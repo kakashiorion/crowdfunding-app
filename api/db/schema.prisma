@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -10,9 +10,575 @@ generator client {
 
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
 // to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+
+model User {
+  id                     Int            @id @default(autoincrement())
+  email                  String         @unique
+  hashedPassword         String
+  salt                   String
+  mobile                 Int            @unique
+  otp                    String?
+  otpExpiresAt           DateTime?
+  type                   UserType       @default(GUEST)
+  investor               Investor?
+  startup                Startup?
+  isLoggedIn             Boolean        @default(false)
+  isOnboarded            Boolean        @default(false)
+  messagesSent           Message[]      @relation("Sender")
+  messagesReceived       Message[]      @relation("Receiver")
+  conversationsStarted   Conversation[] @relation("ConvStarter")
+  conversationsResponded Conversation[] @relation("ConvResponder")
+  posts                  Post[]         @relation("Poster")
+  comments               Comment[]      @relation("Commenter")
+  likedPosts             Post[]         @relation("UserLikesPost")
+  likedComments          Comment[]      @relation("UserLikesComment")
+  connectionsRequested   Connection[]   @relation("Requester")
+  connectionsAccepted    Connection[]   @relation("Accepter")
+  followedBy             User[]         @relation("UserFollows")
+  following              User[]         @relation("UserFollows")
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+}
+
+enum UserType {
+  INVESTOR
+  STARTUP
+  ADMIN
+  GUEST
+}
+
+model Connection {
+  id             Int              @id @default(autoincrement())
+  requestingUser User             @relation("Requester", fields: [requesterID], references: [id])
+  requesterID    Int
+  acceptingUser  User             @relation("Accepter", fields: [accepterID], references: [id])
+  accepterID     Int
+  status         ConnectionStatus @default(PENDING)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@unique([requesterID, accepterID])
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Investor {
+  id                Int                  @id @unique
+  user              User                 @relation(fields: [id], references: [id])
+  firstName         String
+  lastName          String
+  dateOfBirth       DateTime
+  linkedInURL       String?
+  websiteURL        String?
+  locationID        Int //from Location table
+  eduBG             EducationBG?
+  yearsOfWorkEx     Int?
+  numberOfCompanies Int?
+  workedInSectors   Int[] // from IndustrySector table
+  investorExp       InvestorExperience?
+  investorMotive    InvestorMotive?
+  investorPref      InvestorPreferences?
+  bids              Bid[]
+  successfulOffers  Offer[]              @relation("SuccessfulDeal")
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+}
+
+//TODO: Need to upload data in Location table
+model Location {
+  id        Int      @id @default(autoincrement())
+  state     String
+  city      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([state, city])
+}
+
+enum EducationBG {
+  HIGH_SCHOOL
+  BACHELORS
+  MASTERS
+  PHD
+}
+
+model InvestorExperience {
+  id                 Int               @id @unique
+  investor           Investor          @relation(fields: [id], references: [id])
+  hasInvestedBefore  Boolean
+  investedCompany    InvestedCompany[]
+  hasFoundStartup    Boolean
+  hasWorkedInStartup Boolean
+  riskApetite        RiskApetite       @default(MEDIUM)
+  investorLevel      InvestorLevel     @default(NOVICE)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+}
+
+enum InvestorLevel {
+  NOVICE
+  INTERMEDIATE
+  EXPERIENCED
+  PROFESSIONAL
+  SEASONED
+}
+
+model InvestedCompany {
+  id                  Int                @id @default(autoincrement())
+  investor            InvestorExperience @relation(fields: [investorID], references: [id])
+  investorID          Int
+  companyName         String
+  industrySectorID    Int //from IndustrySector table
+  fundingStage        FundingStage
+  fundingAmountLacs   AmountRange?
+  fundingReason       String?
+  hasExited           Boolean
+  expectedReturnsMult Int?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+enum FundingStage {
+  SEED
+  SERIES_A
+  SERIES_B
+  SERIES_C
+  SERIES_D
+  SERIES_E
+  SERIES_F
+  LATER
+}
+
+enum AmountRange {
+  LESS_THAN_1_LAC
+  LACS_1_TO_5
+  LACS_5_TO_20
+  LACS_20_TO_99
+  MORE_THAN_1_CRORE
+}
+
+enum RiskApetite {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model InvestorMotive {
+  id                       Int                    @id @unique
+  investor                 Investor               @relation(fields: [id], references: [id])
+  preferredIndustrySectors Int[] //from IndustrySector table
+  prefferedCapitalToInvest AmountRange[]
+  preferredFundingStage    FundingStage[]
+  preferredStartupTeamSize StartupSize[]
+  preferredTimelineMonths  Int?
+  preferredReturnsMult     Int?
+  preferredLocations       Int[] //from Location table
+  reasonForInvesting       String?
+  platformGoal             InvestorPlatformGoal[]
+  referSource              ReferSource[]
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+}
+
+enum StartupSize {
+  ONE
+  BW_1_AND_10
+  BW_10_AND_50
+  BW_50_AND_200
+  BW_200_AND_1000
+  OVER_1000
+}
+
+enum InvestorPlatformGoal {
+  INVEST
+  LEARN
+  EXPLORE
+  CONNECT
+  ADVISE
+}
+
+enum ReferSource {
+  WORD_OF_MOUTH
+  SOCIAL_MEDIA
+  BROWSING
+  REFERRAL
+  ADVERTISEMENT
+}
+
+model InvestorPreferences {
+  id                          Int               @id @unique
+  investor                    Investor          @relation(fields: [id], references: [id])
+  prefersLightTheme           Boolean           @default(true)
+  profileHiddenFromStrangers  Boolean           @default(false)
+  receiveMessageFromStrangers Boolean           @default(true)
+  activityVisbility           VisibilityLevel   @default(PUBLIC)
+  notificationLevel           NotificationLevel @default(HIGH)
+  createdAt                   DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
+}
+
+enum VisibilityLevel {
+  PRIVATE
+  CONNECTIONS
+  PUBLIC
+}
+
+enum NotificationLevel {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Startup {
+  id                 Int                 @id @unique
+  user               User                @relation(fields: [id], references: [id])
+  name               String              @unique
+  writeUp            String
+  dateIncorporated   DateTime
+  linkedInURL        String?
+  websiteURL         String?
+  locationID         Int //from Location table
+  industrySectorID   Int //from IndustrySector table
+  startupBasic       StartupBasic?
+  startupBusiness    StartupBusiness?
+  startupFinancials  StartupFinancials?
+  startupMotive      StartupMotive?
+  startupPreferences StartupPreferences?
+  offers             Offer[]             @relation("OffersByStartup")
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model IndustrySector {
+  id        Int      @id @default(autoincrement())
+  industry  Industry
+  sector    Sector
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//TODO: Split Industy Sector
+enum Industry {
+  EDUCATION
+  HEALTHCARE
+  PHARMACEUTICALS
+  BANKING_AND_FINANCE
+  ENERGY
+  CONSUMER_GOODS
+  RETAIL_ECOMMERCE
+  REAL_ESTATE
+  FOOD_AND_BEVERAGE
+  IT
+  IOT
+  AGRICULTURE
+  MANUFACTURING
+  FASHION
+  MEDIA
+  GAMING
+  ENTERTAINMENT
+  TELECOM
+  LOGISTICS
+  TRANSPORTATION
+  AUTOMOTIVE
+  AVIATION
+  HEAVY_MACHINERY
+  CHEMICAL
+  CONSTRUCTION
+  DEFENCE
+  ELECTRONICS
+  FISHERIES
+  MINING
+  BIOTECHNOLOGY
+  LEGAL
+  SPORTS_AND_FITNESS
+  WASTE_MANAGEMENT
+  WATER_MANAGEMENT
+  TRAVEL_AND_HOSPITALITY
+  SECURITY
+  SOCIAL_SERVICE
+  MARKETING
+  HUMAN_RESOURCES
+  BUSINESS_MANAGEMENT
+  AUTOMATION
+}
+
+//TODO: Align with industry
+enum Sector {
+  AI
+  AUTOMATION
+}
+
+model StartupBasic {
+  id              Int         @id @unique
+  startup         Startup     @relation(fields: [id], references: [id])
+  valueProp       String
+  story           String?
+  whyThisBusiness String?
+  isFirstStartup  Boolean
+  mission         String
+  vision          String
+  startupSize     StartupSize
+  leadingTeam     KeyPeople[]
+  coreValues      String[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model KeyPeople {
+  id          Int          @id @default(autoincrement())
+  startup     StartupBasic @relation(fields: [startupID], references: [id])
+  startupID   Int
+  name        String
+  role        String
+  writeup     String?
+  eduBG       EducationBG?
+  linkedInURL String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model StartupBusiness {
+  id                  Int              @id @unique
+  startup             Startup          @relation(fields: [id], references: [id])
+  numberUsersFY       Int
+  numberCitiesFY      Int
+  distributionType    DistributionType
+  workedWell          String[]
+  challenges          String[]
+  couldImprove        String[]
+  currentFYActivities String[]
+  hasOnlineBusiness   Boolean
+  partners            String[]
+  customers           String[]
+  revenueModel        String?
+  costStructure       String?
+  shortTermPlan       ShortTermPlan[]
+  marketSizeLacs      Float?
+  marketGrowthRate    Float?
+  trends              String[]
+  competitors         String[]
+  opporunities        String[]
+  threats             String[]
+  xFactor             String[]
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+}
+
+enum DistributionType {
+  B2B
+  B2C
+  BOTH
+}
+
+//TODO: Add more options
+enum ShortTermPlan {
+  EXPAND_GEO
+  IPO
+  HIRE_TEAM
+  IMPROVE_PRODUCT_SERVICE
+  BUILD_CUSTOMER_BASE
+}
+
+model StartupFinancials {
+  id                   Int                @id @unique
+  startup              Startup            @relation(fields: [id], references: [id])
+  currentValuationLacs Float
+  currentCapTable      CapTable[]
+  currentStage         FundingStage
+  fundraisingRounds    FundraisingRound[]
+  currentRatio         Float?
+  DERatio              Float?
+  revenueLastFYLacs    Float?
+  revenueGrowthRate    Float?
+  isProfitable         Boolean?
+  margin               Float?
+  cashRunwayMonths     Int?
+  plansForUsingCash    String[]
+  biggestCostHeads     String[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model FundraisingRound {
+  id                Int               @id @default(autoincrement())
+  startup           StartupFinancials @relation(fields: [startupID], references: [id])
+  startupID         Int
+  roundStage        FundingStage
+  capitalRaisedLacs Float
+  valuationLacs     Float
+  keyInvestors      String[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model CapTable {
+  id          Int               @id @default(autoincrement())
+  startup     StartupFinancials @relation(fields: [startupID], references: [id])
+  startupID   Int
+  shareholder String
+  equityShare Float
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model StartupMotive {
+  id                       Int                   @id @unique
+  startup                  Startup               @relation(fields: [id], references: [id])
+  platformGoal             StartupPlatformGoal[]
+  referSource              ReferSource[]
+  preferredIndustrySectors Int[] //from IndustrySector table
+  preferredInvestorLevels  InvestorLevel[]
+  preferredLocations       Int[] //from Location table
+  promisingReturnsMult     Int?
+  promisingTimeline        Int?
+  pitchDeckURL             String?
+  demoURL                  String?
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+}
+
+enum StartupPlatformGoal {
+  RAISE_FUNDS
+  EXPLORE
+  CONNECT
+  GET_ADVICE
+}
+
+model StartupPreferences {
+  id                          Int               @id @unique
+  startup                     Startup           @relation(fields: [id], references: [id])
+  prefersLightTheme           Boolean           @default(true)
+  profileHiddenFromStrangers  Boolean           @default(false)
+  receiveMessageFromStrangers Boolean           @default(true)
+  activityVisbility           VisibilityLevel   @default(PUBLIC)
+  financialVisbility          VisibilityLevel   @default(CONNECTIONS)
+  notificationLevel           NotificationLevel @default(HIGH)
+  createdAt                   DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
+}
+
+model Offer {
+  id                  Int         @id @default(autoincrement())
+  startup             Startup     @relation("OffersByStartup", fields: [startupID], references: [id])
+  startupID           Int
+  bids                Bid[]
+  status              OfferStatus @default(CREATED)
+  extended            Boolean     @default(false)
+  capitalTargetLacs   Float
+  equityBeingIssued   Float
+  minTicketSizeLacs   Float       @default(1.0)
+  maxTicketSizeLacs   Float
+  numberOfInvestors   Int?
+  willUseFundsFor     String[]
+  needHelpWith        String[]
+  timelineDays        Int         @default(30)
+  successfulInvestors Investor[]  @relation("SuccessfulDeal")
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+enum OfferStatus {
+  CREATED
+  EXCEEDED
+  RAISED
+  CLOSED
+}
+
+model Bid {
+  id               Int           @id @default(autoincrement())
+  offer            Offer         @relation(fields: [offerID], references: [id])
+  offerID          Int
+  investor         Investor      @relation(fields: [investorID], references: [id])
+  investorID       Int
+  status           BidStatus     @default(CREATED)
+  rebid            Boolean       @default(false)
+  capitalAvailable Float
+  equityNeeded     Float
+  counterCapital   Float?
+  counterEquity    Float?
+  canHelpWith      String[]
+  questions        BidQuestion[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@unique([offerID, investorID]) //An investor can only bid once on an offer
+}
+
+enum BidStatus {
+  CREATED
+  COUNTER
+  ACCEPTED
+  DECLINED
+}
+
+model BidQuestion {
+  id        Int      @id @default(autoincrement())
+  bid       Bid      @relation(fields: [bidID], references: [id])
+  bidID     Int
+  question  String
+  answered  Boolean  @default(false)
+  answer    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  poster        User      @relation("Poster", fields: [posterID], references: [id])
+  posterID      Int
+  comments      Comment[]
+  likedByUsers  User[]    @relation("UserLikesPost")
+  title         String
+  writeup       String?
+  attachmentURL String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Comment {
+  id            Int      @id @default(autoincrement())
+  commenter     User     @relation("Commenter", fields: [commenterID], references: [id])
+  commenterID   Int
+  post          Post     @relation(fields: [postID], references: [id])
+  postID        Int
+  content       String
+  attachmentURL String?
+  likedByUsers  User[]   @relation("UserLikesComment")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Conversation {
+  id                      Int       @id @default(autoincrement())
+  conversationStarter     User      @relation("ConvStarter", fields: [conversationStarterID], references: [id])
+  conversationStarterID   Int
+  conversationResponder   User      @relation("ConvResponder", fields: [conversationResponderID], references: [id])
+  conversationResponderID Int
+  messages                Message[]
+  isFavoriteByStarter     Boolean   @default(false)
+  isFavoriteByResponder   Boolean   @default(false)
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@unique([conversationStarterID, conversationResponderID])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversation   Conversation @relation(fields: [conversationID], references: [id])
+  conversationID Int
+  sender         User         @relation("Sender", fields: [senderID], references: [id])
+  senderID       Int
+  receiver       User         @relation("Receiver", fields: [receiverID], references: [id])
+  receiverID     Int
+  content        String
+  attachmentURL  String?
+  unread         Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
