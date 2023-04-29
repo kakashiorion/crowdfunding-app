@@ -1,7 +1,7 @@
 import { RedwoodProvider, FatalErrorBoundary } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
-import FatalErrorPage from 'src/pages/FatalErrorPage/FatalErrorPage'
+import FatalErrorPage from 'src/pages/Error/FatalErrorPage/FatalErrorPage'
 import Routes from 'src/Routes'
 
 import { AuthProvider, useAuth } from './auth'
