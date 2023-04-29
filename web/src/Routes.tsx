@@ -9,8 +9,17 @@
 
 import { Route, Router } from '@redwoodjs/router'
 
+// import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
+
+import { useAuth } from './auth'
+
 const Routes = () => {
-  return <Router>{/* <Route path="/"></Route> */}</Router>
+  return (
+    <Router useAuth={useAuth}>
+      <Route notfound page={NotFoundPage} />
+      <Route path="/" page={LandingPage} name="landing" />
+    </Router>
+  )
 }
 
 export default Routes

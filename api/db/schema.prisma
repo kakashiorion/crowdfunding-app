@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("TEST_DATABASE_URL")
 }
 
 generator client {
@@ -11,33 +11,49 @@ generator client {
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
 // to create migrations for them and apply to your dev DB.
 
+//TODO: Implement SupaBase Storage for profile pic
 model User {
-  id                     Int            @id @default(autoincrement())
-  email                  String         @unique
+  id                     Int              @id @default(autoincrement())
+  email                  String           @unique
   hashedPassword         String
   salt                   String
-  mobile                 Int            @unique
+  resetToken             String?
+  resetTokenExpiresAt    DateTime?
+  lastLogin              DateTime         @default(now())
+  profilePicURL          String?
+  mobile                 String?          @unique
   otp                    String?
   otpExpiresAt           DateTime?
-  type                   UserType       @default(GUEST)
+  webAuthnChallenge      String?          @unique
+  credentials            UserCredential[]
+  type                   UserType         @default(GUEST)
   investor               Investor?
   startup                Startup?
-  isLoggedIn             Boolean        @default(false)
-  isOnboarded            Boolean        @default(false)
-  messagesSent           Message[]      @relation("Sender")
-  messagesReceived       Message[]      @relation("Receiver")
-  conversationsStarted   Conversation[] @relation("ConvStarter")
-  conversationsResponded Conversation[] @relation("ConvResponder")
-  posts                  Post[]         @relation("Poster")
-  comments               Comment[]      @relation("Commenter")
-  likedPosts             Post[]         @relation("UserLikesPost")
-  likedComments          Comment[]      @relation("UserLikesComment")
-  connectionsRequested   Connection[]   @relation("Requester")
-  connectionsAccepted    Connection[]   @relation("Accepter")
-  followedBy             User[]         @relation("UserFollows")
-  following              User[]         @relation("UserFollows")
-  createdAt              DateTime       @default(now())
-  updatedAt              DateTime       @updatedAt
+  isLoggedIn             Boolean          @default(false)
+  isOnboarded            Boolean          @default(false)
+  messagesSent           Message[]        @relation("Sender")
+  messagesReceived       Message[]        @relation("Receiver")
+  conversationsStarted   Conversation[]   @relation("ConvStarter")
+  conversationsResponded Conversation[]   @relation("ConvResponder")
+  posts                  Post[]           @relation("Poster")
+  comments               Comment[]        @relation("Commenter")
+  likedPosts             Post[]           @relation("UserLikesPost")
+  likedComments          Comment[]        @relation("UserLikesComment")
+  connectionsRequested   Connection[]     @relation("Requester")
+  connectionsAccepted    Connection[]     @relation("Accepter")
+  followedBy             User[]           @relation("UserFollows")
+  following              User[]           @relation("UserFollows")
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+}
+
+model UserCredential {
+  id         String  @id
+  userId     Int
+  user       User    @relation(fields: [userId], references: [id])
+  publicKey  Bytes
+  transports String?
+  counter    BigInt
 }
 
 enum UserType {
@@ -88,7 +104,7 @@ model Investor {
   updatedAt         DateTime             @updatedAt
 }
 
-//TODO: Need to upload data in Location table
+//TODO: Need to upload city data in Location table
 model Location {
   id        Int      @id @default(autoincrement())
   state     String
@@ -375,7 +391,6 @@ enum DistributionType {
   BOTH
 }
 
-//TODO: Add more options
 enum ShortTermPlan {
   EXPAND_GEO
   IPO
