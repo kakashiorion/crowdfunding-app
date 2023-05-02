@@ -23,8 +23,8 @@ import StartupOnboardingLayout from './layouts/StartupOnboardingLayout/StartupOn
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Route notfound page={ErrorNotFoundPage} />
       <Set wrap={[LandingPageLayout]}>
-        <Route notfound page={ErrorNotFoundPage} />
         <Route path="/" page={LandingLandingPage} name="landing" />
       </Set>
       <Set wrap={[LoginPageLayout]}>
@@ -44,6 +44,7 @@ const Routes = () => {
         <Route path="/startup/explore" page={StartupStartupExplorePage} name="startupExplore" />
         <Route path="/startup/help" page={StartupStartupHelpPage} name="startupHelp" />
         <Route path="/startup/investorProfile" page={StartupInvestorProfilePage} name="startupInvestorProfile" />
+        <Route path="/startup/post" page={StartupStartupPostPage} name="startupPost" />
       </Set>
       <Set wrap={[StartupOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
         <Route path="/startup/onboarding" page={StartupStartupHomePage} name="startupOnboarding" />
@@ -58,6 +59,7 @@ const Routes = () => {
         <Route path="/investor/help" page={InvestorInvestorHelpPage} name="investorHelp" />
         <Route path="/investor/otherInvestorProfile" page={InvestorOtherInvestorProfilePage} name="otherInvestorProfile" />
         <Route path="/investor/startupProfile" page={InvestorStartupProfilePage} name="investorStartupProfile" />
+        <Route path="/investor/post" page={InvestorInvestorPostPage} name="investorPost" />
       </Set>
       <Set wrap={[InvestorOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}>
         <Route path="/investor/onboarding" page={InvestorInvestorHomePage} name="investorOnboarding" />

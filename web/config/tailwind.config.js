@@ -1,9 +1,111 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   content: ['src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Hind', 'Inter', 'Poppins', ...defaultTheme.fontFamily.sans],
+      },
+    },
+    screens: {
+      lg: '768px',
+      xl: '1280px',
+    },
+    fontSize: {
+      h1: ['64px', '64px'],
+      h2: ['48px', '52px'],
+      h3: ['40px', '48px'],
+      h4: ['32px', '40px'],
+      h5: ['24px', '32px'],
+      h6: ['20px', '30px'],
+      b1: ['16px', '24px'],
+      b2: ['14px', '21px'],
+      b3: ['12px', '18px'],
+      b4: ['10px', '15px'],
+    },
+    backgroundColor: ({ theme }) => theme('colors'),
+    colors: {
+      black: {
+        DEFAULT: '#000000',
+        l1: '#1b1b1b',
+        l2: '#3e3e3e',
+        l3: '#6c6c6c',
+        l4: '#969696',
+      },
+      white: {
+        DEFAULT: '#ffffff',
+        d1: '#eeeeee',
+        d2: '#dddddd',
+        d3: '#cccccc',
+        d4: '#bbbbbb',
+      },
+      primary: {
+        l2: '#BFAEEF',
+        l1: '#9075DC',
+        DEFAULT: '#694AC1',
+        d1: '#4B27AE',
+        d2: '#20007A',
+      },
+      secondary: {
+        l2: '#EAF8AD',
+        l1: '#C8DF5C',
+        DEFAULT: '#A0B831',
+        d1: '#7D9412',
+        d2: '#516200',
+      },
+      accent: {
+        l2: '#B3DEF0',
+        l1: '#5DB7DE',
+        DEFAULT: '#189BD3',
+        d1: '#0C79A9',
+        d2: '#004664',
+      },
+      success: {
+        l2: '#9FF2C6',
+        l1: '#7CF0B2',
+        DEFAULT: '#31E083',
+        d1: '#15BB63',
+        d2: '#007D3B',
+      },
+      error: {
+        l2: '#FCA6AA',
+        l1: '#E2646A',
+        DEFAULT: '#E73941',
+        d1: '#C10A12',
+        d2: '#7C0006',
+      },
+      warn: {
+        l2: '#E9D38F',
+        l1: '#DEB841',
+        DEFAULT: '#E3AF0B',
+        d1: '#AB8304',
+        d2: '#594400',
+      },
+      transparent: 'transparent',
+      current: 'currentColor',
+      inherit: 'inheritColor',
+    },
+    spacing: {
+      0: '0px',
+      1: '4px',
+      2: '8px',
+      3: '12px',
+      4: '16px',
+      5: '24px',
+      6: '32px',
+      7: '40px',
+      8: '48px',
+      9: '64px',
+      10: '80px',
+      11: '96px',
+      12: '128px',
+      13: '192px',
+      14: '256px',
+      15: '360px',
+      16: '512px',
+    },
   },
   plugins: [],
 }
-

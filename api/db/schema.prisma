@@ -13,38 +13,44 @@ generator client {
 
 //TODO: Implement SupaBase Storage for profile pic
 model User {
-  id                     Int              @id @default(autoincrement())
-  email                  String           @unique
-  hashedPassword         String
-  salt                   String
-  resetToken             String?
-  resetTokenExpiresAt    DateTime?
-  lastLogin              DateTime         @default(now())
-  profilePicURL          String?
-  mobile                 String?          @unique
-  otp                    String?
-  otpExpiresAt           DateTime?
-  webAuthnChallenge      String?          @unique
-  credentials            UserCredential[]
-  type                   UserType         @default(GUEST)
-  investor               Investor?
-  startup                Startup?
-  isLoggedIn             Boolean          @default(false)
-  isOnboarded            Boolean          @default(false)
-  messagesSent           Message[]        @relation("Sender")
-  messagesReceived       Message[]        @relation("Receiver")
-  conversationsStarted   Conversation[]   @relation("ConvStarter")
-  conversationsResponded Conversation[]   @relation("ConvResponder")
-  posts                  Post[]           @relation("Poster")
-  comments               Comment[]        @relation("Commenter")
-  likedPosts             Post[]           @relation("UserLikesPost")
-  likedComments          Comment[]        @relation("UserLikesComment")
-  connectionsRequested   Connection[]     @relation("Requester")
-  connectionsAccepted    Connection[]     @relation("Accepter")
-  followedBy             User[]           @relation("UserFollows")
-  following              User[]           @relation("UserFollows")
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @updatedAt
+  id                          Int               @id @default(autoincrement())
+  email                       String            @unique
+  hashedPassword              String
+  salt                        String
+  resetToken                  String?
+  resetTokenExpiresAt         DateTime?
+  lastLogin                   DateTime          @default(now())
+  profilePicURL               String?
+  mobile                      String?           @unique
+  otp                         String?
+  otpExpiresAt                DateTime?
+  webAuthnChallenge           String?           @unique
+  credentials                 UserCredential[]
+  type                        UserType          @default(GUEST)
+  investor                    Investor?
+  startup                     Startup?
+  isLoggedIn                  Boolean           @default(false)
+  isOnboarded                 Boolean           @default(false)
+  messagesSent                Message[]         @relation("Sender")
+  messagesReceived            Message[]         @relation("Receiver")
+  conversationsStarted        Conversation[]    @relation("ConvStarter")
+  conversationsResponded      Conversation[]    @relation("ConvResponder")
+  posts                       Post[]            @relation("Poster")
+  comments                    Comment[]         @relation("Commenter")
+  likedPosts                  Post[]            @relation("UserLikesPost")
+  likedComments               Comment[]         @relation("UserLikesComment")
+  connectionsRequested        Connection[]      @relation("Requester")
+  connectionsAccepted         Connection[]      @relation("Accepter")
+  followedBy                  User[]            @relation("UserFollows")
+  following                   User[]            @relation("UserFollows")
+  prefersLightTheme           Boolean           @default(true)
+  profileHiddenFromStrangers  Boolean           @default(false)
+  receiveMessageFromStrangers Boolean           @default(true)
+  activityVisbility           VisibilityLevel   @default(PUBLIC)
+  notificationLevel           NotificationLevel @default(HIGH)
+  financialVisbility          VisibilityLevel   @default(CONNECTIONS)
+  createdAt                   DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
 }
 
 model UserCredential {
@@ -83,8 +89,8 @@ enum ConnectionStatus {
 }
 
 model Investor {
-  id                Int                  @id @unique
-  user              User                 @relation(fields: [id], references: [id])
+  id                Int                 @id @unique
+  user              User                @relation(fields: [id], references: [id])
   firstName         String
   lastName          String
   dateOfBirth       DateTime
@@ -97,11 +103,10 @@ model Investor {
   workedInSectors   Int[] // from IndustrySector table
   investorExp       InvestorExperience?
   investorMotive    InvestorMotive?
-  investorPref      InvestorPreferences?
   bids              Bid[]
-  successfulOffers  Offer[]              @relation("SuccessfulDeal")
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
+  successfulOffers  Offer[]             @relation("SuccessfulDeal")
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 }
 
 //TODO: Need to upload city data in Location table
@@ -225,21 +230,10 @@ enum ReferSource {
   ADVERTISEMENT
 }
 
-model InvestorPreferences {
-  id                          Int               @id @unique
-  investor                    Investor          @relation(fields: [id], references: [id])
-  prefersLightTheme           Boolean           @default(true)
-  profileHiddenFromStrangers  Boolean           @default(false)
-  receiveMessageFromStrangers Boolean           @default(true)
-  activityVisbility           VisibilityLevel   @default(PUBLIC)
-  notificationLevel           NotificationLevel @default(HIGH)
-  createdAt                   DateTime          @default(now())
-  updatedAt                   DateTime          @updatedAt
-}
-
 enum VisibilityLevel {
   PRIVATE
   CONNECTIONS
+  FOLLOWERS
   PUBLIC
 }
 
@@ -251,23 +245,22 @@ enum NotificationLevel {
 }
 
 model Startup {
-  id                 Int                 @id @unique
-  user               User                @relation(fields: [id], references: [id])
-  name               String              @unique
-  writeUp            String
-  dateIncorporated   DateTime
-  linkedInURL        String?
-  websiteURL         String?
-  locationID         Int //from Location table
-  industrySectorID   Int //from IndustrySector table
-  startupBasic       StartupBasic?
-  startupBusiness    StartupBusiness?
-  startupFinancials  StartupFinancials?
-  startupMotive      StartupMotive?
-  startupPreferences StartupPreferences?
-  offers             Offer[]             @relation("OffersByStartup")
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+  id                Int                @id @unique
+  user              User               @relation(fields: [id], references: [id])
+  name              String             @unique
+  writeUp           String
+  dateIncorporated  DateTime
+  linkedInURL       String?
+  websiteURL        String?
+  locationID        Int //from Location table
+  industrySectorID  Int //from IndustrySector table
+  startupBasic      StartupBasic?
+  startupBusiness   StartupBusiness?
+  startupFinancials StartupFinancials?
+  startupMotive     StartupMotive?
+  offers            Offer[]            @relation("OffersByStartup")
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
 model IndustrySector {
@@ -278,7 +271,7 @@ model IndustrySector {
   updatedAt DateTime @updatedAt
 }
 
-//TODO: Split Industy Sector
+//TODO: Split Industy Sector and populate data
 enum Industry {
   EDUCATION
   HEALTHCARE
@@ -323,7 +316,7 @@ enum Industry {
   AUTOMATION
 }
 
-//TODO: Align with industry
+//TODO: Align with industry and populate data
 enum Sector {
   AI
   AUTOMATION
@@ -462,19 +455,6 @@ enum StartupPlatformGoal {
   EXPLORE
   CONNECT
   GET_ADVICE
-}
-
-model StartupPreferences {
-  id                          Int               @id @unique
-  startup                     Startup           @relation(fields: [id], references: [id])
-  prefersLightTheme           Boolean           @default(true)
-  profileHiddenFromStrangers  Boolean           @default(false)
-  receiveMessageFromStrangers Boolean           @default(true)
-  activityVisbility           VisibilityLevel   @default(PUBLIC)
-  financialVisbility          VisibilityLevel   @default(CONNECTIONS)
-  notificationLevel           NotificationLevel @default(HIGH)
-  createdAt                   DateTime          @default(now())
-  updatedAt                   DateTime          @updatedAt
 }
 
 model Offer {

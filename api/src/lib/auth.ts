@@ -35,6 +35,7 @@ export const getCurrentUser = async (session: Decoded) => {
       lastLogin: true,
       isLoggedIn: true,
       isOnboarded: true,
+      prefersLightTheme: true,
     },
   })
 }
