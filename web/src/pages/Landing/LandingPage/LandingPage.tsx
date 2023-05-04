@@ -123,7 +123,7 @@ const InvestorSection = forwardRef(function InvestorSection(
       <SectionHeader title="FOR INVESTORS" />
       <ValuePropSection valuePropList={investorValuePropList} />
       <LargePrimaryFilledButton
-        action={() => navigate(routes.signup())}
+        action={() => navigate(routes.signup({ type: 'Investor' }))}
         label="START INVESTING"
       />
     </div>
@@ -143,7 +143,7 @@ const StartupSection = forwardRef(function StartupSection(
       <SectionHeader title="FOR STARTUPS" />
       <ValuePropSection valuePropList={startValuePropList} />
       <LargePrimaryFilledButton
-        action={() => navigate(routes.signup())}
+        action={() => navigate(routes.signup({ type: 'Startup' }))}
         label="RAISE FUNDS"
       />{' '}
     </div>

@@ -5,7 +5,7 @@ import { BlackTextButton } from '../Button/Button'
 
 const LandingFooter = () => {
   return (
-    <div className="grid max-w-full grid-cols-2 flex-col items-start justify-start gap-6 py-12 lg:grid-cols-4 lg:py-14 ">
+    <div className="grid max-w-full grid-cols-2 flex-col items-start justify-start gap-6  py-12 lg:grid-cols-4 lg:py-14 ">
       <BrandBlock />
       <InfoList header="PLATFORM" infoList={platformInfoList} />
       <InfoList header="LEGAL" infoList={legalInfoList} />

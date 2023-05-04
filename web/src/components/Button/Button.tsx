@@ -108,7 +108,7 @@ export const HoverPrimaryTextButton = (props: ButtonProps) => {
 export const SmallHoverPrimaryTextButton = (props: ButtonProps) => {
   return (
     <button
-      className="text-b3 text-black-l2 hover:text-primary dark:text-white-d2 dark:hover:text-primary-l1  lg:text-b2"
+      className="text-b3 text-black-l2 underline hover:text-primary dark:text-white-d2 dark:hover:text-primary-l1  lg:text-b2"
       onClick={props.action}
     >
       {props.label}

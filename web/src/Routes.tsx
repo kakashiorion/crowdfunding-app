@@ -37,7 +37,7 @@ const Routes = () => {
       </Set>
       <Set wrap={[StartupHomeLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
         <Route path="/startup/home" page={StartupStartupHomePage} name="startupHome" />
-        <Route path="/startup/myProfile" page={StartupStartupHomePage} name="startupMyProfile" />
+        <Route path="/startup/myProfile" page={StartupStartupMyProfilePage} name="startupMyProfile" />
         <Route path="/startup/myOffer" page={StartupStartupMyOfferPage} name="startupMyOffer" />
         <Route path="/startup/myConnections" page={StartupStartupMyConnectionsPage} name="startupMyConnections" />
         <Route path="/startup/myConversations" page={StartupStartupMyConversationsPage} name="startupMyConversations" />
@@ -47,7 +47,7 @@ const Routes = () => {
         <Route path="/startup/post" page={StartupStartupPostPage} name="startupPost" />
       </Set>
       <Set wrap={[StartupOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
-        <Route path="/startup/onboarding" page={StartupStartupHomePage} name="startupOnboarding" />
+        <Route path="/startup/onboarding" page={StartupStartupOnboardingPage} name="startupOnboarding" />
       </Set>
       <Set wrap={[InvestorHomeLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}>
         <Route path="/investor/home" page={InvestorInvestorHomePage} name="investorHome" />
@@ -61,8 +61,9 @@ const Routes = () => {
         <Route path="/investor/startupProfile" page={InvestorStartupProfilePage} name="investorStartupProfile" />
         <Route path="/investor/post" page={InvestorInvestorPostPage} name="investorPost" />
       </Set>
-      <Set wrap={[InvestorOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}>
-        <Route path="/investor/onboarding" page={InvestorInvestorHomePage} name="investorOnboarding" />
+      {/* <Set wrap={[InvestorOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}> */}
+      <Set wrap={[InvestorOnboardingLayout]} unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}>
+        <Route path="/investor/onboarding" page={InvestorInvestorOnboardingPage} name="investorOnboarding" />
       </Set>
     </Router>
   )

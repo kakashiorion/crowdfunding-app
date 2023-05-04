@@ -5,15 +5,21 @@ import { navigate, routes } from '@redwoodjs/router'
 import CloseIcon from '../../../public/icons/close.svg'
 import MenuIcon from '../../../public/icons/menu.svg'
 import Logo from '../../../public/logo/DealbariLogo.svg'
-import { HoverPrimaryTextButton, PrimaryOutlineButton } from '../Button/Button'
+import {
+  HoverPrimaryTextButton,
+  SmallPrimaryOutlineButton,
+} from '../Button/Button'
 
 const LandingHeader = (props: {
   scrollRefsList: React.RefObject<HTMLDivElement>[]
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
   return (
-    <div className="sticky top-0 z-10 flex h-8 w-full items-center justify-between rounded-sm bg-white-d1/30 px-4  backdrop-blur-sm dark:bg-black-l1/60 lg:h-10 lg:px-5  ">
-      <Logo className="h-6 w-10 lg:h-8 lg:w-12" />
+    <div className="sticky top-0 z-10 flex w-full items-center justify-between rounded-sm  py-2 backdrop-blur-sm   lg:py-3">
+      <Logo
+        className="h-6 w-10 lg:h-8 lg:w-12"
+        onClick={() => navigate(routes.landing())}
+      />
       <HeaderMenu size="large" scrollRefsList={props.scrollRefsList} />
       {isMenuOpen && (
         <HeaderMenu size="small" scrollRefsList={props.scrollRefsList} />
@@ -67,7 +73,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         action={() => props.scrollRefsList[3].current?.scrollIntoView()}
         label="CONTACT"
       />
-      <PrimaryOutlineButton
+      <SmallPrimaryOutlineButton
         action={() => navigate(routes.login())}
         label="LOGIN"
       />
