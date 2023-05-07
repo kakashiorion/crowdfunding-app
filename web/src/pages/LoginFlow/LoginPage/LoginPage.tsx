@@ -127,8 +127,12 @@ const LoginMethodSelectorButton = (props: LoginMethodSelectorButtonProps) => {
   )
 }
 
+const Divider = () => {
+  return <div className="h-4" />
+}
+
 export const loginFormClassName =
-  'flex w-full flex-1 flex-col items-center justify-around gap-1 lg:gap-2'
+  'flex w-full flex-1 flex-col items-center justify-center gap-1 lg:gap-2'
 
 const PasswordLoginForm = () => {
   const [pwdError, setPwdError] = useState('')
@@ -146,6 +150,7 @@ const PasswordLoginForm = () => {
           pwdError != '' && setPwdError('')
         }}
       />
+      <Divider />
       <TextLabel label="Password" />
       <TextInput
         value={enteredPwd}
@@ -156,6 +161,7 @@ const PasswordLoginForm = () => {
         }}
       />
       <ErrorSubTextLabel label={pwdError} />
+      <Divider />
       <PrimaryFilledButton
         action={() => {
           if (enteredEmail.length == 0) {
@@ -166,13 +172,17 @@ const PasswordLoginForm = () => {
             //TODO: Try login with email and password
             //login()
             //TODO: If success, navigate to home based on user type
-            // navigate(routes.investorHome())
-            //TODO: If failed, set appropriate error
-            setPwdError('Wrong password')
+            if (enteredPwd == '12345678') {
+              navigate(routes.investorHome())
+            } else {
+              //TODO: If failed, set appropriate error
+              setPwdError('Wrong password')
+            }
           }
         }}
         label="LOGIN"
       />
+      <Divider />
       <SmallHoverPrimaryTextButton
         action={() => {
           navigate(routes.forgotPassword({ email: enteredEmail }))
@@ -250,6 +260,7 @@ const PhoneLoginForm = () => {
           label={otpSent ? 'RESEND OTP' : 'SEND OTP'}
         />
       )}
+      <Divider />
       <TextLabel label="Enter OTP" />
       <TextInput
         value={enteredOTP}
@@ -260,7 +271,6 @@ const PhoneLoginForm = () => {
         }}
       />
       <ErrorSubTextLabel label={otpMsg} />
-
       {otpSent ? (
         <PrimaryFilledButton
           action={() => {
@@ -346,6 +356,7 @@ const TokenLoginForm = () => {
           label={tokenSent ? 'RESEND TOKEN' : 'SEND TOKEN'}
         />
       )}
+      <Divider />
       <TextLabel label="Enter Token received in email" />
       <TextInput
         value={enteredToken}

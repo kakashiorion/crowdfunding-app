@@ -21,7 +21,7 @@ model User {
   resetTokenExpiresAt         DateTime?
   lastLogin                   DateTime          @default(now())
   profilePicURL               String?
-  mobile                      String?           @unique
+  mobile                      String            @unique
   otp                         String?
   otpExpiresAt                DateTime?
   webAuthnChallenge           String?           @unique
@@ -31,10 +31,10 @@ model User {
   startup                     Startup?
   isLoggedIn                  Boolean           @default(false)
   isOnboarded                 Boolean           @default(false)
-  messagesSent                Message[]         @relation("Sender")
-  messagesReceived            Message[]         @relation("Receiver")
-  conversationsStarted        Conversation[]    @relation("ConvStarter")
-  conversationsResponded      Conversation[]    @relation("ConvResponder")
+  sentMessages                Message[]         @relation("Sender")
+  receivedMessages            Message[]         @relation("Receiver")
+  startedConversations        Conversation[]    @relation("ConvStarter")
+  respondedConversations      Conversation[]    @relation("ConvResponder")
   posts                       Post[]            @relation("Poster")
   comments                    Comment[]         @relation("Commenter")
   likedPosts                  Post[]            @relation("UserLikesPost")
@@ -91,18 +91,17 @@ enum ConnectionStatus {
 model Investor {
   id                Int                 @id @unique
   user              User                @relation(fields: [id], references: [id])
-  firstName         String
-  lastName          String
-  dateOfBirth       DateTime
+  name              String
+  dateOfBirth       DateTime?
+  locationID        Int //from Location table
   linkedInURL       String?
   websiteURL        String?
-  locationID        Int //from Location table
   eduBG             EducationBG?
-  yearsOfWorkEx     Int?
-  numberOfCompanies Int?
-  workedInSectors   Int[] // from IndustrySector table
+  yearsOfWorkEx     SizeRange?
+  numberOfCompanies SizeRange?
+  workedInSectors   Sector[] // from Sector table
   investorExp       InvestorExperience?
-  investorMotive    InvestorMotive?
+  investorObjective InvestorObjective?
   bids              Bid[]
   successfulOffers  Offer[]             @relation("SuccessfulDeal")
   createdAt         DateTime            @default(now())
@@ -113,7 +112,9 @@ model Investor {
 model Location {
   id        Int      @id @default(autoincrement())
   state     String
-  city      String
+  city      String?
+  lat       Float?
+  long      Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -128,16 +129,38 @@ enum EducationBG {
 }
 
 model InvestorExperience {
-  id                 Int               @id @unique
-  investor           Investor          @relation(fields: [id], references: [id])
-  hasInvestedBefore  Boolean
-  investedCompany    InvestedCompany[]
-  hasFoundStartup    Boolean
-  hasWorkedInStartup Boolean
-  riskApetite        RiskApetite       @default(MEDIUM)
-  investorLevel      InvestorLevel     @default(NOVICE)
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
+  id                 Int            @id @unique
+  investor           Investor       @relation(fields: [id], references: [id])
+  workedInStartups   SizeRange
+  foundedStartups    SizeRange
+  investedStartups   SizeRange
+  investedStages     FundingStage[]
+  investedAmountLacs AmountRange?
+  successfulExits    SizeRange?
+  returnsReceived    ReturnsRange[]
+  investedSectors    Sector[]
+  investorLevel      InvestorLevel
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+enum SizeRange {
+  NONE
+  ONE_TO_THREE
+  THREE_TO_TEN
+  TEN_TO_TWENTY
+  MORE_THAN_TWENTY
+}
+
+enum ReturnsRange {
+  BREAKEVEN
+  TWO
+  THREE
+  FIVE
+  TEN
+  TWENTY
+  FIFTY
+  HUNDRED
 }
 
 enum InvestorLevel {
@@ -146,21 +169,6 @@ enum InvestorLevel {
   EXPERIENCED
   PROFESSIONAL
   SEASONED
-}
-
-model InvestedCompany {
-  id                  Int                @id @default(autoincrement())
-  investor            InvestorExperience @relation(fields: [investorID], references: [id])
-  investorID          Int
-  companyName         String
-  industrySectorID    Int //from IndustrySector table
-  fundingStage        FundingStage
-  fundingAmountLacs   AmountRange?
-  fundingReason       String?
-  hasExited           Boolean
-  expectedReturnsMult Int?
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
 }
 
 enum FundingStage {
@@ -175,11 +183,36 @@ enum FundingStage {
 }
 
 enum AmountRange {
-  LESS_THAN_1_LAC
-  LACS_1_TO_5
-  LACS_5_TO_20
-  LACS_20_TO_99
+  LESS_THAN_ONE_LAC
+  ONE_TO_FIVE_LACS
+  FIVE_TO_TWENTY_LACS
+  TWENTY_LACS_TO_ONE_CRORE
   MORE_THAN_1_CRORE
+}
+
+model InvestorObjective {
+  id                        Int                    @id @unique
+  investor                  Investor               @relation(fields: [id], references: [id])
+  preferredAmountToInvest   AmountRange?
+  preferredFundingStages    FundingStage[]
+  preferredStartupTeamSizes StartupTeamSize[]
+  preferredTimelines        TimelineRange[]
+  riskApetite               RiskApetite?
+  preferredSectors          Sector[]
+  preferredLocations        Int[] //from Location table
+  platformGoal              InvestorPlatformGoal[]
+  referSource               ReferSource[]
+  createdAt                 DateTime               @default(now())
+  updatedAt                 DateTime               @updatedAt
+}
+
+enum TimelineRange {
+  LESS_THAN_SIX_MONTHS
+  SIX_TO_TWELVE_MONTHS
+  ONE_TO_TWO_YEARS
+  TWO_TO_FIVE_YEARS
+  FIVE_TO_TEN_YEARS
+  MORE_THAN_TEN_YEARS
 }
 
 enum RiskApetite {
@@ -188,38 +221,21 @@ enum RiskApetite {
   HIGH
 }
 
-model InvestorMotive {
-  id                       Int                    @id @unique
-  investor                 Investor               @relation(fields: [id], references: [id])
-  preferredIndustrySectors Int[] //from IndustrySector table
-  prefferedCapitalToInvest AmountRange[]
-  preferredFundingStage    FundingStage[]
-  preferredStartupTeamSize StartupSize[]
-  preferredTimelineMonths  Int?
-  preferredReturnsMult     Int?
-  preferredLocations       Int[] //from Location table
-  reasonForInvesting       String?
-  platformGoal             InvestorPlatformGoal[]
-  referSource              ReferSource[]
-  createdAt                DateTime               @default(now())
-  updatedAt                DateTime               @updatedAt
-}
-
-enum StartupSize {
+enum StartupTeamSize {
   ONE
-  BW_1_AND_10
-  BW_10_AND_50
-  BW_50_AND_200
-  BW_200_AND_1000
+  BETWEEN_1_AND_10
+  BETWEEN_10_AND_50
+  BETWEEN_50_AND_200
+  BETWEEN_200_AND_1000
   OVER_1000
 }
 
 enum InvestorPlatformGoal {
-  INVEST
-  LEARN
-  EXPLORE
-  CONNECT
-  ADVISE
+  INVESTING
+  CONNECTING
+  LEARNING
+  EXPLORING
+  CONSULTING
 }
 
 enum ReferSource {
@@ -253,26 +269,28 @@ model Startup {
   linkedInURL       String?
   websiteURL        String?
   locationID        Int //from Location table
-  industrySectorID  Int //from IndustrySector table
+  sectorCategoryID  Int //from SectorCategory table
   startupBasic      StartupBasic?
   startupBusiness   StartupBusiness?
   startupFinancials StartupFinancials?
-  startupMotive     StartupMotive?
+  startupObjective  StartupObjective?
   offers            Offer[]            @relation("OffersByStartup")
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 }
 
-model IndustrySector {
+model SectorCategory {
   id        Int      @id @default(autoincrement())
-  industry  Industry
   sector    Sector
+  category  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([sector, category])
 }
 
-//TODO: Split Industy Sector and populate data
-enum Industry {
+//TODO: First level of sectors
+enum Sector {
   EDUCATION
   HEALTHCARE
   PHARMACEUTICALS
@@ -316,26 +334,20 @@ enum Industry {
   AUTOMATION
 }
 
-//TODO: Align with industry and populate data
-enum Sector {
-  AI
-  AUTOMATION
-}
-
 model StartupBasic {
-  id              Int         @id @unique
-  startup         Startup     @relation(fields: [id], references: [id])
+  id              Int             @id @unique
+  startup         Startup         @relation(fields: [id], references: [id])
   valueProp       String
   story           String?
   whyThisBusiness String?
   isFirstStartup  Boolean
   mission         String
   vision          String
-  startupSize     StartupSize
+  startupTeamSize StartupTeamSize
   leadingTeam     KeyPeople[]
   coreValues      String[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }
 
 model KeyPeople {
@@ -434,20 +446,19 @@ model CapTable {
   updatedAt   DateTime          @updatedAt
 }
 
-model StartupMotive {
-  id                       Int                   @id @unique
-  startup                  Startup               @relation(fields: [id], references: [id])
-  platformGoal             StartupPlatformGoal[]
-  referSource              ReferSource[]
-  preferredIndustrySectors Int[] //from IndustrySector table
-  preferredInvestorLevels  InvestorLevel[]
-  preferredLocations       Int[] //from Location table
-  promisingReturnsMult     Int?
-  promisingTimeline        Int?
-  pitchDeckURL             String?
-  demoURL                  String?
-  createdAt                DateTime              @default(now())
-  updatedAt                DateTime              @updatedAt
+model StartupObjective {
+  id                         Int                   @id @unique
+  startup                    Startup               @relation(fields: [id], references: [id])
+  platformGoal               StartupPlatformGoal[]
+  referSource                ReferSource[]
+  preferredInvestorLevels    InvestorLevel[]
+  preferredInvestorLocations Int[] //from Location table
+  expectedTimeline           TimelineRange
+  promisingReturns           ReturnsRange
+  pitchDeckURL               String?
+  demoURL                    String?
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
 }
 
 enum StartupPlatformGoal {

@@ -21,7 +21,17 @@ type ButtonProps = {
 export const PrimaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded-sm bg-primary px-4 py-2 text-b2 text-white hover:bg-primary-d1 lg:px-5 lg:py-3 lg:text-b1"
+      className="rounded-sm border-2 border-primary bg-primary px-4 py-2 text-b2 text-white hover:border-primary-d1 hover:bg-primary-d1 lg:px-5 lg:py-3 lg:text-b1"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
+export const SmallPrimaryFilledButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded-sm border-2 border-primary bg-primary px-2 py-1 text-b3 text-white hover:border-primary-d1 hover:bg-primary-d1 lg:px-4 lg:py-2 lg:text-b2"
       onClick={props.action}
     >
       {props.label}
@@ -32,7 +42,7 @@ export const PrimaryFilledButton = (props: ButtonProps) => {
 export const LargePrimaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded-sm bg-primary px-5 py-3 text-b1 text-white hover:bg-primary-d1 lg:px-6 lg:py-4 lg:text-h6"
+      className="rounded-sm border-2 border-primary bg-primary px-5 py-3 text-b1 text-white hover:border-primary-d1 hover:bg-primary-d1 lg:px-6 lg:py-4 lg:text-h6"
       onClick={props.action}
     >
       {props.label}
@@ -43,14 +53,23 @@ export const LargePrimaryFilledButton = (props: ButtonProps) => {
 export const DisabledFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded-sm bg-black-l4 px-4 py-2 text-b2 text-white-d3 lg:px-5 lg:py-3 lg:text-b1"
+      className="rounded-sm border-2 border-black-l4 bg-black-l4 px-4 py-2 text-b2 text-white-d3 lg:px-5 lg:py-3 lg:text-b1"
       onClick={props.action}
     >
       {props.label}
     </button>
   )
 }
-
+export const BlackOutlineButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded-sm border-2 border-black-l1 px-4 py-2 text-b2 text-black-l1 hover:border-black hover:text-black dark:border-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:text-white lg:px-5 lg:py-3 lg:text-b1"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
 export const PrimaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -71,7 +90,16 @@ export const SmallPrimaryOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
-
+export const SecondaryOutlineButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded-sm border-2 border-secondary px-4 py-2 text-b2 text-secondary hover:border-secondary-d1 hover:text-secondary-d1 dark:border-secondary-l1 dark:text-secondary-l1 dark:hover:border-secondary dark:hover:text-secondary lg:px-5 lg:py-3 lg:text-b1"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
 export const SmallSecondaryOutlineButton = (props: ButtonProps) => {
   return (
     <button

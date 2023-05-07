@@ -2,7 +2,8 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import { SmallSecondaryOutlineButton } from 'src/components/Button/Button'
 
-import Logo from '../../../public/logo/DealbariLogo.svg'
+import LogoBlack from '../../../public/logo/LogoBlack.svg'
+import LogoWhite from '../../../public/logo/LogoWhite.svg'
 
 type LoginPageLayoutProps = {
   children?: React.ReactNode
@@ -23,8 +24,12 @@ export default LoginPageLayout
 const LoginHeader = () => {
   return (
     <div className="flex items-center justify-between py-2 lg:py-3">
-      <Logo
-        className="h-6 w-10 content-start lg:h-8 lg:w-12"
+      <LogoBlack
+        className="flex h-6 w-10 content-start dark:hidden lg:h-8 lg:w-12"
+        onClick={() => navigate(routes.landing())}
+      />
+      <LogoWhite
+        className="hidden h-6 w-10 content-start dark:flex lg:h-8 lg:w-12"
         onClick={() => navigate(routes.landing())}
       />
       <div className="flex items-center justify-end gap-4 lg:gap-5">

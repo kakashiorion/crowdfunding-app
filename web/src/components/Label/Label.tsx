@@ -1,9 +1,18 @@
 type LabelProps = {
   label: string
 }
+
+export const HeadingLabel = (props: LabelProps) => {
+  return (
+    <p className="text-h2 font-black text-black dark:text-white lg:text-h1">
+      {props.label}
+    </p>
+  )
+}
+
 export const TextLabel = (props: LabelProps) => {
   return (
-    <p className="lg:pt-4'  pt-2 text-b2 text-black-l1 dark:text-white lg:text-b1">
+    <p className="text-b2 text-black dark:text-white lg:text-b1">
       {props.label}
     </p>
   )
@@ -11,7 +20,7 @@ export const TextLabel = (props: LabelProps) => {
 
 export const PrimaryTextLabel = (props: LabelProps) => {
   return (
-    <p className="lg:pt-4'  pt-2 text-b2 text-primary dark:text-primary-l1 lg:text-b1">
+    <p className="text-b2 text-primary dark:text-primary-l1 lg:text-b1">
       {props.label}
     </p>
   )
@@ -19,7 +28,7 @@ export const PrimaryTextLabel = (props: LabelProps) => {
 
 export const SuccessTextLabel = (props: LabelProps) => {
   return (
-    <p className="lg:pt-4'  pt-2 text-b2 text-success dark:text-success-l1 lg:text-b1">
+    <p className="text-b2 text-success-d1 dark:text-success lg:text-b1">
       {props.label}
     </p>
   )
@@ -27,7 +36,7 @@ export const SuccessTextLabel = (props: LabelProps) => {
 
 export const DisabledTextLabel = (props: LabelProps) => {
   return (
-    <p className="lg:pt-4'  pt-2 text-b2 text-black-l3 dark:text-white-d3 lg:text-b1">
+    <p className="text-b2 text-black-l4 dark:text-white-d4 lg:text-b1">
       {props.label}
     </p>
   )
@@ -35,7 +44,7 @@ export const DisabledTextLabel = (props: LabelProps) => {
 
 export const SubTitleLabel = (props: LabelProps) => {
   return (
-    <p className="text-b1 text-black dark:text-white lg:text-h6">
+    <p className="text-b1 text-black-l1 dark:text-white-d1 lg:text-h6">
       {props.label}
     </p>
   )
@@ -51,7 +60,7 @@ export const PrimarySubTitleLabel = (props: LabelProps) => {
 
 export const SuccessSubTitleLabel = (props: LabelProps) => {
   return (
-    <p className="text-b1 text-success dark:text-success-l1 lg:text-h6">
+    <p className="text-b1 text-success-d1 dark:text-success lg:text-h6">
       {props.label}
     </p>
   )
@@ -59,7 +68,7 @@ export const SuccessSubTitleLabel = (props: LabelProps) => {
 
 export const DisabledSubTitleLabel = (props: LabelProps) => {
   return (
-    <p className="text-b1 text-black-l3 dark:text-white-d3 lg:text-h6">
+    <p className="text-b1 text-black-l4 dark:text-white-d4 lg:text-h6">
       {props.label}
     </p>
   )
@@ -83,7 +92,7 @@ export const PrimaryTitleLabel = (props: LabelProps) => {
 
 export const SuccessTitleLabel = (props: LabelProps) => {
   return (
-    <p className="text-h5 text-success dark:text-success-l1  lg:text-h4">
+    <p className="text-h5 text-success-d1 dark:text-success  lg:text-h4">
       {props.label}
     </p>
   )
@@ -91,7 +100,7 @@ export const SuccessTitleLabel = (props: LabelProps) => {
 
 export const DisabledTitleLabel = (props: LabelProps) => {
   return (
-    <p className="  text-h5 text-black-l3 dark:text-white-d3  lg:text-h4">
+    <p className="text-h5 text-black-l4 dark:text-white-d4  lg:text-h4">
       {props.label}
     </p>
   )
@@ -129,9 +138,17 @@ export const ErrorSubTextLabel = (props: LabelProps) => {
   )
 }
 
+export const WarnSubTextLabel = (props: LabelProps) => {
+  return (
+    <p className=" text-b3 text-warn-d1 dark:text-warn-l1 lg:text-b2">
+      {props.label}
+    </p>
+  )
+}
+
 export const SuccessSubTextLabel = (props: LabelProps) => {
   return (
-    <p className=" text-b3 text-success-d1 dark:text-success-l1 lg:text-b2">
+    <p className=" text-b3 text-success-d1 dark:text-success lg:text-b2">
       {props.label}
     </p>
   )

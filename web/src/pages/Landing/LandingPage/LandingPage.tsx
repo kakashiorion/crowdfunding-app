@@ -4,6 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 import { LargePrimaryFilledButton } from 'src/components/Button/Button'
+import { HeadingLabel, PrimarySubTitleLabel } from 'src/components/Label/Label'
 import LandingFooter from 'src/components/LandingFooter/LandingFooter'
 import LandingHeader from 'src/components/LandingHeader/LandingHeader'
 
@@ -49,14 +50,13 @@ const HeroSection = () => {
 
 const HeroTextSection = () => {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 lg:gap-8 ">
-      <p className="text-center text-h2 font-black text-black dark:text-white lg:text-h1">
-        Become a part of the Indian growth story
-      </p>
-      <p className="text-center text-h6 text-black-l2 dark:text-white-d2 lg:text-h5">
-        Explore and connect with a community of investors and startups driving
-        innovation in India
-      </p>
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center lg:gap-8 ">
+      <HeadingLabel label={' Become a part of the Indian growth story'} />
+      <PrimarySubTitleLabel
+        label={
+          'Explore and connect with a community of investors and startups driving innovation in India'
+        }
+      />
       <LargePrimaryFilledButton
         action={() => navigate(routes.signup())}
         label="JOIN NOW"

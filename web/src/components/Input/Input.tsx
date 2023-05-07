@@ -1,13 +1,12 @@
 type InputProps = {
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  value: string | number | readonly string[] | undefined
+  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined
   type?: React.HTMLInputTypeAttribute
 }
 
 export const TextInput = (props: InputProps) => {
   return (
     <input
-      id="email-input"
       value={props.value}
       type={props.type}
       onChange={props.onChange}

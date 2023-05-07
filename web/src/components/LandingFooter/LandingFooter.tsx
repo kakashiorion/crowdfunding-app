@@ -1,7 +1,9 @@
 import { routes, navigate } from '@redwoodjs/router'
 
-import Logo from '../../../public/logo/DealbariLogo.svg'
+import BlackLogo from '../../../public/logo/LogoBlack.svg'
+import WhiteLogo from '../../../public/logo/LogoWhite.svg'
 import { BlackTextButton } from '../Button/Button'
+import { PrimarySubTextLabel, TextLabel } from '../Label/Label'
 
 const LandingFooter = () => {
   return (
@@ -17,15 +19,19 @@ const LandingFooter = () => {
 const BrandBlock = () => {
   return (
     <div className="order-last flex flex-col items-start gap-2 lg:order-first lg:gap-3">
-      <Logo
-        className="h-6 w-10 lg:h-8 lg:w-12"
+      <BlackLogo
+        className="flex h-6 w-10 dark:hidden lg:h-8 lg:w-12"
         onClick={() => {
           navigate(routes.landing())
         }}
       />
-      <p className="text-b2 text-black dark:text-white lg:text-b1">
-        Copyright @2023
-      </p>
+      <WhiteLogo
+        className="hidden h-6 w-10 dark:flex lg:h-8 lg:w-12"
+        onClick={() => {
+          navigate(routes.landing())
+        }}
+      />
+      <TextLabel label={'Copyright @2023'} />
     </div>
   )
 }
@@ -96,9 +102,7 @@ type InfoListProps = {
 const InfoList = (props: InfoListProps) => {
   return (
     <div className="flex flex-col items-start justify-start gap-3">
-      <p className="text-b3 font-bold text-black   dark:text-white lg:text-b2">
-        {props.header}
-      </p>
+      <PrimarySubTextLabel label={props.header} />
       {props.infoList.map((item: InfoItemType) => (
         <BlackTextButton
           key={item.label}

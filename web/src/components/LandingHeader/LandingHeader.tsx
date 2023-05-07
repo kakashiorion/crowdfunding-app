@@ -4,7 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import CloseIcon from '../../../public/icons/close.svg'
 import MenuIcon from '../../../public/icons/menu.svg'
-import Logo from '../../../public/logo/DealbariLogo.svg'
+import Logo from '../../../public/logo/LogoOrig.svg'
 import {
   HoverPrimaryTextButton,
   SmallPrimaryOutlineButton,

@@ -58,11 +58,11 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   const participle = props.pref == 'Investor' ? 'an' : 'a'
 
   const activeClassName =
-    'px-2 py-4 lg:py-2 bg-white-d2 shadow-md dark:bg-black-l1 flex h-full w-full  flex-col items-center justify-center gap-2  '
+    'p-4 bg-white-d2 shadow-md dark:bg-black-l1 flex h-full w-full flex-col items-center justify-center gap-2  '
 
-  const inactiveClassName = `p-2 bg-white-d1 ${
+  const inactiveClassName = `p-4 bg-white-d1 ${
     props.selectedType != '' ? 'opacity-60' : ''
-  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l1 flex h-full w-full flex-col items-center justify-center gap-2 lg:p-4 `
+  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l1 flex lg:h-full w-full flex-col items-center justify-center gap-2`
 
   const subText =
     props.pref == 'Investor'
@@ -95,12 +95,10 @@ type SignupFormProps = {
 const SignupForm = (props: SignupFormProps) => {
   const [stage, setStage] = useState('email')
   const [emailError, setEmailError] = useState('')
-  const [nameError, setNameError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [pwdError, setPwdError] = useState('')
   const [codeError, setCodeError] = useState('')
   const [enteredEmail, setEnteredEmail] = useState('')
-  const [enteredName, setEnteredName] = useState('')
   const [enteredPhone, setEnteredPhone] = useState('')
   const [enteredPwd, setEnteredPwd] = useState('')
   const [enteredConfirmPwd, setEnteredConfirmPwd] = useState('')
@@ -110,7 +108,7 @@ const SignupForm = (props: SignupFormProps) => {
   return (
     <div className="flex  w-full flex-col items-center justify-center gap-2 ">
       {stage == 'email' && (
-        //Step 1: Provide Email, Name and Phone number
+        //Step 1: Provide Email and Phone number
         <>
           <SubTextLabel
             label={'Please provide some details required for signup.'}
@@ -125,17 +123,7 @@ const SignupForm = (props: SignupFormProps) => {
             }}
           />
           <ErrorSubTextLabel label={emailError} />
-          <TextLabel label="Name (Optional)" />
-          <TextInput
-            value={enteredName}
-            type="text"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEnteredName(e.target.value)
-              nameError != '' && setNameError('')
-            }}
-          />
-          <ErrorSubTextLabel label={nameError} />
-          <TextLabel label="Phone Number (Optional)" />
+          <TextLabel label="Phone Number" />
           <TextInput
             value={enteredPhone}
             type="tel"
@@ -149,17 +137,26 @@ const SignupForm = (props: SignupFormProps) => {
             action={() => {
               if (enteredEmail.length == 0) {
                 setEmailError(`Email is required for signup!`)
-              } else if (enteredName.length > 0 && enteredName.length < 5) {
-                setNameError('Name should be at least 5 characters long')
-              } else if (enteredPhone.length > 0 && enteredPhone.length < 10) {
+              } else if (enteredEmail == 'abcd') {
+                //TODO: Check email pattern
+                setEmailError('Invalid email')
+              } else if (enteredPhone.length < 10) {
                 setPhoneError('Phone number should be at least 10 digits')
               } else {
-                //TODO: Generate a token
-                const gToken = '123456'
-                //TODO: send token in Email for user to confirnm
-                // sendEmail(gToken)
-                setGeneratedToken(gToken)
-                setStage('confirm')
+                //TODO: Check if email or phone does not exist in DB
+                //checkDB()
+                if (enteredEmail == 'pqrs') {
+                  setEmailError('Email already exists')
+                } else if (enteredPhone == '1111111111') {
+                  setPhoneError('Phone already exists')
+                } else {
+                  //TODO: If success, Generate a token
+                  const gToken = '123456'
+                  //TODO: send token in Email for user to confirnm
+                  // sendEmail(gToken)
+                  setGeneratedToken(gToken)
+                  setStage('confirm')
+                }
               }
             }}
             label="CONTINUE"
@@ -197,11 +194,13 @@ const SignupForm = (props: SignupFormProps) => {
             }}
             label="CONFIRM"
           />
+          <div className="h-2 lg:h-4"></div>
+          <SubTextLabel label={`Not ${enteredEmail}?`} />
           <SmallHoverPrimaryTextButton
             action={() => {
               setStage('email')
             }}
-            label={`Not ${enteredEmail}? Go back`}
+            label={`Go back`}
           />
         </>
       )}
