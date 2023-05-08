@@ -13,6 +13,7 @@ import {
   SubTextLabel,
   TextLabel,
   TitleLabel,
+  WarnSubTextLabel,
 } from 'src/components/Label/Label'
 
 import CheckIcon from '../../../../public/icons/checkCircle.svg'
@@ -46,7 +47,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-5 overflow-y-scroll px-4 py-5 text-center lg:flex-[2] lg:px-6">
           {step == 'code' && (
             <>
-              <TitleLabel label="Reseting password" />{' '}
+              <TitleLabel label="Resetting password" />{' '}
               <SubTextLabel
                 label={'Check your email.. We have sent you a reset code'}
               />
@@ -68,7 +69,9 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                   } else if (enteredCode == '123456') {
                     setStep('password')
                   } else {
-                    setCodeError('Code does not match.. Please try again!')
+                    setCodeError(
+                      'Oops.. Code does not match. Please try again!'
+                    )
                   }
                 }}
                 label="CONTINUE"
@@ -118,11 +121,13 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                 }}
                 label="DONE"
               />
+              <div className="h-4 lg:h-6"></div>
+              <WarnSubTextLabel label={`Not ${props.email}?`} />
               <SmallHoverPrimaryTextButton
                 action={() => {
                   navigate(routes.forgotPassword())
                 }}
-                label={`Not ${props.email} ?`}
+                label={`Go back`}
               />
             </>
           )}

@@ -26,6 +26,14 @@ export const PrimaryTextLabel = (props: LabelProps) => {
   )
 }
 
+export const TertiaryTextLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b2 text-tertiary dark:text-tertiary-l1 lg:text-b1">
+      {props.label}
+    </p>
+  )
+}
+
 export const SuccessTextLabel = (props: LabelProps) => {
   return (
     <p className="text-b2 text-success-d1 dark:text-success lg:text-b1">
@@ -53,6 +61,14 @@ export const SubTitleLabel = (props: LabelProps) => {
 export const PrimarySubTitleLabel = (props: LabelProps) => {
   return (
     <p className="text-b1 text-primary dark:text-primary-l1 lg:text-h6">
+      {props.label}
+    </p>
+  )
+}
+
+export const TertiarySubTitleLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b1 text-tertiary dark:text-tertiary-l1 lg:text-h6">
       {props.label}
     </p>
   )
@@ -90,6 +106,14 @@ export const PrimaryTitleLabel = (props: LabelProps) => {
   )
 }
 
+export const TertiaryTitleLabel = (props: LabelProps) => {
+  return (
+    <p className=" text-h5 text-tertiary dark:text-tertiary-l1  lg:text-h4">
+      {props.label}
+    </p>
+  )
+}
+
 export const SuccessTitleLabel = (props: LabelProps) => {
   return (
     <p className="text-h5 text-success-d1 dark:text-success  lg:text-h4">
@@ -117,6 +141,14 @@ export const SubTextLabel = (props: LabelProps) => {
 export const PrimarySubTextLabel = (props: LabelProps) => {
   return (
     <p className=" text-b3 text-primary dark:text-primary-l1 lg:text-b2">
+      {props.label}
+    </p>
+  )
+}
+
+export const TertiarySubTextLabel = (props: LabelProps) => {
+  return (
+    <p className=" text-b3 text-tertiary dark:text-tertiary-l1 lg:text-b2">
       {props.label}
     </p>
   )

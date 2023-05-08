@@ -132,7 +132,9 @@ const Divider = () => {
 }
 
 export const loginFormClassName =
-  'flex w-full flex-1 flex-col items-center justify-center gap-1 lg:gap-2'
+  'flex w-full flex-grow flex-col items-center justify-center gap-1 lg:gap-2'
+
+const resetTimeLimit = 30
 
 const PasswordLoginForm = () => {
   const [pwdError, setPwdError] = useState('')
@@ -202,7 +204,6 @@ const PhoneLoginForm = () => {
   const [enteredPhone, setEnteredPhone] = useState('')
   const [enteredOTP, setEnteredOTP] = useState('')
   const [resendCounter, setResendCounter] = useState(0)
-  const resetTimeLimit = 5
 
   useEffect(() => {
     if (resendCounter > 0) {
@@ -303,7 +304,6 @@ const TokenLoginForm = () => {
   const [enteredEmail, setEnteredEmail] = useState('')
   const [enteredToken, setEnteredToken] = useState('')
   const [resendCounter, setResendCounter] = useState(0)
-  const resetTimeLimit = 5
 
   useEffect(() => {
     if (resendCounter > 0) {

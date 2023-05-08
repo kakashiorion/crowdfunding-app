@@ -1,10 +1,10 @@
-import { StepsInfoType } from 'src/pages/Investor/InvestorOnboardingPage/stepsConsts'
+import { OnboardingStepsInfoType } from 'src/lib/const'
 
 import { SubTextLabel, SubTitleLabel } from '../Label/Label'
 import ProgressIndicator from '../ProgressIndicator/ProgressIndicator'
 
 type StepHeaderProps = {
-  currentStepInfo: StepsInfoType[]
+  currentStepInfo: OnboardingStepsInfoType[]
   currentStepNumber: number
 }
 const StepHeader = (props: StepHeaderProps) => {

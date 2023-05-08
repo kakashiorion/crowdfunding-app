@@ -29,17 +29,17 @@ module.exports = {
     colors: {
       black: {
         DEFAULT: '#000000',
-        l1: '#1b1b1b',
-        l2: '#3e3e3e',
-        l3: '#6c6c6c',
-        l4: '#969696',
+        l1: '#191919',
+        l2: '#323232',
+        l3: '#4b4b4b',
+        l4: '#646464',
       },
       white: {
         DEFAULT: '#ffffff',
-        d1: '#eeeeee',
-        d2: '#dddddd',
-        d3: '#cccccc',
-        d4: '#bbbbbb',
+        d1: '#ebebeb',
+        d2: '#d7d7d7',
+        d3: '#c3c3c3',
+        d4: '#afafaf',
       },
       primary: {
         l2: '#BFAEEF',
@@ -55,7 +55,7 @@ module.exports = {
         d1: '#7D9412',
         d2: '#516200',
       },
-      accent: {
+      tertiary: {
         l2: '#B3DEF0',
         l1: '#5DB7DE',
         DEFAULT: '#189BD3',

@@ -12,6 +12,7 @@ import {
   ErrorSubTextLabel,
   SubTextLabel,
   TextLabel,
+  WarnSubTextLabel,
 } from 'src/components/Label/Label'
 
 // type UserType = 'Investor' | 'Startup' |''
@@ -58,11 +59,11 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   const participle = props.pref == 'Investor' ? 'an' : 'a'
 
   const activeClassName =
-    'p-4 bg-white-d2 shadow-md dark:bg-black-l1 flex h-full w-full flex-col items-center justify-center gap-2  '
+    'p-4 bg-white-d2 flex-grow shadow-md dark:bg-black-l1 flex h-full w-full flex-col items-center justify-center gap-2  '
 
   const inactiveClassName = `p-4 bg-white-d1 ${
-    props.selectedType != '' ? 'opacity-60' : ''
-  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l1 flex lg:h-full w-full flex-col items-center justify-center gap-2`
+    props.selectedType != '' ? 'opacity-60' : ' flex-grow'
+  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l1 flex w-full flex-col items-center justify-center gap-2`
 
   const subText =
     props.pref == 'Investor'
@@ -137,7 +138,10 @@ const SignupForm = (props: SignupFormProps) => {
             action={() => {
               if (enteredEmail.length == 0) {
                 setEmailError(`Email is required for signup!`)
-              } else if (enteredEmail == 'abcd') {
+              } else if (
+                !enteredEmail.includes('@') ||
+                !enteredEmail.includes('.')
+              ) {
                 //TODO: Check email pattern
                 setEmailError('Invalid email')
               } else if (enteredPhone.length < 10) {
@@ -145,7 +149,7 @@ const SignupForm = (props: SignupFormProps) => {
               } else {
                 //TODO: Check if email or phone does not exist in DB
                 //checkDB()
-                if (enteredEmail == 'pqrs') {
+                if (enteredEmail == 'pqrs@gmail.com') {
                   setEmailError('Email already exists')
                 } else if (enteredPhone == '1111111111') {
                   setPhoneError('Phone already exists')
@@ -194,8 +198,8 @@ const SignupForm = (props: SignupFormProps) => {
             }}
             label="CONFIRM"
           />
-          <div className="h-2 lg:h-4"></div>
-          <SubTextLabel label={`Not ${enteredEmail}?`} />
+          <div className="h-4 lg:h-6"></div>
+          <WarnSubTextLabel label={`Not ${enteredEmail}?`} />
           <SmallHoverPrimaryTextButton
             action={() => {
               setStage('email')
@@ -209,10 +213,9 @@ const SignupForm = (props: SignupFormProps) => {
         //Step 3: Choose password
         <>
           <SubTextLabel
-            label={
-              'Great.. Finally, create a password for your account to complete signup.'
-            }
+            label={`Great.. Let's create a password for your account to complete signup.`}
           />
+          <div className="h-4 lg:h-6"></div>
           <TextLabel label="Choose a password" />
           <TextInput
             value={enteredPwd}

@@ -47,10 +47,10 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   let className = ''
   if (props.size == 'large') {
     className =
-      'hidden lg:flex gap-6 lg:flex-row lg:items-center lg:justify-end lg:gap-6 lg:bg-transparent  lg:p-0 lg:opacity-100 lg:dark:bg-transparent '
+      'hidden lg:flex lg:gap-6 lg:flex-row lg:items-center lg:justify-end lg:p-0 lg:opacity-100'
   } else {
     className =
-      'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded-sm bg-white-d1 py-4 px-6 dark:bg-black-l1 '
+      'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded-sm bg-white-d1/95 py-4 px-6 dark:bg-black-l1/95 '
   }
 
   //  const scrollRefsList = [investorRef, startupRef, aboutRef, contactRef]

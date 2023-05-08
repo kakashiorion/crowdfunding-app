@@ -1,16 +1,17 @@
 import { useState } from 'react'
 
+import CloseIcon from 'public/icons/close.svg'
+import SearchIcon from 'public/icons/search.svg'
+
 import { SmallPrimaryFilledButton } from 'src/components/Button/Button'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingPage'
-import { stepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/stepsConsts'
+import { OnboardingMainProps } from 'src/lib/const'
+import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
 
-import CloseIcon from '../../../../public/icons/close.svg'
-import SearchIcon from '../../../../public/icons/search.svg'
-import StepFooter from '../StepFooter'
-import StepHeader from '../StepHeader'
+import StepFooter from '../../StepFooter'
+import StepHeader from '../../StepHeader'
 
-const locationData = require('../locationData.json')
+const locationData = require('../../locationData.json')
 
 /*Info to be created and saved in InvestorObjective table:
 1  preferredAmountToInvest     AmountRange?
@@ -29,7 +30,7 @@ const InvestorObjective = (props: OnboardingMainProps) => {
   const [step, setStep] = useState(1)
 
   //Get steps info data
-  const currentStepInfo = stepsInfoList[props.currentSection - 1].steps
+  const currentStepInfo = InvestorStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
 
@@ -189,7 +190,7 @@ const InvestorObjective = (props: OnboardingMainProps) => {
   //Function to move ahead with save
   const next = () => {
     skipData.push(false)
-    if (step == stepsInfoList[props.currentSection - 1].steps.length) {
+    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
       saveData()
     } else {
@@ -201,7 +202,7 @@ const InvestorObjective = (props: OnboardingMainProps) => {
   const skip = () => {
     skipData.push(true)
     clearError()
-    if (step == stepsInfoList[props.currentSection - 1].steps.length) {
+    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
       saveData()
     } else {
@@ -625,7 +626,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-between gap-2 border-2 p-2 dark:border-primary lg:flex-row lg:p-4 ">
+      <div className="flex w-full flex-col items-center justify-between gap-2 border-2 border-primary p-2 lg:flex-row lg:p-4 ">
         <div className="flex w-full items-center justify-between gap-2 ">
           <input
             className={
@@ -638,9 +639,9 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
             }}
             type={'text'}
           />
-          <div className="rounded-full bg-primary p-2 hover:bg-primary-d1">
+          <div className="rounded-full bg-primary p-2 shadow-md hover:bg-primary-d1">
             <SearchIcon
-              className="flex h-5 w-5 fill-primary dark:fill-primary-l1 lg:h-6 lg:w-6"
+              className="flex h-5 w-5 fill-white lg:h-6 lg:w-6"
               onClick={() => {
                 setSearchResult(
                   locationList.filter((l) => l.includes(searchTerm))
@@ -718,6 +719,7 @@ const goalsOptions = [
   'LEARNING',
   'EXPLORING',
   'CONSULTING',
+  'RESEARCHING',
 ]
 type ObjectiveGoalsProps = {
   platformGoal: string[]
@@ -763,6 +765,7 @@ const sourcesOptions = [
   'BROWSING',
   'REFERRAL',
   'ADVERTISEMENT',
+  'OTHER',
 ]
 type ObjectiveSourcesProps = {
   referSource: string[]

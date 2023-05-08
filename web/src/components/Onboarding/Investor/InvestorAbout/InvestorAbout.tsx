@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingPage'
-import { stepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/stepsConsts'
+import { OnboardingMainProps } from 'src/lib/const'
+import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
 
-import StepFooter from '../StepFooter'
-import StepHeader from '../StepHeader'
+import StepFooter from '../../StepFooter'
+import StepHeader from '../../StepHeader'
 
-const locationData = require('../locationData.json')
+const locationData = require('../../locationData.json')
 
 // const UPDATE_INVESTOR_MUTATION = gql`
 //   mutation UpdateInvestorMutation($id: Int!, $input: UpdateInvestorInput!) {
@@ -47,7 +47,7 @@ const InvestorAbout = (props: OnboardingMainProps) => {
   const [step, setStep] = useState(1)
 
   //Get steps info data
-  const currentStepInfo = stepsInfoList[props.currentSection - 1].steps
+  const currentStepInfo = InvestorStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
 
@@ -232,7 +232,7 @@ const InvestorAbout = (props: OnboardingMainProps) => {
   //Function to move ahead with save
   const next = () => {
     skipData.push(false)
-    if (step == stepsInfoList[props.currentSection - 1].steps.length) {
+    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
       saveData()
     } else {
@@ -244,7 +244,7 @@ const InvestorAbout = (props: OnboardingMainProps) => {
   const skip = () => {
     skipData.push(true)
     clearError()
-    if (step == stepsInfoList[props.currentSection - 1].steps.length) {
+    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
       saveData()
     } else {
