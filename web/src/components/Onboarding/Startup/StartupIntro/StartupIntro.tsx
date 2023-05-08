@@ -1,21 +1,21 @@
 import CheckIcon from 'public/icons/checkCircle.svg'
 import InfoIcon from 'public/icons/info.svg'
 
-import { PrimaryFilledButton } from 'src/components/Button/Button'
+import { TertiaryFilledButton } from 'src/components/Button/Button'
 import {
   TitleLabel,
-  PrimarySubTitleLabel,
+  TertiarySubTitleLabel,
   WarnSubTextLabel,
 } from 'src/components/Label/Label'
 import { OnboardingIntroSectionProps } from 'src/lib/onboardingConsts'
 
-const InvestorIntro = (props: OnboardingIntroSectionProps) => {
+const StartupIntro = (props: OnboardingIntroSectionProps) => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 rounded-sm px-6 py-5 text-center  lg:px-8 lg:py-6">
       <CheckIcon className="flex h-9 w-9 fill-success-d1 dark:fill-success-l1 lg:h-10 lg:w-10" />
       <TitleLabel label="Congrats.. you have successfully signed up!" />
-      <PrimarySubTitleLabel label="Now, let's get you onboard our platform." />
-      <PrimaryFilledButton
+      <TertiarySubTitleLabel label="Now, let's get you onboard our platform." />
+      <TertiaryFilledButton
         label="GET STARTED"
         action={() => props.setCurrentSection(1)}
       />
@@ -27,4 +27,4 @@ const InvestorIntro = (props: OnboardingIntroSectionProps) => {
   )
 }
 
-export default InvestorIntro
+export default StartupIntro

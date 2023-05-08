@@ -46,7 +46,8 @@ const Routes = () => {
         <Route path="/startup/investorProfile" page={StartupInvestorProfilePage} name="startupInvestorProfile" />
         <Route path="/startup/post" page={StartupStartupPostPage} name="startupPost" />
       </Set>
-      <Set wrap={[StartupOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
+      {/* <Set wrap={[StartupOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}> */}
+      <Set wrap={[StartupOnboardingLayout]} unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
         <Route path="/startup/onboarding" page={StartupStartupOnboardingPage} name="startupOnboarding" />
       </Set>
       <Set wrap={[InvestorHomeLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}>

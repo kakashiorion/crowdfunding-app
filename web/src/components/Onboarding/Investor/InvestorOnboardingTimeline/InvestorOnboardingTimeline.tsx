@@ -9,7 +9,7 @@ import {
   OnboardingSectionInfoType,
   OnboardingTimelineProps,
   OnboardingTimelineStepsProps,
-} from 'src/lib/const'
+} from 'src/lib/onboardingConsts'
 import { InvestorOnboardingSections } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
 
 const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
@@ -17,7 +17,7 @@ const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
     <div
       className={`absolute ${
         props.isMenuOpen ? 'flex' : 'hidden'
-      } right-0 top-0 min-w-[200px] flex-col gap-2 overflow-hidden rounded-sm bg-white-d1 px-2 py-2 shadow-md dark:bg-black-l2/95 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:border-l-2  lg:border-l-white-d2 lg:bg-transparent lg:px-3 lg:py-4 lg:shadow-none dark:lg:border-l-black-l2`}
+      } right-0 top-0 min-w-[200px] flex-col gap-2 overflow-scroll rounded-sm bg-white-d1 p-2 shadow-md dark:bg-black-l2/95 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:border-l-2  lg:border-l-white-d2 lg:bg-transparent lg:py-0 lg:pl-3 lg:shadow-none dark:lg:border-l-black-l2`}
     >
       <PrimaryTextLabel label="ONBOARDING SECTIONS" />
       {InvestorOnboardingSections.map((section: OnboardingSectionInfoType) => (
@@ -36,9 +36,9 @@ const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
 export default InvestorOnboardingTimeline
 
 const InvestorTimelineSteps = (props: OnboardingTimelineStepsProps) => {
-  const divClassName = `grid rounded-sm grid-cols-[1fr,6fr] w-full items-start justify-center text-center gap-1 overflow-hidden p-2 lg:gap-2 ${
+  const divClassName = `grid rounded-sm grid-cols-[1fr,6fr] w-full items-start justify-center text-center gap-1 p-2 lg:gap-2 ${
     props.sectionNumber == props.currentNumber
-      ? 'bg-white dark:bg-black-l1'
+      ? 'bg-white dark:bg-black-l1 lg:bg-white-d1 lg:dark:bg-black-l2'
       : ''
   }`
   const subClassName = 'flex flex-[5] flex-col gap-1 items-start text-start'

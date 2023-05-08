@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import PrimaryProgressIndicator from './ProgressIndicator'
+import StartupOnboardingMain from './StartupOnboardingMain'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('ProgressIndicator', () => {
+describe('StartupOnboardingMain', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PrimaryProgressIndicator />)
+      render(<StartupOnboardingMain />)
     }).not.toThrow()
   })
 })

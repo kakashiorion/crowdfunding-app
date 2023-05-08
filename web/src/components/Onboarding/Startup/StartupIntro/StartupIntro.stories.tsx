@@ -4,8 +4,8 @@
 // ```tsx
 // import type { ComponentStory } from '@storybook/react'
 //
-// export const generated: ComponentStory<typeof ProgressIndicator> = (args) => {
-//   return <ProgressIndicator {...args} />
+// export const generated: ComponentStory<typeof StartupIntro> = (args) => {
+//   return <StartupIntro {...args} />
 // }
 // ```
 //
@@ -13,13 +13,13 @@
 
 import type { ComponentMeta } from '@storybook/react'
 
-import PrimaryProgressIndicator from './ProgressIndicator'
+import StartupIntro from './StartupIntro'
 
 export const generated = () => {
-  return <PrimaryProgressIndicator />
+  return <StartupIntro />
 }
 
 export default {
-  title: 'Components/ProgressIndicator',
-  component: PrimaryProgressIndicator,
-} as ComponentMeta<typeof PrimaryProgressIndicator>
+  title: 'Components/StartupIntro',
+  component: StartupIntro,
+} as ComponentMeta<typeof StartupIntro>

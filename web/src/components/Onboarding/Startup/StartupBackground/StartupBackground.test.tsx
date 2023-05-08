@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import PrimaryProgressIndicator from './ProgressIndicator'
+import StartupBackground from './StartupBackground'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('ProgressIndicator', () => {
+describe('StartupBackground', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PrimaryProgressIndicator />)
+      render(<StartupBackground />)
     }).not.toThrow()
   })
 })

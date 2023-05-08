@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/const'
+import { OnboardingMainProps } from 'src/lib/onboardingConsts'
 import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
 
-import StepFooter from '../../StepFooter'
-import StepHeader from '../../StepHeader'
+import { InvestorStepFooter } from '../../StepFooter'
+import { InvestorStepHeader } from '../../StepHeader'
 
 /*Info to be created and saved in User table:
   messageVisibility           VisibilityLevel   @default(PUBLIC)
@@ -142,7 +142,10 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
 
   return (
     <div className="flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2">
-      <StepHeader currentStepInfo={currentStepInfo} currentStepNumber={step} />
+      <InvestorStepHeader
+        currentStepInfo={currentStepInfo}
+        currentStepNumber={step}
+      />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
           <PreferencesMessage
@@ -185,7 +188,7 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
           />
         )}
       </div>
-      <StepFooter
+      <InvestorStepFooter
         currentStepInfo={currentStepInfo}
         setStep={setStep}
         step={step}

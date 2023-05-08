@@ -271,14 +271,14 @@ enum NotificationLevel {
 model Startup {
   id                Int                @id @unique
   user              User               @relation(fields: [id], references: [id])
-  name              String             @unique
+  name              String
   writeUp           String
   dateIncorporated  DateTime
   linkedInURL       String?
   websiteURL        String?
   locationID        Int //from Location table
   sectorCategoryID  Int //from SectorCategory table
-  startupBasic      StartupBasic?
+  startupBackground StartupBackground?
   startupBusiness   StartupBusiness?
   startupFinancials StartupFinancials?
   startupObjective  StartupObjective?
@@ -290,7 +290,7 @@ model Startup {
 model SectorCategory {
   id        Int      @id @default(autoincrement())
   sector    Sector
-  category  String?
+  category  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -342,33 +342,32 @@ enum Sector {
   AUTOMATION
 }
 
-model StartupBasic {
-  id              Int             @id @unique
-  startup         Startup         @relation(fields: [id], references: [id])
-  valueProp       String
-  story           String?
-  whyThisBusiness String?
-  isFirstStartup  Boolean
-  mission         String
-  vision          String
-  startupTeamSize StartupTeamSize
-  leadingTeam     KeyPeople[]
+model StartupBackground {
+  id              Int              @id @unique
+  startup         Startup          @relation(fields: [id], references: [id])
+  valueProp       String?
+  idea            String?
+  whyThis         String?
+  foundedBefore   SizeRange?
+  mission         String?
+  vision          String?
   coreValues      String[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  startupTeamSize StartupTeamSize?
+  keyPeople       KeyPeople[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model KeyPeople {
-  id          Int          @id @default(autoincrement())
-  startup     StartupBasic @relation(fields: [startupID], references: [id])
-  startupID   Int
-  name        String
-  role        String
-  writeup     String?
-  eduBG       EducationBG?
-  linkedInURL String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id                  Int               @id @default(autoincrement())
+  startupBackground   StartupBackground @relation(fields: [startupBackgroundID], references: [id])
+  startupBackgroundID Int
+  name                String
+  role                String
+  writeup             String?
+  linkedInURL         String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 }
 
 model StartupBusiness {

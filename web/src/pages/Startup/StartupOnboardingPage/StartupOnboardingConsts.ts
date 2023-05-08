@@ -1,18 +1,22 @@
 import AboutIcon from 'public/icons/about.svg'
-import ExperienceIcon from 'public/icons/experience.svg'
+import BackgroundIcon from 'public/icons/background.svg'
+import BusinessIcon from 'public/icons/business.svg'
+import FinancialsIcon from 'public/icons/finance.svg'
 import ObjectiveIcon from 'public/icons/objective.svg'
 import PreferencesIcon from 'public/icons/preferences.svg'
 
-import InvestorAbout from 'src/components/Onboarding/Investor/InvestorAbout/InvestorAbout'
-import InvestorExperience from 'src/components/Onboarding/Investor/InvestorExperience/InvestorExperience'
-import InvestorObjective from 'src/components/Onboarding/Investor/InvestorObjective/InvestorObjective'
-import InvestorPreferences from 'src/components/Onboarding/Investor/InvestorPreferences/InvestorPreferences'
+import StartupBusiness from 'src/components/Admin/StartupBusiness/StartupBusiness'
+import StartupFinancials from 'src/components/Admin/StartupFinancials/StartupFinancials'
+import StartupPreferences from 'src/components/Admin/StartupPreferences/StartupPreferences'
+import StartupAbout from 'src/components/Onboarding/Startup/StartupAbout/StartupAbout'
+import StartupBackground from 'src/components/Onboarding/Startup/StartupBackground/StartupBackground'
+import StartupObjective from 'src/components/Onboarding/Startup/StartupObjective/StartupObjective'
 import {
   OnboardingSectionInfoType,
   OnboardingStepsInfoType,
 } from 'src/lib/onboardingConsts'
 
-export const InvestorOnboardingSections: OnboardingSectionInfoType[] = [
+export const StartupOnboardingSections: OnboardingSectionInfoType[] = [
   {
     index: 1,
     title: 'About You',
@@ -21,158 +25,175 @@ export const InvestorOnboardingSections: OnboardingSectionInfoType[] = [
   },
   {
     index: 2,
-    title: 'Experience',
-    subTitle: 'Getting to know your entrepreneurial history',
-    icon: ExperienceIcon,
+    title: 'Background',
+    subTitle: 'Learning about your background and story',
+    icon: BackgroundIcon,
   },
   {
     index: 3,
+    title: 'Business',
+    subTitle: 'Getting to know more about your business model',
+    icon: BusinessIcon,
+  },
+  {
+    index: 4,
+    title: 'Financials',
+    subTitle: 'Looking at your financial numbers',
+    icon: FinancialsIcon,
+  },
+  {
+    index: 5,
     title: 'Objective',
     subTitle: 'Understanding your goals to get better matches',
     icon: ObjectiveIcon,
   },
   {
-    index: 4,
+    index: 6,
     title: 'Preferences',
     subTitle: 'Personalizing the platform as per your needs',
     icon: PreferencesIcon,
   },
 ]
 
-const InvestorAboutSteps: OnboardingStepsInfoType[] = [
+const StartupAboutSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title: `Let's start with your name.`,
+    title: `Let's start with the name of your startup.`,
     display: 'Name',
     help: 'This name will be displayed on your profile.',
     skippable: false,
   },
   {
     index: 2,
-    title: 'When were you born?',
-    display: 'DOB',
-    help: 'This info will be used for internal purposes.',
-    skippable: true,
+    title: 'Briefly describe your startup in two sentences',
+    display: 'Writeup',
+    help: 'This will help investors know more about your startup.',
+    skippable: false,
   },
   {
     index: 3,
-    title: 'Where are you located?',
-    display: 'Location',
-    help: 'This will help startups or other investors to find you in filtered results.',
-    skippable: false,
+    title: 'When did your company start?',
+    display: 'Date',
+    help: 'This date will be displayed on your profile.',
+    skippable: true,
   },
   {
     index: 4,
     title: 'Do you have a LinkedIn Profile?',
     display: 'LinkedIn',
-    help: 'This enables startups or other investors to reach out to you outside our platform.',
+    help: 'This enables investors to reach out to you outside our platform.',
     skippable: true,
   },
   {
     index: 5,
-    title: 'Do you have a personal website?',
+    title: 'Do you have a company website?',
     display: 'Website',
-    help: 'This enables startups or other investors to reach out to you outside our platform.',
+    help: 'This enables investors to reach out to you outside our platform.',
     skippable: true,
   },
   {
     index: 6,
-    title: 'What is your education background?',
-    display: 'Education',
-    help: 'This will help startups or other investors to find you in filtered results.',
-    skippable: true,
+    title: 'Where is your startup based?',
+    display: 'Location',
+    help: 'This will help investors to find you in filtered results.',
+    skippable: false,
   },
   {
     index: 7,
-    title: 'Do you have any work experience (in years)?',
-    display: 'Work',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
-    skippable: true,
-  },
-  {
-    index: 8,
-    title: 'How many different companies have you worked at?',
-    display: 'Companies',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
-    skippable: true,
-  },
-  {
-    index: 9,
-    title: 'Select all the different sectors you have worked in.',
-    display: 'Sectors',
-    help: 'This will help startups or other investors to find you in filtered results.',
-    skippable: true,
+    title: 'Select which sector/category your business caters.',
+    display: 'Sector',
+    help: 'This will help investors to find you in filtered results.',
+    skippable: false,
   },
 ]
 
-const InvestorExperienceSteps: OnboardingStepsInfoType[] = [
+const StartupBackgroundSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title: 'How many startups have you worked in as an employee?',
-    display: 'Exposure',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
-    skippable: false,
+    title: 'What value do you provide to your customers?',
+    display: 'Value',
+    help: 'This will help investors know more about what you do.',
+    skippable: true,
   },
   {
     index: 2,
-    title: 'Hpw many statups have you founded?',
-    display: 'Founder',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
-    skippable: false,
+    title: 'How did you get the idea for this startup?',
+    display: 'Idea',
+    help: 'This will make investors connect with your story.',
+    skippable: true,
   },
   {
     index: 3,
-    title: 'How many startups have you invested in before?',
-    display: 'Investments',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
-    skippable: false,
+    title: 'Why this business and not something else?',
+    display: 'Why This',
+    help: 'This can win over investors about your dedication.',
+    skippable: true,
   },
   {
     index: 4,
-    title: 'Which funding stages have you participated in the past?',
-    display: 'Stage',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
+    title: 'How many startups have you founded before this?',
+    display: 'Experience',
+    help: 'This will help investors find you in filtered results.',
     skippable: true,
   },
   {
     index: 5,
-    title: 'Generally, how much amount do you invest in a startup?',
-    display: 'Amount',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
+    title: 'What is the mission of your startup?',
+    display: 'Mission',
+    help: 'This will help investors connect with your mission.',
     skippable: true,
   },
   {
     index: 6,
-    title: 'How many successful exits have you had till now?',
-    display: 'Exits',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
+    title: 'What is the your vision for this startup?',
+    display: 'Vision',
+    help: 'This will help investors know more about your plans.',
     skippable: true,
   },
   {
     index: 7,
-    title:
-      'Usually, what multiple of returns have you received from your investments?',
-    display: 'Returns',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
+    title: 'What are your top 3 core values?',
+    display: 'Core Values',
+    help: 'This will help investors know more about your company culture.',
     skippable: true,
   },
   {
     index: 8,
-    title: 'Select all the sectors you have invested in the past.',
-    display: 'Sectors',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
+    title: 'What is your team size?',
+    display: 'Team Size',
+    help: 'This will help investors find you in filtered results.',
     skippable: true,
   },
   {
     index: 9,
-    title: 'At what level would you consider yourself as an investor?',
-    display: 'Level',
-    help: 'This enables us to guage your profile for relevant feed and suggestions.',
+    title: 'Tell us who are the key people in your startup.',
+    display: 'People',
+    help: 'This will help investors connect with your startup.',
+    skippable: true,
+  },
+]
+
+const StartupBusinessSteps: OnboardingStepsInfoType[] = [
+  {
+    index: 1,
+    title: '',
+    display: '',
+    help: '',
     skippable: false,
   },
 ]
 
-const InvestorObjectiveSteps: OnboardingStepsInfoType[] = [
+const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
+  {
+    index: 1,
+    title: '',
+    display: '',
+    help: '',
+    skippable: false,
+  },
+]
+
+const StartupObjectiveSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
     title: 'How much capital are you planning to invest here?',
@@ -240,7 +261,7 @@ const InvestorObjectiveSteps: OnboardingStepsInfoType[] = [
   },
 ]
 
-const InvestorPreferencesSteps: OnboardingStepsInfoType[] = [
+const StartupPreferencesSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
     title: 'Choose who can message you',
@@ -278,9 +299,11 @@ const InvestorPreferencesSteps: OnboardingStepsInfoType[] = [
   },
 ]
 
-export const InvestorStepsInfoList = [
-  { steps: InvestorAboutSteps, component: InvestorAbout },
-  { steps: InvestorExperienceSteps, component: InvestorExperience },
-  { steps: InvestorObjectiveSteps, component: InvestorObjective },
-  { steps: InvestorPreferencesSteps, component: InvestorPreferences },
+export const StartupStepsInfoList = [
+  { steps: StartupAboutSteps, component: StartupAbout },
+  { steps: StartupBackgroundSteps, component: StartupBackground },
+  { steps: StartupBusinessSteps, component: StartupBusiness },
+  { steps: StartupFinancialsSteps, component: StartupFinancials },
+  { steps: StartupObjectiveSteps, component: StartupObjective },
+  { steps: StartupPreferencesSteps, component: StartupPreferences },
 ]
