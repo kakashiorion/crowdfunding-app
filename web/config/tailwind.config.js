@@ -57,7 +57,7 @@ module.exports = {
       },
       tertiary: {
         l2: '#B3DEF0',
-        l1: '#5DB7DE',
+        l1: '#72C7EC',
         DEFAULT: '#189BD3',
         d1: '#0C79A9',
         d2: '#004664',

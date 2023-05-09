@@ -23,7 +23,7 @@ export const InvestorStepHeader = (props: StepHeaderProps) => {
         />
         <div className="flex items-center justify-end gap-1">
           <SubTextLabel
-            label={`${props.currentStepNumber} of ${props.currentStepInfo.length}`}
+            label={`Step ${props.currentStepNumber} of ${props.currentStepInfo.length}`}
           />
           <div className="h-[2px] w-[2px] rounded-full bg-black dark:bg-white lg:h-1 lg:w-1"></div>
           <SubTextLabel
@@ -48,7 +48,7 @@ export const StartupStepHeader = (props: StepHeaderProps) => {
         />
         <div className="flex items-center justify-end gap-1">
           <SubTextLabel
-            label={`${props.currentStepNumber} of ${props.currentStepInfo.length}`}
+            label={`Step ${props.currentStepNumber} of ${props.currentStepInfo.length}`}
           />
           <div className="h-[2px] w-[2px] rounded-full bg-black dark:bg-white lg:h-1 lg:w-1"></div>
           <SubTextLabel

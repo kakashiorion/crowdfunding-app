@@ -3,7 +3,7 @@ import { OnboardingMainProps } from 'src/lib/onboardingConsts'
 import {
   StartupOnboardingSections,
   StartupStepsInfoList,
-} from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingConsts'
+} from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import StartupCompleted from '../StartupCompleted/StartupCompleted'
 import StartupIntro from '../StartupIntro/StartupIntro'

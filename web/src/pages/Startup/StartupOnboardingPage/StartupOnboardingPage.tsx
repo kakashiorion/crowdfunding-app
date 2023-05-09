@@ -14,7 +14,7 @@ const StartupOnboardingPage = () => {
   const [isMenuOpen, setMenuOpen] = useState(false)
   //TODO: Fetch onboarding progress from DB and resume from there
   // const startFrom = fetchOnboardingProgressData()??0
-  const [currentSection, setCurrentSection] = useState(2)
+  const [currentSection, setCurrentSection] = useState(7)
 
   return (
     <>

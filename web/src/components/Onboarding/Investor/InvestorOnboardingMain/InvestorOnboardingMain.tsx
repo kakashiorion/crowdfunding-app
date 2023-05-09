@@ -3,7 +3,7 @@ import { OnboardingMainProps } from 'src/lib/onboardingConsts'
 import {
   InvestorOnboardingSections,
   InvestorStepsInfoList,
-} from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
+} from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import InvestorCompleted from '../InvestorCompleted/InvestorCompleted'
 import InvestorIntro from '../InvestorIntro/InvestorIntro'

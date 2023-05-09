@@ -4,7 +4,7 @@ import CloseIcon from 'public/icons/close.svg'
 
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
-import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingConsts'
+import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
@@ -141,8 +141,12 @@ const StartupBackground = (props: OnboardingMainProps) => {
     }
     //Checks for step 7
     else if (step == 7) {
-      if (coreValue1 == '' && coreValue2 == '' && coreValue3 == '') {
-        setError7('Please provide atleast 1 value to save')
+      if (
+        coreValue1.length < 5 &&
+        coreValue2.length < 5 &&
+        coreValue3.length < 5
+      ) {
+        setError7('Please provide atleast 1 core value to save')
         return false
       } else {
         return true
@@ -439,7 +443,7 @@ const BackgroundExperience = (props: BackgroundExperienceProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.foundedBefore
                 ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
             }`}
             onClick={() => {
               props.setFoundedBefore(e)
@@ -592,7 +596,7 @@ const BackgroundTeamSize = (props: BackgroundTeamSizeProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.startupTeamSize
                 ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
             }`}
             onClick={() => {
               props.setStartupTeamSize(e)

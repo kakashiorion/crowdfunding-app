@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
-import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
+import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
@@ -607,7 +607,7 @@ const AboutEducation = (props: AboutEducationProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.eduBG
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setEduBG(e)
@@ -648,7 +648,7 @@ const AboutWorkEx = (props: AboutWorkExProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.workEx
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setWorkEx(e)
@@ -682,7 +682,7 @@ const AboutCompanies = (props: AboutCompaniesProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.numCom
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setNumCom(e)
@@ -733,7 +733,7 @@ const AboutSectors = (props: AboutSectorsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.sectors.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.sectors.includes(e)) {

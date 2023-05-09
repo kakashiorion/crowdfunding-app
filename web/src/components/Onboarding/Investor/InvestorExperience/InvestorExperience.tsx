@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
-import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
+import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
@@ -334,7 +334,7 @@ const ExperienceExposure = (props: ExperienceExposureProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.workedInStartup
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setWorkedInStartup(e)
@@ -367,7 +367,7 @@ const ExperienceFounder = (props: ExperienceFounderProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.foundedStartup
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setFoundedStartup(e)
@@ -400,7 +400,7 @@ const ExperienceInvestments = (props: ExperienceInvestmentsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.investedStartups
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setInvestedStartups(e)
@@ -444,7 +444,7 @@ const ExperienceStage = (props: ExperienceStageProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.stages.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.stages.includes(e)) {
@@ -489,7 +489,7 @@ const ExperienceAmount = (props: ExperienceAmountProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.amount
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setAmount(e)
@@ -522,7 +522,7 @@ const ExperienceExits = (props: ExperienceExitsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.exits
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setExits(e)
@@ -566,7 +566,7 @@ const ExperienceReturns = (props: ExperienceReturnsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.returns.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.returns.includes(e)) {
@@ -620,7 +620,7 @@ const ExperienceSectors = (props: ExperienceSectorsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.sectors.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.sectors.includes(e)) {
@@ -665,7 +665,7 @@ const ExperienceLevel = (props: ExperienceLevelProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.level
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setLevel(e)

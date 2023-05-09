@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
-import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
+import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
@@ -232,7 +232,7 @@ const PreferencesMessage = (props: PreferencesMessageProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.messageVisibility
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setMessageVisibility(e)
@@ -265,7 +265,7 @@ const PreferencesActivity = (props: PreferencesActivityProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.activityVisbility
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setActivityVisbility(e)
@@ -298,7 +298,7 @@ const PreferencesProfile = (props: PreferencesProfileProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.profileVisbility
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setProfileVisbility(e)
@@ -333,7 +333,7 @@ const PreferencesNotifications = (props: PreferencesNotificationsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.notificationLevel
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setNotificationLevel(e)
@@ -368,7 +368,7 @@ const PreferencesTheme = (props: PreferencesThemeProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.prefersTheme
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setPrefersTheme(e)

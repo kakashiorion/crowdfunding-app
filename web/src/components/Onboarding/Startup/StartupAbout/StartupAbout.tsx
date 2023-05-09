@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
-import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingConsts'
+import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'

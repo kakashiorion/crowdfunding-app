@@ -7,20 +7,20 @@ import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/St
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
 
-/*Info to be created and saved in StartupBusiness table:
-  numberUsers         UserRange?
-  numberCities        SizeRange?
-  distributionType    DistributionType?
-  partners            String[]
-  customers           String[]
-  workedWell          String[]
-  challenges          String[]
-  couldImprove        String[]
-  currentActivities   String[]
-  hasOnlineBusiness   OnlineBusiness?
+/*Info to be created and saved in StartupMarket table:
+  revenueStreams   RevenueStreams[]
+  costHeads        CostHeads[]
+  shortTermPlan    ShortTermPlan
+  marketSizeInCr   Float?
+  marketGrowthRate Float?
+  trends           String[]
+  opporunities     String[]
+  threats          String[]
+  competitors      String[]
+  xFactor          String?
 */
 
-const StartupBusiness = (props: OnboardingMainProps) => {
+const StartupMarket = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
 
@@ -30,63 +30,59 @@ const StartupBusiness = (props: OnboardingMainProps) => {
   const skipData: boolean[] = []
 
   //States for step 1
-  const [numberUsers, setNumberUsers] = useState<string>('')
+  const [revenueStreams, setRevenueStreams] = useState<string[]>([])
   const [error1, setError1] = useState<string>(' ')
 
   //States for step 2
-  const [numberCities, setNumberCities] = useState<string>('')
+  const [costHeads, setCostHeads] = useState<string[]>([])
   const [error2, setError2] = useState<string>(' ')
 
   //States for step 3
-  const [distributionType, setDistributionType] = useState<string>('')
+  const [shortTermPlan, setShortTermPlan] = useState<string>('')
   const [error3, setError3] = useState<string>(' ')
 
   //States for step 4
-  const [partners1, setPartners1] = useState<string>('')
-  const [partners2, setPartners2] = useState<string>('')
-  const [partners3, setPartners3] = useState<string>('')
+  const [marketSizeInCr, setMarketSizeInCr] = useState<string>('')
   const [error4, setError4] = useState<string>(' ')
 
   //States for step 5
-  const [customers1, setCustomers1] = useState<string>('')
-  const [customers2, setCustomers2] = useState<string>('')
-  const [customers3, setCustomers3] = useState<string>('')
+  const [marketGrowthRate, setMarketGrowthRate] = useState<string>('')
   const [error5, setError5] = useState<string>(' ')
 
   //States for step 6
-  const [workedWell1, setWorkedWell1] = useState<string>('')
-  const [workedWell2, setWorkedWell2] = useState<string>('')
-  const [workedWell3, setWorkedWell3] = useState<string>('')
+  const [trends1, setTrends1] = useState<string>('')
+  const [trends2, setTrends2] = useState<string>('')
+  const [trends3, setTrends3] = useState<string>('')
   const [error6, setError6] = useState<string>(' ')
 
   //States for step 7
-  const [challenges1, setChallenges1] = useState<string>('')
-  const [challenges2, setChallenges2] = useState<string>('')
-  const [challenges3, setChallenges3] = useState<string>('')
+  const [opportunities1, setOpportunities1] = useState<string>('')
+  const [opportunities2, setOpportunities2] = useState<string>('')
+  const [opportunities3, setOpportunities3] = useState<string>('')
   const [error7, setError7] = useState<string>(' ')
 
   //States for step 8
-  const [couldImprove1, setCouldImprove1] = useState<string>('')
-  const [couldImprove2, setCouldImprove2] = useState<string>('')
-  const [couldImprove3, setCouldImprove3] = useState<string>('')
+  const [threats1, setThreats1] = useState<string>('')
+  const [threats2, setThreats2] = useState<string>('')
+  const [threats3, setThreats3] = useState<string>('')
   const [error8, setError8] = useState<string>(' ')
 
   //States for step 9
-  const [currentActivities1, setCurrentActivities1] = useState<string>('')
-  const [currentActivities2, setCurrentActivities2] = useState<string>('')
-  const [currentActivities3, setCurrentActivities3] = useState<string>('')
+  const [competitors1, setCompetitors1] = useState<string>('')
+  const [competitors2, setCompetitors2] = useState<string>('')
+  const [competitors3, setCompetitors3] = useState<string>('')
   const [error9, setError9] = useState<string>(' ')
 
   //States for step 10
-  const [hasOnlineBusiness, setHasOnlineBusiness] = useState<string>('')
+  const [xFactor, setXFactor] = useState<string>('')
   const [error10, setError10] = useState<string>(' ')
 
   //Always check UI data before proceeding to next step
   const checkUIData = () => {
     //Checks for step 1
     if (step == 1) {
-      if (numberUsers == '') {
-        setError1('Please select an option to save')
+      if (revenueStreams.length == 0) {
+        setError1('Please select atleast an option to save')
         return false
       } else {
         return true
@@ -94,8 +90,8 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 2
     else if (step == 2) {
-      if (numberCities == '') {
-        setError2('Please select an option to save')
+      if (costHeads.length == 0) {
+        setError2('Please select atleast an option to save')
         return false
       } else {
         return true
@@ -103,7 +99,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 3
     else if (step == 3) {
-      if (distributionType == '') {
+      if (shortTermPlan == '') {
         setError3('Please select an option to save')
         return false
       } else {
@@ -112,12 +108,8 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 4
     else if (step == 4) {
-      if (
-        partners1.length < 5 &&
-        partners2.length < 5 &&
-        partners3.length < 5
-      ) {
-        setError4('Please provide atleast 1 value to save')
+      if (marketSizeInCr == '') {
+        setError4('Please provide an option to save')
         return false
       } else {
         return true
@@ -125,12 +117,8 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 5
     else if (step == 5) {
-      if (
-        customers1.length < 5 &&
-        customers2.length < 5 &&
-        customers3.length < 5
-      ) {
-        setError5('Please provide atleast 1 value to save')
+      if (marketGrowthRate == '') {
+        setError5('Please provide an option to save')
         return false
       } else {
         return true
@@ -138,11 +126,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 6
     else if (step == 6) {
-      if (
-        workedWell1.length < 5 &&
-        workedWell2.length < 5 &&
-        workedWell3.length < 5
-      ) {
+      if (trends1.length < 5 && trends2.length < 5 && trends3.length < 5) {
         setError6('Please provide atleast 1 value to save')
         return false
       } else {
@@ -152,9 +136,9 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     //Checks for step 7
     else if (step == 7) {
       if (
-        challenges1.length < 5 &&
-        challenges2.length < 5 &&
-        challenges3.length < 5
+        opportunities1.length < 5 &&
+        opportunities2.length < 5 &&
+        opportunities3.length < 5
       ) {
         setError7('Please provide atleast 1 value to save')
         return false
@@ -164,11 +148,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 8
     else if (step == 8) {
-      if (
-        couldImprove1.length < 5 &&
-        couldImprove2.length < 5 &&
-        couldImprove3.length < 5
-      ) {
+      if (threats1.length < 5 && threats2.length < 5 && threats3.length < 5) {
         setError8('Please provide atleast 1 value to save')
         return false
       } else {
@@ -178,9 +158,9 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     //Checks for step 9
     else if (step == 9) {
       if (
-        currentActivities1.length < 5 &&
-        currentActivities2.length < 5 &&
-        currentActivities3.length < 5
+        competitors1.length < 5 &&
+        competitors2.length < 5 &&
+        competitors3.length < 5
       ) {
         setError9('Please provide atleast 1 value to save')
         return false
@@ -190,8 +170,8 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
     //Checks for step 10
     else if (step == 10) {
-      if (hasOnlineBusiness == '') {
-        setError10('Please select an option to save')
+      if (xFactor == '') {
+        setError10('Please provide a value to save')
         return false
       } else {
         return true
@@ -266,105 +246,97 @@ const StartupBusiness = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <BusinessUsers
-            numberUsers={numberUsers}
-            setNumberUsers={setNumberUsers}
+          <MarketRevenue
+            revenueStreams={revenueStreams}
+            setRevenueStreams={setRevenueStreams}
             error1={error1}
             setError1={setError1}
           />
         )}
         {step == 2 && (
-          <BusinessCities
-            numberCities={numberCities}
-            setNumberCities={setNumberCities}
+          <MarketCost
+            costHeads={costHeads}
+            setCostHeads={setCostHeads}
             error2={error2}
             setError2={setError2}
           />
         )}
         {step == 3 && (
-          <BusinessDistribution
-            distributionType={distributionType}
-            setDistributionType={setDistributionType}
+          <MarketPlan
+            shortTermPlan={shortTermPlan}
+            setShortTermPlan={setShortTermPlan}
             error3={error3}
             setError3={setError3}
           />
         )}
         {step == 4 && (
-          <BusinessPartners
-            partners1={partners1}
-            setPartners1={setPartners1}
-            partners2={partners2}
-            setPartners2={setPartners2}
-            partners3={partners3}
-            setPartners3={setPartners3}
+          <MarketSize
+            marketSizeInCr={marketSizeInCr}
+            setMarketSizeInCr={setMarketSizeInCr}
             error4={error4}
             setError4={setError4}
           />
         )}
         {step == 5 && (
-          <BusinessCustomers
-            customers1={customers1}
-            setCustomers1={setCustomers1}
-            customers2={customers2}
-            setCustomers2={setCustomers2}
-            customers3={customers3}
-            setCustomers3={setCustomers3}
+          <MarketRate
+            marketGrowthRate={marketGrowthRate}
+            setMarketGrowthRate={setMarketGrowthRate}
             error5={error5}
             setError5={setError5}
           />
         )}
         {step == 6 && (
-          <BusinessSuccess
-            workedWell1={workedWell1}
-            setWorkedWell1={setWorkedWell1}
-            workedWell2={workedWell2}
-            setWorkedWell2={setWorkedWell2}
-            workedWell3={workedWell3}
-            setWorkedWell3={setWorkedWell3}
+          <MarketTrends
+            trends1={trends1}
+            setTrends1={setTrends1}
+            trends2={trends2}
+            setTrends2={setTrends2}
+            trends3={trends3}
+            setTrends3={setTrends3}
             error6={error6}
             setError6={setError6}
           />
         )}
         {step == 7 && (
-          <BusinessChallenges
-            challenges1={challenges1}
-            setChallenges1={setChallenges1}
-            challenges2={challenges2}
-            setChallenges2={setChallenges2}
-            challenges3={challenges3}
-            setChallenges3={setChallenges3}
+          <MarketOpportunities
+            opportunities1={opportunities1}
+            setOpportunities1={setOpportunities1}
+            opportunities2={opportunities2}
+            setOpportunities2={setOpportunities2}
+            opportunities3={opportunities3}
+            setOpportunities3={setOpportunities3}
             error7={error7}
             setError7={setError7}
           />
         )}
         {step == 8 && (
-          <BusinessImprovements
-            couldImprove1={couldImprove1}
-            setCouldImprove1={setCouldImprove1}
-            couldImprove2={couldImprove2}
-            setCouldImprove2={setCouldImprove2}
-            couldImprove3={couldImprove3}
-            setCouldImprove3={setCouldImprove3}
+          <MarketThreats
+            threats1={threats1}
+            setThreats1={setThreats1}
+            threats2={threats2}
+            setThreats2={setThreats2}
+            threats3={threats3}
+            setThreats3={setThreats3}
             error8={error8}
             setError8={setError8}
           />
         )}
         {step == 9 && (
-          <BusinessActivities
-            currentActivities1={currentActivities1}
-            setCurrentActivities1={setCurrentActivities1}
-            currentActivities2={currentActivities2}
-            setCurrentActivities2={setCurrentActivities2}
-            currentActivities3={currentActivities3}
-            setCurrentActivities3={setCurrentActivities3}
+          <MarketCompetitors
+            competitors1={competitors1}
+            setCompetitors1={setCompetitors1}
+            competitors2={competitors2}
+            setCompetitors2={setCompetitors2}
+            competitors3={competitors3}
+            setCompetitors3={setCompetitors3}
             error9={error9}
             setError9={setError9}
           />
         )}
         {step == 10 && (
-          <BusinessOnline
-            hasOnlineBusiness={hasOnlineBusiness}
-            setHasOnlineBusiness={setHasOnlineBusiness}
+          <MarketXFactor
+            xFactor={xFactor}
+            setXFactor={setXFactor}
             error10={error10}
             setError10={setError10}
           />
@@ -389,42 +361,49 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     </div>
   )
 }
-export default StartupBusiness
+export default StartupMarket
 
 const Divider = () => {
   return <div className="h-2"></div>
 }
 
-//TODO: Update users options as per DB enum
-const usersOptions = [
-  'LESS_THAN_100',
-  'BETWEEN_100_AND_1000',
-  'BETWEEN_1000_AND_10000',
-  'BETWEEN_10000_AND_1_LAC',
-  'BETWEEN_1_LAC_AND_10_LACS',
-  'BETWEEEN_10_LACS_AND_1_CRORE',
-  'MORE_THAN_1_CRORE',
+//TODO: Update revenue options as per DB enum
+const revenueOptions = [
+  'SELLING_GOODS',
+  'RENTAL_OR_LEASING',
+  'ADS_OR_SPONSORS',
+  'COMMISSION_FEE',
+  'SUBSCRIPTION_OR_LICENSING',
+  'DONATIONS',
+  'FREEMIUM',
+  'OTHER',
 ]
-type BusinessUsersProps = {
-  numberUsers: string
-  setNumberUsers: React.Dispatch<React.SetStateAction<string>>
+type MarketRevenueProps = {
+  revenueStreams: string[]
+  setRevenueStreams: React.Dispatch<React.SetStateAction<string[]>>
   error1: string
   setError1: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessUsers = (props: BusinessUsersProps) => {
+const MarketRevenue = (props: MarketRevenueProps) => {
   return (
     <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {usersOptions.map((e) => (
+      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
+        {revenueOptions.map((e) => (
           <button
             key={e}
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.numberUsers
+              props.revenueStreams.includes(e)
                 ? ' bg-tertiary'
                 : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
             }`}
             onClick={() => {
-              props.setNumberUsers(e)
+              if (props.revenueStreams.includes(e)) {
+                props.setRevenueStreams(
+                  props.revenueStreams.filter((s) => s != e)
+                )
+              } else {
+                props.setRevenueStreams([...props.revenueStreams, e])
+              }
               props.error1 != '' && props.setError1('')
             }}
           >
@@ -438,34 +417,41 @@ const BusinessUsers = (props: BusinessUsersProps) => {
   )
 }
 
-//TODO: Update size options as per DB enum
-const sizeOptions = [
-  'NONE',
-  'ONE_TO_THREE',
-  'THREE_TO_TEN',
-  'TEN_TO_TWENTY',
-  'MORE_THAN_TWENTY',
+//TODO: Update cost options as per DB enum
+const costOptions = [
+  'MATERIAL',
+  'WAGES',
+  'RENT',
+  'INTEREST',
+  'EQUIPMENT',
+  'MARKETING',
+  'ADMIN',
+  'OTHER',
 ]
-type BusinessCitiesProps = {
-  numberCities: string
-  setNumberCities: React.Dispatch<React.SetStateAction<string>>
+type MarketCostProps = {
+  costHeads: string[]
+  setCostHeads: React.Dispatch<React.SetStateAction<string[]>>
   error2: string
   setError2: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessCities = (props: BusinessCitiesProps) => {
+const MarketCost = (props: MarketCostProps) => {
   return (
     <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
+      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
+        {costOptions.map((e) => (
           <button
             key={e}
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.numberCities
+              props.costHeads.includes(e)
                 ? ' bg-tertiary'
                 : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
             }`}
             onClick={() => {
-              props.setNumberCities(e)
+              if (props.costHeads.includes(e)) {
+                props.setCostHeads(props.costHeads.filter((s) => s != e))
+              } else {
+                props.setCostHeads([...props.costHeads, e])
+              }
               props.error2 != '' && props.setError2('')
             }}
           >
@@ -479,28 +465,35 @@ const BusinessCities = (props: BusinessCitiesProps) => {
   )
 }
 
-//TODO: Update distribution options as per DB enum
-const distributionOptions = ['B2B', 'B2C', 'BOTH', 'OTHER']
-type BusinessDistributionProps = {
-  distributionType: string
-  setDistributionType: React.Dispatch<React.SetStateAction<string>>
+//TODO: Update plan options as per DB enum
+const planOptions = [
+  'EXPAND_GEOGRAPHICALLY',
+  'GO_FOR_IPO',
+  'HIRE_AND_EXPAND_TEAM',
+  'IMPROVE_PRODUCT_OR_SERVICE',
+  'BUILD_CUSTOMER_BASE',
+  'OTHER',
+]
+type MarketPlanProps = {
+  shortTermPlan: string
+  setShortTermPlan: React.Dispatch<React.SetStateAction<string>>
   error3: string
   setError3: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessDistribution = (props: BusinessDistributionProps) => {
+const MarketPlan = (props: MarketPlanProps) => {
   return (
     <>
       <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {distributionOptions.map((e) => (
+        {planOptions.map((e) => (
           <button
             key={e}
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.distributionType
+              e == props.shortTermPlan
                 ? ' bg-tertiary'
                 : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
             }`}
             onClick={() => {
-              props.setDistributionType(e)
+              props.setShortTermPlan(e)
               props.error3 != '' && props.setError3('')
             }}
           >
@@ -514,142 +507,112 @@ const BusinessDistribution = (props: BusinessDistributionProps) => {
   )
 }
 
-type BusinessPartnersProps = {
-  partners1: string
-  setPartners1: React.Dispatch<React.SetStateAction<string>>
-  partners2: string
-  setPartners2: React.Dispatch<React.SetStateAction<string>>
-  partners3: string
-  setPartners3: React.Dispatch<React.SetStateAction<string>>
+//TODO: Update market size options as per DB enum
+const marketSizeOptions = [
+  'LESS_THAN_10_CR',
+  'BETWEEN_10_AND_100_CR',
+  'BETWEEN_100_AND_1000_CR',
+  'BETWEEN_1000_AND_10000_CR',
+  'BETWEEN_10000_AND_1_LAC_CR',
+  'MORE_THAN_1_LAC_CR',
+]
+type MarketSizeProps = {
+  marketSizeInCr: string
+  setMarketSizeInCr: React.Dispatch<React.SetStateAction<string>>
   error4: string
   setError4: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessPartners = (props: BusinessPartnersProps) => {
+const MarketSize = (props: MarketSizeProps) => {
   return (
     <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.partners1}
-        rows={2}
-        placeholder="Partner 1"
-        onChange={(e) => {
-          props.setPartners1(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.partners2}
-        rows={2}
-        placeholder="Partner 2"
-        onChange={(e) => {
-          props.setPartners2(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.partners3}
-        rows={2}
-        placeholder="Partner 3"
-        onChange={(e) => {
-          props.setPartners3(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-      />
+      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
+        {marketSizeOptions.map((e) => (
+          <button
+            key={e}
+            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
+              e == props.marketSizeInCr
+                ? ' bg-tertiary'
+                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
+            }`}
+            onClick={() => {
+              props.setMarketSizeInCr(e)
+              props.error4 != '' && props.setError4('')
+            }}
+          >
+            {e.replaceAll('_', ' ')}
+          </button>
+        ))}
+      </div>
       <Divider />
       <ErrorSubTextLabel label={props.error4} />
     </>
   )
 }
 
-type BusinessCustomersProps = {
-  customers1: string
-  setCustomers1: React.Dispatch<React.SetStateAction<string>>
-  customers2: string
-  setCustomers2: React.Dispatch<React.SetStateAction<string>>
-  customers3: string
-  setCustomers3: React.Dispatch<React.SetStateAction<string>>
+//TODO: Update market growth options as per DB enum
+const marketGrowthOptions = [
+  'LESS_THAN_5',
+  'BETWEEN_5_TO_10',
+  'BETWEEN_10_TO_20',
+  'BETWEEN_20_TO_50',
+  'BETWEEN_50_TO_100',
+  'MORE_THAN_100',
+]
+type marketRateProps = {
+  marketGrowthRate: string
+  setMarketGrowthRate: React.Dispatch<React.SetStateAction<string>>
   error5: string
   setError5: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessCustomers = (props: BusinessCustomersProps) => {
+const MarketRate = (props: marketRateProps) => {
   return (
     <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.customers1}
-        rows={2}
-        placeholder="Customer 1"
-        onChange={(e) => {
-          props.setCustomers1(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.customers2}
-        rows={2}
-        placeholder="Customer 2"
-        onChange={(e) => {
-          props.setCustomers2(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.customers3}
-        rows={2}
-        placeholder="Customer 3"
-        onChange={(e) => {
-          props.setCustomers3(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
+      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
+        {marketGrowthOptions.map((e) => (
+          <button
+            key={e}
+            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
+              e == props.marketGrowthRate
+                ? ' bg-tertiary'
+                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
+            }`}
+            onClick={() => {
+              props.setMarketGrowthRate(e)
+              props.error5 != '' && props.setError5('')
+            }}
+          >
+            {e.replaceAll('_', ' ')}
+          </button>
+        ))}
+      </div>
       <Divider />
       <ErrorSubTextLabel label={props.error5} />
     </>
   )
 }
 
-type BusinessSuccessProps = {
-  workedWell1: string
-  setWorkedWell1: React.Dispatch<React.SetStateAction<string>>
-  workedWell2: string
-  setWorkedWell2: React.Dispatch<React.SetStateAction<string>>
-  workedWell3: string
-  setWorkedWell3: React.Dispatch<React.SetStateAction<string>>
+type MarketTrendsProps = {
+  trends1: string
+  setTrends1: React.Dispatch<React.SetStateAction<string>>
+  trends2: string
+  setTrends2: React.Dispatch<React.SetStateAction<string>>
+  trends3: string
+  setTrends3: React.Dispatch<React.SetStateAction<string>>
   error6: string
   setError6: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessSuccess = (props: BusinessSuccessProps) => {
+const MarketTrends = (props: MarketTrendsProps) => {
   return (
     <>
       <textarea
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.workedWell1}
+        value={props.trends1}
         rows={2}
-        placeholder="Success 1"
+        placeholder="Trend 1"
         onChange={(e) => {
-          props.setWorkedWell1(e.target.value)
+          props.setTrends1(e.target.value)
           props.error6 != ' ' && props.setError6(' ')
         }}
       />
@@ -658,11 +621,11 @@ const BusinessSuccess = (props: BusinessSuccessProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.workedWell2}
+        value={props.trends2}
         rows={2}
-        placeholder="Success 2"
+        placeholder="Trend 2"
         onChange={(e) => {
-          props.setWorkedWell2(e.target.value)
+          props.setTrends2(e.target.value)
           props.error6 != ' ' && props.setError6(' ')
         }}
       />
@@ -671,11 +634,11 @@ const BusinessSuccess = (props: BusinessSuccessProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.workedWell3}
+        value={props.trends3}
         rows={2}
-        placeholder="Success 3"
+        placeholder="Trend 3"
         onChange={(e) => {
-          props.setWorkedWell3(e.target.value)
+          props.setTrends3(e.target.value)
           props.error6 != ' ' && props.setError6(' ')
         }}
       />
@@ -685,28 +648,28 @@ const BusinessSuccess = (props: BusinessSuccessProps) => {
   )
 }
 
-type BusinessChallengesProps = {
-  challenges1: string
-  setChallenges1: React.Dispatch<React.SetStateAction<string>>
-  challenges2: string
-  setChallenges2: React.Dispatch<React.SetStateAction<string>>
-  challenges3: string
-  setChallenges3: React.Dispatch<React.SetStateAction<string>>
+type MarketOpportunitiesProps = {
+  opportunities1: string
+  setOpportunities1: React.Dispatch<React.SetStateAction<string>>
+  opportunities2: string
+  setOpportunities2: React.Dispatch<React.SetStateAction<string>>
+  opportunities3: string
+  setOpportunities3: React.Dispatch<React.SetStateAction<string>>
   error7: string
   setError7: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessChallenges = (props: BusinessChallengesProps) => {
+const MarketOpportunities = (props: MarketOpportunitiesProps) => {
   return (
     <>
       <textarea
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.challenges1}
+        value={props.opportunities1}
         rows={2}
-        placeholder="Challenge 1"
+        placeholder="Opportunity 1"
         onChange={(e) => {
-          props.setChallenges1(e.target.value)
+          props.setOpportunities1(e.target.value)
           props.error7 != ' ' && props.setError7(' ')
         }}
       />
@@ -715,11 +678,11 @@ const BusinessChallenges = (props: BusinessChallengesProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.challenges2}
+        value={props.opportunities2}
         rows={2}
-        placeholder="Challenge 2"
+        placeholder="Opportunity 2"
         onChange={(e) => {
-          props.setChallenges2(e.target.value)
+          props.setOpportunities2(e.target.value)
           props.error7 != ' ' && props.setError7(' ')
         }}
       />
@@ -728,11 +691,11 @@ const BusinessChallenges = (props: BusinessChallengesProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.challenges3}
+        value={props.opportunities3}
         rows={2}
-        placeholder="Challenge 3"
+        placeholder="Opportunity 3"
         onChange={(e) => {
-          props.setChallenges3(e.target.value)
+          props.setOpportunities3(e.target.value)
           props.error7 != ' ' && props.setError7(' ')
         }}
       />
@@ -742,28 +705,28 @@ const BusinessChallenges = (props: BusinessChallengesProps) => {
   )
 }
 
-type BusinessImprovementsProps = {
-  couldImprove1: string
-  setCouldImprove1: React.Dispatch<React.SetStateAction<string>>
-  couldImprove2: string
-  setCouldImprove2: React.Dispatch<React.SetStateAction<string>>
-  couldImprove3: string
-  setCouldImprove3: React.Dispatch<React.SetStateAction<string>>
+type MarketThreatsProps = {
+  threats1: string
+  setThreats1: React.Dispatch<React.SetStateAction<string>>
+  threats2: string
+  setThreats2: React.Dispatch<React.SetStateAction<string>>
+  threats3: string
+  setThreats3: React.Dispatch<React.SetStateAction<string>>
   error8: string
   setError8: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessImprovements = (props: BusinessImprovementsProps) => {
+const MarketThreats = (props: MarketThreatsProps) => {
   return (
     <>
       <textarea
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.couldImprove1}
+        value={props.threats1}
         rows={2}
-        placeholder="Improvement 1"
+        placeholder="Threat 1"
         onChange={(e) => {
-          props.setCouldImprove1(e.target.value)
+          props.setThreats1(e.target.value)
           props.error8 != ' ' && props.setError8(' ')
         }}
       />
@@ -772,11 +735,11 @@ const BusinessImprovements = (props: BusinessImprovementsProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.couldImprove2}
+        value={props.threats2}
         rows={2}
-        placeholder="Improvement 2"
+        placeholder="Threat 2"
         onChange={(e) => {
-          props.setCouldImprove2(e.target.value)
+          props.setThreats2(e.target.value)
           props.error8 != ' ' && props.setError8(' ')
         }}
       />
@@ -785,11 +748,11 @@ const BusinessImprovements = (props: BusinessImprovementsProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.couldImprove3}
+        value={props.threats3}
         rows={2}
-        placeholder="Improvement 3"
+        placeholder="Threat 3"
         onChange={(e) => {
-          props.setCouldImprove3(e.target.value)
+          props.setThreats3(e.target.value)
           props.error8 != ' ' && props.setError8(' ')
         }}
       />
@@ -799,28 +762,28 @@ const BusinessImprovements = (props: BusinessImprovementsProps) => {
   )
 }
 
-type BusinessActivitiesProps = {
-  currentActivities1: string
-  setCurrentActivities1: React.Dispatch<React.SetStateAction<string>>
-  currentActivities2: string
-  setCurrentActivities2: React.Dispatch<React.SetStateAction<string>>
-  currentActivities3: string
-  setCurrentActivities3: React.Dispatch<React.SetStateAction<string>>
+type MarketCompetitorsProps = {
+  competitors1: string
+  setCompetitors1: React.Dispatch<React.SetStateAction<string>>
+  competitors2: string
+  setCompetitors2: React.Dispatch<React.SetStateAction<string>>
+  competitors3: string
+  setCompetitors3: React.Dispatch<React.SetStateAction<string>>
   error9: string
   setError9: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessActivities = (props: BusinessActivitiesProps) => {
+const MarketCompetitors = (props: MarketCompetitorsProps) => {
   return (
     <>
       <textarea
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.currentActivities1}
+        value={props.competitors1}
         rows={2}
         placeholder="Activity 1"
         onChange={(e) => {
-          props.setCurrentActivities1(e.target.value)
+          props.setCompetitors1(e.target.value)
           props.error9 != ' ' && props.setError9(' ')
         }}
       />
@@ -829,11 +792,11 @@ const BusinessActivities = (props: BusinessActivitiesProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.currentActivities2}
+        value={props.competitors2}
         rows={2}
         placeholder="Activity 2"
         onChange={(e) => {
-          props.setCurrentActivities2(e.target.value)
+          props.setCompetitors2(e.target.value)
           props.error9 != ' ' && props.setError9(' ')
         }}
       />
@@ -842,11 +805,11 @@ const BusinessActivities = (props: BusinessActivitiesProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.currentActivities3}
+        value={props.competitors3}
         rows={2}
         placeholder="Activity 3"
         onChange={(e) => {
-          props.setCurrentActivities3(e.target.value)
+          props.setCompetitors3(e.target.value)
           props.error9 != ' ' && props.setError9(' ')
         }}
       />
@@ -856,35 +819,27 @@ const BusinessActivities = (props: BusinessActivitiesProps) => {
   )
 }
 
-//TODO: Update online business options as per DB enum
-const onlineOptions = ['YES', 'SETTING_UP', 'PLANNED', 'NO']
-type BusinessOnlineProps = {
-  hasOnlineBusiness: string
-  setHasOnlineBusiness: React.Dispatch<React.SetStateAction<string>>
+type MarketXFactorProps = {
+  xFactor: string
+  setXFactor: React.Dispatch<React.SetStateAction<string>>
   error10: string
   setError10: React.Dispatch<React.SetStateAction<string>>
 }
-const BusinessOnline = (props: BusinessOnlineProps) => {
+const MarketXFactor = (props: MarketXFactorProps) => {
   return (
     <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {onlineOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.hasOnlineBusiness
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setHasOnlineBusiness(e)
-              props.error10 != '' && props.setError10('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
+      <input
+        className={
+          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+        }
+        value={props.xFactor}
+        placeholder="Website URL"
+        onChange={(e) => {
+          props.setXFactor(e.target.value)
+          props.error10 != ' ' && props.setError10(' ')
+        }}
+        type={'text'}
+      />
       <Divider />
       <ErrorSubTextLabel label={props.error10} />
     </>

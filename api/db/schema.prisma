@@ -280,6 +280,7 @@ model Startup {
   sectorCategoryID  Int //from SectorCategory table
   startupBackground StartupBackground?
   startupBusiness   StartupBusiness?
+  startupMarket     StartupMarket?
   startupFinancials StartupFinancials?
   startupObjective  StartupObjective?
   offers            Offer[]            @relation("OffersByStartup")
@@ -371,128 +372,220 @@ model KeyPeople {
 }
 
 model StartupBusiness {
-  id                  Int              @id @unique
-  startup             Startup          @relation(fields: [id], references: [id])
-  numberUsersFY       Int
-  numberCitiesFY      Int
-  distributionType    DistributionType
-  workedWell          String[]
-  challenges          String[]
-  couldImprove        String[]
-  currentFYActivities String[]
-  hasOnlineBusiness   Boolean
-  partners            String[]
-  customers           String[]
-  revenueModel        String?
-  costStructure       String?
-  shortTermPlan       ShortTermPlan[]
-  marketSizeLacs      Float?
-  marketGrowthRate    Float?
-  trends              String[]
-  competitors         String[]
-  opporunities        String[]
-  threats             String[]
-  xFactor             String[]
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
+  id                Int               @id @unique
+  startup           Startup           @relation(fields: [id], references: [id])
+  numberUsers       UserRange?
+  numberCities      SizeRange?
+  distributionType  DistributionType?
+  partners          String[]
+  customers         String[]
+  workedWell        String[]
+  challenges        String[]
+  couldImprove      String[]
+  currentActivities String[]
+  hasOnlineBusiness OnlineBusiness?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+enum OnlineBusiness {
+  YES
+  SETTING_UP
+  PLANNED
+  NO
+}
+
+enum UserRange {
+  LESS_THAN_100
+  BETWEEN_100_AND_1000
+  BETWEEN_1000_AND_10000
+  BETWEEN_10000_AND_1_LAC
+  BETWEEN_1_LAC_AND_10_LACS
+  BETWEEEN_10_LACS_AND_1_CRORE
+  MORE_THAN_1_CRORE
 }
 
 enum DistributionType {
   B2B
   B2C
   BOTH
+  OTHER
+}
+
+model StartupMarket {
+  id               Int              @id @unique
+  startup          Startup          @relation(fields: [id], references: [id])
+  revenueStreams   RevenueStreams[]
+  costHeads        CostHeads[]
+  shortTermPlan    ShortTermPlan?
+  marketSizeInCr   MarketSize?
+  marketGrowthRate GrowthRate?
+  trends           String[]
+  opporunities     String[]
+  threats          String[]
+  competitors      String[]
+  xFactor          String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+enum MarketSize {
+  LESS_THAN_10_CR
+  BETWEEN_10_AND_100_CR
+  BETWEEN_100_AND_1000_CR
+  BETWEEN_1000_AND_10000_CR
+  BETWEEN_10000_AND_1_LAC_CR
+  MORE_THAN_1_LAC_CR
+}
+
+enum GrowthRate {
+  LESS_THAN_5
+  BETWEEN_5_TO_10
+  BETWEEN_10_TO_20
+  BETWEEN_20_TO_50
+  BETWEEN_50_TO_100
+  MORE_THAN_100
+}
+
+enum RevenueStreams {
+  SELLING_GOODS
+  RENTAL_OR_LEASING
+  ADS_OR_SPONSORS
+  COMMISSION_FEE
+  SUBSCRIPTION_OR_LICENSING
+  DONATIONS
+  FREEMIUM
+  OTHER
+}
+
+enum CostHeads {
+  MATERIAL
+  WAGES
+  RENT
+  INTEREST
+  EQUIPMENT
+  MARKETING
+  ADMIN
+  OTHER
 }
 
 enum ShortTermPlan {
-  EXPAND_GEO
-  IPO
-  HIRE_TEAM
-  IMPROVE_PRODUCT_SERVICE
+  EXPAND_GEOGRAPHICALLY
+  GO_FOR_IPO
+  HIRE_AND_EXPAND_TEAM
+  IMPROVE_PRODUCT_OR_SERVICE
   BUILD_CUSTOMER_BASE
+  OTHER
 }
 
 model StartupFinancials {
-  id                   Int                @id @unique
-  startup              Startup            @relation(fields: [id], references: [id])
-  currentValuationLacs Float
-  currentCapTable      CapTable[]
-  currentStage         FundingStage
-  fundraisingRounds    FundraisingRound[]
-  currentRatio         Float?
-  DERatio              Float?
-  revenueLastFYLacs    Float?
-  revenueGrowthRate    Float?
-  isProfitable         Boolean?
-  margin               Float?
-  cashRunwayMonths     Int?
-  plansForUsingCash    String[]
-  biggestCostHeads     String[]
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
+  id                  Int                @id @unique
+  startup             Startup            @relation(fields: [id], references: [id])
+  latestFundingStage  FundingStage?
+  latestValuationInCr Float?
+  latestCapTable      CapTable[]
+  fundraisingRounds   FundraisingRound[]
+  currentRatio        DecimalRange?
+  debtEquityRatio     DecimalRange?
+  revenueLastFY       RevenueRange?
+  revenueGrowthRate   GrowthRate?
+  margin              Margin?
+  cashRunway          TimelineRange?
+  plansForUsingCash   String[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+enum DecimalRange {
+  LESS_THAN_HALF
+  BETWEEN_HALF_AND_ONE
+  BETWEEN_ONE_AND_TWO
+  MORE_THAN_TWO
+}
+
+enum RevenueRange {
+  LESS_THAN_10_LACS
+  BETWEEN_10_TO_20_LACS
+  BETWEEN_20_TO_50_LACS
+  BETWEEN_50_TO_100_LACS
+  BETWEEN_1_TO_10_CR
+  BETWEEN_10_TO_50_CR
+  BETWEEN_50_TO_100_CR
+  MORE_THAN_100_CRORE
+}
+
+enum Margin {
+  LOSS_OVER_50
+  LOSS_BETWEEN_20_AND_50
+  LOSS_LESS_THAN_20
+  PROFIT_LESS_THAN_20
+  PROFIT_BETWEEN_20_AND_50
+  PROFIT_OVER_50
 }
 
 model FundraisingRound {
   id                Int               @id @default(autoincrement())
   startup           StartupFinancials @relation(fields: [startupID], references: [id])
   startupID         Int
-  roundStage        FundingStage
-  capitalRaisedLacs Float
-  valuationLacs     Float
-  keyInvestors      String[]
+  fundingStage      FundingStage
+  capitalRaisedInCr Float
+  valuationInCr     Float
+  keyInvestors      String?
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
 }
 
 model CapTable {
-  id          Int               @id @default(autoincrement())
-  startup     StartupFinancials @relation(fields: [startupID], references: [id])
-  startupID   Int
-  shareholder String
-  equityShare Float
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id                  Int               @id @default(autoincrement())
+  startupFinancials   StartupFinancials @relation(fields: [startupFinancialsID], references: [id])
+  startupFinancialsID Int
+  shareholderName     String
+  equityShare         Float
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 }
 
 model StartupObjective {
-  id                         Int                   @id @unique
-  startup                    Startup               @relation(fields: [id], references: [id])
-  platformGoal               StartupPlatformGoal[]
-  referSource                ReferSource[]
-  preferredInvestorLevels    InvestorLevel[]
-  preferredInvestorLocations Int[] //from Location table
-  expectedTimeline           TimelineRange
-  promisingReturns           ReturnsRange
-  pitchDeckURL               String?
-  demoURL                    String?
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @updatedAt
+  id                      Int                   @id @unique
+  startup                 Startup               @relation(fields: [id], references: [id])
+  preferredInvestorLevels InvestorLevel[]
+  preferredLocations      Int[] //from Location table
+  expectedTimeline        TimelineRange?
+  promisingReturns        ReturnsRange?
+  platformGoal            StartupPlatformGoal[]
+  referSource             ReferSource[]
+  pitchDeckURL            String?
+  demoURL                 String[]
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
 }
 
 enum StartupPlatformGoal {
-  RAISE_FUNDS
-  EXPLORE
-  CONNECT
-  GET_ADVICE
+  RAISING_FUNDS
+  EXPLORING
+  CONNECTING
+  GETTING_ADVICE
 }
 
 model Offer {
-  id                  Int         @id @default(autoincrement())
-  startup             Startup     @relation("OffersByStartup", fields: [startupID], references: [id])
+  id                  Int           @id @default(autoincrement())
+  startup             Startup       @relation("OffersByStartup", fields: [startupID], references: [id])
   startupID           Int
   bids                Bid[]
-  status              OfferStatus @default(CREATED)
-  extended            Boolean     @default(false)
+  status              OfferStatus   @default(CREATED)
+  extended            Boolean       @default(false)
   capitalTargetLacs   Float
   equityBeingIssued   Float
-  minTicketSizeLacs   Float       @default(1.0)
+  minTicketSizeLacs   Float         @default(1.0)
   maxTicketSizeLacs   Float
+  fundingStage        FundingStage?
   numberOfInvestors   Int?
   willUseFundsFor     String[]
   needHelpWith        String[]
-  timelineDays        Int         @default(30)
-  successfulInvestors Investor[]  @relation("SuccessfulDeal")
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
+  timelineDays        Int           @default(30)
+  successfulInvestors Investor[]    @relation("SuccessfulDeal")
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 }
 
 enum OfferStatus {

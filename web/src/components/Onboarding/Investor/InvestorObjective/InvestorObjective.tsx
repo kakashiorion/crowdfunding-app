@@ -6,7 +6,7 @@ import SearchIcon from 'public/icons/search.svg'
 import { SmallPrimaryFilledButton } from 'src/components/Button/Button'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
-import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
+import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
@@ -345,7 +345,7 @@ const ObjectiveCapital = (props: ObjectiveCapitalProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.preferredAmountToInvest
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setPreferredAmountToInvest(e)
@@ -389,7 +389,7 @@ const ObjectiveStages = (props: ObjectiveStagesProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.preferredFundingStages.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.preferredFundingStages.includes(e)) {
@@ -440,7 +440,7 @@ const ObjectiveSizes = (props: ObjectiveSizesProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.preferredStartupTeamSizes.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.preferredStartupTeamSizes.includes(e)) {
@@ -491,7 +491,7 @@ const ObjectiveTimelines = (props: ObjectiveTimelinesProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.preferredTimelines.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.preferredTimelines.includes(e)) {
@@ -532,7 +532,7 @@ const ObjectiveApetite = (props: ObjectiveApetiteProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               e == props.riskApetite
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               props.setRiskApetite(e)
@@ -582,7 +582,7 @@ const ObjectiveSectors = (props: ObjectiveSectorsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.preferredSectors.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.preferredSectors.includes(e)) {
@@ -610,9 +610,9 @@ type CityDataType = { city: string; lat: number; long: number }
 const locationList: string[] = Object.keys(locationData)
 Object.keys(locationData).forEach((state: string) => {
   locationData[state].forEach((element: CityDataType) => {
-    if (!locationList.includes(element.city)) {
-      locationList.push(element.city)
-    }
+    // if (!locationList.includes(element.city)) {
+    locationList.push(`${element.city} (${state})`)
+    // }
   })
 })
 
@@ -629,7 +629,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-between gap-2 border-2 border-primary p-2 lg:flex-row lg:p-4 ">
+      <div className="flex w-full flex-col items-center justify-between gap-2 border-2 border-primary p-2 lg:p-4 ">
         <div className="flex w-full items-center justify-between gap-2 ">
           <input
             className={
@@ -740,7 +740,7 @@ const ObjectiveGoals = (props: ObjectiveGoalsProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.platformGoal.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.platformGoal.includes(e)) {
@@ -786,7 +786,7 @@ const ObjectiveSources = (props: ObjectiveSourcesProps) => {
             className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.referSource.includes(e)
                 ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1'
+                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {
               if (props.referSource.includes(e)) {

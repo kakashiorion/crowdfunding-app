@@ -10,7 +10,7 @@ import {
   OnboardingTimelineProps,
   OnboardingTimelineStepsProps,
 } from 'src/lib/onboardingConsts'
-import { InvestorOnboardingSections } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingConsts'
+import { InvestorOnboardingSections } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
   return (
@@ -19,7 +19,13 @@ const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
         props.isMenuOpen ? 'flex' : 'hidden'
       } right-0 top-0 min-w-[200px] flex-col gap-2 overflow-scroll rounded-sm bg-white-d1 p-2 shadow-md dark:bg-black-l2/95 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:border-l-2  lg:border-l-white-d2 lg:bg-transparent lg:py-0 lg:pl-3 lg:shadow-none dark:lg:border-l-black-l2`}
     >
-      <PrimaryTextLabel label="ONBOARDING SECTIONS" />
+      <PrimaryTextLabel
+        label={`ONBOARDING SECTIONS (${
+          props.currentSection < InvestorOnboardingSections.length
+            ? props.currentSection
+            : InvestorOnboardingSections.length
+        }/${InvestorOnboardingSections.length})`}
+      />
       {InvestorOnboardingSections.map((section: OnboardingSectionInfoType) => (
         <InvestorTimelineSteps
           key={section.index}
