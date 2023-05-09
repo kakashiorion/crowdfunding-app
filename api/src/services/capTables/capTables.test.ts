@@ -31,17 +31,19 @@ describe('capTables', () => {
   scenario('creates a capTable', async (scenario: StandardScenario) => {
     const result = await createCapTable({
       input: {
-        startupID: scenario.capTable.two.startupID,
-        shareholder: 'String',
-        equityShare: 732985.4696754112,
-        updatedAt: '2023-04-29T06:50:11.423Z',
+        startupFinancialsID: scenario.capTable.two.startupFinancialsID,
+        shareholderName: 'String',
+        equityShare: 7503633.674578474,
+        updatedAt: '2023-05-09T21:14:25.468Z',
       },
     })
 
-    expect(result.startupID).toEqual(scenario.capTable.two.startupID)
-    expect(result.shareholder).toEqual('String')
-    expect(result.equityShare).toEqual(732985.4696754112)
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:50:11.423Z'))
+    expect(result.startupFinancialsID).toEqual(
+      scenario.capTable.two.startupFinancialsID
+    )
+    expect(result.shareholderName).toEqual('String')
+    expect(result.equityShare).toEqual(7503633.674578474)
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:14:25.468Z'))
   })
 
   scenario('updates a capTable', async (scenario: StandardScenario) => {
@@ -50,10 +52,10 @@ describe('capTables', () => {
     })) as CapTable
     const result = await updateCapTable({
       id: original.id,
-      input: { shareholder: 'String2' },
+      input: { shareholderName: 'String2' },
     })
 
-    expect(result.shareholder).toEqual('String2')
+    expect(result.shareholderName).toEqual('String2')
   })
 
   scenario('deletes a capTable', async (scenario: StandardScenario) => {

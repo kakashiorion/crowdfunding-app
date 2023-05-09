@@ -5,42 +5,46 @@ export const standard = defineScenario<Prisma.ConversationCreateArgs>({
   conversation: {
     one: {
       data: {
-        updatedAt: '2023-04-29T06:53:36.473Z',
+        updatedAt: '2023-05-09T21:19:32.844Z',
         conversationStarter: {
           create: {
-            email: 'String1224693',
+            email: 'String740692',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:53:36.473Z',
+            mobile: 'String8803217',
+            updatedAt: '2023-05-09T21:19:32.844Z',
           },
         },
         conversationResponder: {
           create: {
-            email: 'String7328315',
+            email: 'String954966',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:53:36.473Z',
+            mobile: 'String2469345',
+            updatedAt: '2023-05-09T21:19:32.844Z',
           },
         },
       },
     },
     two: {
       data: {
-        updatedAt: '2023-04-29T06:53:36.473Z',
+        updatedAt: '2023-05-09T21:19:32.844Z',
         conversationStarter: {
           create: {
-            email: 'String5338296',
+            email: 'String3566154',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:53:36.473Z',
+            mobile: 'String311831',
+            updatedAt: '2023-05-09T21:19:32.844Z',
           },
         },
         conversationResponder: {
           create: {
-            email: 'String1143220',
+            email: 'String3267075',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:53:36.473Z',
+            mobile: 'String5530003',
+            updatedAt: '2023-05-09T21:19:32.844Z',
           },
         },
       },

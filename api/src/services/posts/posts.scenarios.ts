@@ -6,13 +6,14 @@ export const standard = defineScenario<Prisma.PostCreateArgs>({
     one: {
       data: {
         title: 'String',
-        updatedAt: '2023-04-29T06:52:53.334Z',
+        updatedAt: '2023-05-09T21:18:23.698Z',
         poster: {
           create: {
-            email: 'String4974528',
+            email: 'String1268918',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:52:53.334Z',
+            mobile: 'String8061268',
+            updatedAt: '2023-05-09T21:18:23.698Z',
           },
         },
       },
@@ -20,13 +21,14 @@ export const standard = defineScenario<Prisma.PostCreateArgs>({
     two: {
       data: {
         title: 'String',
-        updatedAt: '2023-04-29T06:52:53.334Z',
+        updatedAt: '2023-05-09T21:18:23.698Z',
         poster: {
           create: {
-            email: 'String4231967',
+            email: 'String9664126',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:52:53.334Z',
+            mobile: 'String4437136',
+            updatedAt: '2023-05-09T21:18:23.698Z',
           },
         },
       },

@@ -43,7 +43,9 @@ export const deleteKeyPeople: MutationResolvers['deleteKeyPeople'] = ({
 }
 
 export const KeyPeople: KeyPeopleRelationResolvers = {
-  startup: (_obj, { root }) => {
-    return db.keyPeople.findUnique({ where: { id: root?.id } }).startup()
+  startupBackground: (_obj, { root }) => {
+    return db.keyPeople
+      .findUnique({ where: { id: root?.id } })
+      .startupBackground()
   },
 }

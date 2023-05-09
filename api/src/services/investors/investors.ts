@@ -47,11 +47,10 @@ export const Investor: InvestorRelationResolvers = {
   investorExp: (_obj, { root }) => {
     return db.investor.findUnique({ where: { id: root?.id } }).investorExp()
   },
-  investorMotive: (_obj, { root }) => {
-    return db.investor.findUnique({ where: { id: root?.id } }).investorMotive()
-  },
-  investorPref: (_obj, { root }) => {
-    return db.investor.findUnique({ where: { id: root?.id } }).investorPref()
+  investorObjective: (_obj, { root }) => {
+    return db.investor
+      .findUnique({ where: { id: root?.id } })
+      .investorObjective()
   },
   bids: (_obj, { root }) => {
     return db.investor.findUnique({ where: { id: root?.id } }).bids()

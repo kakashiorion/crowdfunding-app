@@ -44,18 +44,26 @@ describe('investorExperiences', () => {
       const result = await createInvestorExperience({
         input: {
           id: scenario.investorExperience.two.id,
-          hasInvestedBefore: true,
-          hasFoundStartup: true,
-          hasWorkedInStartup: true,
-          updatedAt: '2023-04-29T06:42:27.322Z',
+          workedInStartups: 'NONE',
+          foundedStartups: 'NONE',
+          investedStartups: 'NONE',
+          investedStages: 'SEED',
+          returnsReceived: 'BREAKEVEN',
+          investedSectors: 'EDUCATION',
+          investorLevel: 'NOVICE',
+          updatedAt: '2023-05-09T21:04:15.392Z',
         },
       })
 
       expect(result.id).toEqual(scenario.investorExperience.two.id)
-      expect(result.hasInvestedBefore).toEqual(true)
-      expect(result.hasFoundStartup).toEqual(true)
-      expect(result.hasWorkedInStartup).toEqual(true)
-      expect(result.updatedAt).toEqual(new Date('2023-04-29T06:42:27.322Z'))
+      expect(result.workedInStartups).toEqual('NONE')
+      expect(result.foundedStartups).toEqual('NONE')
+      expect(result.investedStartups).toEqual('NONE')
+      expect(result.investedStages).toEqual('SEED')
+      expect(result.returnsReceived).toEqual('BREAKEVEN')
+      expect(result.investedSectors).toEqual('EDUCATION')
+      expect(result.investorLevel).toEqual('NOVICE')
+      expect(result.updatedAt).toEqual(new Date('2023-05-09T21:04:15.392Z'))
     }
   )
 
@@ -67,10 +75,10 @@ describe('investorExperiences', () => {
       })) as InvestorExperience
       const result = await updateInvestorExperience({
         id: original.id,
-        input: { hasInvestedBefore: false },
+        input: { workedInStartups: 'MORE_THAN_TWENTY' },
       })
 
-      expect(result.hasInvestedBefore).toEqual(false)
+      expect(result.workedInStartups).toEqual('MORE_THAN_TWENTY')
     }
   )
 

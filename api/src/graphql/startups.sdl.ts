@@ -8,12 +8,12 @@ export const schema = gql`
     linkedInURL: String
     websiteURL: String
     locationID: Int!
-    industrySectorID: Int!
-    startupBasic: StartupBasic
+    sectorCategoryID: Int!
+    startupBackground: StartupBackground
     startupBusiness: StartupBusiness
+    startupMarket: StartupMarket
     startupFinancials: StartupFinancials
-    startupMotive: StartupMotive
-    startupPreferences: StartupPreferences
+    startupObjective: StartupObjective
     offers: [Offer]!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -31,7 +31,7 @@ export const schema = gql`
     linkedInURL: String
     websiteURL: String
     locationID: Int!
-    industrySectorID: Int!
+    sectorCategoryID: Int!
   }
 
   input UpdateStartupInput {
@@ -41,7 +41,7 @@ export const schema = gql`
     linkedInURL: String
     websiteURL: String
     locationID: Int
-    industrySectorID: Int
+    sectorCategoryID: Int
   }
 
   type Mutation {

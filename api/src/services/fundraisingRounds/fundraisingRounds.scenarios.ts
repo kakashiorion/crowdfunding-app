@@ -5,32 +5,29 @@ export const standard = defineScenario<Prisma.FundraisingRoundCreateArgs>({
   fundraisingRound: {
     one: {
       data: {
-        roundStage: 'SEED',
-        capitalRaisedLacs: 7983059.994903565,
-        valuationLacs: 1602179.5781325232,
-        keyInvestors: 'String',
-        updatedAt: '2023-04-29T06:49:54.785Z',
+        fundingStage: 'SEED',
+        capitalRaisedInCr: 5264006.032333508,
+        valuationInCr: 7284286.264359508,
+        updatedAt: '2023-05-09T21:13:44.714Z',
         startup: {
           create: {
-            currentValuationLacs: 7231944.208488803,
-            currentStage: 'SEED',
             plansForUsingCash: 'String',
-            biggestCostHeads: 'String',
-            updatedAt: '2023-04-29T06:49:54.785Z',
+            updatedAt: '2023-05-09T21:13:44.714Z',
             startup: {
               create: {
-                name: 'String2818493',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:49:54.785Z',
-                locationID: 5376178,
-                industrySectorID: 7008323,
-                updatedAt: '2023-04-29T06:49:54.785Z',
+                dateIncorporated: '2023-05-09T21:13:44.714Z',
+                locationID: 8182269,
+                sectorCategoryID: 7411202,
+                updatedAt: '2023-05-09T21:13:44.714Z',
                 user: {
                   create: {
-                    email: 'String8857911',
+                    email: 'String2558402',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:49:54.785Z',
+                    mobile: 'String8594271',
+                    updatedAt: '2023-05-09T21:13:44.714Z',
                   },
                 },
               },
@@ -41,32 +38,29 @@ export const standard = defineScenario<Prisma.FundraisingRoundCreateArgs>({
     },
     two: {
       data: {
-        roundStage: 'SEED',
-        capitalRaisedLacs: 492065.6290264769,
-        valuationLacs: 3710813.207218817,
-        keyInvestors: 'String',
-        updatedAt: '2023-04-29T06:49:54.785Z',
+        fundingStage: 'SEED',
+        capitalRaisedInCr: 6068757.668961651,
+        valuationInCr: 1233871.1837568162,
+        updatedAt: '2023-05-09T21:13:44.714Z',
         startup: {
           create: {
-            currentValuationLacs: 2379631.040408836,
-            currentStage: 'SEED',
             plansForUsingCash: 'String',
-            biggestCostHeads: 'String',
-            updatedAt: '2023-04-29T06:49:54.785Z',
+            updatedAt: '2023-05-09T21:13:44.714Z',
             startup: {
               create: {
-                name: 'String1368922',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:49:54.785Z',
-                locationID: 9344055,
-                industrySectorID: 6576436,
-                updatedAt: '2023-04-29T06:49:54.785Z',
+                dateIncorporated: '2023-05-09T21:13:44.714Z',
+                locationID: 6768353,
+                sectorCategoryID: 7682375,
+                updatedAt: '2023-05-09T21:13:44.714Z',
                 user: {
                   create: {
-                    email: 'String4165601',
+                    email: 'String2860999',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:49:54.785Z',
+                    mobile: 'String4418417',
+                    updatedAt: '2023-05-09T21:13:44.714Z',
                   },
                 },
               },

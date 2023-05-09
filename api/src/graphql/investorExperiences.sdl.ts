@@ -2,20 +2,123 @@ export const schema = gql`
   type InvestorExperience {
     id: Int!
     investor: Investor!
-    hasInvestedBefore: Boolean!
-    investedCompany: [InvestedCompany]!
-    hasFoundStartup: Boolean!
-    hasWorkedInStartup: Boolean!
-    riskApetite: RiskApetite!
+    workedInStartups: SizeRange!
+    foundedStartups: SizeRange!
+    investedStartups: SizeRange!
+    investedStages: [FundingStage]!
+    investedAmountLacs: AmountRange
+    successfulExits: SizeRange
+    returnsReceived: [ReturnsRange]!
+    investedSectors: [Sector]!
     investorLevel: InvestorLevel!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
 
-  enum RiskApetite {
-    LOW
-    MEDIUM
-    HIGH
+  enum SizeRange {
+    NONE
+    ONE_TO_THREE
+    THREE_TO_TEN
+    TEN_TO_TWENTY
+    MORE_THAN_TWENTY
+  }
+
+  enum SizeRange {
+    NONE
+    ONE_TO_THREE
+    THREE_TO_TEN
+    TEN_TO_TWENTY
+    MORE_THAN_TWENTY
+  }
+
+  enum SizeRange {
+    NONE
+    ONE_TO_THREE
+    THREE_TO_TEN
+    TEN_TO_TWENTY
+    MORE_THAN_TWENTY
+  }
+
+  enum FundingStage {
+    SEED
+    SERIES_A
+    SERIES_B
+    SERIES_C
+    SERIES_D
+    SERIES_E
+    SERIES_F
+    LATER
+  }
+
+  enum AmountRange {
+    LESS_THAN_ONE_LAC
+    ONE_TO_FIVE_LACS
+    FIVE_TO_TWENTY_LACS
+    TWENTY_LACS_TO_ONE_CRORE
+    MORE_THAN_1_CRORE
+  }
+
+  enum SizeRange {
+    NONE
+    ONE_TO_THREE
+    THREE_TO_TEN
+    TEN_TO_TWENTY
+    MORE_THAN_TWENTY
+  }
+
+  enum ReturnsRange {
+    BREAKEVEN
+    TWO
+    THREE
+    FIVE
+    TEN
+    TWENTY
+    FIFTY
+    HUNDRED
+  }
+
+  enum Sector {
+    EDUCATION
+    HEALTHCARE
+    PHARMACEUTICALS
+    BANKING_AND_FINANCE
+    ENERGY
+    CONSUMER_GOODS
+    RETAIL_ECOMMERCE
+    REAL_ESTATE
+    FOOD_AND_BEVERAGE
+    IT
+    IOT
+    AGRICULTURE
+    MANUFACTURING
+    FASHION
+    MEDIA
+    GAMING
+    ENTERTAINMENT
+    TELECOM
+    LOGISTICS
+    TRANSPORTATION
+    AUTOMOTIVE
+    AVIATION
+    HEAVY_MACHINERY
+    CHEMICAL
+    CONSTRUCTION
+    DEFENCE
+    ELECTRONICS
+    FISHERIES
+    MINING
+    BIOTECHNOLOGY
+    LEGAL
+    SPORTS_AND_FITNESS
+    WASTE_MANAGEMENT
+    WATER_MANAGEMENT
+    TRAVEL_AND_HOSPITALITY
+    SECURITY
+    SOCIAL_SERVICE
+    MARKETING
+    HUMAN_RESOURCES
+    BUSINESS_MANAGEMENT
+    AUTOMATION
   }
 
   enum InvestorLevel {
@@ -32,18 +135,26 @@ export const schema = gql`
   }
 
   input CreateInvestorExperienceInput {
-    hasInvestedBefore: Boolean!
-    hasFoundStartup: Boolean!
-    hasWorkedInStartup: Boolean!
-    riskApetite: RiskApetite!
+    workedInStartups: SizeRange!
+    foundedStartups: SizeRange!
+    investedStartups: SizeRange!
+    investedStages: [FundingStage]!
+    investedAmountLacs: AmountRange
+    successfulExits: SizeRange
+    returnsReceived: [ReturnsRange]!
+    investedSectors: [Sector]!
     investorLevel: InvestorLevel!
   }
 
   input UpdateInvestorExperienceInput {
-    hasInvestedBefore: Boolean
-    hasFoundStartup: Boolean
-    hasWorkedInStartup: Boolean
-    riskApetite: RiskApetite
+    workedInStartups: SizeRange
+    foundedStartups: SizeRange
+    investedStartups: SizeRange
+    investedStages: [FundingStage]!
+    investedAmountLacs: AmountRange
+    successfulExits: SizeRange
+    returnsReceived: [ReturnsRange]!
+    investedSectors: [Sector]!
     investorLevel: InvestorLevel
   }
 

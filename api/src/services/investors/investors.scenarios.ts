@@ -5,36 +5,34 @@ export const standard = defineScenario<Prisma.InvestorCreateArgs>({
   investor: {
     one: {
       data: {
-        firstName: 'String',
-        lastName: 'String',
-        dateOfBirth: '2023-04-29T06:40:59.512Z',
-        locationID: 399790,
-        workedInSectors: 5226778,
-        updatedAt: '2023-04-29T06:40:59.512Z',
+        name: 'String',
+        locationID: 8447597,
+        workedInSectors: 'EDUCATION',
+        updatedAt: '2023-05-09T21:02:19.923Z',
         user: {
           create: {
-            email: 'String5183100',
+            email: 'String3822651',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:40:59.512Z',
+            mobile: 'String2763973',
+            updatedAt: '2023-05-09T21:02:19.923Z',
           },
         },
       },
     },
     two: {
       data: {
-        firstName: 'String',
-        lastName: 'String',
-        dateOfBirth: '2023-04-29T06:40:59.512Z',
-        locationID: 8473175,
-        workedInSectors: 1210167,
-        updatedAt: '2023-04-29T06:40:59.512Z',
+        name: 'String',
+        locationID: 3031258,
+        workedInSectors: 'EDUCATION',
+        updatedAt: '2023-05-09T21:02:19.923Z',
         user: {
           create: {
-            email: 'String9682452',
+            email: 'String2863622',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:40:59.512Z',
+            mobile: 'String664992',
+            updatedAt: '2023-05-09T21:02:19.923Z',
           },
         },
       },

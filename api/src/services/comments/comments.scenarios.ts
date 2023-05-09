@@ -6,25 +6,27 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
     one: {
       data: {
         content: 'String',
-        updatedAt: '2023-04-29T06:53:11.068Z',
+        updatedAt: '2023-05-09T21:18:57.033Z',
         commenter: {
           create: {
-            email: 'String3325107',
+            email: 'String3725508',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:53:11.068Z',
+            mobile: 'String4370602',
+            updatedAt: '2023-05-09T21:18:57.033Z',
           },
         },
         post: {
           create: {
             title: 'String',
-            updatedAt: '2023-04-29T06:53:11.068Z',
+            updatedAt: '2023-05-09T21:18:57.033Z',
             poster: {
               create: {
-                email: 'String3173080',
+                email: 'String676870',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:53:11.068Z',
+                mobile: 'String6345461',
+                updatedAt: '2023-05-09T21:18:57.033Z',
               },
             },
           },
@@ -34,25 +36,27 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
     two: {
       data: {
         content: 'String',
-        updatedAt: '2023-04-29T06:53:11.068Z',
+        updatedAt: '2023-05-09T21:18:57.033Z',
         commenter: {
           create: {
-            email: 'String6144406',
+            email: 'String7877543',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:53:11.068Z',
+            mobile: 'String3214416',
+            updatedAt: '2023-05-09T21:18:57.033Z',
           },
         },
         post: {
           create: {
             title: 'String',
-            updatedAt: '2023-04-29T06:53:11.068Z',
+            updatedAt: '2023-05-09T21:18:57.033Z',
             poster: {
               create: {
-                email: 'String9026893',
+                email: 'String2744771',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:53:11.068Z',
+                mobile: 'String9924801',
+                updatedAt: '2023-05-09T21:18:57.033Z',
               },
             },
           },

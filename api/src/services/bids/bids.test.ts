@@ -27,29 +27,29 @@ describe('bids', () => {
       input: {
         offerID: scenario.bid.two.offerID,
         investorID: scenario.bid.two.investorID,
-        capitalAvailable: 1388368.7045036796,
-        equityNeeded: 8240737.0119575355,
+        capitalAvailable: 5824188.275521147,
+        equityNeeded: 8056691.889830296,
         canHelpWith: 'String',
-        updatedAt: '2023-04-29T06:52:12.591Z',
+        updatedAt: '2023-05-09T21:16:12.142Z',
       },
     })
 
     expect(result.offerID).toEqual(scenario.bid.two.offerID)
     expect(result.investorID).toEqual(scenario.bid.two.investorID)
-    expect(result.capitalAvailable).toEqual(1388368.7045036796)
-    expect(result.equityNeeded).toEqual(8240737.0119575355)
+    expect(result.capitalAvailable).toEqual(5824188.275521147)
+    expect(result.equityNeeded).toEqual(8056691.889830296)
     expect(result.canHelpWith).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:52:12.591Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:16:12.142Z'))
   })
 
   scenario('updates a bid', async (scenario: StandardScenario) => {
     const original = (await bid({ id: scenario.bid.one.id })) as Bid
     const result = await updateBid({
       id: original.id,
-      input: { capitalAvailable: 6002083.229874828 },
+      input: { capitalAvailable: 7505537.924380246 },
     })
 
-    expect(result.capitalAvailable).toEqual(6002083.229874828)
+    expect(result.capitalAvailable).toEqual(7505537.924380246)
   })
 
   scenario('deletes a bid', async (scenario: StandardScenario) => {

@@ -8,20 +8,21 @@ export const schema = gql`
     resetTokenExpiresAt: DateTime
     lastLogin: DateTime!
     profilePicURL: String
-    mobile: String
+    mobile: String!
     otp: String
     otpExpiresAt: DateTime
     webAuthnChallenge: String
-    # credentials: [UserCredential]!
+    credentials: [UserCredential]!
     type: UserType!
     investor: Investor
     startup: Startup
     isLoggedIn: Boolean!
     isOnboarded: Boolean!
-    messagesSent: [Message]!
-    messagesReceived: [Message]!
-    conversationsStarted: [Conversation]!
-    conversationsResponded: [Conversation]!
+    likedOnboarding: Boolean
+    sentMessages: [Message]!
+    receivedMessages: [Message]!
+    startedConversations: [Conversation]!
+    respondedConversations: [Conversation]!
     posts: [Post]!
     comments: [Comment]!
     likedPosts: [Post]!
@@ -30,6 +31,11 @@ export const schema = gql`
     connectionsAccepted: [Connection]!
     followedBy: [User]!
     following: [User]!
+    messageVisibility: VisibilityLevel!
+    activityVisbility: VisibilityLevel!
+    profileVisbility: VisibilityLevel!
+    notificationLevel: NotificationLevel!
+    prefersTheme: UITheme!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -39,6 +45,40 @@ export const schema = gql`
     STARTUP
     ADMIN
     GUEST
+  }
+
+  enum VisibilityLevel {
+    PRIVATE
+    CONNECTIONS
+    FOLLOWERS
+    PUBLIC
+  }
+
+  enum VisibilityLevel {
+    PRIVATE
+    CONNECTIONS
+    FOLLOWERS
+    PUBLIC
+  }
+
+  enum VisibilityLevel {
+    PRIVATE
+    CONNECTIONS
+    FOLLOWERS
+    PUBLIC
+  }
+
+  enum NotificationLevel {
+    NONE
+    LOW
+    MEDIUM
+    HIGH
+  }
+
+  enum UITheme {
+    SYSTEM
+    LIGHT
+    DARK
   }
 
   type Query {
@@ -54,13 +94,19 @@ export const schema = gql`
     resetTokenExpiresAt: DateTime
     lastLogin: DateTime!
     profilePicURL: String
-    mobile: String
+    mobile: String!
     otp: String
     otpExpiresAt: DateTime
     webAuthnChallenge: String
     type: UserType!
     isLoggedIn: Boolean!
     isOnboarded: Boolean!
+    likedOnboarding: Boolean
+    messageVisibility: VisibilityLevel!
+    activityVisbility: VisibilityLevel!
+    profileVisbility: VisibilityLevel!
+    notificationLevel: NotificationLevel!
+    prefersTheme: UITheme!
   }
 
   input UpdateUserInput {
@@ -78,6 +124,12 @@ export const schema = gql`
     type: UserType
     isLoggedIn: Boolean
     isOnboarded: Boolean
+    likedOnboarding: Boolean
+    messageVisibility: VisibilityLevel
+    activityVisbility: VisibilityLevel
+    profileVisbility: VisibilityLevel
+    notificationLevel: NotificationLevel
+    prefersTheme: UITheme
   }
 
   type Mutation {

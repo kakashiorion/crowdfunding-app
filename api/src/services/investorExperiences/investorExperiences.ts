@@ -47,9 +47,4 @@ export const InvestorExperience: InvestorExperienceRelationResolvers = {
       .findUnique({ where: { id: root?.id } })
       .investor()
   },
-  investedCompany: (_obj, { root }) => {
-    return db.investorExperience
-      .findUnique({ where: { id: root?.id } })
-      .investedCompany()
-  },
 }

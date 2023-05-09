@@ -6,35 +6,36 @@ export const standard = defineScenario<Prisma.BidQuestionCreateArgs>({
     one: {
       data: {
         question: 'String',
-        updatedAt: '2023-04-29T06:52:26.806Z',
+        updatedAt: '2023-05-09T21:17:21.494Z',
         bid: {
           create: {
-            capitalAvailable: 2568939.0899334108,
-            equityNeeded: 2980566.951399628,
+            capitalAvailable: 628686.7142980213,
+            equityNeeded: 4392921.178362632,
             canHelpWith: 'String',
-            updatedAt: '2023-04-29T06:52:26.806Z',
+            updatedAt: '2023-05-09T21:17:21.494Z',
             offer: {
               create: {
-                capitalTargetLacs: 4370449.448087907,
-                equityBeingIssued: 6730151.7634351235,
-                maxTicketSizeLacs: 6457426.324241284,
+                capitalTargetLacs: 3746661.2013728875,
+                equityBeingIssued: 9009815.953024851,
+                maxTicketSizeLacs: 8535797.819658305,
                 willUseFundsFor: 'String',
                 needHelpWith: 'String',
-                updatedAt: '2023-04-29T06:52:26.806Z',
+                updatedAt: '2023-05-09T21:17:21.494Z',
                 startup: {
                   create: {
-                    name: 'String5356996',
+                    name: 'String',
                     writeUp: 'String',
-                    dateIncorporated: '2023-04-29T06:52:26.806Z',
-                    locationID: 7355790,
-                    industrySectorID: 9889076,
-                    updatedAt: '2023-04-29T06:52:26.806Z',
+                    dateIncorporated: '2023-05-09T21:17:21.494Z',
+                    locationID: 8433394,
+                    sectorCategoryID: 6165177,
+                    updatedAt: '2023-05-09T21:17:21.494Z',
                     user: {
                       create: {
-                        email: 'String4913845',
+                        email: 'String4507260',
                         hashedPassword: 'String',
                         salt: 'String',
-                        updatedAt: '2023-04-29T06:52:26.806Z',
+                        mobile: 'String7857451',
+                        updatedAt: '2023-05-09T21:17:21.494Z',
                       },
                     },
                   },
@@ -43,18 +44,17 @@ export const standard = defineScenario<Prisma.BidQuestionCreateArgs>({
             },
             investor: {
               create: {
-                firstName: 'String',
-                lastName: 'String',
-                dateOfBirth: '2023-04-29T06:52:26.806Z',
-                locationID: 5428758,
-                workedInSectors: 1030252,
-                updatedAt: '2023-04-29T06:52:26.806Z',
+                name: 'String',
+                locationID: 1883457,
+                workedInSectors: 'EDUCATION',
+                updatedAt: '2023-05-09T21:17:21.494Z',
                 user: {
                   create: {
-                    email: 'String67185',
+                    email: 'String3710782',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:52:26.806Z',
+                    mobile: 'String5563646',
+                    updatedAt: '2023-05-09T21:17:21.494Z',
                   },
                 },
               },
@@ -66,35 +66,36 @@ export const standard = defineScenario<Prisma.BidQuestionCreateArgs>({
     two: {
       data: {
         question: 'String',
-        updatedAt: '2023-04-29T06:52:26.806Z',
+        updatedAt: '2023-05-09T21:17:21.494Z',
         bid: {
           create: {
-            capitalAvailable: 1352533.8008387045,
-            equityNeeded: 5196667.227861945,
+            capitalAvailable: 9054015.77341181,
+            equityNeeded: 1012393.487143104,
             canHelpWith: 'String',
-            updatedAt: '2023-04-29T06:52:26.806Z',
+            updatedAt: '2023-05-09T21:17:21.494Z',
             offer: {
               create: {
-                capitalTargetLacs: 620376.312721711,
-                equityBeingIssued: 5835504.587047498,
-                maxTicketSizeLacs: 5647698.582431662,
+                capitalTargetLacs: 4706055.191447141,
+                equityBeingIssued: 164116.35002951065,
+                maxTicketSizeLacs: 3690908.6117321397,
                 willUseFundsFor: 'String',
                 needHelpWith: 'String',
-                updatedAt: '2023-04-29T06:52:26.806Z',
+                updatedAt: '2023-05-09T21:17:21.494Z',
                 startup: {
                   create: {
-                    name: 'String8253336',
+                    name: 'String',
                     writeUp: 'String',
-                    dateIncorporated: '2023-04-29T06:52:26.806Z',
-                    locationID: 486416,
-                    industrySectorID: 1169810,
-                    updatedAt: '2023-04-29T06:52:26.806Z',
+                    dateIncorporated: '2023-05-09T21:17:21.494Z',
+                    locationID: 5685956,
+                    sectorCategoryID: 4622723,
+                    updatedAt: '2023-05-09T21:17:21.494Z',
                     user: {
                       create: {
-                        email: 'String6132935',
+                        email: 'String78397',
                         hashedPassword: 'String',
                         salt: 'String',
-                        updatedAt: '2023-04-29T06:52:26.806Z',
+                        mobile: 'String2140649',
+                        updatedAt: '2023-05-09T21:17:21.494Z',
                       },
                     },
                   },
@@ -103,18 +104,17 @@ export const standard = defineScenario<Prisma.BidQuestionCreateArgs>({
             },
             investor: {
               create: {
-                firstName: 'String',
-                lastName: 'String',
-                dateOfBirth: '2023-04-29T06:52:26.806Z',
-                locationID: 2289590,
-                workedInSectors: 2459060,
-                updatedAt: '2023-04-29T06:52:26.806Z',
+                name: 'String',
+                locationID: 9758713,
+                workedInSectors: 'EDUCATION',
+                updatedAt: '2023-05-09T21:17:21.494Z',
                 user: {
                   create: {
-                    email: 'String3248835',
+                    email: 'String7258578',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:52:26.806Z',
+                    mobile: 'String4683609',
+                    updatedAt: '2023-05-09T21:17:21.494Z',
                   },
                 },
               },

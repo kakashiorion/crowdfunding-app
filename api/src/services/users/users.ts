@@ -45,21 +45,21 @@ export const User: UserRelationResolvers = {
   startup: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).startup()
   },
-  messagesSent: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).messagesSent()
+  sentMessages: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).sentMessages()
   },
-  messagesReceived: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).messagesReceived()
+  receivedMessages: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).receivedMessages()
   },
-  conversationsStarted: (_obj, { root }) => {
+  startedConversations: (_obj, { root }) => {
     return db.user
       .findUnique({ where: { id: root?.id } })
-      .conversationsStarted()
+      .startedConversations()
   },
-  conversationsResponded: (_obj, { root }) => {
+  respondedConversations: (_obj, { root }) => {
     return db.user
       .findUnique({ where: { id: root?.id } })
-      .conversationsResponded()
+      .respondedConversations()
   },
   posts: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).posts()

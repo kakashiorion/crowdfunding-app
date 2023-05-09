@@ -36,13 +36,13 @@ describe('bidQuestions', () => {
       input: {
         bidID: scenario.bidQuestion.two.bidID,
         question: 'String',
-        updatedAt: '2023-04-29T06:52:26.779Z',
+        updatedAt: '2023-05-09T21:17:19.126Z',
       },
     })
 
     expect(result.bidID).toEqual(scenario.bidQuestion.two.bidID)
     expect(result.question).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:52:26.779Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:17:19.126Z'))
   })
 
   scenario('updates a bidQuestion', async (scenario: StandardScenario) => {

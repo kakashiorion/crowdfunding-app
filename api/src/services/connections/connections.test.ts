@@ -36,13 +36,13 @@ describe('connections', () => {
       input: {
         requesterID: scenario.connection.two.requesterID,
         accepterID: scenario.connection.two.accepterID,
-        updatedAt: '2023-04-29T06:38:02.628Z',
+        updatedAt: '2023-05-09T21:01:30.218Z',
       },
     })
 
     expect(result.requesterID).toEqual(scenario.connection.two.requesterID)
     expect(result.accepterID).toEqual(scenario.connection.two.accepterID)
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:38:02.628Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:01:30.218Z'))
   })
 
   scenario('updates a connection', async (scenario: StandardScenario) => {
@@ -51,10 +51,10 @@ describe('connections', () => {
     })) as Connection
     const result = await updateConnection({
       id: original.id,
-      input: { updatedAt: '2023-04-30T06:38:02.628Z' },
+      input: { updatedAt: '2023-05-10T21:01:30.218Z' },
     })
 
-    expect(result.updatedAt).toEqual(new Date('2023-04-30T06:38:02.628Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-10T21:01:30.218Z'))
   })
 
   scenario('deletes a connection', async (scenario: StandardScenario) => {

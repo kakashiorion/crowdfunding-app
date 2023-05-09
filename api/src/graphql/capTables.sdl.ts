@@ -1,9 +1,9 @@
 export const schema = gql`
   type CapTable {
     id: Int!
-    startup: StartupFinancials!
-    startupID: Int!
-    shareholder: String!
+    startupFinancials: StartupFinancials!
+    startupFinancialsID: Int!
+    shareholderName: String!
     equityShare: Float!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -15,14 +15,14 @@ export const schema = gql`
   }
 
   input CreateCapTableInput {
-    startupID: Int!
-    shareholder: String!
+    startupFinancialsID: Int!
+    shareholderName: String!
     equityShare: Float!
   }
 
   input UpdateCapTableInput {
-    startupID: Int
-    shareholder: String
+    startupFinancialsID: Int
+    shareholderName: String
     equityShare: Float
   }
 

@@ -41,7 +41,9 @@ export const deleteCapTable: MutationResolvers['deleteCapTable'] = ({ id }) => {
 }
 
 export const CapTable: CapTableRelationResolvers = {
-  startup: (_obj, { root }) => {
-    return db.capTable.findUnique({ where: { id: root?.id } }).startup()
+  startupFinancials: (_obj, { root }) => {
+    return db.capTable
+      .findUnique({ where: { id: root?.id } })
+      .startupFinancials()
   },
 }

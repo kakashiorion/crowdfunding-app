@@ -5,36 +5,38 @@ export const standard = defineScenario<Prisma.StartupCreateArgs>({
   startup: {
     one: {
       data: {
-        name: 'String4772756',
+        name: 'String',
         writeUp: 'String',
-        dateIncorporated: '2023-04-29T06:46:07.381Z',
-        locationID: 4870272,
-        industrySectorID: 1369015,
-        updatedAt: '2023-04-29T06:46:07.381Z',
+        dateIncorporated: '2023-05-09T21:05:27.160Z',
+        locationID: 779049,
+        sectorCategoryID: 4642469,
+        updatedAt: '2023-05-09T21:05:27.160Z',
         user: {
           create: {
-            email: 'String5942583',
+            email: 'String906149',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:46:07.381Z',
+            mobile: 'String9710385',
+            updatedAt: '2023-05-09T21:05:27.160Z',
           },
         },
       },
     },
     two: {
       data: {
-        name: 'String5937486',
+        name: 'String',
         writeUp: 'String',
-        dateIncorporated: '2023-04-29T06:46:07.381Z',
-        locationID: 2168830,
-        industrySectorID: 1839070,
-        updatedAt: '2023-04-29T06:46:07.381Z',
+        dateIncorporated: '2023-05-09T21:05:27.160Z',
+        locationID: 4334221,
+        sectorCategoryID: 5775284,
+        updatedAt: '2023-05-09T21:05:27.160Z',
         user: {
           create: {
-            email: 'String2375193',
+            email: 'String2787208',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:46:07.381Z',
+            mobile: 'String9820059',
+            updatedAt: '2023-05-09T21:05:27.160Z',
           },
         },
       },

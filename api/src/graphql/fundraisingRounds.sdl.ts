@@ -3,10 +3,10 @@ export const schema = gql`
     id: Int!
     startup: StartupFinancials!
     startupID: Int!
-    roundStage: FundingStage!
-    capitalRaisedLacs: Float!
-    valuationLacs: Float!
-    keyInvestors: [String]!
+    fundingStage: FundingStage!
+    capitalRaisedInCr: Float!
+    valuationInCr: Float!
+    keyInvestors: String
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -29,18 +29,18 @@ export const schema = gql`
 
   input CreateFundraisingRoundInput {
     startupID: Int!
-    roundStage: FundingStage!
-    capitalRaisedLacs: Float!
-    valuationLacs: Float!
-    keyInvestors: [String]!
+    fundingStage: FundingStage!
+    capitalRaisedInCr: Float!
+    valuationInCr: Float!
+    keyInvestors: String
   }
 
   input UpdateFundraisingRoundInput {
     startupID: Int
-    roundStage: FundingStage
-    capitalRaisedLacs: Float
-    valuationLacs: Float
-    keyInvestors: [String]!
+    fundingStage: FundingStage
+    capitalRaisedInCr: Float
+    valuationInCr: Float
+    keyInvestors: String
   }
 
   type Mutation {

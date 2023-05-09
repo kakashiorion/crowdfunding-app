@@ -42,44 +42,24 @@ describe('startupBusinesses', () => {
     const result = await createStartupBusiness({
       input: {
         id: scenario.startupBusiness.two.id,
-        numberUsersFY: 9927447,
-        numberCitiesFY: 6452853,
-        distributionType: 'B2B',
+        partners: 'String',
+        customers: 'String',
         workedWell: 'String',
         challenges: 'String',
         couldImprove: 'String',
-        currentFYActivities: 'String',
-        hasOnlineBusiness: true,
-        partners: 'String',
-        customers: 'String',
-        shortTermPlan: 'EXPAND_GEO',
-        trends: 'String',
-        competitors: 'String',
-        opporunities: 'String',
-        threats: 'String',
-        xFactor: 'String',
-        updatedAt: '2023-04-29T06:47:14.858Z',
+        currentActivities: 'String',
+        updatedAt: '2023-05-09T21:10:58.530Z',
       },
     })
 
     expect(result.id).toEqual(scenario.startupBusiness.two.id)
-    expect(result.numberUsersFY).toEqual(9927447)
-    expect(result.numberCitiesFY).toEqual(6452853)
-    expect(result.distributionType).toEqual('B2B')
+    expect(result.partners).toEqual('String')
+    expect(result.customers).toEqual('String')
     expect(result.workedWell).toEqual('String')
     expect(result.challenges).toEqual('String')
     expect(result.couldImprove).toEqual('String')
-    expect(result.currentFYActivities).toEqual('String')
-    expect(result.hasOnlineBusiness).toEqual(true)
-    expect(result.partners).toEqual('String')
-    expect(result.customers).toEqual('String')
-    expect(result.shortTermPlan).toEqual('EXPAND_GEO')
-    expect(result.trends).toEqual('String')
-    expect(result.competitors).toEqual('String')
-    expect(result.opporunities).toEqual('String')
-    expect(result.threats).toEqual('String')
-    expect(result.xFactor).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:47:14.858Z'))
+    expect(result.currentActivities).toEqual('String')
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:10:58.530Z'))
   })
 
   scenario('updates a startupBusiness', async (scenario: StandardScenario) => {
@@ -88,10 +68,10 @@ describe('startupBusinesses', () => {
     })) as StartupBusiness
     const result = await updateStartupBusiness({
       id: original.id,
-      input: { numberUsersFY: 8971220 },
+      input: { partners: 'String2' },
     })
 
-    expect(result.numberUsersFY).toEqual(8971220)
+    expect(result.partners).toEqual('String2')
   })
 
   scenario('deletes a startupBusiness', async (scenario: StandardScenario) => {

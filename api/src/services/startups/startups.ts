@@ -44,24 +44,24 @@ export const Startup: StartupRelationResolvers = {
   user: (_obj, { root }) => {
     return db.startup.findUnique({ where: { id: root?.id } }).user()
   },
-  startupBasic: (_obj, { root }) => {
-    return db.startup.findUnique({ where: { id: root?.id } }).startupBasic()
+  startupBackground: (_obj, { root }) => {
+    return db.startup
+      .findUnique({ where: { id: root?.id } })
+      .startupBackground()
   },
   startupBusiness: (_obj, { root }) => {
     return db.startup.findUnique({ where: { id: root?.id } }).startupBusiness()
+  },
+  startupMarket: (_obj, { root }) => {
+    return db.startup.findUnique({ where: { id: root?.id } }).startupMarket()
   },
   startupFinancials: (_obj, { root }) => {
     return db.startup
       .findUnique({ where: { id: root?.id } })
       .startupFinancials()
   },
-  startupMotive: (_obj, { root }) => {
-    return db.startup.findUnique({ where: { id: root?.id } }).startupMotive()
-  },
-  startupPreferences: (_obj, { root }) => {
-    return db.startup
-      .findUnique({ where: { id: root?.id } })
-      .startupPreferences()
+  startupObjective: (_obj, { root }) => {
+    return db.startup.findUnique({ where: { id: root?.id } }).startupObjective()
   },
   offers: (_obj, { root }) => {
     return db.startup.findUnique({ where: { id: root?.id } }).offers()

@@ -32,22 +32,18 @@ describe('investors', () => {
     const result = await createInvestor({
       input: {
         id: scenario.investor.two.id,
-        firstName: 'String',
-        lastName: 'String',
-        dateOfBirth: '2023-04-29T06:40:59.459Z',
-        locationID: 9642753,
-        workedInSectors: 2823035,
-        updatedAt: '2023-04-29T06:40:59.459Z',
+        name: 'String',
+        locationID: 8592345,
+        workedInSectors: 'EDUCATION',
+        updatedAt: '2023-05-09T21:02:19.871Z',
       },
     })
 
     expect(result.id).toEqual(scenario.investor.two.id)
-    expect(result.firstName).toEqual('String')
-    expect(result.lastName).toEqual('String')
-    expect(result.dateOfBirth).toEqual(new Date('2023-04-29T06:40:59.459Z'))
-    expect(result.locationID).toEqual(9642753)
-    expect(result.workedInSectors).toEqual(2823035)
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:40:59.459Z'))
+    expect(result.name).toEqual('String')
+    expect(result.locationID).toEqual(8592345)
+    expect(result.workedInSectors).toEqual('EDUCATION')
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:02:19.871Z'))
   })
 
   scenario('updates a investor', async (scenario: StandardScenario) => {
@@ -56,10 +52,10 @@ describe('investors', () => {
     })) as Investor
     const result = await updateInvestor({
       id: original.id,
-      input: { firstName: 'String2' },
+      input: { name: 'String2' },
     })
 
-    expect(result.firstName).toEqual('String2')
+    expect(result.name).toEqual('String2')
   })
 
   scenario('deletes a investor', async (scenario: StandardScenario) => {

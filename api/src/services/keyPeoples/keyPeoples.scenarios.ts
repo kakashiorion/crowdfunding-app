@@ -7,30 +7,26 @@ export const standard = defineScenario<Prisma.KeyPeopleCreateArgs>({
       data: {
         name: 'String',
         role: 'String',
-        updatedAt: '2023-04-29T06:47:43.105Z',
-        startup: {
+        updatedAt: '2023-05-09T21:09:53.938Z',
+        startupBackground: {
           create: {
-            valueProp: 'String',
-            isFirstStartup: true,
-            mission: 'String',
-            vision: 'String',
-            startupSize: 'ONE',
             coreValues: 'String',
-            updatedAt: '2023-04-29T06:47:43.105Z',
+            updatedAt: '2023-05-09T21:09:53.938Z',
             startup: {
               create: {
-                name: 'String2201293',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:47:43.105Z',
-                locationID: 6110481,
-                industrySectorID: 2114352,
-                updatedAt: '2023-04-29T06:47:43.105Z',
+                dateIncorporated: '2023-05-09T21:09:53.938Z',
+                locationID: 1493109,
+                sectorCategoryID: 3850340,
+                updatedAt: '2023-05-09T21:09:53.938Z',
                 user: {
                   create: {
-                    email: 'String4885238',
+                    email: 'String7038968',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:47:43.105Z',
+                    mobile: 'String6375692',
+                    updatedAt: '2023-05-09T21:09:53.938Z',
                   },
                 },
               },
@@ -43,30 +39,26 @@ export const standard = defineScenario<Prisma.KeyPeopleCreateArgs>({
       data: {
         name: 'String',
         role: 'String',
-        updatedAt: '2023-04-29T06:47:43.105Z',
-        startup: {
+        updatedAt: '2023-05-09T21:09:53.938Z',
+        startupBackground: {
           create: {
-            valueProp: 'String',
-            isFirstStartup: true,
-            mission: 'String',
-            vision: 'String',
-            startupSize: 'ONE',
             coreValues: 'String',
-            updatedAt: '2023-04-29T06:47:43.105Z',
+            updatedAt: '2023-05-09T21:09:53.938Z',
             startup: {
               create: {
-                name: 'String1020940',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:47:43.106Z',
-                locationID: 5761730,
-                industrySectorID: 2085369,
-                updatedAt: '2023-04-29T06:47:43.106Z',
+                dateIncorporated: '2023-05-09T21:09:53.938Z',
+                locationID: 4594245,
+                sectorCategoryID: 3544993,
+                updatedAt: '2023-05-09T21:09:53.938Z',
                 user: {
                   create: {
-                    email: 'String1140999',
+                    email: 'String6218953',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:47:43.106Z',
+                    mobile: 'String4796879',
+                    updatedAt: '2023-05-09T21:09:53.938Z',
                   },
                 },
               },

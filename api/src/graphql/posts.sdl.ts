@@ -8,8 +8,16 @@ export const schema = gql`
     title: String!
     writeup: String
     attachmentURL: String
+    visibility: VisibilityLevel!
     createdAt: DateTime!
     updatedAt: DateTime!
+  }
+
+  enum VisibilityLevel {
+    PRIVATE
+    CONNECTIONS
+    FOLLOWERS
+    PUBLIC
   }
 
   type Query {
@@ -22,6 +30,7 @@ export const schema = gql`
     title: String!
     writeup: String
     attachmentURL: String
+    visibility: VisibilityLevel!
   }
 
   input UpdatePostInput {
@@ -29,6 +38,7 @@ export const schema = gql`
     title: String
     writeup: String
     attachmentURL: String
+    visibility: VisibilityLevel
   }
 
   type Mutation {

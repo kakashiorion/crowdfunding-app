@@ -5,32 +5,33 @@ export const standard = defineScenario<Prisma.BidCreateArgs>({
   bid: {
     one: {
       data: {
-        capitalAvailable: 1063513.4749088215,
-        equityNeeded: 3464416.684142968,
+        capitalAvailable: 4923304.213781819,
+        equityNeeded: 9226051.137280952,
         canHelpWith: 'String',
-        updatedAt: '2023-04-29T06:52:12.633Z',
+        updatedAt: '2023-05-09T21:16:13.554Z',
         offer: {
           create: {
-            capitalTargetLacs: 9286546.293863127,
-            equityBeingIssued: 5221254.741391823,
-            maxTicketSizeLacs: 6672647.198666335,
+            capitalTargetLacs: 5080883.510771972,
+            equityBeingIssued: 9016153.485315917,
+            maxTicketSizeLacs: 8311388.068344976,
             willUseFundsFor: 'String',
             needHelpWith: 'String',
-            updatedAt: '2023-04-29T06:52:12.633Z',
+            updatedAt: '2023-05-09T21:16:13.554Z',
             startup: {
               create: {
-                name: 'String3323441',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:52:12.633Z',
-                locationID: 7839406,
-                industrySectorID: 5692417,
-                updatedAt: '2023-04-29T06:52:12.633Z',
+                dateIncorporated: '2023-05-09T21:16:13.554Z',
+                locationID: 4419365,
+                sectorCategoryID: 195146,
+                updatedAt: '2023-05-09T21:16:13.554Z',
                 user: {
                   create: {
-                    email: 'String2148255',
+                    email: 'String7048919',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:52:12.633Z',
+                    mobile: 'String855974',
+                    updatedAt: '2023-05-09T21:16:13.554Z',
                   },
                 },
               },
@@ -39,18 +40,17 @@ export const standard = defineScenario<Prisma.BidCreateArgs>({
         },
         investor: {
           create: {
-            firstName: 'String',
-            lastName: 'String',
-            dateOfBirth: '2023-04-29T06:52:12.633Z',
-            locationID: 7967298,
-            workedInSectors: 9667399,
-            updatedAt: '2023-04-29T06:52:12.633Z',
+            name: 'String',
+            locationID: 3064091,
+            workedInSectors: 'EDUCATION',
+            updatedAt: '2023-05-09T21:16:13.554Z',
             user: {
               create: {
-                email: 'String1546939',
+                email: 'String4686929',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:52:12.633Z',
+                mobile: 'String2162835',
+                updatedAt: '2023-05-09T21:16:13.554Z',
               },
             },
           },
@@ -59,32 +59,33 @@ export const standard = defineScenario<Prisma.BidCreateArgs>({
     },
     two: {
       data: {
-        capitalAvailable: 7601420.311146037,
-        equityNeeded: 2530626.712084585,
+        capitalAvailable: 3674633.769310889,
+        equityNeeded: 142877.33003801593,
         canHelpWith: 'String',
-        updatedAt: '2023-04-29T06:52:12.633Z',
+        updatedAt: '2023-05-09T21:16:13.554Z',
         offer: {
           create: {
-            capitalTargetLacs: 1056851.912044845,
-            equityBeingIssued: 8576877.539479822,
-            maxTicketSizeLacs: 3245908.1939945356,
+            capitalTargetLacs: 1837353.5789046725,
+            equityBeingIssued: 8332711.392304699,
+            maxTicketSizeLacs: 5247853.557005931,
             willUseFundsFor: 'String',
             needHelpWith: 'String',
-            updatedAt: '2023-04-29T06:52:12.633Z',
+            updatedAt: '2023-05-09T21:16:13.554Z',
             startup: {
               create: {
-                name: 'String8755658',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:52:12.633Z',
-                locationID: 9186469,
-                industrySectorID: 4599084,
-                updatedAt: '2023-04-29T06:52:12.633Z',
+                dateIncorporated: '2023-05-09T21:16:13.554Z',
+                locationID: 4278946,
+                sectorCategoryID: 918635,
+                updatedAt: '2023-05-09T21:16:13.554Z',
                 user: {
                   create: {
-                    email: 'String1367957',
+                    email: 'String8878295',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:52:12.633Z',
+                    mobile: 'String1891983',
+                    updatedAt: '2023-05-09T21:16:13.554Z',
                   },
                 },
               },
@@ -93,18 +94,17 @@ export const standard = defineScenario<Prisma.BidCreateArgs>({
         },
         investor: {
           create: {
-            firstName: 'String',
-            lastName: 'String',
-            dateOfBirth: '2023-04-29T06:52:12.633Z',
-            locationID: 952720,
-            workedInSectors: 3505843,
-            updatedAt: '2023-04-29T06:52:12.633Z',
+            name: 'String',
+            locationID: 5426549,
+            workedInSectors: 'EDUCATION',
+            updatedAt: '2023-05-09T21:16:13.554Z',
             user: {
               create: {
-                email: 'String4887918',
+                email: 'String8196868',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:52:12.633Z',
+                mobile: 'String9773842',
+                updatedAt: '2023-05-09T21:16:13.554Z',
               },
             },
           },

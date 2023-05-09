@@ -35,7 +35,7 @@ describe('messages', () => {
         senderID: scenario.message.two.senderID,
         receiverID: scenario.message.two.receiverID,
         content: 'String',
-        updatedAt: '2023-04-29T06:54:11.680Z',
+        updatedAt: '2023-05-09T21:20:09.238Z',
       },
     })
 
@@ -43,7 +43,7 @@ describe('messages', () => {
     expect(result.senderID).toEqual(scenario.message.two.senderID)
     expect(result.receiverID).toEqual(scenario.message.two.receiverID)
     expect(result.content).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:54:11.680Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:20:09.238Z'))
   })
 
   scenario('updates a message', async (scenario: StandardScenario) => {

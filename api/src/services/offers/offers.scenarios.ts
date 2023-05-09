@@ -5,26 +5,27 @@ export const standard = defineScenario<Prisma.OfferCreateArgs>({
   offer: {
     one: {
       data: {
-        capitalTargetLacs: 2393809.6680795653,
-        equityBeingIssued: 1508120.3093912166,
-        maxTicketSizeLacs: 2451536.9387644115,
+        capitalTargetLacs: 6677797.094597977,
+        equityBeingIssued: 6394467.321467014,
+        maxTicketSizeLacs: 174908.1580170997,
         willUseFundsFor: 'String',
         needHelpWith: 'String',
-        updatedAt: '2023-04-29T06:51:42.565Z',
+        updatedAt: '2023-05-09T21:15:47.921Z',
         startup: {
           create: {
-            name: 'String9280737',
+            name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-04-29T06:51:42.565Z',
-            locationID: 2125758,
-            industrySectorID: 8488974,
-            updatedAt: '2023-04-29T06:51:42.565Z',
+            dateIncorporated: '2023-05-09T21:15:47.921Z',
+            locationID: 7144970,
+            sectorCategoryID: 3354259,
+            updatedAt: '2023-05-09T21:15:47.921Z',
             user: {
               create: {
-                email: 'String668432',
+                email: 'String2401516',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:51:42.565Z',
+                mobile: 'String2371522',
+                updatedAt: '2023-05-09T21:15:47.921Z',
               },
             },
           },
@@ -33,26 +34,27 @@ export const standard = defineScenario<Prisma.OfferCreateArgs>({
     },
     two: {
       data: {
-        capitalTargetLacs: 6761916.952116262,
-        equityBeingIssued: 5528634.012071398,
-        maxTicketSizeLacs: 4253065.432471557,
+        capitalTargetLacs: 9545089.450970212,
+        equityBeingIssued: 1842365.8453416135,
+        maxTicketSizeLacs: 9648706.114947863,
         willUseFundsFor: 'String',
         needHelpWith: 'String',
-        updatedAt: '2023-04-29T06:51:42.565Z',
+        updatedAt: '2023-05-09T21:15:47.921Z',
         startup: {
           create: {
-            name: 'String4086166',
+            name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-04-29T06:51:42.565Z',
-            locationID: 9365285,
-            industrySectorID: 2555351,
-            updatedAt: '2023-04-29T06:51:42.565Z',
+            dateIncorporated: '2023-05-09T21:15:47.921Z',
+            locationID: 4341811,
+            sectorCategoryID: 8277154,
+            updatedAt: '2023-05-09T21:15:47.921Z',
             user: {
               create: {
-                email: 'String5918287',
+                email: 'String5910494',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:51:42.565Z',
+                mobile: 'String5814412',
+                updatedAt: '2023-05-09T21:15:47.921Z',
               },
             },
           },

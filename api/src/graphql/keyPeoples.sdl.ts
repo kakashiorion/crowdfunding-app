@@ -1,22 +1,14 @@
 export const schema = gql`
   type KeyPeople {
     id: Int!
-    startup: StartupBasic!
-    startupID: Int!
+    startupBackground: StartupBackground!
+    startupBackgroundID: Int!
     name: String!
     role: String!
     writeup: String
-    eduBG: EducationBG
     linkedInURL: String
     createdAt: DateTime!
     updatedAt: DateTime!
-  }
-
-  enum EducationBG {
-    HIGH_SCHOOL
-    BACHELORS
-    MASTERS
-    PHD
   }
 
   type Query {
@@ -25,20 +17,18 @@ export const schema = gql`
   }
 
   input CreateKeyPeopleInput {
-    startupID: Int!
+    startupBackgroundID: Int!
     name: String!
     role: String!
     writeup: String
-    eduBG: EducationBG
     linkedInURL: String
   }
 
   input UpdateKeyPeopleInput {
-    startupID: Int
+    startupBackgroundID: Int
     name: String
     role: String
     writeup: String
-    eduBG: EducationBG
     linkedInURL: String
   }
 

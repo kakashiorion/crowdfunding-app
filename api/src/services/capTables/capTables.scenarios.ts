@@ -5,30 +5,28 @@ export const standard = defineScenario<Prisma.CapTableCreateArgs>({
   capTable: {
     one: {
       data: {
-        shareholder: 'String',
-        equityShare: 953485.4334867471,
-        updatedAt: '2023-04-29T06:50:11.514Z',
-        startup: {
+        shareholderName: 'String',
+        equityShare: 560783.952063224,
+        updatedAt: '2023-05-09T21:14:26.724Z',
+        startupFinancials: {
           create: {
-            currentValuationLacs: 4377622.084093462,
-            currentStage: 'SEED',
             plansForUsingCash: 'String',
-            biggestCostHeads: 'String',
-            updatedAt: '2023-04-29T06:50:11.514Z',
+            updatedAt: '2023-05-09T21:14:26.724Z',
             startup: {
               create: {
-                name: 'String7036877',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:50:11.514Z',
-                locationID: 3650996,
-                industrySectorID: 183775,
-                updatedAt: '2023-04-29T06:50:11.514Z',
+                dateIncorporated: '2023-05-09T21:14:26.724Z',
+                locationID: 3873866,
+                sectorCategoryID: 8749247,
+                updatedAt: '2023-05-09T21:14:26.724Z',
                 user: {
                   create: {
-                    email: 'String9108614',
+                    email: 'String1818260',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:50:11.514Z',
+                    mobile: 'String9210918',
+                    updatedAt: '2023-05-09T21:14:26.725Z',
                   },
                 },
               },
@@ -39,30 +37,28 @@ export const standard = defineScenario<Prisma.CapTableCreateArgs>({
     },
     two: {
       data: {
-        shareholder: 'String',
-        equityShare: 3295261.623517285,
-        updatedAt: '2023-04-29T06:50:11.514Z',
-        startup: {
+        shareholderName: 'String',
+        equityShare: 918415.2163525327,
+        updatedAt: '2023-05-09T21:14:26.725Z',
+        startupFinancials: {
           create: {
-            currentValuationLacs: 9366590.335499037,
-            currentStage: 'SEED',
             plansForUsingCash: 'String',
-            biggestCostHeads: 'String',
-            updatedAt: '2023-04-29T06:50:11.514Z',
+            updatedAt: '2023-05-09T21:14:26.725Z',
             startup: {
               create: {
-                name: 'String5519658',
+                name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-04-29T06:50:11.514Z',
-                locationID: 8524112,
-                industrySectorID: 8773028,
-                updatedAt: '2023-04-29T06:50:11.514Z',
+                dateIncorporated: '2023-05-09T21:14:26.725Z',
+                locationID: 8958058,
+                sectorCategoryID: 8024579,
+                updatedAt: '2023-05-09T21:14:26.725Z',
                 user: {
                   create: {
-                    email: 'String8875370',
+                    email: 'String4412',
                     hashedPassword: 'String',
                     salt: 'String',
-                    updatedAt: '2023-04-29T06:50:11.514Z',
+                    mobile: 'String2856352',
+                    updatedAt: '2023-05-09T21:14:26.725Z',
                   },
                 },
               },

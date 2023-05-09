@@ -30,16 +30,11 @@ describe('locations', () => {
 
   scenario('creates a location', async () => {
     const result = await createLocation({
-      input: {
-        state: 'String',
-        city: 'String',
-        updatedAt: '2023-04-29T06:41:57.500Z',
-      },
+      input: { state: 'String', updatedAt: '2023-05-09T21:03:04.343Z' },
     })
 
     expect(result.state).toEqual('String')
-    expect(result.city).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:41:57.500Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:03:04.343Z'))
   })
 
   scenario('updates a location', async (scenario: StandardScenario) => {

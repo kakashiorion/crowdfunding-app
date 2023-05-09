@@ -37,7 +37,7 @@ describe('conversations', () => {
         conversationStarterID: scenario.conversation.two.conversationStarterID,
         conversationResponderID:
           scenario.conversation.two.conversationResponderID,
-        updatedAt: '2023-04-29T06:53:36.443Z',
+        updatedAt: '2023-05-09T21:19:32.591Z',
       },
     })
 
@@ -47,7 +47,7 @@ describe('conversations', () => {
     expect(result.conversationResponderID).toEqual(
       scenario.conversation.two.conversationResponderID
     )
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:53:36.443Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:19:32.591Z'))
   })
 
   scenario('updates a conversation', async (scenario: StandardScenario) => {
@@ -56,10 +56,10 @@ describe('conversations', () => {
     })) as Conversation
     const result = await updateConversation({
       id: original.id,
-      input: { updatedAt: '2023-04-30T06:53:36.443Z' },
+      input: { updatedAt: '2023-05-10T21:19:32.592Z' },
     })
 
-    expect(result.updatedAt).toEqual(new Date('2023-04-30T06:53:36.443Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-10T21:19:32.592Z'))
   })
 
   scenario('deletes a conversation', async (scenario: StandardScenario) => {

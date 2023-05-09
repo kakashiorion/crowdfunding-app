@@ -6,42 +6,46 @@ export const standard = defineScenario<Prisma.MessageCreateArgs>({
     one: {
       data: {
         content: 'String',
-        updatedAt: '2023-04-29T06:54:11.724Z',
+        updatedAt: '2023-05-09T21:20:09.556Z',
         conversation: {
           create: {
-            updatedAt: '2023-04-29T06:54:11.725Z',
+            updatedAt: '2023-05-09T21:20:09.556Z',
             conversationStarter: {
               create: {
-                email: 'String7599179',
+                email: 'String3709862',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:54:11.725Z',
+                mobile: 'String1368886',
+                updatedAt: '2023-05-09T21:20:09.557Z',
               },
             },
             conversationResponder: {
               create: {
-                email: 'String8431450',
+                email: 'String8607739',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:54:11.725Z',
+                mobile: 'String8511082',
+                updatedAt: '2023-05-09T21:20:09.557Z',
               },
             },
           },
         },
         sender: {
           create: {
-            email: 'String1980307',
+            email: 'String2332582',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:54:11.725Z',
+            mobile: 'String1832193',
+            updatedAt: '2023-05-09T21:20:09.557Z',
           },
         },
         receiver: {
           create: {
-            email: 'String459387',
+            email: 'String8226135',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:54:11.725Z',
+            mobile: 'String2245310',
+            updatedAt: '2023-05-09T21:20:09.557Z',
           },
         },
       },
@@ -49,42 +53,46 @@ export const standard = defineScenario<Prisma.MessageCreateArgs>({
     two: {
       data: {
         content: 'String',
-        updatedAt: '2023-04-29T06:54:11.725Z',
+        updatedAt: '2023-05-09T21:20:09.557Z',
         conversation: {
           create: {
-            updatedAt: '2023-04-29T06:54:11.725Z',
+            updatedAt: '2023-05-09T21:20:09.557Z',
             conversationStarter: {
               create: {
-                email: 'String9634469',
+                email: 'String3055878',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:54:11.725Z',
+                mobile: 'String4923293',
+                updatedAt: '2023-05-09T21:20:09.557Z',
               },
             },
             conversationResponder: {
               create: {
-                email: 'String2296837',
+                email: 'String8273028',
                 hashedPassword: 'String',
                 salt: 'String',
-                updatedAt: '2023-04-29T06:54:11.725Z',
+                mobile: 'String4351640',
+                updatedAt: '2023-05-09T21:20:09.557Z',
               },
             },
           },
         },
         sender: {
           create: {
-            email: 'String4815262',
+            email: 'String6585277',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:54:11.726Z',
+            mobile: 'String9795010',
+            updatedAt: '2023-05-09T21:20:09.557Z',
           },
         },
         receiver: {
           create: {
-            email: 'String7626748',
+            email: 'String3969116',
             hashedPassword: 'String',
             salt: 'String',
-            updatedAt: '2023-04-29T06:54:11.726Z',
+            mobile: 'String8305796',
+            updatedAt: '2023-05-09T21:20:09.557Z',
           },
         },
       },

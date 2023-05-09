@@ -10,6 +10,7 @@ export const schema = gql`
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
     maxTicketSizeLacs: Float!
+    fundingStage: FundingStage
     numberOfInvestors: Int
     willUseFundsFor: [String]!
     needHelpWith: [String]!
@@ -26,6 +27,17 @@ export const schema = gql`
     CLOSED
   }
 
+  enum FundingStage {
+    SEED
+    SERIES_A
+    SERIES_B
+    SERIES_C
+    SERIES_D
+    SERIES_E
+    SERIES_F
+    LATER
+  }
+
   type Query {
     offers: [Offer!]! @requireAuth
     offer(id: Int!): Offer @requireAuth
@@ -39,6 +51,7 @@ export const schema = gql`
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
     maxTicketSizeLacs: Float!
+    fundingStage: FundingStage
     numberOfInvestors: Int
     willUseFundsFor: [String]!
     needHelpWith: [String]!
@@ -53,6 +66,7 @@ export const schema = gql`
     equityBeingIssued: Float
     minTicketSizeLacs: Float
     maxTicketSizeLacs: Float
+    fundingStage: FundingStage
     numberOfInvestors: Int
     willUseFundsFor: [String]!
     needHelpWith: [String]!

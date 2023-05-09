@@ -26,32 +26,32 @@ describe('offers', () => {
     const result = await createOffer({
       input: {
         startupID: scenario.offer.two.startupID,
-        capitalTargetLacs: 5972946.321304566,
-        equityBeingIssued: 774841.3241843899,
-        maxTicketSizeLacs: 8770967.86113381,
+        capitalTargetLacs: 5458151.898149641,
+        equityBeingIssued: 8127595.845174325,
+        maxTicketSizeLacs: 4191638.686924868,
         willUseFundsFor: 'String',
         needHelpWith: 'String',
-        updatedAt: '2023-04-29T06:51:42.521Z',
+        updatedAt: '2023-05-09T21:15:47.334Z',
       },
     })
 
     expect(result.startupID).toEqual(scenario.offer.two.startupID)
-    expect(result.capitalTargetLacs).toEqual(5972946.321304566)
-    expect(result.equityBeingIssued).toEqual(774841.3241843899)
-    expect(result.maxTicketSizeLacs).toEqual(8770967.86113381)
+    expect(result.capitalTargetLacs).toEqual(5458151.898149641)
+    expect(result.equityBeingIssued).toEqual(8127595.845174325)
+    expect(result.maxTicketSizeLacs).toEqual(4191638.686924868)
     expect(result.willUseFundsFor).toEqual('String')
     expect(result.needHelpWith).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:51:42.521Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:15:47.334Z'))
   })
 
   scenario('updates a offer', async (scenario: StandardScenario) => {
     const original = (await offer({ id: scenario.offer.one.id })) as Offer
     const result = await updateOffer({
       id: original.id,
-      input: { capitalTargetLacs: 922331.8574811446 },
+      input: { capitalTargetLacs: 9176689.308878 },
     })
 
-    expect(result.capitalTargetLacs).toEqual(922331.8574811446)
+    expect(result.capitalTargetLacs).toEqual(9176689.308878)
   })
 
   scenario('deletes a offer', async (scenario: StandardScenario) => {

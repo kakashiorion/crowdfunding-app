@@ -42,20 +42,18 @@ describe('fundraisingRounds', () => {
     const result = await createFundraisingRound({
       input: {
         startupID: scenario.fundraisingRound.two.startupID,
-        roundStage: 'SEED',
-        capitalRaisedLacs: 1975780.0906633926,
-        valuationLacs: 1414969.0890104272,
-        keyInvestors: 'String',
-        updatedAt: '2023-04-29T06:49:54.737Z',
+        fundingStage: 'SEED',
+        capitalRaisedInCr: 7829107.37352285,
+        valuationInCr: 5465459.322551978,
+        updatedAt: '2023-05-09T21:13:43.702Z',
       },
     })
 
     expect(result.startupID).toEqual(scenario.fundraisingRound.two.startupID)
-    expect(result.roundStage).toEqual('SEED')
-    expect(result.capitalRaisedLacs).toEqual(1975780.0906633926)
-    expect(result.valuationLacs).toEqual(1414969.0890104272)
-    expect(result.keyInvestors).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:49:54.737Z'))
+    expect(result.fundingStage).toEqual('SEED')
+    expect(result.capitalRaisedInCr).toEqual(7829107.37352285)
+    expect(result.valuationInCr).toEqual(5465459.322551978)
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:13:43.702Z'))
   })
 
   scenario('updates a fundraisingRound', async (scenario: StandardScenario) => {
@@ -64,10 +62,10 @@ describe('fundraisingRounds', () => {
     })) as FundraisingRound
     const result = await updateFundraisingRound({
       id: original.id,
-      input: { roundStage: 'LATER' },
+      input: { fundingStage: 'LATER' },
     })
 
-    expect(result.roundStage).toEqual('LATER')
+    expect(result.fundingStage).toEqual('LATER')
   })
 
   scenario('deletes a fundraisingRound', async (scenario: StandardScenario) => {

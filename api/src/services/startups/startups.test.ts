@@ -32,34 +32,34 @@ describe('startups', () => {
     const result = await createStartup({
       input: {
         id: scenario.startup.two.id,
-        name: 'String2286899',
+        name: 'String',
         writeUp: 'String',
-        dateIncorporated: '2023-04-29T06:46:07.333Z',
-        locationID: 3753139,
-        industrySectorID: 8968713,
-        updatedAt: '2023-04-29T06:46:07.333Z',
+        dateIncorporated: '2023-05-09T21:05:26.963Z',
+        locationID: 7196652,
+        sectorCategoryID: 4491564,
+        updatedAt: '2023-05-09T21:05:26.963Z',
       },
     })
 
     expect(result.id).toEqual(scenario.startup.two.id)
-    expect(result.name).toEqual('String2286899')
+    expect(result.name).toEqual('String')
     expect(result.writeUp).toEqual('String')
     expect(result.dateIncorporated).toEqual(
-      new Date('2023-04-29T06:46:07.333Z')
+      new Date('2023-05-09T21:05:26.963Z')
     )
-    expect(result.locationID).toEqual(3753139)
-    expect(result.industrySectorID).toEqual(8968713)
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:46:07.333Z'))
+    expect(result.locationID).toEqual(7196652)
+    expect(result.sectorCategoryID).toEqual(4491564)
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:05:26.963Z'))
   })
 
   scenario('updates a startup', async (scenario: StandardScenario) => {
     const original = (await startup({ id: scenario.startup.one.id })) as Startup
     const result = await updateStartup({
       id: original.id,
-      input: { name: 'String23763182' },
+      input: { name: 'String2' },
     })
 
-    expect(result.name).toEqual('String23763182')
+    expect(result.name).toEqual('String2')
   })
 
   scenario('deletes a startup', async (scenario: StandardScenario) => {

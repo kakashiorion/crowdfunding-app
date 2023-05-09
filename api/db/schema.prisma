@@ -46,7 +46,7 @@ model User {
   following              User[]            @relation("UserFollows")
   messageVisibility      VisibilityLevel   @default(PUBLIC)
   activityVisbility      VisibilityLevel   @default(PUBLIC)
-  profileVisbility       VisibilityLevel   @default(CONNECTIONS)
+  profileVisbility       VisibilityLevel   @default(FOLLOWERS)
   notificationLevel      NotificationLevel @default(HIGH)
   prefersTheme           UITheme           @default(SYSTEM)
   createdAt              DateTime          @default(now())

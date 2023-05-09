@@ -27,13 +27,13 @@ describe('posts', () => {
       input: {
         posterID: scenario.post.two.posterID,
         title: 'String',
-        updatedAt: '2023-04-29T06:52:53.299Z',
+        updatedAt: '2023-05-09T21:18:23.569Z',
       },
     })
 
     expect(result.posterID).toEqual(scenario.post.two.posterID)
     expect(result.title).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:52:53.299Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:18:23.569Z'))
   })
 
   scenario('updates a post', async (scenario: StandardScenario) => {

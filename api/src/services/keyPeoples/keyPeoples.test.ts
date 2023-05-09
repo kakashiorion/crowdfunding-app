@@ -31,17 +31,19 @@ describe('keyPeoples', () => {
   scenario('creates a keyPeople', async (scenario: StandardScenario) => {
     const result = await createKeyPeople({
       input: {
-        startupID: scenario.keyPeople.two.startupID,
+        startupBackgroundID: scenario.keyPeople.two.startupBackgroundID,
         name: 'String',
         role: 'String',
-        updatedAt: '2023-04-29T06:47:43.073Z',
+        updatedAt: '2023-05-09T21:09:53.426Z',
       },
     })
 
-    expect(result.startupID).toEqual(scenario.keyPeople.two.startupID)
+    expect(result.startupBackgroundID).toEqual(
+      scenario.keyPeople.two.startupBackgroundID
+    )
     expect(result.name).toEqual('String')
     expect(result.role).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-04-29T06:47:43.073Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:09:53.426Z'))
   })
 
   scenario('updates a keyPeople', async (scenario: StandardScenario) => {
