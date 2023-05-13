@@ -95,7 +95,7 @@ export const DisabledFilledButton = (props: ButtonProps) => {
 export const BlackOutlineButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded-sm border-2 border-black-l1 px-4 py-2 text-b2 text-black-l1 hover:border-black hover:text-black dark:border-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:text-white lg:px-5 lg:py-3 lg:text-b1"
+      className="rounded-sm border-2 border-black-l2 px-4 py-2 text-b2 text-black-l2 hover:border-black hover:text-black dark:border-white-d2 dark:text-white-d2 dark:hover:border-white dark:hover:text-white lg:px-5 lg:py-3 lg:text-b1"
       onClick={props.action}
     >
       {props.label}

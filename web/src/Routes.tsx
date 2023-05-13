@@ -35,13 +35,14 @@ const Routes = () => {
       <Set wrap={[SignupPageLayout]}>
         <Route path="/signup" page={SignupFlowSignupPage} name="signup" />
       </Set>
-      <Set wrap={[StartupHomeLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
+      {/* <Set wrap={[StartupHomeLayout]} private unauthenticated="landing" roles={['ADMIN', 'STARTUP']}> */}
+      <Set wrap={[StartupHomeLayout]} unauthenticated="landing" roles={['ADMIN', 'STARTUP']}>
         <Route path="/startup/home" page={StartupStartupHomePage} name="startupHome" />
-        <Route path="/startup/myProfile" page={StartupStartupMyProfilePage} name="startupMyProfile" />
         <Route path="/startup/myOffer" page={StartupStartupMyOfferPage} name="startupMyOffer" />
         <Route path="/startup/myConnections" page={StartupStartupMyConnectionsPage} name="startupMyConnections" />
         <Route path="/startup/myConversations" page={StartupStartupMyConversationsPage} name="startupMyConversations" />
         <Route path="/startup/explore" page={StartupStartupExplorePage} name="startupExplore" />
+        <Route path="/startup/myProfile" page={StartupStartupMyProfilePage} name="startupMyProfile" />
         <Route path="/startup/help" page={StartupStartupHelpPage} name="startupHelp" />
         <Route path="/startup/investorProfile" page={StartupInvestorProfilePage} name="startupInvestorProfile" />
         <Route path="/startup/post" page={StartupStartupPostPage} name="startupPost" />
@@ -51,12 +52,13 @@ const Routes = () => {
         <Route path="/startup/onboarding" page={StartupStartupOnboardingPage} name="startupOnboarding" />
       </Set>
       <Set wrap={[InvestorHomeLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}>
+        {/* <Set wrap={[InvestorHomeLayout]} unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}> */}
         <Route path="/investor/home" page={InvestorInvestorHomePage} name="investorHome" />
-        <Route path="/investor/myProfile" page={InvestorMyInvestorProfilePage} name="investorMyProfile" />
         <Route path="/investor/myBids" page={InvestorInvestorMyBidsPage} name="investorMyBids" />
         <Route path="/investor/myConnections" page={InvestorInvestorMyConnectionsPage} name="investorMyConnections" />
         <Route path="/investor/myConversations" page={InvestorInvestorMyConversationsPage} name="investorMyConversations" />
         <Route path="/investor/explore" page={InvestorInvestorExplorePage} name="investorExplore" />
+        <Route path="/investor/myProfile" page={InvestorMyInvestorProfilePage} name="myInvestorProfile" />
         <Route path="/investor/help" page={InvestorInvestorHelpPage} name="investorHelp" />
         <Route path="/investor/otherInvestorProfile" page={InvestorOtherInvestorProfilePage} name="otherInvestorProfile" />
         <Route path="/investor/startupProfile" page={InvestorStartupProfilePage} name="investorStartupProfile" />

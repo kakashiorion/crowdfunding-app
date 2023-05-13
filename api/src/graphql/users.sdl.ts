@@ -12,7 +12,7 @@ export const schema = gql`
     otp: String
     otpExpiresAt: DateTime
     webAuthnChallenge: String
-    credentials: [UserCredential]!
+    # credentials: [UserCredential]!
     type: UserType!
     investor: Investor
     startup: Startup
@@ -84,6 +84,8 @@ export const schema = gql`
   type Query {
     users: [User!]! @requireAuth
     user(id: Int!): User @requireAuth
+    userByEmail(email: String!): User @requireAuth
+    userByMobile(mobile: String!): User @requireAuth
   }
 
   input CreateUserInput {
@@ -136,5 +138,7 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
+    loginPwdLessUser(email: String!): User! @requireAuth
+    resetPwdUser(email: String!): User! @requireAuth
   }
 `

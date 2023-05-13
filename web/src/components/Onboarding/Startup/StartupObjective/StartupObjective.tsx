@@ -393,10 +393,14 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
               className="flex h-5 w-5 fill-white lg:h-6 lg:w-6"
               onClick={() => {
                 setSearchResult(
-                  locationList.filter((l) => l.includes(searchTerm))
+                  locationList.filter((l) =>
+                    l.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
                 )
                 setSelectedLoc(
-                  locationList.filter((l) => l.includes(searchTerm))[0]
+                  locationList.filter((l) =>
+                    l.toLowerCase().includes(searchTerm.toLowerCase())
+                  )[0]
                 )
               }}
             />

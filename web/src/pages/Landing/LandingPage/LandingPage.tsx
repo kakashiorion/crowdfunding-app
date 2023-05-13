@@ -5,8 +5,8 @@ import { MetaTags } from '@redwoodjs/web'
 
 import { LargePrimaryFilledButton } from 'src/components/Button/Button'
 import { HeadingLabel, PrimarySubTitleLabel } from 'src/components/Label/Label'
-import LandingFooter from 'src/components/LandingFooter/LandingFooter'
-import LandingHeader from 'src/components/LandingHeader/LandingHeader'
+import LandingFooter from 'src/components/Landing/LandingFooter/LandingFooter'
+import LandingHeader from 'src/components/Landing/LandingHeader/LandingHeader'
 
 const LandingPage = () => {
   const investorRef = useRef<HTMLDivElement>(null)

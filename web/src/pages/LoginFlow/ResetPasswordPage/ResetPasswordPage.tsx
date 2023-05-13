@@ -1,8 +1,11 @@
 import { useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import {
   PrimaryFilledButton,
   SmallHoverPrimaryTextButton,
@@ -22,6 +25,30 @@ import resetImg from './reset.jpg'
 
 type StepType = 'code' | 'password' | 'success'
 
+const RESET_USER_QUERY = gql`
+  query user($id: Int!) {
+    user(id: $id) {
+      id
+      email
+      type
+      resetToken
+      resetTokenExpiresAt
+    }
+  }
+`
+
+// const RESET_PWD_MUTATION = gql`
+//   mutation updateUser($id: Int!, $input: UpdateUserInput!) {
+//     updateUser(id: $id, input: $input) {
+//       id
+//       email
+//       type
+//       resetToken
+//       resetTokenExpiresAt
+//     }
+//   }
+// `
+
 type ResetPasswordPageProps = {
   email: string
   id: number
@@ -33,6 +60,18 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
   const [enteredCode, setEnteredCode] = useState('')
   const [enteredPwd, setEnteredPwd] = useState('')
   const [enteredConfirmPwd, setEnteredConfirmPwd] = useState('')
+
+  const { resetPassword } = useAuth()
+  const [getData] = useLazyQuery(RESET_USER_QUERY)
+  // const [resetPwd] = useMutation(RESET_PWD_MUTATION, {
+  //   variables: {
+  //     id: Number(props.id),
+  //     input: {
+  //       password: enteredPwd,
+  //       resetToken: '',
+  //     },
+  //   },
+  // })
 
   return (
     <>
@@ -62,16 +101,32 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
               />
               <ErrorSubTextLabel label={codeError} />
               <PrimaryFilledButton
-                action={() => {
-                  //TODO: Match code for the prop email in DB
-                  if (enteredCode.length != 6) {
-                    setCodeError('Code must be 6 digits')
-                  } else if (enteredCode == '123456') {
-                    setStep('password')
+                action={async () => {
+                  if (enteredCode.length == 0) {
+                    setCodeError('Code must be provided')
                   } else {
-                    setCodeError(
-                      'Oops.. Code does not match. Please try again!'
-                    )
+                    //Match code for the userID in DB
+                    await getData({
+                      variables: { id: Number(props.id) },
+                    }).then((d) => {
+                      // console.log(d)
+                      if (
+                        d.data.user &&
+                        enteredCode == d.data.user.resetToken
+                      ) {
+                        if (new Date() > d.data.user.resetTokenExpiresAt) {
+                          setCodeError(
+                            'Code has expired. Go back and send the code again!'
+                          )
+                        } else {
+                          setStep('password')
+                        }
+                      } else {
+                        setCodeError(
+                          'Oops.. Code does not match. Please try again!'
+                        )
+                      }
+                    })
                   }
                 }}
                 label="CONTINUE"
@@ -108,14 +163,17 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
               />
               <ErrorSubTextLabel label={pwdError} />
               <PrimaryFilledButton
-                action={() => {
+                action={async () => {
                   if (enteredPwd.length < 8 || enteredConfirmPwd.length < 8) {
                     setPwdError('Atleast 8 characters required')
                   } else if (enteredPwd != enteredConfirmPwd) {
                     setPwdError('Passwords do not match')
                   } else {
-                    //TODO: Passwords matched -> reset password in DB and continue)
-                    //resetPassword()
+                    //Passwords matched -> reset password in DB and continue)
+                    await resetPassword({
+                      password: enteredPwd,
+                      resetToken: '',
+                    })
                     setStep('success')
                   }
                 }}

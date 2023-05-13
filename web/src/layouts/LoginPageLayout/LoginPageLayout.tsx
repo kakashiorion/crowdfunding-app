@@ -1,9 +1,9 @@
+import LogoBlack from 'public/logo/LogoBlack.svg'
+import LogoWhite from 'public/logo/LogoWhite.svg'
+
 import { navigate, routes } from '@redwoodjs/router'
 
 import { SmallSecondaryOutlineButton } from 'src/components/Button/Button'
-
-import LogoBlack from '../../../public/logo/LogoBlack.svg'
-import LogoWhite from '../../../public/logo/LogoWhite.svg'
 
 type LoginPageLayoutProps = {
   children?: React.ReactNode
@@ -11,7 +11,7 @@ type LoginPageLayoutProps = {
 
 const LoginPageLayout = ({ children }: LoginPageLayoutProps) => {
   return (
-    <div className="h-screen bg-white px-5 dark:bg-black-l1 lg:px-6 ">
+    <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
       <div className="flex h-full flex-col xl:mx-auto xl:max-w-screen-xl ">
         <LoginHeader />
         {children}

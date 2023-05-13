@@ -1,8 +1,11 @@
 import { useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import {
   PrimaryFilledButton,
   SmallHoverPrimaryTextButton,
@@ -14,8 +17,22 @@ import {
   TextLabel,
   WarnSubTextLabel,
 } from 'src/components/Label/Label'
+import { sendSignupEmailJS } from 'src/lib/sendEmail'
 
-// type UserType = 'Investor' | 'Startup' |''
+const SIGNUP_QUERY = gql`
+  query CheckUser($email: String!, $mobile: String!) {
+    user1: userByEmail(email: $email) {
+      id
+      email
+      mobile
+    }
+    user2: userByMobile(mobile: $mobile) {
+      id
+      email
+      mobile
+    }
+  }
+`
 
 type SignupPageProps = {
   type?: string
@@ -30,17 +47,17 @@ const SignupPage = (props: SignupPageProps) => {
       />
       <div className="my-4 flex h-full flex-col gap-2 overflow-hidden rounded-sm bg-white-d1/50 p-2 dark:bg-black-l2/50 lg:my-5 lg:flex-row lg:gap-4 lg:p-4">
         <UserSignupCard
-          pref={'Investor'}
+          pref={'INVESTOR'}
           selectedType={selectedType}
           action={() => {
-            selectedType != 'Investor' && setSelectedType('Investor')
+            selectedType != 'INVESTOR' && setSelectedType('INVESTOR')
           }}
         />
         <UserSignupCard
-          pref={'Startup'}
+          pref={'STARTUP'}
           selectedType={selectedType}
           action={() => {
-            selectedType != 'Startup' && setSelectedType('Startup')
+            selectedType != 'STARTUP' && setSelectedType('STARTUP')
           }}
         />
       </div>
@@ -56,7 +73,7 @@ type UserSignupCardProps = {
   action: () => void
 }
 const UserSignupCard = (props: UserSignupCardProps) => {
-  const participle = props.pref == 'Investor' ? 'an' : 'a'
+  const participle = props.pref == 'INVESTOR' ? 'an' : 'a'
 
   const activeClassName =
     'p-4 bg-white-d2 flex-grow shadow-md dark:bg-black-l1 flex h-full w-full flex-col items-center justify-center gap-2  '
@@ -66,15 +83,18 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l1 flex w-full flex-col items-center justify-center gap-2`
 
   const subText =
-    props.pref == 'Investor'
+    props.pref == 'INVESTOR'
       ? 'I want to explore and invest in startups of India'
       : 'I want to raise funds and connect with investors of India'
   return (
-    <button
+    <div
       className={
         props.selectedType != props.pref ? inactiveClassName : activeClassName
       }
       onClick={props.action}
+      role="button"
+      tabIndex={0}
+      aria-hidden="true"
     >
       <p className="text-h6 text-black dark:text-white lg:text-h5">
         {props.pref == props.selectedType
@@ -86,7 +106,7 @@ const UserSignupCard = (props: UserSignupCardProps) => {
       </p>
       {props.pref != props.selectedType && <SubTextLabel label={subText} />}
       {props.pref == props.selectedType && <SignupForm userType={props.pref} />}
-    </button>
+    </div>
   )
 }
 
@@ -105,6 +125,9 @@ const SignupForm = (props: SignupFormProps) => {
   const [enteredConfirmPwd, setEnteredConfirmPwd] = useState('')
   const [enteredCode, setEnteredCode] = useState('')
   const [generatedToken, setGeneratedToken] = useState('')
+
+  const { signUp } = useAuth()
+  const [checkDB] = useLazyQuery(SIGNUP_QUERY)
 
   return (
     <div className="flex  w-full flex-col items-center justify-center gap-2 ">
@@ -136,31 +159,33 @@ const SignupForm = (props: SignupFormProps) => {
           <ErrorSubTextLabel label={phoneError} />
           <PrimaryFilledButton
             action={() => {
-              if (enteredEmail.length == 0) {
+              if (enteredEmail.length < 5) {
                 setEmailError(`Email is required for signup!`)
               } else if (
                 !enteredEmail.includes('@') ||
                 !enteredEmail.includes('.')
               ) {
-                //TODO: Check email pattern
+                //Check email pattern
                 setEmailError('Invalid email')
               } else if (enteredPhone.length < 10) {
                 setPhoneError('Phone number should be at least 10 digits')
               } else {
-                //TODO: Check if email or phone does not exist in DB
-                //checkDB()
-                if (enteredEmail == 'pqrs@gmail.com') {
-                  setEmailError('Email already exists')
-                } else if (enteredPhone == '1111111111') {
-                  setPhoneError('Phone already exists')
-                } else {
-                  //TODO: If success, Generate a token
-                  const gToken = '123456'
-                  //TODO: send token in Email for user to confirnm
-                  // sendEmail(gToken)
-                  setGeneratedToken(gToken)
-                  setStage('confirm')
-                }
+                //Check if email or phone already exists in DB
+                checkDB({
+                  variables: { email: enteredEmail, mobile: enteredPhone },
+                }).then((d) => {
+                  if (d.data.user1) {
+                    setEmailError('Email is already registered!')
+                  } else if (d.data.user2) {
+                    setPhoneError('Phone is already registered!')
+                  } else {
+                    const gToken = Math.floor(100000 + Math.random() * 900000)
+                    //Send token in Email for user to confirnm
+                    sendSignupEmailJS(enteredEmail, gToken.toString())
+                    setGeneratedToken(gToken.toString())
+                    setStage('confirm')
+                  }
+                })
               }
             }}
             label="CONTINUE"
@@ -236,19 +261,29 @@ const SignupForm = (props: SignupFormProps) => {
           />
           <ErrorSubTextLabel label={pwdError} />
           <PrimaryFilledButton
-            action={() => {
+            action={async () => {
               if (enteredPwd.length < 8 || enteredConfirmPwd.length < 8) {
                 setPwdError('Atleast 8 characters required')
               } else if (enteredPwd != enteredConfirmPwd) {
                 setPwdError('Passwords do not match')
               } else {
-                //TODO: Passwords matched -> signup based on user type and go to onboarding page )
-                //signup()
-                if (props.userType == 'Investor') {
-                  navigate(routes.investorOnboarding())
-                } else {
-                  navigate(routes.startupOnboarding())
-                }
+                //Passwords matched -> signup based on user type and go to onboarding page )
+                await signUp({
+                  username: enteredEmail,
+                  password: enteredPwd,
+                  mobile: enteredPhone,
+                  type: props.userType,
+                }).then((d) => {
+                  if (d.error) {
+                    setPwdError(d.error)
+                  } else {
+                    if (props.userType == 'INVESTOR') {
+                      navigate(routes.investorOnboarding())
+                    } else {
+                      navigate(routes.startupOnboarding())
+                    }
+                  }
+                })
               }
             }}
             label="SIGNUP"

@@ -5,6 +5,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { sendTokenEmail, resetPwdEmail } from 'src/lib/email'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -14,6 +15,58 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
+}
+
+export const userByEmail = ({ email }: { email: string }) => {
+  return db.user.findUnique({
+    where: {
+      email: email,
+    },
+  })
+}
+
+export const userByMobile = ({ mobile }: { mobile: string }) => {
+  return db.user.findUnique({
+    where: {
+      mobile: mobile,
+    },
+  })
+}
+
+export const loginPwdLessUser = async ({ email }: { email: string }) => {
+  try {
+    const lookupUser = await db.user.findFirst({ where: { email } })
+    if (!lookupUser) {
+      return null
+    }
+    const gToken = Math.floor(100000 + Math.random() * 900000)
+    const expiresAt = new Date()
+    expiresAt.setMinutes(expiresAt.getMinutes() + 15)
+    const data = {
+      resetToken: gToken.toString(),
+      resetTokenExpiresAt: expiresAt,
+    }
+    //TODO: await sendTokenEmail(email, gToken.toString())
+    return await db.user.update({
+      where: { id: lookupUser.id },
+      data,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const resetPwdUser = async ({ email }: { email: string }) => {
+  try {
+    const lookupUser = await db.user.findUnique({ where: { email } })
+    if (!lookupUser) {
+      return null
+    }
+    await resetPwdEmail(email, lookupUser.resetToken ?? '')
+    return lookupUser
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const createUser: MutationResolvers['createUser'] = ({ input }) => {

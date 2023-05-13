@@ -15,8 +15,8 @@ generator client {
 model User {
   id                     Int               @id @default(autoincrement())
   email                  String            @unique
-  hashedPassword         String
-  salt                   String
+  hashedPassword         String            @default("")
+  salt                   String            @default("")
   resetToken             String?
   resetTokenExpiresAt    DateTime?
   lastLogin              DateTime          @default(now())

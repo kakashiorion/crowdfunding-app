@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import { UserType } from 'types/graphql'
 
 import { DbAuthHandler, DbAuthHandlerOptions } from '@redwoodjs/auth-dbauth-api'
 
@@ -56,15 +57,15 @@ export const handler = async (
 
     errors: {
       usernameOrPasswordMissing: 'Both Email and password are required',
-      usernameNotFound: 'Email ${email} not found',
+      usernameNotFound: 'Email not found',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      incorrectPassword: 'Incorrect password for ${email}',
+      incorrectPassword: 'Incorrect password',
     },
 
     // How long a user will remain logged in, in seconds
-    expires: 60 * 60 * 24 * 365 * 10,
+    expires: 60 * 60 * 24 * 90,
   }
 
   const resetPasswordOptions: DbAuthHandlerOptions['resetPassword'] = {
@@ -107,14 +108,14 @@ export const handler = async (
     //
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
-    handler: ({ email, hashedPassword, salt, mobile }) => {
+    handler: ({ username, hashedPassword, salt, userAttributes }) => {
       return db.user.create({
         data: {
-          email: email,
+          email: username,
           hashedPassword: hashedPassword,
           salt: salt,
-          mobile: mobile,
-          // name: userAttributes.name
+          mobile: userAttributes.mobile,
+          type: <UserType>userAttributes.type,
         },
       })
     },
@@ -129,7 +130,7 @@ export const handler = async (
     errors: {
       // `field` will be either "username" or "password"
       fieldMissing: '${field} is required',
-      usernameTaken: 'Email `${email}` already in use',
+      usernameTaken: 'Email already in use',
     },
   }
 
@@ -156,6 +157,8 @@ export const handler = async (
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
       challenge: 'webAuthnChallenge',
+      mobile: 'mobile',
+      type: 'type',
     },
 
     // Specifies attributes on the cookie that dbAuth sets in order to remember

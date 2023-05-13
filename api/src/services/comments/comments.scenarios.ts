@@ -6,27 +6,27 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
     one: {
       data: {
         content: 'String',
-        updatedAt: '2023-05-09T21:18:57.033Z',
+        updatedAt: '2023-05-11T22:21:59.629Z',
         commenter: {
           create: {
-            email: 'String3725508',
+            email: 'String3237022',
             hashedPassword: 'String',
             salt: 'String',
-            mobile: 'String4370602',
-            updatedAt: '2023-05-09T21:18:57.033Z',
+            mobile: 'String3419105',
+            updatedAt: '2023-05-11T22:21:59.629Z',
           },
         },
         post: {
           create: {
             title: 'String',
-            updatedAt: '2023-05-09T21:18:57.033Z',
+            updatedAt: '2023-05-11T22:21:59.629Z',
             poster: {
               create: {
-                email: 'String676870',
+                email: 'String5822387',
                 hashedPassword: 'String',
                 salt: 'String',
-                mobile: 'String6345461',
-                updatedAt: '2023-05-09T21:18:57.033Z',
+                mobile: 'String9554846',
+                updatedAt: '2023-05-11T22:21:59.629Z',
               },
             },
           },
@@ -36,27 +36,27 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
     two: {
       data: {
         content: 'String',
-        updatedAt: '2023-05-09T21:18:57.033Z',
+        updatedAt: '2023-05-11T22:21:59.629Z',
         commenter: {
           create: {
-            email: 'String7877543',
+            email: 'String1737625',
             hashedPassword: 'String',
             salt: 'String',
-            mobile: 'String3214416',
-            updatedAt: '2023-05-09T21:18:57.033Z',
+            mobile: 'String7076556',
+            updatedAt: '2023-05-11T22:21:59.629Z',
           },
         },
         post: {
           create: {
             title: 'String',
-            updatedAt: '2023-05-09T21:18:57.033Z',
+            updatedAt: '2023-05-11T22:21:59.629Z',
             poster: {
               create: {
-                email: 'String2744771',
+                email: 'String5465857',
                 hashedPassword: 'String',
                 salt: 'String',
-                mobile: 'String9924801',
-                updatedAt: '2023-05-09T21:18:57.033Z',
+                mobile: 'String7629817',
+                updatedAt: '2023-05-11T22:21:59.629Z',
               },
             },
           },

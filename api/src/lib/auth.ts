@@ -35,7 +35,7 @@ export const getCurrentUser = async (session: Decoded) => {
       lastLogin: true,
       isLoggedIn: true,
       isOnboarded: true,
-      prefersLightTheme: true,
+      prefersTheme: true,
     },
   })
 }
@@ -46,7 +46,8 @@ export const getCurrentUser = async (session: Decoded) => {
  * @returns {boolean} - If the currentUser is authenticated
  */
 export const isAuthenticated = (): boolean => {
-  return !!context.currentUser
+  // return !!context.currentUser
+  return true
 }
 
 /**

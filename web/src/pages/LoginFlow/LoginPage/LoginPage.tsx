@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import {
   DisabledFilledButton,
   SmallHoverPrimaryTextButton,
@@ -21,6 +22,18 @@ type LoginMethodType = 'password' | 'phone' | 'token'
 
 //Master switch to enable various login methods
 const enabledLoginMethods: LoginMethodType[] = ['password', 'phone', 'token']
+
+const EMAIL_USER_MUTATION = gql`
+  mutation loginPwdLessUser($email: String!) {
+    loginPwdLessUser(email: $email) {
+      id
+      email
+      type
+      resetToken
+      resetTokenExpiresAt
+    }
+  }
+`
 
 const LoginPage = () => {
   const [loginMethod, setLoginMethod] = useState<LoginMethodType>('password')
@@ -140,6 +153,7 @@ const PasswordLoginForm = () => {
   const [pwdError, setPwdError] = useState('')
   const [enteredEmail, setEnteredEmail] = useState('')
   const [enteredPwd, setEnteredPwd] = useState('')
+  const { logIn, getCurrentUser } = useAuth()
 
   return (
     <div className={loginFormClassName}>
@@ -165,21 +179,31 @@ const PasswordLoginForm = () => {
       <ErrorSubTextLabel label={pwdError} />
       <Divider />
       <PrimaryFilledButton
-        action={() => {
+        action={async () => {
           if (enteredEmail.length == 0) {
-            setPwdError(`Don't leave it blank`)
+            setPwdError(`Don't leave email blank`)
           } else if (enteredPwd.length < 8) {
             setPwdError('Password must be atleast 8 characters long')
           } else {
-            //TODO: Try login with email and password
-            //login()
-            //TODO: If success, navigate to home based on user type
-            if (enteredPwd == '12345678') {
-              navigate(routes.investorHome())
-            } else {
-              //TODO: If failed, set appropriate error
-              setPwdError('Wrong password')
-            }
+            //Try login with email and password
+            await logIn({
+              username: enteredEmail,
+              password: enteredPwd,
+            }).then(async (d) => {
+              // console.log(d)
+              if (d.error) {
+                setPwdError(d.error)
+              } else {
+                const loggedInUser = await getCurrentUser()
+                if (loggedInUser?.type == 'INVESTOR') {
+                  navigate(routes.investorHome())
+                } else if (loggedInUser?.type == 'STARTUP') {
+                  navigate(routes.startupHome())
+                } else {
+                  // console.log(loggedInUser?.type)
+                }
+              }
+            })
           }
         }}
         label="LOGIN"
@@ -257,7 +281,6 @@ const PhoneLoginForm = () => {
               }
             }
           }}
-          //TODO: Add OTP resend functionality
           label={otpSent ? 'RESEND OTP' : 'SEND OTP'}
         />
       )}
@@ -304,6 +327,12 @@ const TokenLoginForm = () => {
   const [enteredEmail, setEnteredEmail] = useState('')
   const [enteredToken, setEnteredToken] = useState('')
   const [resendCounter, setResendCounter] = useState(0)
+  const [receivedToken, setReceivedToken] = useState('')
+  const [receivedExpiredTime, setReceivedExpiredTime] = useState(new Date())
+  const [receivedType, setReceivedType] = useState('')
+
+  const [emailUser] = useMutation(EMAIL_USER_MUTATION)
+  const { logIn } = useAuth()
 
   useEffect(() => {
     if (resendCounter > 0) {
@@ -337,20 +366,30 @@ const TokenLoginForm = () => {
         />
       ) : (
         <PrimaryFilledButton
-          action={() => {
+          action={async () => {
             if (enteredEmail.length == 0) {
               setEmailMsg(`Don't leave it blank`)
             } else {
-              //TODO: Check if email exists in DB
-              if (enteredEmail == 'abcd') {
-                setTokenSent(true)
-                setEmailExists(true)
-                setEmailMsg('Token sent!')
-                setResendCounter(resetTimeLimit)
-              } else {
-                setEmailExists(false)
-                setEmailMsg('Email does not exist in our records!')
-              }
+              //Check if email exists in DB
+              await emailUser({ variables: { email: enteredEmail } }).then(
+                (d) => {
+                  // console.log(d)
+                  if (!d) {
+                    setEmailExists(false)
+                    setEmailMsg('Email does not exist in our records!')
+                  } else {
+                    setReceivedToken(d.data.loginPwdLessUser.resetToken)
+                    setReceivedExpiredTime(
+                      d.data.loginPwdLessUser.resetTokenExpiresAt
+                    )
+                    setReceivedType(d.data.loginPwdLessUser.type)
+                    setTokenSent(true)
+                    setEmailExists(true)
+                    setEmailMsg('Token sent!')
+                    setResendCounter(resetTimeLimit)
+                  }
+                }
+              )
             }
           }}
           label={tokenSent ? 'RESEND TOKEN' : 'SEND TOKEN'}
@@ -369,14 +408,24 @@ const TokenLoginForm = () => {
       <ErrorSubTextLabel label={tokenMsg} />
       {tokenSent ? (
         <PrimaryFilledButton
-          action={() => {
+          action={async () => {
             if (enteredToken.length != 6) {
               setTokenMsg(`Token must be 6 digits`)
             } else {
-              //TODO: Try login with Token in DB
-              if (enteredToken == '123456') {
-                //TODO: If success, navigate to home based on user type
-                // navigate(routes.investorHome())
+              //Try matching with Token in DB
+              // console.log(receivedExpiredTime)
+              if (new Date() > receivedExpiredTime) {
+                setTokenMsg('Token has expired.. Please try again!')
+              } else if (enteredToken == receivedToken) {
+                //If success, navigate to home based on user type
+                await logIn({ username: enteredEmail, password: enteredToken })
+                if (receivedType == 'INVESTOR') {
+                  navigate(routes.investorHome())
+                } else if (receivedType == 'STARTUP') {
+                  navigate(routes.startupHome())
+                } else {
+                  // console.log(receivedType)
+                }
               } else {
                 setTokenMsg('Token does not match.. Please try again!')
               }

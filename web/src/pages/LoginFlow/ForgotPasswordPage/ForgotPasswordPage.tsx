@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import {
   PrimaryFilledButton,
   SmallHoverPrimaryTextButton,
@@ -12,12 +13,27 @@ import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 
 import forgotImg from './forgot.jpg'
 
+const EMAIL_USER_MUTATION = gql`
+  mutation resetPwdUser($email: String!) {
+    resetPwdUser(email: $email) {
+      id
+      email
+      type
+      resetToken
+      resetTokenExpiresAt
+    }
+  }
+`
+
 type ForgotPasswordPageProps = {
   email?: string
 }
 const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
   const [emailMsg, setEmailMsg] = useState('')
   const [enteredEmail, setEnteredEmail] = useState(props.email ?? '')
+  const [emailUser] = useMutation(EMAIL_USER_MUTATION)
+
+  const { forgotPassword } = useAuth()
 
   return (
     <>
@@ -49,16 +65,26 @@ const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
           />
           <ErrorSubTextLabel label={emailMsg} />
           <PrimaryFilledButton
-            action={() => {
+            action={async () => {
               if (enteredEmail.length == 0) {
                 setEmailMsg(`Don't leave it blank`)
               } else {
-                //TODO: Check if email exists in DB*/
-                if (enteredEmail == 'abcd') {
-                  navigate(routes.resetPassword({ email: enteredEmail }))
-                } else {
-                  setEmailMsg('Email ID does not exist in our records!')
-                }
+                //Check if email exists in DB*/
+                await forgotPassword(enteredEmail).then(async (d) => {
+                  if (d.error) {
+                    setEmailMsg('Email does not exist in our records!')
+                  } else {
+                    await emailUser({
+                      variables: { email: enteredEmail },
+                    })
+                    navigate(
+                      routes.resetPassword({
+                        email: d.email,
+                        id: d.id,
+                      })
+                    )
+                  }
+                })
               }
             }}
             label={'RESET PASSWORD'}
