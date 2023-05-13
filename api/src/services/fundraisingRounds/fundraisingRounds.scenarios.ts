@@ -6,28 +6,33 @@ export const standard = defineScenario<Prisma.FundraisingRoundCreateArgs>({
     one: {
       data: {
         fundingStage: 'SEED',
-        capitalRaisedInCr: 5264006.032333508,
-        valuationInCr: 7284286.264359508,
-        updatedAt: '2023-05-09T21:13:44.714Z',
-        startup: {
+        capitalRaisedInCr: 4721263.087001362,
+        valuationInCr: 3229272.050846763,
+        updatedAt: '2023-05-13T21:44:47.026Z',
+        startupFinancials: {
           create: {
+            latestFundingStage: 'SEED',
+            currentRatio: 'LESS_THAN_HALF',
+            debtEquityRatio: 'LESS_THAN_HALF',
+            revenueLastFY: 'LESS_THAN_10_LACS',
+            revenueGrowthRate: 'LESS_THAN_5',
+            margin: 'LOSS_OVER_50',
+            cashRunway: 'LESS_THAN_SIX_MONTHS',
             plansForUsingCash: 'String',
-            updatedAt: '2023-05-09T21:13:44.714Z',
+            updatedAt: '2023-05-13T21:44:47.027Z',
             startup: {
               create: {
                 name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-05-09T21:13:44.714Z',
-                locationID: 8182269,
-                sectorCategoryID: 7411202,
-                updatedAt: '2023-05-09T21:13:44.714Z',
+                dateIncorporated: '2023-05-13T21:44:47.027Z',
+                locationID: 917349,
+                sectorCategoryID: 4992277,
+                updatedAt: '2023-05-13T21:44:47.027Z',
                 user: {
                   create: {
-                    email: 'String2558402',
-                    hashedPassword: 'String',
-                    salt: 'String',
-                    mobile: 'String8594271',
-                    updatedAt: '2023-05-09T21:13:44.714Z',
+                    email: 'String6126957',
+                    mobile: 'String7160826',
+                    updatedAt: '2023-05-13T21:44:47.027Z',
                   },
                 },
               },
@@ -39,28 +44,33 @@ export const standard = defineScenario<Prisma.FundraisingRoundCreateArgs>({
     two: {
       data: {
         fundingStage: 'SEED',
-        capitalRaisedInCr: 6068757.668961651,
-        valuationInCr: 1233871.1837568162,
-        updatedAt: '2023-05-09T21:13:44.714Z',
-        startup: {
+        capitalRaisedInCr: 6211885.513393911,
+        valuationInCr: 5324455.855019008,
+        updatedAt: '2023-05-13T21:44:47.027Z',
+        startupFinancials: {
           create: {
+            latestFundingStage: 'SEED',
+            currentRatio: 'LESS_THAN_HALF',
+            debtEquityRatio: 'LESS_THAN_HALF',
+            revenueLastFY: 'LESS_THAN_10_LACS',
+            revenueGrowthRate: 'LESS_THAN_5',
+            margin: 'LOSS_OVER_50',
+            cashRunway: 'LESS_THAN_SIX_MONTHS',
             plansForUsingCash: 'String',
-            updatedAt: '2023-05-09T21:13:44.714Z',
+            updatedAt: '2023-05-13T21:44:47.027Z',
             startup: {
               create: {
                 name: 'String',
                 writeUp: 'String',
-                dateIncorporated: '2023-05-09T21:13:44.714Z',
-                locationID: 6768353,
-                sectorCategoryID: 7682375,
-                updatedAt: '2023-05-09T21:13:44.714Z',
+                dateIncorporated: '2023-05-13T21:44:47.027Z',
+                locationID: 409547,
+                sectorCategoryID: 130529,
+                updatedAt: '2023-05-13T21:44:47.027Z',
                 user: {
                   create: {
-                    email: 'String2860999',
-                    hashedPassword: 'String',
-                    salt: 'String',
-                    mobile: 'String4418417',
-                    updatedAt: '2023-05-09T21:13:44.714Z',
+                    email: 'String2222943',
+                    mobile: 'String7816296',
+                    updatedAt: '2023-05-13T21:44:47.027Z',
                   },
                 },
               },

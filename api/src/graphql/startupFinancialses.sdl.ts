@@ -2,16 +2,16 @@ export const schema = gql`
   type StartupFinancials {
     id: Int!
     startup: Startup!
-    latestFundingStage: FundingStage
+    latestFundingStage: FundingStage!
     latestValuationInCr: Float
     latestCapTable: [CapTable]!
     fundraisingRounds: [FundraisingRound]!
-    currentRatio: DecimalRange
-    debtEquityRatio: DecimalRange
-    revenueLastFY: RevenueRange
-    revenueGrowthRate: GrowthRate
-    margin: Margin
-    cashRunway: TimelineRange
+    currentRatio: DecimalRange!
+    debtEquityRatio: DecimalRange!
+    revenueLastFY: RevenueRange!
+    revenueGrowthRate: GrowthRate!
+    margin: Margin!
+    cashRunway: TimelineRange!
     plansForUsingCash: [String]!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -86,14 +86,15 @@ export const schema = gql`
   }
 
   input CreateStartupFinancialsInput {
-    latestFundingStage: FundingStage
+    id: Int!
+    latestFundingStage: FundingStage!
     latestValuationInCr: Float
-    currentRatio: DecimalRange
-    debtEquityRatio: DecimalRange
-    revenueLastFY: RevenueRange
-    revenueGrowthRate: GrowthRate
-    margin: Margin
-    cashRunway: TimelineRange
+    currentRatio: DecimalRange!
+    debtEquityRatio: DecimalRange!
+    revenueLastFY: RevenueRange!
+    revenueGrowthRate: GrowthRate!
+    margin: Margin!
+    cashRunway: TimelineRange!
     plansForUsingCash: [String]!
   }
 

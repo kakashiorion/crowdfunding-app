@@ -1,11 +1,19 @@
 import { useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
+
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
+import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
+import StartupSingleTextInput from '../comps/StartupSingleTextInput/StartupSingleTextInput'
+import StartupTripleTextInput from '../comps/StartupTripleTextInput/StartupTripleTextInput'
 
 const locationData = require('../../locationData.json')
 //TODO: Update sector json data
@@ -21,6 +29,49 @@ const sectorData = require('../../sectorData.json')
   sectorCategoryID  Int //from SectorCategory table
 */
 
+const STARTUP_ABOUT_MUTATION = gql`
+  mutation createStartup($input: CreateStartupInput!) {
+    createStartup(input: $input) {
+      id
+    }
+  }
+`
+
+const GET_LOCATION_SECTOR_ID_QUERY = gql`
+  query getLocationSectorIDs(
+    $state: String!
+    $city: String!
+    $sector: Sector!
+    $category: String!
+  ) {
+    getLocationID(state: $state, city: $city) {
+      id
+      state
+      city
+    }
+    getSectorCategoryID(sector: $sector, category: $category) {
+      id
+      sector
+      category
+    }
+  }
+`
+
+// const GET_ENUM_QUERY = gql`
+//   query getLocationSectorEnums {
+//     locations {
+//       id
+//       state
+//       city
+//     }
+//     sectorCategories {
+//       id
+//       sector
+//       category
+//     }
+//   }
+// `
+
 const daysMapping = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 const StartupAbout = (props: OnboardingMainProps) => {
@@ -31,6 +82,10 @@ const StartupAbout = (props: OnboardingMainProps) => {
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
+
+  const { currentUser } = useAuth()
+  const [createStartup] = useMutation(STARTUP_ABOUT_MUTATION)
+  const [getLocationSectorData] = useLazyQuery(GET_LOCATION_SECTOR_ID_QUERY)
 
   //States for step 1
   const [name, setName] = useState<string>('')
@@ -174,8 +229,37 @@ const StartupAbout = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = async () => {
+    //Fetch IDs to be used to create startup entry
+    await getLocationSectorData({
+      variables: {
+        state: state,
+        city: city,
+        sector: sector,
+        category: category,
+      },
+    }).then((d) => {
+      createStartup({
+        variables: {
+          input: {
+            id: currentUser?.id,
+            name: name,
+            writeUp: writeUp,
+            dateIncorporated: new Date(
+              Number(year),
+              Number(month) - 1,
+              Number(day)
+            ),
+            linkedInURL: skipData[3] ? null : linkedInURL,
+            websiteURL: skipData[4] ? null : websiteURL,
+            locationID: d.data.getLocationID.id,
+            sectorCategoryID: d.data.getSectorCategoryID.id,
+          },
+        },
+      })
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
@@ -214,47 +298,54 @@ const StartupAbout = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <AboutName
-            name={name}
-            setName={setName}
-            error1={error1}
-            setError1={setError1}
+          <StartupSingleTextInput
+            input={name}
+            setInput={setName}
+            placeholder={'Name of statup'}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <AboutWriteup
-            writeUp={writeUp}
-            setWriteUp={setWriteUp}
-            error2={error2}
-            setError2={setError2}
+          <StartupSingleTextArea
+            input={writeUp}
+            setInput={setWriteUp}
+            placeholder="Tell us about your startup in brief.."
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <AboutDate
-            day={day}
-            setDay={setDay}
-            month={month}
-            setMonth={setMonth}
-            year={year}
-            setYear={setYear}
-            error3={error3}
-            setError3={setError3}
+          <StartupTripleTextInput
+            input1={year}
+            setInput1={setYear}
+            placeholder1="YYYY"
+            input2={month}
+            setInput2={setMonth}
+            placeholder2="MM"
+            input3={day}
+            setInput3={setDay}
+            placeholder3="DD"
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <AboutLIUrl
-            linkedInURL={linkedInURL}
-            setLinkedInURL={setLinkedInURL}
-            error4={error4}
-            setError4={setError4}
+          <StartupSingleTextInput
+            input={linkedInURL}
+            setInput={setLinkedInURL}
+            placeholder="LinkedIn URL (optional)"
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <AboutWebsiteUrl
-            websiteURL={websiteURL}
-            setWebsiteURL={setWebsiteURL}
-            error5={error5}
-            setError5={setError5}
+          <StartupSingleTextInput
+            input={websiteURL}
+            placeholder="Website URL (optional)"
+            setInput={setWebsiteURL}
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
@@ -298,174 +389,6 @@ const StartupAbout = (props: OnboardingMainProps) => {
   )
 }
 export default StartupAbout
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-type AboutNameProps = {
-  name: string
-  setName: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const AboutName = (props: AboutNameProps) => {
-  return (
-    <>
-      <input
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.name}
-        placeholder="Name"
-        onChange={(e) => {
-          props.setName(e.target.value)
-          props.error1 != ' ' && props.setError1(' ')
-        }}
-        type={'text'}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-type AboutWriteupProps = {
-  writeUp: string
-  setWriteUp: React.Dispatch<React.SetStateAction<string>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const AboutWriteup = (props: AboutWriteupProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.writeUp}
-        rows={3}
-        placeholder="Tell us what your startup is about..."
-        onChange={(e) => {
-          props.setWriteUp(e.target.value)
-          props.error2 != ' ' && props.setError2(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-type AboutDateProps = {
-  day: string
-  setDay: React.Dispatch<React.SetStateAction<string>>
-  month: string
-  setMonth: React.Dispatch<React.SetStateAction<string>>
-  year: string
-  setYear: React.Dispatch<React.SetStateAction<string>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const AboutDate = (props: AboutDateProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-col items-center justify-center gap-4">
-        <input
-          className={
-            ' w-1/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-          }
-          value={props.year}
-          placeholder="YYYY"
-          onChange={(e) => {
-            props.setYear(e.target.value)
-            props.error3 != ' ' && props.setError3('')
-          }}
-          type={'text'}
-        />
-        <input
-          className={
-            ' w-1/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-          }
-          value={props.month}
-          placeholder="MM"
-          onChange={(e) => {
-            props.setMonth(e.target.value)
-            props.error3 != ' ' && props.setError3('')
-          }}
-          type={'text'}
-        />
-        <input
-          className={
-            ' w-1/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-          }
-          value={props.day}
-          placeholder="DD"
-          onChange={(e) => {
-            props.setDay(e.target.value)
-            props.error3 != ' ' && props.setError3('')
-          }}
-          type={'text'}
-        />
-        <ErrorSubTextLabel label={props.error3} />
-      </div>
-    </>
-  )
-}
-
-type AboutLIUrlProps = {
-  linkedInURL: string
-  setLinkedInURL: React.Dispatch<React.SetStateAction<string>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const AboutLIUrl = (props: AboutLIUrlProps) => {
-  return (
-    <>
-      <input
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.linkedInURL}
-        placeholder="LinkedIn Profile URL"
-        onChange={(e) => {
-          props.setLinkedInURL(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-        type={'url'}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-type AboutWebsiteUrlProps = {
-  websiteURL: string
-  setWebsiteURL: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const AboutWebsiteUrl = (props: AboutWebsiteUrlProps) => {
-  return (
-    <>
-      <input
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.websiteURL}
-        placeholder="Website URL"
-        onChange={(e) => {
-          props.setWebsiteURL(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-        type={'url'}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
 
 type CityDataType = { city: string; lat: number; long: number }
 type AboutLocationProps = {

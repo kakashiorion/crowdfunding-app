@@ -186,24 +186,20 @@ const PasswordLoginForm = () => {
             setPwdError('Password must be atleast 8 characters long')
           } else {
             //Try login with email and password
-            await logIn({
+            const response = await logIn({
               username: enteredEmail,
               password: enteredPwd,
-            }).then(async (d) => {
-              // console.log(d)
-              if (d.error) {
-                setPwdError(d.error)
-              } else {
-                const loggedInUser = await getCurrentUser()
-                if (loggedInUser?.type == 'INVESTOR') {
-                  navigate(routes.investorHome())
-                } else if (loggedInUser?.type == 'STARTUP') {
-                  navigate(routes.startupHome())
-                } else {
-                  // console.log(loggedInUser?.type)
-                }
-              }
             })
+            if (response.error) {
+              setPwdError(response.error)
+            } else {
+              const loggedInUser = await getCurrentUser()
+              if (loggedInUser?.type === 'INVESTOR') {
+                navigate(routes.investorHome())
+              } else if (loggedInUser?.type === 'STARTUP') {
+                navigate(routes.startupHome())
+              }
+            }
           }
         }}
         label="LOGIN"
@@ -219,7 +215,6 @@ const PasswordLoginForm = () => {
   )
 }
 
-// let resendCounter = 0
 const PhoneLoginForm = () => {
   const [otpSent, setOTPSent] = useState(false)
   const [phoneMsg, setPhoneMsg] = useState('')
@@ -373,7 +368,6 @@ const TokenLoginForm = () => {
               //Check if email exists in DB
               await emailUser({ variables: { email: enteredEmail } }).then(
                 (d) => {
-                  // console.log(d)
                   if (!d) {
                     setEmailExists(false)
                     setEmailMsg('Email does not exist in our records!')
@@ -413,7 +407,6 @@ const TokenLoginForm = () => {
               setTokenMsg(`Token must be 6 digits`)
             } else {
               //Try matching with Token in DB
-              // console.log(receivedExpiredTime)
               if (new Date() > receivedExpiredTime) {
                 setTokenMsg('Token has expired.. Please try again!')
               } else if (enteredToken == receivedToken) {
@@ -423,8 +416,6 @@ const TokenLoginForm = () => {
                   navigate(routes.investorHome())
                 } else if (receivedType == 'STARTUP') {
                   navigate(routes.startupHome())
-                } else {
-                  // console.log(receivedType)
                 }
               } else {
                 setTokenMsg('Token does not match.. Please try again!')

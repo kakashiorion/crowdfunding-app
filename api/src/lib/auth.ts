@@ -1,3 +1,5 @@
+import { UserType } from 'types/graphql'
+
 import type { Decoded } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -54,7 +56,7 @@ export const isAuthenticated = (): boolean => {
  * When checking role membership, roles can be a single value, a list, or none.
  * You can use Prisma enums too (if you're using them for roles), just import your enum type from `@prisma/client`
  */
-type AllowedRoles = string | string[] | undefined
+type AllowedRoles = UserType[]
 
 /**
  * Checks if the currentUser is authenticated (and assigned one of the given roles)
@@ -69,14 +71,17 @@ export const hasRole = (roles: AllowedRoles): boolean => {
     return false
   }
 
-  const currentUserRoles = context.currentUser?.type.toString()
+  const currentUserRoles = context.currentUser?.type
 
-  if (typeof roles === 'string' && currentUserRoles) {
-    return currentUserRoles === roles
-  }
+  // console.log({ currentUserRoles })
+  // if (typeof roles === 'string' && currentUserRoles) {
+  //   return currentUserRoles === roles.toString()
+  // }
 
   if (Array.isArray(roles) && currentUserRoles) {
-    return roles.some((allowedRole) => currentUserRoles === allowedRole)
+    return roles.some(
+      (allowedRole) => currentUserRoles.toString() === allowedRole.toString()
+    )
   }
 
   // roles not found
@@ -97,12 +102,12 @@ export const hasRole = (roles: AllowedRoles): boolean => {
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
-export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
+export const requireAuth = ({ type }: { type?: UserType[] } = {}) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (roles && !hasRole(roles)) {
+  if (type && !hasRole(type)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }

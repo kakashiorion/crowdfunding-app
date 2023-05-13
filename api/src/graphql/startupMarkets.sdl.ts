@@ -71,6 +71,7 @@ export const schema = gql`
   }
 
   input CreateStartupMarketInput {
+    id: Int!
     revenueStreams: [RevenueStreams]!
     costHeads: [CostHeads]!
     shortTermPlan: ShortTermPlan

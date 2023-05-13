@@ -4,6 +4,7 @@ import { UserType } from 'types/graphql'
 import { DbAuthHandler, DbAuthHandlerOptions } from '@redwoodjs/auth-dbauth-api'
 
 import { db } from 'src/lib/db'
+import { resetPwdEmail } from 'src/lib/email'
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -23,6 +24,7 @@ export const handler = async (
     // address in a toast message so the user will know it worked and where
     // to look for the email.
     handler: (user) => {
+      resetPwdEmail(user.email, user.resetToken)
       return user
     },
 
@@ -114,8 +116,8 @@ export const handler = async (
           email: username,
           hashedPassword: hashedPassword,
           salt: salt,
-          mobile: userAttributes.mobile,
-          type: <UserType>userAttributes.type,
+          mobile: userAttributes?.mobile ?? '',
+          type: <UserType>userAttributes?.type,
         },
       })
     },
@@ -157,8 +159,6 @@ export const handler = async (
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
       challenge: 'webAuthnChallenge',
-      mobile: 'mobile',
-      type: 'type',
     },
 
     // Specifies attributes on the cookie that dbAuth sets in order to remember

@@ -1,21 +1,67 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
 import CloseIcon from 'public/icons/close.svg'
 import MenuIcon from 'public/icons/menu.svg'
 import LogoBlack from 'public/logo/LogoBlack.svg'
 import LogoWhite from 'public/logo/LogoWhite.svg'
 
+import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
+import { SmallSecondaryOutlineButton } from 'src/components/Button/Button'
 import InvestorOnboardingMain from 'src/components/Onboarding/Investor/InvestorOnboardingMain/InvestorOnboardingMain'
 import InvestorOnboardingTimeline from 'src/components/Onboarding/Investor/InvestorOnboardingTimeline/InvestorOnboardingTimeline'
+
+const INVESTOR_ONBOARDING_QUERY = gql`
+  query CheckInvestorOnboarding($id: Int!) {
+    user(id: $id) {
+      id
+      investor {
+        id
+        investorExp {
+          id
+        }
+        investorObjective {
+          id
+        }
+      }
+    }
+  }
+`
 
 const InvestorOnboardingPage = () => {
   const [isMenuOpen, setMenuOpen] = useState(false)
 
-  //TODO: Fetch onboarding progress from DB and resume from there
-  // const startFrom = fetchOnboardingProgressData()??0
   const [currentSection, setCurrentSection] = useState(0)
+  const { logOut, currentUser } = useAuth()
+
+  //Fetch onboarding progress from DB and resume from there
+  const [getOnboardingData] = useLazyQuery(INVESTOR_ONBOARDING_QUERY)
+
+  useEffect(() => {
+    if (currentUser?.isOnboarded == true) {
+      navigate(routes.investorHome())
+    } else {
+      const getData = async () => {
+        await getOnboardingData({ variables: { id: currentUser?.id } }).then(
+          (d) => {
+            if (!d.data.user.investor) {
+              setCurrentSection(0)
+            } else if (!d.data.user.investor.investorExp) {
+              setCurrentSection(2)
+            } else if (!d.data.user.investor.investorObjective) {
+              setCurrentSection(3)
+            } else {
+              setCurrentSection(4)
+            }
+          }
+        )
+      }
+      getData()
+    }
+  }, [currentUser?.id, currentUser?.isOnboarded, getOnboardingData])
   return (
     <>
       <MetaTags
@@ -25,17 +71,23 @@ const InvestorOnboardingPage = () => {
       <div className="relative flex items-center justify-between py-2 lg:py-3">
         <LogoBlack className="flex h-6 w-10 dark:hidden lg:h-8 lg:w-12" />
         <LogoWhite className="hidden h-6 w-10 dark:flex lg:h-8 lg:w-12" />
-        {isMenuOpen ? (
-          <CloseIcon
-            className="flex h-6 w-6 fill-black dark:fill-white lg:hidden"
-            onClick={() => setMenuOpen(false)}
+        <div className="flex items-center justify-end gap-2 lg:gap-4">
+          <SmallSecondaryOutlineButton
+            label="Logout"
+            action={async () => await logOut()}
           />
-        ) : (
-          <MenuIcon
-            className="flex h-6 w-6 fill-black dark:fill-white lg:hidden"
-            onClick={() => setMenuOpen(true)}
-          />
-        )}
+          {isMenuOpen ? (
+            <CloseIcon
+              className="flex h-6 w-6 fill-black dark:fill-white lg:hidden"
+              onClick={() => setMenuOpen(false)}
+            />
+          ) : (
+            <MenuIcon
+              className="flex h-6 w-6 fill-black dark:fill-white lg:hidden"
+              onClick={() => setMenuOpen(true)}
+            />
+          )}
+        </div>
       </div>
       <div className=" relative mb-4 mt-2 flex h-full overflow-hidden lg:mb-5 lg:mt-3 lg:gap-4 ">
         <InvestorOnboardingMain

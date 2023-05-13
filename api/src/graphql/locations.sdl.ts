@@ -12,6 +12,7 @@ export const schema = gql`
   type Query {
     locations: [Location!]! @requireAuth
     location(id: Int!): Location @requireAuth
+    getLocationID(state: String!, city: String): Location @requireAuth
   }
 
   input CreateLocationInput {

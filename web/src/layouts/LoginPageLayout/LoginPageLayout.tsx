@@ -1,8 +1,11 @@
+import { useEffect } from 'react'
+
 import LogoBlack from 'public/logo/LogoBlack.svg'
 import LogoWhite from 'public/logo/LogoWhite.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
+import { useAuth } from 'src/auth'
 import { SmallSecondaryOutlineButton } from 'src/components/Button/Button'
 
 type LoginPageLayoutProps = {
@@ -10,6 +13,15 @@ type LoginPageLayoutProps = {
 }
 
 const LoginPageLayout = ({ children }: LoginPageLayoutProps) => {
+  const { currentUser } = useAuth()
+
+  useEffect(() => {
+    if (currentUser?.type == 'STARTUP') {
+      navigate(routes.startupHome(), { replace: true })
+    } else if (currentUser?.type == 'INVESTOR') {
+      navigate(routes.investorHome(), { replace: true })
+    }
+  }, [currentUser?.type])
   return (
     <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
       <div className="flex h-full flex-col xl:mx-auto xl:max-w-screen-xl ">

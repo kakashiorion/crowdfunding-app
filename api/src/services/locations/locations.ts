@@ -12,6 +12,23 @@ export const location: QueryResolvers['location'] = ({ id }) => {
   })
 }
 
+export const getLocationID = ({
+  state,
+  city,
+}: {
+  state: string
+  city: string
+}) => {
+  return db.location.findUnique({
+    where: {
+      state_city: {
+        state: state,
+        city: city,
+      },
+    },
+  })
+}
+
 export const createLocation: MutationResolvers['createLocation'] = ({
   input,
 }) => {

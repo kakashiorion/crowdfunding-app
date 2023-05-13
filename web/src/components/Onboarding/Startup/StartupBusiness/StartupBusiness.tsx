@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { useLazyQuery } from '@apollo/client'
+
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
+import StartupSingleChoiceOption from '../comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
+import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupBusiness table:
   numberUsers         UserRange?
@@ -20,6 +26,43 @@ import { StartupStepHeader } from '../../StepHeader'
   hasOnlineBusiness   OnlineBusiness?
 */
 
+const GET_ENUM_QUERY = gql`
+  query enumQueryBusiness {
+    size: __type(name: "SizeRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    user: __type(name: "UserRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    online: __type(name: "OnlineBusiness") {
+      name
+      enumValues {
+        name
+      }
+    }
+    distribution: __type(name: "DistributionType") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+
+const STARTUP_BUSINESS_MUTATION = gql`
+  mutation createStartupBusiness($input: CreateStartupBusinessInput!) {
+    createStartupBusiness(input: $input) {
+      id
+    }
+  }
+`
+
 const StartupBusiness = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -28,6 +71,27 @@ const StartupBusiness = (props: OnboardingMainProps) => {
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
+
+  const [sizeOptions, setSizeOptions] = useState<string[]>([])
+  const [userOptions, setUserOptions] = useState<string[]>([])
+  const [onlineOptions, setOnlineOptions] = useState<string[]>([])
+  const [distributionOptions, setDistributionOptions] = useState<string[]>([])
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [createStartupBusiness] = useMutation(STARTUP_BUSINESS_MUTATION)
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        setSizeOptions(getEnumValues(d.data.size.enumValues))
+        setUserOptions(getEnumValues(d.data.user.enumValues))
+        setOnlineOptions(getEnumValues(d.data.online.enumValues))
+        setDistributionOptions(getEnumValues(d.data.distribution.enumValues))
+      })
+    }
+    getData()
+  }, [])
 
   //States for step 1
   const [numberUsers, setNumberUsers] = useState<string>('')
@@ -226,8 +290,34 @@ const StartupBusiness = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = async () => {
+    await createStartupBusiness({
+      variables: {
+        input: {
+          id: currentUser?.id,
+          numberUsers: numberUsers,
+          numberCities: numberCities,
+          distributionType: distributionType,
+          partners: skipData[3] ? [] : [partners1, partners2, partners3],
+          customers: skipData[4] ? [] : [customers1, customers2, customers3],
+          workedWell: skipData[5]
+            ? []
+            : [workedWell1, workedWell2, workedWell3],
+          challenges: skipData[6]
+            ? []
+            : [challenges1, challenges2, challenges3],
+          couldImprove: skipData[7]
+            ? []
+            : [couldImprove1, couldImprove2, couldImprove3],
+          currentActivities: skipData[9]
+            ? []
+            : [currentActivities1, currentActivities2, currentActivities3],
+          hasOnlineBusiness: hasOnlineBusiness,
+        },
+      },
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
@@ -266,107 +356,129 @@ const StartupBusiness = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <BusinessUsers
-            numberUsers={numberUsers}
-            setNumberUsers={setNumberUsers}
-            error1={error1}
-            setError1={setError1}
+          <StartupSingleChoiceOption
+            input={numberUsers}
+            setInput={setNumberUsers}
+            options={userOptions}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <BusinessCities
-            numberCities={numberCities}
-            setNumberCities={setNumberCities}
-            error2={error2}
-            setError2={setError2}
+          <StartupSingleChoiceOption
+            input={numberCities}
+            setInput={setNumberCities}
+            options={sizeOptions}
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <BusinessDistribution
-            distributionType={distributionType}
-            setDistributionType={setDistributionType}
-            error3={error3}
-            setError3={setError3}
+          <StartupSingleChoiceOption
+            input={distributionType}
+            setInput={setDistributionType}
+            options={distributionOptions}
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <BusinessPartners
-            partners1={partners1}
-            setPartners1={setPartners1}
-            partners2={partners2}
-            setPartners2={setPartners2}
-            partners3={partners3}
-            setPartners3={setPartners3}
-            error4={error4}
-            setError4={setError4}
+          <StartupTripleTextArea
+            input1={partners1}
+            setInput1={setPartners1}
+            placeholder1="Partner 1"
+            input2={partners2}
+            setInput2={setPartners2}
+            placeholder2="Partner 2"
+            input3={partners3}
+            setInput3={setPartners3}
+            placeholder3="Partner 3"
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <BusinessCustomers
-            customers1={customers1}
-            setCustomers1={setCustomers1}
-            customers2={customers2}
-            setCustomers2={setCustomers2}
-            customers3={customers3}
-            setCustomers3={setCustomers3}
-            error5={error5}
-            setError5={setError5}
+          <StartupTripleTextArea
+            input1={customers1}
+            setInput1={setCustomers1}
+            placeholder1="Customer 1"
+            input2={customers2}
+            setInput2={setCustomers2}
+            placeholder2="Customer 2"
+            input3={customers3}
+            setInput3={setCustomers3}
+            placeholder3="Customer 3"
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
-          <BusinessSuccess
-            workedWell1={workedWell1}
-            setWorkedWell1={setWorkedWell1}
-            workedWell2={workedWell2}
-            setWorkedWell2={setWorkedWell2}
-            workedWell3={workedWell3}
-            setWorkedWell3={setWorkedWell3}
-            error6={error6}
-            setError6={setError6}
+          <StartupTripleTextArea
+            input1={workedWell1}
+            setInput1={setWorkedWell1}
+            placeholder1="Success 1"
+            input2={workedWell2}
+            setInput2={setWorkedWell2}
+            placeholder2="Success 2"
+            input3={workedWell3}
+            setInput3={setWorkedWell3}
+            placeholder3="Success 3"
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
-          <BusinessChallenges
-            challenges1={challenges1}
-            setChallenges1={setChallenges1}
-            challenges2={challenges2}
-            setChallenges2={setChallenges2}
-            challenges3={challenges3}
-            setChallenges3={setChallenges3}
-            error7={error7}
-            setError7={setError7}
+          <StartupTripleTextArea
+            input1={challenges1}
+            setInput1={setChallenges1}
+            placeholder1="Challenge 1"
+            input2={challenges2}
+            setInput2={setChallenges2}
+            placeholder2="Challenge 2"
+            input3={challenges3}
+            setInput3={setChallenges3}
+            placeholder3="Challenge 3"
+            error={error7}
+            setError={setError7}
           />
         )}
         {step == 8 && (
-          <BusinessImprovements
-            couldImprove1={couldImprove1}
-            setCouldImprove1={setCouldImprove1}
-            couldImprove2={couldImprove2}
-            setCouldImprove2={setCouldImprove2}
-            couldImprove3={couldImprove3}
-            setCouldImprove3={setCouldImprove3}
-            error8={error8}
-            setError8={setError8}
+          <StartupTripleTextArea
+            input1={couldImprove1}
+            setInput1={setCouldImprove1}
+            placeholder1="Improvements 1"
+            input2={couldImprove2}
+            setInput2={setCouldImprove2}
+            placeholder2="Improvements 2"
+            input3={couldImprove3}
+            setInput3={setCouldImprove3}
+            placeholder3="Improvements 3"
+            error={error8}
+            setError={setError8}
           />
         )}
         {step == 9 && (
-          <BusinessActivities
-            currentActivities1={currentActivities1}
-            setCurrentActivities1={setCurrentActivities1}
-            currentActivities2={currentActivities2}
-            setCurrentActivities2={setCurrentActivities2}
-            currentActivities3={currentActivities3}
-            setCurrentActivities3={setCurrentActivities3}
-            error9={error9}
-            setError9={setError9}
+          <StartupTripleTextArea
+            input1={currentActivities1}
+            setInput1={setCurrentActivities1}
+            placeholder1="Activity 1"
+            input2={currentActivities2}
+            setInput2={setCurrentActivities2}
+            placeholder2="Activity 2"
+            input3={currentActivities3}
+            setInput3={setCurrentActivities3}
+            placeholder3="Activity 3"
+            error={error9}
+            setError={setError9}
           />
         )}
         {step == 10 && (
-          <BusinessOnline
-            hasOnlineBusiness={hasOnlineBusiness}
-            setHasOnlineBusiness={setHasOnlineBusiness}
-            error10={error10}
-            setError10={setError10}
+          <StartupSingleChoiceOption
+            input={hasOnlineBusiness}
+            setInput={setHasOnlineBusiness}
+            options={onlineOptions}
+            error={error10}
+            setError={setError10}
           />
         )}
       </div>
@@ -390,503 +502,3 @@ const StartupBusiness = (props: OnboardingMainProps) => {
   )
 }
 export default StartupBusiness
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-//TODO: Update users options as per DB enum
-const usersOptions = [
-  'LESS_THAN_100',
-  'BETWEEN_100_AND_1000',
-  'BETWEEN_1000_AND_10000',
-  'BETWEEN_10000_AND_1_LAC',
-  'BETWEEN_1_LAC_AND_10_LACS',
-  'BETWEEEN_10_LACS_AND_1_CRORE',
-  'MORE_THAN_1_CRORE',
-]
-type BusinessUsersProps = {
-  numberUsers: string
-  setNumberUsers: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessUsers = (props: BusinessUsersProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {usersOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.numberUsers
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setNumberUsers(e)
-              props.error1 != '' && props.setError1('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-//TODO: Update size options as per DB enum
-const sizeOptions = [
-  'NONE',
-  'ONE_TO_THREE',
-  'THREE_TO_TEN',
-  'TEN_TO_TWENTY',
-  'MORE_THAN_TWENTY',
-]
-type BusinessCitiesProps = {
-  numberCities: string
-  setNumberCities: React.Dispatch<React.SetStateAction<string>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessCities = (props: BusinessCitiesProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.numberCities
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setNumberCities(e)
-              props.error2 != '' && props.setError2('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-//TODO: Update distribution options as per DB enum
-const distributionOptions = ['B2B', 'B2C', 'BOTH', 'OTHER']
-type BusinessDistributionProps = {
-  distributionType: string
-  setDistributionType: React.Dispatch<React.SetStateAction<string>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessDistribution = (props: BusinessDistributionProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {distributionOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.distributionType
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setDistributionType(e)
-              props.error3 != '' && props.setError3('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error3} />
-    </>
-  )
-}
-
-type BusinessPartnersProps = {
-  partners1: string
-  setPartners1: React.Dispatch<React.SetStateAction<string>>
-  partners2: string
-  setPartners2: React.Dispatch<React.SetStateAction<string>>
-  partners3: string
-  setPartners3: React.Dispatch<React.SetStateAction<string>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessPartners = (props: BusinessPartnersProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.partners1}
-        rows={2}
-        placeholder="Partner 1"
-        onChange={(e) => {
-          props.setPartners1(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.partners2}
-        rows={2}
-        placeholder="Partner 2"
-        onChange={(e) => {
-          props.setPartners2(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.partners3}
-        rows={2}
-        placeholder="Partner 3"
-        onChange={(e) => {
-          props.setPartners3(e.target.value)
-          props.error4 != ' ' && props.setError4(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-type BusinessCustomersProps = {
-  customers1: string
-  setCustomers1: React.Dispatch<React.SetStateAction<string>>
-  customers2: string
-  setCustomers2: React.Dispatch<React.SetStateAction<string>>
-  customers3: string
-  setCustomers3: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessCustomers = (props: BusinessCustomersProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.customers1}
-        rows={2}
-        placeholder="Customer 1"
-        onChange={(e) => {
-          props.setCustomers1(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.customers2}
-        rows={2}
-        placeholder="Customer 2"
-        onChange={(e) => {
-          props.setCustomers2(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.customers3}
-        rows={2}
-        placeholder="Customer 3"
-        onChange={(e) => {
-          props.setCustomers3(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
-
-type BusinessSuccessProps = {
-  workedWell1: string
-  setWorkedWell1: React.Dispatch<React.SetStateAction<string>>
-  workedWell2: string
-  setWorkedWell2: React.Dispatch<React.SetStateAction<string>>
-  workedWell3: string
-  setWorkedWell3: React.Dispatch<React.SetStateAction<string>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessSuccess = (props: BusinessSuccessProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.workedWell1}
-        rows={2}
-        placeholder="Success 1"
-        onChange={(e) => {
-          props.setWorkedWell1(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.workedWell2}
-        rows={2}
-        placeholder="Success 2"
-        onChange={(e) => {
-          props.setWorkedWell2(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.workedWell3}
-        rows={2}
-        placeholder="Success 3"
-        onChange={(e) => {
-          props.setWorkedWell3(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error6} />
-    </>
-  )
-}
-
-type BusinessChallengesProps = {
-  challenges1: string
-  setChallenges1: React.Dispatch<React.SetStateAction<string>>
-  challenges2: string
-  setChallenges2: React.Dispatch<React.SetStateAction<string>>
-  challenges3: string
-  setChallenges3: React.Dispatch<React.SetStateAction<string>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessChallenges = (props: BusinessChallengesProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.challenges1}
-        rows={2}
-        placeholder="Challenge 1"
-        onChange={(e) => {
-          props.setChallenges1(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.challenges2}
-        rows={2}
-        placeholder="Challenge 2"
-        onChange={(e) => {
-          props.setChallenges2(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.challenges3}
-        rows={2}
-        placeholder="Challenge 3"
-        onChange={(e) => {
-          props.setChallenges3(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error7} />
-    </>
-  )
-}
-
-type BusinessImprovementsProps = {
-  couldImprove1: string
-  setCouldImprove1: React.Dispatch<React.SetStateAction<string>>
-  couldImprove2: string
-  setCouldImprove2: React.Dispatch<React.SetStateAction<string>>
-  couldImprove3: string
-  setCouldImprove3: React.Dispatch<React.SetStateAction<string>>
-  error8: string
-  setError8: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessImprovements = (props: BusinessImprovementsProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.couldImprove1}
-        rows={2}
-        placeholder="Improvement 1"
-        onChange={(e) => {
-          props.setCouldImprove1(e.target.value)
-          props.error8 != ' ' && props.setError8(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.couldImprove2}
-        rows={2}
-        placeholder="Improvement 2"
-        onChange={(e) => {
-          props.setCouldImprove2(e.target.value)
-          props.error8 != ' ' && props.setError8(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.couldImprove3}
-        rows={2}
-        placeholder="Improvement 3"
-        onChange={(e) => {
-          props.setCouldImprove3(e.target.value)
-          props.error8 != ' ' && props.setError8(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error8} />
-    </>
-  )
-}
-
-type BusinessActivitiesProps = {
-  currentActivities1: string
-  setCurrentActivities1: React.Dispatch<React.SetStateAction<string>>
-  currentActivities2: string
-  setCurrentActivities2: React.Dispatch<React.SetStateAction<string>>
-  currentActivities3: string
-  setCurrentActivities3: React.Dispatch<React.SetStateAction<string>>
-  error9: string
-  setError9: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessActivities = (props: BusinessActivitiesProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.currentActivities1}
-        rows={2}
-        placeholder="Activity 1"
-        onChange={(e) => {
-          props.setCurrentActivities1(e.target.value)
-          props.error9 != ' ' && props.setError9(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.currentActivities2}
-        rows={2}
-        placeholder="Activity 2"
-        onChange={(e) => {
-          props.setCurrentActivities2(e.target.value)
-          props.error9 != ' ' && props.setError9(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.currentActivities3}
-        rows={2}
-        placeholder="Activity 3"
-        onChange={(e) => {
-          props.setCurrentActivities3(e.target.value)
-          props.error9 != ' ' && props.setError9(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error9} />
-    </>
-  )
-}
-
-//TODO: Update online business options as per DB enum
-const onlineOptions = ['YES', 'SETTING_UP', 'PLANNED', 'NO']
-type BusinessOnlineProps = {
-  hasOnlineBusiness: string
-  setHasOnlineBusiness: React.Dispatch<React.SetStateAction<string>>
-  error10: string
-  setError10: React.Dispatch<React.SetStateAction<string>>
-}
-const BusinessOnline = (props: BusinessOnlineProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {onlineOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.hasOnlineBusiness
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setHasOnlineBusiness(e)
-              props.error10 != '' && props.setError10('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error10} />
-    </>
-  )
-}

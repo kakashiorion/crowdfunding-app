@@ -38,6 +38,7 @@ export const schema = gql`
   }
 
   input CreateStartupBackgroundInput {
+    id: Int!
     valueProp: String
     idea: String
     whyThis: String

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { MetaTags } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import {
@@ -9,21 +9,13 @@ import {
   SmallHoverPrimaryTextButton,
 } from 'src/components/Button/Button'
 import { TextInput } from 'src/components/Input/Input'
-import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
+import {
+  ErrorSubTextLabel,
+  SuccessSubTextLabel,
+  TextLabel,
+} from 'src/components/Label/Label'
 
 import forgotImg from './forgot.jpg'
-
-const EMAIL_USER_MUTATION = gql`
-  mutation resetPwdUser($email: String!) {
-    resetPwdUser(email: $email) {
-      id
-      email
-      type
-      resetToken
-      resetTokenExpiresAt
-    }
-  }
-`
 
 type ForgotPasswordPageProps = {
   email?: string
@@ -31,7 +23,7 @@ type ForgotPasswordPageProps = {
 const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
   const [emailMsg, setEmailMsg] = useState('')
   const [enteredEmail, setEnteredEmail] = useState(props.email ?? '')
-  const [emailUser] = useMutation(EMAIL_USER_MUTATION)
+  const [success, setSuccess] = useState(false)
 
   const { forgotPassword } = useAuth()
 
@@ -63,28 +55,24 @@ const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
               emailMsg != '' && setEmailMsg('')
             }}
           />
-          <ErrorSubTextLabel label={emailMsg} />
+          {success ? (
+            <SuccessSubTextLabel label={emailMsg} />
+          ) : (
+            <ErrorSubTextLabel label={emailMsg} />
+          )}
           <PrimaryFilledButton
             action={async () => {
               if (enteredEmail.length == 0) {
                 setEmailMsg(`Don't leave it blank`)
               } else {
-                //Check if email exists in DB*/
-                await forgotPassword(enteredEmail).then(async (d) => {
-                  if (d.error) {
-                    setEmailMsg('Email does not exist in our records!')
-                  } else {
-                    await emailUser({
-                      variables: { email: enteredEmail },
-                    })
-                    navigate(
-                      routes.resetPassword({
-                        email: d.email,
-                        id: d.id,
-                      })
-                    )
-                  }
-                })
+                //Send forgot pwd link to user*/
+                const user = await forgotPassword(enteredEmail)
+                if (user.error) {
+                  setEmailMsg('Email does not exist in our records!')
+                } else {
+                  setSuccess(true)
+                  setEmailMsg('Reset link sent to your email!')
+                }
               }
             }}
             label={'RESET PASSWORD'}

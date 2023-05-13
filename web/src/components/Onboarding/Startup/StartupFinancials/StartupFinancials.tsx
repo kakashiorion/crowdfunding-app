@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
 import CloseIcon from 'public/icons/close.svg'
 
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
+import StartupSingleChoiceOption from '../comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
+import StartupSingleTextInput from '../comps/StartupSingleTextInput/StartupSingleTextInput'
+import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupFinancials table:
   latestFundingStage   FundingStage?
@@ -23,6 +30,68 @@ import { StartupStepHeader } from '../../StepHeader'
   plansForUsingCash    String[]
 */
 
+const GET_ENUM_QUERY = gql`
+  query enumQueryFinancials {
+    stage: __type(name: "FundingStage") {
+      name
+      enumValues {
+        name
+      }
+    }
+    decimal: __type(name: "DecimalRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    revenue: __type(name: "RevenueRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    growth: __type(name: "GrowthRate") {
+      name
+      enumValues {
+        name
+      }
+    }
+    margin: __type(name: "Margin") {
+      name
+      enumValues {
+        name
+      }
+    }
+    timeline: __type(name: "TimelineRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+const STARTUP_FINANCIALS_MUTATION = gql`
+  mutation createStartupFinancials($input: CreateStartupFinancialsInput!) {
+    createStartupFinancials(input: $input) {
+      id
+    }
+  }
+`
+const FUNDRAISING_ROUND_MUTATION = gql`
+  mutation createFundraisingRound($input: CreateFundraisingRoundInput!) {
+    createFundraisingRound(input: $input) {
+      id
+    }
+  }
+`
+const CAP_TABLE_MUTATION = gql`
+  mutation createCapTable($input: CreateCapTableInput!) {
+    createCapTable(input: $input) {
+      id
+    }
+  }
+`
+
 const StartupFinancials = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -31,6 +100,33 @@ const StartupFinancials = (props: OnboardingMainProps) => {
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
+
+  const [stageOptions, setStageOptions] = useState<string[]>([])
+  const [decimalOptions, setDecimalOptions] = useState<string[]>([])
+  const [revenueOptions, setRevenueOptions] = useState<string[]>([])
+  const [growthOptions, setGrowthOptions] = useState<string[]>([])
+  const [marginOptions, setMarginOptions] = useState<string[]>([])
+  const [timelineOptions, setTimelineOptions] = useState<string[]>([])
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [createStartupFinancials] = useMutation(STARTUP_FINANCIALS_MUTATION)
+  const [createCapTable] = useMutation(CAP_TABLE_MUTATION)
+  const [createFundraisingRound] = useMutation(FUNDRAISING_ROUND_MUTATION)
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        setStageOptions(getEnumValues(d.data.stage.enumValues))
+        setDecimalOptions(getEnumValues(d.data.decimal.enumValues))
+        setRevenueOptions(getEnumValues(d.data.revenue.enumValues))
+        setGrowthOptions(getEnumValues(d.data.growth.enumValues))
+        setMarginOptions(getEnumValues(d.data.margin.enumValues))
+        setTimelineOptions(getEnumValues(d.data.timeline.enumValues))
+      })
+    }
+    getData()
+  }, [])
 
   //States for step 1
   const [latestFundingStage, setLatestFundingStage] = useState<string>('')
@@ -216,8 +312,54 @@ const StartupFinancials = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = async () => {
+    await createStartupFinancials({
+      variables: {
+        input: {
+          id: currentUser?.id,
+          latestFundingStage: latestFundingStage,
+          latestValuationInCr: skipData[1] ? null : Number(latestValuationInCr),
+          currentRatio: currentRatio,
+          debtEquityRatio: debtEquityRatio,
+          revenueLastFY: revenueLastFY,
+          revenueGrowthRate: revenueGrowthRate,
+          margin: margin,
+          cashRunway: cashRunway,
+          plansForUsingCash: skipData[10]
+            ? []
+            : [plansForUsingCash1, plansForUsingCash2, plansForUsingCash3],
+        },
+      },
+    }).then((d) => {
+      !skipData[2] &&
+        latestCapTable.forEach(async (item) => {
+          await createCapTable({
+            variables: {
+              input: {
+                startupFinancialsID: d.data.createStartupFinancials.id,
+                shareholderName: item.shareholderName,
+                equityShare: Number(item.equityShare),
+              },
+            },
+          })
+        })
+      !skipData[3] &&
+        fundraisingRounds.forEach(async (item) => {
+          await createFundraisingRound({
+            variables: {
+              input: {
+                startupFinancialsID: d.data.createStartupFinancials.id,
+                fundingStage: item.fundingStage,
+                capitalRaisedInCr: Number(item.capitalRaisedInCr),
+                valuationInCr: Number(item.valuationInCr),
+                keyInvestors: item.keyInvestors,
+              },
+            },
+          })
+        })
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
@@ -256,19 +398,21 @@ const StartupFinancials = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <FinancialsStage
-            latestFundingStage={latestFundingStage}
-            setLatestFundingStage={setLatestFundingStage}
-            error1={error1}
-            setError1={setError1}
+          <StartupSingleChoiceOption
+            input={latestFundingStage}
+            setInput={setLatestFundingStage}
+            options={stageOptions}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <FinancialsValuation
-            latestValuationInCr={latestValuationInCr}
-            setLatestValuationInCr={setLatestValuationInCr}
-            error2={error2}
-            setError2={setError2}
+          <StartupSingleTextInput
+            input={latestValuationInCr}
+            setInput={setLatestValuationInCr}
+            placeholder="Valuation (in Cr)"
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
@@ -283,68 +427,78 @@ const StartupFinancials = (props: OnboardingMainProps) => {
           <FinancialsRounds
             fundraisingRounds={fundraisingRounds}
             setFundraisingRounds={setFundraisingRounds}
+            options={stageOptions}
             error4={error4}
             setError4={setError4}
           />
         )}
         {step == 5 && (
-          <FinancialsCurrentRatio
-            currentRatio={currentRatio}
-            setCurrentRatio={setCurrentRatio}
-            error5={error5}
-            setError5={setError5}
+          <StartupSingleChoiceOption
+            input={currentRatio}
+            setInput={setCurrentRatio}
+            options={decimalOptions}
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
-          <FinancialsDERatio
-            debtEquityRatio={debtEquityRatio}
-            setDebtEquityRatio={setDebtEquityRatio}
-            error6={error6}
-            setError6={setError6}
+          <StartupSingleChoiceOption
+            input={debtEquityRatio}
+            setInput={setDebtEquityRatio}
+            options={decimalOptions}
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
-          <FinancialsRevenue
-            revenueLastFY={revenueLastFY}
-            setRevenueLastFY={setRevenueLastFY}
-            error7={error7}
-            setError7={setError7}
+          <StartupSingleChoiceOption
+            input={revenueLastFY}
+            setInput={setRevenueLastFY}
+            options={revenueOptions}
+            error={error7}
+            setError={setError7}
           />
         )}
         {step == 8 && (
-          <FinancialsGrowth
-            revenueGrowth={revenueGrowthRate}
-            setRevenueGrowth={setRevenueGrowthRate}
-            error8={error8}
-            setError8={setError8}
+          <StartupSingleChoiceOption
+            input={revenueGrowthRate}
+            setInput={setRevenueGrowthRate}
+            options={growthOptions}
+            error={error8}
+            setError={setError8}
           />
         )}
         {step == 9 && (
-          <FinancialsMargin
-            margin={margin}
-            setMargin={setMargin}
-            error9={error9}
-            setError9={setError9}
+          <StartupSingleChoiceOption
+            input={margin}
+            setInput={setMargin}
+            options={marginOptions}
+            error={error9}
+            setError={setError9}
           />
         )}
         {step == 10 && (
-          <FinancialsRunway
-            cashRunway={cashRunway}
-            setCashRunway={setCashRunway}
-            error10={error10}
-            setError10={setError10}
+          <StartupSingleChoiceOption
+            input={cashRunway}
+            setInput={setCashRunway}
+            options={timelineOptions}
+            error={error10}
+            setError={setError10}
           />
         )}
         {step == 11 && (
-          <FinancialsPlans
-            plansForUsingCash1={plansForUsingCash1}
-            setPlansForUsingCash1={setPlansForUsingCash1}
-            plansForUsingCash2={plansForUsingCash2}
-            setPlansForUsingCash2={setPlansForUsingCash2}
-            plansForUsingCash3={plansForUsingCash3}
-            setPlansForUsingCash3={setPlansForUsingCash3}
-            error11={error11}
-            setError11={setError11}
+          <StartupTripleTextArea
+            input1={plansForUsingCash1}
+            setInput1={setPlansForUsingCash1}
+            placeholder1="Plan 1"
+            input2={plansForUsingCash2}
+            setInput2={setPlansForUsingCash2}
+            placeholder2="Plan 2"
+            input3={plansForUsingCash3}
+            setInput3={setPlansForUsingCash3}
+            placeholder3="Plan 3"
+            error={error11}
+            setError={setError11}
           />
         )}
       </div>
@@ -368,81 +522,6 @@ const StartupFinancials = (props: OnboardingMainProps) => {
   )
 }
 export default StartupFinancials
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-//TODO: Update stage options as per DB enum
-const stageOptions = [
-  'SEED',
-  'SERIES_A',
-  'SERIES_B',
-  'SERIES_C',
-  'SERIES_D',
-  'SERIES_E',
-  'SERIES_F',
-  'LATER',
-]
-type FinancialsStageProps = {
-  latestFundingStage: string
-  setLatestFundingStage: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsStage = (props: FinancialsStageProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {stageOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.latestFundingStage
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setLatestFundingStage(e)
-              props.error1 != '' && props.setError1('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-type FinancialsValuationProps = {
-  latestValuationInCr: string
-  setLatestValuationInCr: React.Dispatch<React.SetStateAction<string>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsValuation = (props: FinancialsValuationProps) => {
-  return (
-    <>
-      <input
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.latestValuationInCr}
-        placeholder="Valuation (in Cr)"
-        onChange={(e) => {
-          props.setLatestValuationInCr(e.target.value)
-          props.error2 != ' ' && props.setError2(' ')
-        }}
-        type={'text'}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
 
 type CapTable = {
   shareholderName: string
@@ -513,7 +592,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
           {'ADD SHAREHOLDER'}
         </button>
       </div>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
         {props.latestCapTable.map((e) => (
           <div
             key={`${e.shareholderName}, ${e.equityShare}`}
@@ -533,7 +612,6 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
           </div>
         ))}
       </div>
-      <Divider />
       <ErrorSubTextLabel label={props.error3} />
     </>
   )
@@ -548,6 +626,7 @@ type FundraisingRound = {
 type FinancialsRoundsProps = {
   fundraisingRounds: FundraisingRound[]
   setFundraisingRounds: React.Dispatch<React.SetStateAction<FundraisingRound[]>>
+  options: string[]
   error4: string
   setError4: React.Dispatch<React.SetStateAction<string>>
 }
@@ -573,7 +652,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
             props.error4 != ' ' && props.setError4(' ')
           }}
         >
-          {stageOptions.map((s) => (
+          {props.options.map((s) => (
             <option value={s} key={s}>
               {s}
             </option>
@@ -630,6 +709,8 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
               props.setError4('Must provide capital raised')
             } else if (enteredValuation == '') {
               props.setError4('Must provide valuation')
+            } else if (Number(enteredValuation) < Number(enteredCapital)) {
+              props.setError4('Valuation cannot be less than capital raised')
             } else {
               props.setFundraisingRounds([
                 ...props.fundraisingRounds,
@@ -647,7 +728,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
           {'ADD ROUND'}
         </button>
       </div>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
         {props.fundraisingRounds.sort().map((e) => (
           <div
             key={`${e.fundingStage}`}
@@ -668,308 +749,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
           </div>
         ))}
       </div>
-      <Divider />
       <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-//TODO: Update decimal range options as per DB enum
-const decimalOptions = [
-  'LESS_THAN_HALF',
-  'BETWEEN_HALF_AND_ONE',
-  'BETWEEN_ONE_AND_TWO',
-  'MORE_THAN_TWO',
-]
-type FinancialsCurrentRatioProps = {
-  currentRatio: string
-  setCurrentRatio: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsCurrentRatio = (props: FinancialsCurrentRatioProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {decimalOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.currentRatio
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setCurrentRatio(e)
-              props.error5 != '' && props.setError5('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
-
-type FinancialsDERatioProps = {
-  debtEquityRatio: string
-  setDebtEquityRatio: React.Dispatch<React.SetStateAction<string>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsDERatio = (props: FinancialsDERatioProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {decimalOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.debtEquityRatio
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setDebtEquityRatio(e)
-              props.error6 != '' && props.setError6('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error6} />
-    </>
-  )
-}
-
-//TODO: Update revenue options as per DB enum
-const revenueOptions = [
-  'LESS_THAN_10_LACS',
-  'BETWEEN_10_TO_20_LACS',
-  'BETWEEN_20_TO_50_LACS',
-  'BETWEEN_50_TO_100_LACS',
-  'BETWEEN_1_TO_10_CR',
-  'BETWEEN_10_TO_50_CR',
-  'BETWEEN_50_TO_100_CR',
-  'MORE_THAN_100_CRORE',
-]
-type FinancialsRevenueProps = {
-  revenueLastFY: string
-  setRevenueLastFY: React.Dispatch<React.SetStateAction<string>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsRevenue = (props: FinancialsRevenueProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {revenueOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.revenueLastFY
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setRevenueLastFY(e)
-              props.error7 != '' && props.setError7('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error7} />
-    </>
-  )
-}
-
-//TODO: Update growth options as per DB enum
-const growthOptions = [
-  'LESS_THAN_5',
-  'BETWEEN_5_TO_10',
-  'BETWEEN_10_TO_20',
-  'BETWEEN_20_TO_50',
-  'BETWEEN_50_TO_100',
-  'MORE_THAN_100',
-]
-type FinancialsGrowthProps = {
-  revenueGrowth: string
-  setRevenueGrowth: React.Dispatch<React.SetStateAction<string>>
-  error8: string
-  setError8: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsGrowth = (props: FinancialsGrowthProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {growthOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.revenueGrowth
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setRevenueGrowth(e)
-              props.error8 != '' && props.setError8('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error8} />
-    </>
-  )
-}
-
-//TODO: Update margin options as per DB enum
-const marginOptions = [
-  'LOSS_OVER_50',
-  'LOSS_BETWEEN_20_AND_50',
-  'LOSS_LESS_THAN_20',
-  'PROFIT_LESS_THAN_20',
-  'PROFIT_BETWEEN_20_AND_50',
-  'PROFIT_OVER_50',
-]
-type FinancialsMarginProps = {
-  margin: string
-  setMargin: React.Dispatch<React.SetStateAction<string>>
-  error9: string
-  setError9: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsMargin = (props: FinancialsMarginProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {marginOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.margin
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setMargin(e)
-              props.error9 != '' && props.setError9('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error9} />
-    </>
-  )
-}
-
-//TODO: Update timeline options as per DB enum
-const timelineOptions = [
-  'LESS_THAN_SIX_MONTHS',
-  'SIX_TO_TWELVE_MONTHS',
-  'ONE_TO_TWO_YEARS',
-  'TWO_TO_FIVE_YEARS',
-  'FIVE_TO_TEN_YEARS',
-  'MORE_THAN_TEN_YEARS',
-]
-type FinancialsRunwayProps = {
-  cashRunway: string
-  setCashRunway: React.Dispatch<React.SetStateAction<string>>
-  error10: string
-  setError10: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsRunway = (props: FinancialsRunwayProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {timelineOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.cashRunway
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setCashRunway(e)
-              props.error10 != '' && props.setError10('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error10} />
-    </>
-  )
-}
-
-type FinancialsPlansProps = {
-  plansForUsingCash1: string
-  setPlansForUsingCash1: React.Dispatch<React.SetStateAction<string>>
-  plansForUsingCash2: string
-  setPlansForUsingCash2: React.Dispatch<React.SetStateAction<string>>
-  plansForUsingCash3: string
-  setPlansForUsingCash3: React.Dispatch<React.SetStateAction<string>>
-  error11: string
-  setError11: React.Dispatch<React.SetStateAction<string>>
-}
-const FinancialsPlans = (props: FinancialsPlansProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.plansForUsingCash1}
-        rows={2}
-        placeholder="Plan 1"
-        onChange={(e) => {
-          props.setPlansForUsingCash1(e.target.value)
-          props.error11 != ' ' && props.setError11(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.plansForUsingCash2}
-        rows={2}
-        placeholder="Plan 2"
-        onChange={(e) => {
-          props.setPlansForUsingCash2(e.target.value)
-          props.error11 != ' ' && props.setError11(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.plansForUsingCash3}
-        rows={2}
-        placeholder="Plan 3"
-        onChange={(e) => {
-          props.setPlansForUsingCash3(e.target.value)
-          props.error11 != ' ' && props.setError11(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error11} />
     </>
   )
 }

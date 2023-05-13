@@ -54,6 +54,7 @@ export const schema = gql`
   }
 
   input CreateStartupBusinessInput {
+    id: Int!
     numberUsers: UserRange
     numberCities: SizeRange
     distributionType: DistributionType

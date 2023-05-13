@@ -1,4 +1,4 @@
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+import type { QueryResolvers, MutationResolvers, Sector } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -9,6 +9,23 @@ export const sectorCategories: QueryResolvers['sectorCategories'] = () => {
 export const sectorCategory: QueryResolvers['sectorCategory'] = ({ id }) => {
   return db.sectorCategory.findUnique({
     where: { id },
+  })
+}
+
+export const getSectorCategoryID = ({
+  sector,
+  category,
+}: {
+  sector: Sector
+  category: string
+}) => {
+  return db.sectorCategory.findUnique({
+    where: {
+      sector_category: {
+        sector: sector,
+        category: category,
+      },
+    },
   })
 }
 

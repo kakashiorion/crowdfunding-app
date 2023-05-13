@@ -56,19 +56,6 @@ export const loginPwdLessUser = async ({ email }: { email: string }) => {
   }
 }
 
-export const resetPwdUser = async ({ email }: { email: string }) => {
-  try {
-    const lookupUser = await db.user.findUnique({ where: { email } })
-    if (!lookupUser) {
-      return null
-    }
-    await resetPwdEmail(email, lookupUser.resetToken ?? '')
-    return lookupUser
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 export const createUser: MutationResolvers['createUser'] = ({ input }) => {
   return db.user.create({
     data: input,

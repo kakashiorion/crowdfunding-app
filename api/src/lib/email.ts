@@ -44,9 +44,10 @@ export const sendTokenEmail = (emailAddress: string, token: string) => {
 
 export const resetPwdEmail = (emailAddress: string, token: string) => {
   const subject = 'Token for password reset - Dealbari'
-  const text = `Hi ${emailAddress}, Your token for password reset is : ${token} \n\n It will expire in 15 minutes. \n\n
+  //TODO: Change host URL
+  const text = `Hi ${emailAddress}, Your link for password reset is : localhost:8910/resetPassword?resetToken=${token} \n\n It will expire in 24 hours. \n\n
     It was sent from Dealbari platform.`
-  const html = `Hi ${emailAddress}, Your token for password reset is : ${token}<br><br> It will expire in 15 minutes. \n\n
+  const html = `Hi ${emailAddress}, Your link for password reset is : localhost:8910/resetPassword?resetToken=${token}<br><br> It will expire in 24 hours. \n\n
     It was sent from Dealbari platform.`
   return sendEmail({ to: emailAddress, subject, text, html })
 }

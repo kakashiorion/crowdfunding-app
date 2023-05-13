@@ -41,19 +41,21 @@ describe('fundraisingRounds', () => {
   scenario('creates a fundraisingRound', async (scenario: StandardScenario) => {
     const result = await createFundraisingRound({
       input: {
-        startupID: scenario.fundraisingRound.two.startupID,
+        startupFinancialsID: scenario.fundraisingRound.two.startupFinancialsID,
         fundingStage: 'SEED',
-        capitalRaisedInCr: 7829107.37352285,
-        valuationInCr: 5465459.322551978,
-        updatedAt: '2023-05-09T21:13:43.702Z',
+        capitalRaisedInCr: 986724.2526451547,
+        valuationInCr: 2234251.814017605,
+        updatedAt: '2023-05-13T21:44:45.826Z',
       },
     })
 
-    expect(result.startupID).toEqual(scenario.fundraisingRound.two.startupID)
+    expect(result.startupFinancialsID).toEqual(
+      scenario.fundraisingRound.two.startupFinancialsID
+    )
     expect(result.fundingStage).toEqual('SEED')
-    expect(result.capitalRaisedInCr).toEqual(7829107.37352285)
-    expect(result.valuationInCr).toEqual(5465459.322551978)
-    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:13:43.702Z'))
+    expect(result.capitalRaisedInCr).toEqual(986724.2526451547)
+    expect(result.valuationInCr).toEqual(2234251.814017605)
+    expect(result.updatedAt).toEqual(new Date('2023-05-13T21:44:45.826Z'))
   })
 
   scenario('updates a fundraisingRound', async (scenario: StandardScenario) => {

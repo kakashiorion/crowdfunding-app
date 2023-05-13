@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
 import CloseIcon from 'public/icons/close.svg'
 
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
+import StartupSingleChoiceOption from '../comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
+import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
+import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupBackground table:
   valueProp       String?
@@ -21,6 +28,39 @@ import { StartupStepHeader } from '../../StepHeader'
   keyPeople       KeyPeople[]
 */
 
+const GET_ENUM_QUERY = gql`
+  query enumQueryBackground {
+    size: __type(name: "SizeRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    team: __type(name: "StartupTeamSize") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+
+const STARTUP_BACKGROUND_MUTATION = gql`
+  mutation createStartupBackground($input: CreateStartupBackgroundInput!) {
+    createStartupBackground(input: $input) {
+      id
+    }
+  }
+`
+
+const KEY_PEOPLE_MUTATION = gql`
+  mutation createKeyPeople($input: CreateKeyPeopleInput!) {
+    createKeyPeople(input: $input) {
+      id
+    }
+  }
+`
+
 const StartupBackground = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -29,6 +69,24 @@ const StartupBackground = (props: OnboardingMainProps) => {
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [createStartupBackground] = useMutation(STARTUP_BACKGROUND_MUTATION)
+  const [createKeyPeople] = useMutation(KEY_PEOPLE_MUTATION)
+
+  const [sizeOptions, setSizeOptions] = useState<string[]>([])
+  const [teamSizeOptions, setTeamSizeOptions] = useState<string[]>([])
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        setSizeOptions(getEnumValues(d.data.size.enumValues))
+        setTeamSizeOptions(getEnumValues(d.data.team.enumValues))
+      })
+    }
+    getData()
+  }, [])
 
   //States for step 1
   const [valueProp, setValueProp] = useState<string>('')
@@ -197,8 +255,39 @@ const StartupBackground = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = async () => {
+    await createStartupBackground({
+      variables: {
+        input: {
+          id: currentUser?.id,
+          valueProp: skipData[0] ? null : valueProp,
+          idea: skipData[1] ? null : idea,
+          whyThis: skipData[2] ? null : whyThis,
+          foundedBefore: foundedBefore,
+          mission: skipData[4] ? null : mission,
+          vision: skipData[5] ? null : vision,
+          coreValues: skipData[6] ? [] : [coreValue1, coreValue2, coreValue3],
+          startupTeamSize: startupTeamSize,
+        },
+      },
+    }).then((d) => {
+      !skipData[8] &&
+        keyPeople.forEach(async (item) => {
+          await createKeyPeople({
+            variables: {
+              input: {
+                startupBackgroundID: d.data.createStartupBackground.id,
+                name: item.name,
+                role: item.role,
+                writeup: item.writeup,
+                linkedInURL: item.linkedInURL,
+              },
+            },
+          })
+        })
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
@@ -237,71 +326,81 @@ const StartupBackground = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <BackgroundValue
-            value={valueProp}
-            setValue={setValueProp}
-            error1={error1}
-            setError1={setError1}
+          <StartupSingleTextArea
+            input={valueProp}
+            setInput={setValueProp}
+            placeholder="Tell us what your value proposition..."
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <BackgroundIdea
-            idea={idea}
-            setIdea={setIdea}
-            error2={error2}
-            setError2={setError2}
+          <StartupSingleTextArea
+            input={idea}
+            setInput={setIdea}
+            placeholder="Tell us how you got the idea..."
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <BackgroundWhyThis
-            whyThis={whyThis}
-            setWhyThis={setWhyThis}
-            error3={error3}
-            setError3={setError3}
+          <StartupSingleTextArea
+            input={whyThis}
+            setInput={setWhyThis}
+            placeholder="Tell us why this business and not something else..."
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <BackgroundExperience
-            foundedBefore={foundedBefore}
-            setFoundedBefore={setFoundedBefore}
-            error4={error4}
-            setError4={setError4}
+          <StartupSingleChoiceOption
+            input={foundedBefore}
+            setInput={setFoundedBefore}
+            options={sizeOptions}
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <BackgroundMission
-            mission={mission}
-            setMission={setMission}
-            error5={error5}
-            setError5={setError5}
+          <StartupSingleTextArea
+            input={mission}
+            setInput={setMission}
+            placeholder="Tell us about your mission..."
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
-          <BackgroundVision
-            vision={vision}
-            setVision={setVision}
-            error6={error6}
-            setError6={setError6}
+          <StartupSingleTextArea
+            input={vision}
+            setInput={setVision}
+            placeholder="Tell us about your company vision..."
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
-          <BackgroundCoreValues
-            coreValue1={coreValue1}
-            setCoreValue1={setCoreValue1}
-            coreValue2={coreValue2}
-            setCoreValue2={setCoreValue2}
-            coreValue3={coreValue3}
-            setCoreValue3={setCoreValue3}
-            error7={error7}
-            setError7={setError7}
+          <StartupTripleTextArea
+            input1={coreValue1}
+            setInput1={setCoreValue1}
+            placeholder1="Core value 1"
+            input2={coreValue2}
+            setInput2={setCoreValue2}
+            placeholder2="Core value 2"
+            input3={coreValue3}
+            setInput3={setCoreValue3}
+            placeholder3="Core value 3"
+            error={error7}
+            setError={setError7}
           />
         )}
         {step == 8 && (
-          <BackgroundTeamSize
-            startupTeamSize={startupTeamSize}
-            setStartupTeamSize={setStartupTeamSize}
-            error8={error8}
-            setError8={setError8}
+          <StartupSingleChoiceOption
+            input={startupTeamSize}
+            setInput={setStartupTeamSize}
+            options={teamSizeOptions}
+            error={error8}
+            setError={setError8}
           />
         )}
         {step == 9 && (
@@ -333,285 +432,6 @@ const StartupBackground = (props: OnboardingMainProps) => {
   )
 }
 export default StartupBackground
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-type BackgroundValueProps = {
-  value: string
-  setValue: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundValue = (props: BackgroundValueProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.value}
-        rows={3}
-        placeholder="Tell us what your value proposition..."
-        onChange={(e) => {
-          props.setValue(e.target.value)
-          props.error1 != ' ' && props.setError1(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-type BackgroundIdeaProps = {
-  idea: string
-  setIdea: React.Dispatch<React.SetStateAction<string>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundIdea = (props: BackgroundIdeaProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.idea}
-        rows={3}
-        placeholder="Tell us how you got the idea..."
-        onChange={(e) => {
-          props.setIdea(e.target.value)
-          props.error2 != ' ' && props.setError2(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-type BackgroundWhyThisProps = {
-  whyThis: string
-  setWhyThis: React.Dispatch<React.SetStateAction<string>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundWhyThis = (props: BackgroundWhyThisProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.whyThis}
-        rows={3}
-        placeholder="Tell us why this business and not something else..."
-        onChange={(e) => {
-          props.setWhyThis(e.target.value)
-          props.error3 != ' ' && props.setError3(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error3} />
-    </>
-  )
-}
-
-//TODO: Update size options as per DB enum
-const sizeOptions = [
-  'NONE',
-  'ONE_TO_THREE',
-  'THREE_TO_TEN',
-  'TEN_TO_TWENTY',
-  'MORE_THAN_TWENTY',
-]
-type BackgroundExperienceProps = {
-  foundedBefore: string
-  setFoundedBefore: React.Dispatch<React.SetStateAction<string>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundExperience = (props: BackgroundExperienceProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.foundedBefore
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setFoundedBefore(e)
-              props.error4 != '' && props.setError4('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-type BackgroundMissionProps = {
-  mission: string
-  setMission: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundMission = (props: BackgroundMissionProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.mission}
-        rows={3}
-        placeholder="Tell us about your mission..."
-        onChange={(e) => {
-          props.setMission(e.target.value)
-          props.error5 != ' ' && props.setError5(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
-
-type BackgroundVisionProps = {
-  vision: string
-  setVision: React.Dispatch<React.SetStateAction<string>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundVision = (props: BackgroundVisionProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.vision}
-        rows={3}
-        placeholder="Tell us about your company vision..."
-        onChange={(e) => {
-          props.setVision(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error6} />
-    </>
-  )
-}
-
-type BackgroundCoreValuesProps = {
-  coreValue1: string
-  setCoreValue1: React.Dispatch<React.SetStateAction<string>>
-  coreValue2: string
-  setCoreValue2: React.Dispatch<React.SetStateAction<string>>
-  coreValue3: string
-  setCoreValue3: React.Dispatch<React.SetStateAction<string>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundCoreValues = (props: BackgroundCoreValuesProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.coreValue1}
-        rows={2}
-        placeholder="Core value 1"
-        onChange={(e) => {
-          props.setCoreValue1(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.coreValue2}
-        rows={2}
-        placeholder="Core value 2"
-        onChange={(e) => {
-          props.setCoreValue2(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.coreValue3}
-        rows={2}
-        placeholder="Core value 3"
-        onChange={(e) => {
-          props.setCoreValue3(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error7} />
-    </>
-  )
-}
-
-//TODO: Update teamsize options as per DB enum
-const teamSizeOptions = [
-  'ONE',
-  'BETWEEN_1_AND_10',
-  'BETWEEN_10_AND_50',
-  'BETWEEN_50_AND_200',
-  'BETWEEN_200_AND_1000',
-  'OVER_1000',
-]
-type BackgroundTeamSizeProps = {
-  startupTeamSize: string
-  setStartupTeamSize: React.Dispatch<React.SetStateAction<string>>
-  error8: string
-  setError8: React.Dispatch<React.SetStateAction<string>>
-}
-const BackgroundTeamSize = (props: BackgroundTeamSizeProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {teamSizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.startupTeamSize
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setStartupTeamSize(e)
-              props.error8 != '' && props.setError8('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error8} />
-    </>
-  )
-}
 
 type KeyPeople = {
   name: string
@@ -661,7 +481,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
             'w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
           }
           value={enteredWriteup}
-          placeholder="Short brief (optional)"
+          placeholder="Short job description (optional)"
           onChange={(e) => {
             setEnteredWriteup(e.target.value)
           }}
@@ -708,7 +528,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
           {'ADD PERSON'}
         </button>
       </div>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
         {props.keyPeople.map((e) => (
           <div
             key={`${e.name}, ${e.role}`}
@@ -725,7 +545,6 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
           </div>
         ))}
       </div>
-      <Divider />
       <ErrorSubTextLabel label={props.error9} />
     </>
   )

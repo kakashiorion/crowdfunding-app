@@ -1,11 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { useLazyQuery } from '@apollo/client'
+
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
 
 import { StartupStepFooter } from '../../StepFooter'
 import { StartupStepHeader } from '../../StepHeader'
+import StartupMultipleChoiceOption from '../comps/StartupMultipleChoiceOption/StartupMultipleChoiceOption'
+import StartupSingleChoiceOption from '../comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
+import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
+import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupMarket table:
   revenueStreams   RevenueStreams[]
@@ -20,6 +28,49 @@ import { StartupStepHeader } from '../../StepHeader'
   xFactor          String?
 */
 
+const GET_ENUM_QUERY = gql`
+  query enumQueryMarket {
+    revenue: __type(name: "RevenueStreams") {
+      name
+      enumValues {
+        name
+      }
+    }
+    cost: __type(name: "CostHeads") {
+      name
+      enumValues {
+        name
+      }
+    }
+    plan: __type(name: "ShortTermPlan") {
+      name
+      enumValues {
+        name
+      }
+    }
+    size: __type(name: "MarketSize") {
+      name
+      enumValues {
+        name
+      }
+    }
+    growth: __type(name: "GrowthRate") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+
+const STARTUP_MARKET_MUTATION = gql`
+  mutation createStartupMarket($input: CreateStartupMarketInput!) {
+    createStartupMarket(input: $input) {
+      id
+    }
+  }
+`
+
 const StartupMarket = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -28,6 +79,29 @@ const StartupMarket = (props: OnboardingMainProps) => {
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
   const skipData: boolean[] = []
+
+  const [revenueOptions, setRevenueOptions] = useState<string[]>([])
+  const [costOptions, setCostOptions] = useState<string[]>([])
+  const [planOptions, setPlanOptions] = useState<string[]>([])
+  const [sizeOptions, setSizeOptions] = useState<string[]>([])
+  const [growthOptions, setGrowthOptions] = useState<string[]>([])
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [createStartupMarket] = useMutation(STARTUP_MARKET_MUTATION)
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        setRevenueOptions(getEnumValues(d.data.revenue.enumValues))
+        setCostOptions(getEnumValues(d.data.cost.enumValues))
+        setPlanOptions(getEnumValues(d.data.plan.enumValues))
+        setSizeOptions(getEnumValues(d.data.size.enumValues))
+        setGrowthOptions(getEnumValues(d.data.growth.enumValues))
+      })
+    }
+    getData()
+  }, [])
 
   //States for step 1
   const [revenueStreams, setRevenueStreams] = useState<string[]>([])
@@ -207,7 +281,29 @@ const StartupMarket = (props: OnboardingMainProps) => {
   }
 
   //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  const saveData = async () => {
+    await createStartupMarket({
+      variables: {
+        input: {
+          id: currentUser?.id,
+          revenueStreams: skipData[0] ? [] : revenueStreams,
+          costHeads: skipData[1] ? [] : costHeads,
+          shortTermPlan: shortTermPlan,
+          marketSizeInCr: marketSizeInCr,
+          marketGrowthRate: marketGrowthRate,
+          trends: skipData[5] ? [] : [trends1, trends2, trends3],
+          opporunities: skipData[6]
+            ? []
+            : [opportunities1, opportunities2, opportunities3],
+          threats: skipData[7] ? [] : [threats1, threats2, threats3],
+          competitors: skipData[8]
+            ? []
+            : [competitors1, competitors2, competitors3],
+          xFactor: skipData[9] ? [] : xFactor,
+        },
+      },
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
@@ -246,99 +342,117 @@ const StartupMarket = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <MarketRevenue
-            revenueStreams={revenueStreams}
-            setRevenueStreams={setRevenueStreams}
-            error1={error1}
-            setError1={setError1}
+          <StartupMultipleChoiceOption
+            input={revenueStreams}
+            setInput={setRevenueStreams}
+            options={revenueOptions}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <MarketCost
-            costHeads={costHeads}
-            setCostHeads={setCostHeads}
-            error2={error2}
-            setError2={setError2}
+          <StartupMultipleChoiceOption
+            input={costHeads}
+            setInput={setCostHeads}
+            options={costOptions}
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <MarketPlan
-            shortTermPlan={shortTermPlan}
-            setShortTermPlan={setShortTermPlan}
-            error3={error3}
-            setError3={setError3}
+          <StartupSingleChoiceOption
+            input={shortTermPlan}
+            setInput={setShortTermPlan}
+            options={planOptions}
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <MarketSize
-            marketSizeInCr={marketSizeInCr}
-            setMarketSizeInCr={setMarketSizeInCr}
-            error4={error4}
-            setError4={setError4}
+          <StartupSingleChoiceOption
+            input={marketSizeInCr}
+            setInput={setMarketSizeInCr}
+            options={sizeOptions}
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <MarketRate
-            marketGrowthRate={marketGrowthRate}
-            setMarketGrowthRate={setMarketGrowthRate}
-            error5={error5}
-            setError5={setError5}
+          <StartupSingleChoiceOption
+            input={marketGrowthRate}
+            setInput={setMarketGrowthRate}
+            options={growthOptions}
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
-          <MarketTrends
-            trends1={trends1}
-            setTrends1={setTrends1}
-            trends2={trends2}
-            setTrends2={setTrends2}
-            trends3={trends3}
-            setTrends3={setTrends3}
-            error6={error6}
-            setError6={setError6}
+          <StartupTripleTextArea
+            input1={trends1}
+            setInput1={setTrends1}
+            placeholder1="Trend 1"
+            input2={trends2}
+            setInput2={setTrends2}
+            placeholder2="Trend 2"
+            input3={trends3}
+            setInput3={setTrends3}
+            placeholder3="Trend 3"
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
-          <MarketOpportunities
-            opportunities1={opportunities1}
-            setOpportunities1={setOpportunities1}
-            opportunities2={opportunities2}
-            setOpportunities2={setOpportunities2}
-            opportunities3={opportunities3}
-            setOpportunities3={setOpportunities3}
-            error7={error7}
-            setError7={setError7}
+          <StartupTripleTextArea
+            input1={opportunities1}
+            setInput1={setOpportunities1}
+            placeholder1="Opportunities 1"
+            input2={opportunities2}
+            setInput2={setOpportunities2}
+            placeholder2="Opportunities 2"
+            input3={opportunities3}
+            setInput3={setOpportunities3}
+            placeholder3="Opportunities 3"
+            error={error7}
+            setError={setError7}
           />
         )}
         {step == 8 && (
-          <MarketThreats
-            threats1={threats1}
-            setThreats1={setThreats1}
-            threats2={threats2}
-            setThreats2={setThreats2}
-            threats3={threats3}
-            setThreats3={setThreats3}
-            error8={error8}
-            setError8={setError8}
+          <StartupTripleTextArea
+            input1={threats1}
+            setInput1={setThreats1}
+            placeholder1="Threats 1"
+            input2={threats2}
+            setInput2={setThreats2}
+            placeholder2="Threats 2"
+            input3={threats3}
+            setInput3={setThreats3}
+            placeholder3="Threats 3"
+            error={error8}
+            setError={setError8}
           />
         )}
         {step == 9 && (
-          <MarketCompetitors
-            competitors1={competitors1}
-            setCompetitors1={setCompetitors1}
-            competitors2={competitors2}
-            setCompetitors2={setCompetitors2}
-            competitors3={competitors3}
-            setCompetitors3={setCompetitors3}
-            error9={error9}
-            setError9={setError9}
+          <StartupTripleTextArea
+            input1={competitors1}
+            setInput1={setCompetitors1}
+            placeholder1="Competitor 1"
+            input2={competitors2}
+            setInput2={setCompetitors2}
+            placeholder2="Competitor 2"
+            input3={competitors3}
+            setInput3={setCompetitors3}
+            placeholder3="Competitor 3"
+            error={error9}
+            setError={setError9}
           />
         )}
         {step == 10 && (
-          <MarketXFactor
-            xFactor={xFactor}
-            setXFactor={setXFactor}
-            error10={error10}
-            setError10={setError10}
+          <StartupSingleTextArea
+            input={xFactor}
+            setInput={setXFactor}
+            placeholder="Tell us about your X Factor"
+            error={error10}
+            setError={setError10}
           />
         )}
       </div>
@@ -362,486 +476,3 @@ const StartupMarket = (props: OnboardingMainProps) => {
   )
 }
 export default StartupMarket
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-//TODO: Update revenue options as per DB enum
-const revenueOptions = [
-  'SELLING_GOODS',
-  'RENTAL_OR_LEASING',
-  'ADS_OR_SPONSORS',
-  'COMMISSION_FEE',
-  'SUBSCRIPTION_OR_LICENSING',
-  'DONATIONS',
-  'FREEMIUM',
-  'OTHER',
-]
-type MarketRevenueProps = {
-  revenueStreams: string[]
-  setRevenueStreams: React.Dispatch<React.SetStateAction<string[]>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketRevenue = (props: MarketRevenueProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {revenueOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.revenueStreams.includes(e)
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              if (props.revenueStreams.includes(e)) {
-                props.setRevenueStreams(
-                  props.revenueStreams.filter((s) => s != e)
-                )
-              } else {
-                props.setRevenueStreams([...props.revenueStreams, e])
-              }
-              props.error1 != '' && props.setError1('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-//TODO: Update cost options as per DB enum
-const costOptions = [
-  'MATERIAL',
-  'WAGES',
-  'RENT',
-  'INTEREST',
-  'EQUIPMENT',
-  'MARKETING',
-  'ADMIN',
-  'OTHER',
-]
-type MarketCostProps = {
-  costHeads: string[]
-  setCostHeads: React.Dispatch<React.SetStateAction<string[]>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketCost = (props: MarketCostProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {costOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.costHeads.includes(e)
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              if (props.costHeads.includes(e)) {
-                props.setCostHeads(props.costHeads.filter((s) => s != e))
-              } else {
-                props.setCostHeads([...props.costHeads, e])
-              }
-              props.error2 != '' && props.setError2('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-//TODO: Update plan options as per DB enum
-const planOptions = [
-  'EXPAND_GEOGRAPHICALLY',
-  'GO_FOR_IPO',
-  'HIRE_AND_EXPAND_TEAM',
-  'IMPROVE_PRODUCT_OR_SERVICE',
-  'BUILD_CUSTOMER_BASE',
-  'OTHER',
-]
-type MarketPlanProps = {
-  shortTermPlan: string
-  setShortTermPlan: React.Dispatch<React.SetStateAction<string>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketPlan = (props: MarketPlanProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {planOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.shortTermPlan
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setShortTermPlan(e)
-              props.error3 != '' && props.setError3('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error3} />
-    </>
-  )
-}
-
-//TODO: Update market size options as per DB enum
-const marketSizeOptions = [
-  'LESS_THAN_10_CR',
-  'BETWEEN_10_AND_100_CR',
-  'BETWEEN_100_AND_1000_CR',
-  'BETWEEN_1000_AND_10000_CR',
-  'BETWEEN_10000_AND_1_LAC_CR',
-  'MORE_THAN_1_LAC_CR',
-]
-type MarketSizeProps = {
-  marketSizeInCr: string
-  setMarketSizeInCr: React.Dispatch<React.SetStateAction<string>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketSize = (props: MarketSizeProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {marketSizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.marketSizeInCr
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setMarketSizeInCr(e)
-              props.error4 != '' && props.setError4('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-//TODO: Update market growth options as per DB enum
-const marketGrowthOptions = [
-  'LESS_THAN_5',
-  'BETWEEN_5_TO_10',
-  'BETWEEN_10_TO_20',
-  'BETWEEN_20_TO_50',
-  'BETWEEN_50_TO_100',
-  'MORE_THAN_100',
-]
-type marketRateProps = {
-  marketGrowthRate: string
-  setMarketGrowthRate: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketRate = (props: marketRateProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {marketGrowthOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.marketGrowthRate
-                ? ' bg-tertiary'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
-            }`}
-            onClick={() => {
-              props.setMarketGrowthRate(e)
-              props.error5 != '' && props.setError5('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
-
-type MarketTrendsProps = {
-  trends1: string
-  setTrends1: React.Dispatch<React.SetStateAction<string>>
-  trends2: string
-  setTrends2: React.Dispatch<React.SetStateAction<string>>
-  trends3: string
-  setTrends3: React.Dispatch<React.SetStateAction<string>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketTrends = (props: MarketTrendsProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.trends1}
-        rows={2}
-        placeholder="Trend 1"
-        onChange={(e) => {
-          props.setTrends1(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.trends2}
-        rows={2}
-        placeholder="Trend 2"
-        onChange={(e) => {
-          props.setTrends2(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.trends3}
-        rows={2}
-        placeholder="Trend 3"
-        onChange={(e) => {
-          props.setTrends3(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error6} />
-    </>
-  )
-}
-
-type MarketOpportunitiesProps = {
-  opportunities1: string
-  setOpportunities1: React.Dispatch<React.SetStateAction<string>>
-  opportunities2: string
-  setOpportunities2: React.Dispatch<React.SetStateAction<string>>
-  opportunities3: string
-  setOpportunities3: React.Dispatch<React.SetStateAction<string>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketOpportunities = (props: MarketOpportunitiesProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.opportunities1}
-        rows={2}
-        placeholder="Opportunity 1"
-        onChange={(e) => {
-          props.setOpportunities1(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.opportunities2}
-        rows={2}
-        placeholder="Opportunity 2"
-        onChange={(e) => {
-          props.setOpportunities2(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.opportunities3}
-        rows={2}
-        placeholder="Opportunity 3"
-        onChange={(e) => {
-          props.setOpportunities3(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error7} />
-    </>
-  )
-}
-
-type MarketThreatsProps = {
-  threats1: string
-  setThreats1: React.Dispatch<React.SetStateAction<string>>
-  threats2: string
-  setThreats2: React.Dispatch<React.SetStateAction<string>>
-  threats3: string
-  setThreats3: React.Dispatch<React.SetStateAction<string>>
-  error8: string
-  setError8: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketThreats = (props: MarketThreatsProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.threats1}
-        rows={2}
-        placeholder="Threat 1"
-        onChange={(e) => {
-          props.setThreats1(e.target.value)
-          props.error8 != ' ' && props.setError8(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.threats2}
-        rows={2}
-        placeholder="Threat 2"
-        onChange={(e) => {
-          props.setThreats2(e.target.value)
-          props.error8 != ' ' && props.setError8(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.threats3}
-        rows={2}
-        placeholder="Threat 3"
-        onChange={(e) => {
-          props.setThreats3(e.target.value)
-          props.error8 != ' ' && props.setError8(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error8} />
-    </>
-  )
-}
-
-type MarketCompetitorsProps = {
-  competitors1: string
-  setCompetitors1: React.Dispatch<React.SetStateAction<string>>
-  competitors2: string
-  setCompetitors2: React.Dispatch<React.SetStateAction<string>>
-  competitors3: string
-  setCompetitors3: React.Dispatch<React.SetStateAction<string>>
-  error9: string
-  setError9: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketCompetitors = (props: MarketCompetitorsProps) => {
-  return (
-    <>
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.competitors1}
-        rows={2}
-        placeholder="Activity 1"
-        onChange={(e) => {
-          props.setCompetitors1(e.target.value)
-          props.error9 != ' ' && props.setError9(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.competitors2}
-        rows={2}
-        placeholder="Activity 2"
-        onChange={(e) => {
-          props.setCompetitors2(e.target.value)
-          props.error9 != ' ' && props.setError9(' ')
-        }}
-      />
-      <Divider />
-      <textarea
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.competitors3}
-        rows={2}
-        placeholder="Activity 3"
-        onChange={(e) => {
-          props.setCompetitors3(e.target.value)
-          props.error9 != ' ' && props.setError9(' ')
-        }}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error9} />
-    </>
-  )
-}
-
-type MarketXFactorProps = {
-  xFactor: string
-  setXFactor: React.Dispatch<React.SetStateAction<string>>
-  error10: string
-  setError10: React.Dispatch<React.SetStateAction<string>>
-}
-const MarketXFactor = (props: MarketXFactorProps) => {
-  return (
-    <>
-      <input
-        className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
-        }
-        value={props.xFactor}
-        placeholder="Website URL"
-        onChange={(e) => {
-          props.setXFactor(e.target.value)
-          props.error10 != ' ' && props.setError10(' ')
-        }}
-        type={'text'}
-      />
-      <Divider />
-      <ErrorSubTextLabel label={props.error10} />
-    </>
-  )
-}

@@ -25,6 +25,7 @@ export const schema = gql`
   }
 
   input CreateStartupInput {
+    id: Int!
     name: String!
     writeUp: String!
     dateIncorporated: DateTime!

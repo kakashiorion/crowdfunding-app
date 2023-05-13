@@ -54,6 +54,8 @@ export const schema = gql`
   type Query {
     sectorCategories: [SectorCategory!]! @requireAuth
     sectorCategory(id: Int!): SectorCategory @requireAuth
+    getSectorCategoryID(sector: Sector!, category: String!): SectorCategory
+      @requireAuth
   }
 
   input CreateSectorCategoryInput {

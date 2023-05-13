@@ -102,9 +102,9 @@ model Investor {
   locationID        Int //from Location table
   linkedInURL       String?
   websiteURL        String?
-  eduBG             EducationBG?
-  yearsOfWorkEx     SizeRange?
-  numberOfCompanies SizeRange?
+  eduBG             EducationBG
+  yearsOfWorkEx     SizeRange
+  numberOfCompanies SizeRange
   workedInSectors   Sector[] // from Sector table
   investorExp       InvestorExperience?
   investorObjective InvestorObjective?
@@ -141,8 +141,8 @@ model InvestorExperience {
   foundedStartups    SizeRange
   investedStartups   SizeRange
   investedStages     FundingStage[]
-  investedAmountLacs AmountRange?
-  successfulExits    SizeRange?
+  investedAmountLacs AmountRange
+  successfulExits    SizeRange
   returnsReceived    ReturnsRange[]
   investedSectors    Sector[]
   investorLevel      InvestorLevel
@@ -199,11 +199,11 @@ enum AmountRange {
 model InvestorObjective {
   id                        Int                    @id @unique
   investor                  Investor               @relation(fields: [id], references: [id])
-  preferredAmountToInvest   AmountRange?
+  preferredAmountToInvest   AmountRange
   preferredFundingStages    FundingStage[]
   preferredStartupTeamSizes StartupTeamSize[]
   preferredTimelines        TimelineRange[]
-  riskApetite               RiskApetite?
+  riskApetite               RiskApetite
   preferredSectors          Sector[]
   preferredLocations        Int[] //from Location table
   platformGoal              InvestorPlatformGoal[]
@@ -344,19 +344,19 @@ enum Sector {
 }
 
 model StartupBackground {
-  id              Int              @id @unique
-  startup         Startup          @relation(fields: [id], references: [id])
+  id              Int             @id @unique
+  startup         Startup         @relation(fields: [id], references: [id])
   valueProp       String?
   idea            String?
   whyThis         String?
-  foundedBefore   SizeRange?
+  foundedBefore   SizeRange
   mission         String?
   vision          String?
   coreValues      String[]
-  startupTeamSize StartupTeamSize?
+  startupTeamSize StartupTeamSize
   keyPeople       KeyPeople[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }
 
 model KeyPeople {
@@ -372,20 +372,20 @@ model KeyPeople {
 }
 
 model StartupBusiness {
-  id                Int               @id @unique
-  startup           Startup           @relation(fields: [id], references: [id])
-  numberUsers       UserRange?
-  numberCities      SizeRange?
-  distributionType  DistributionType?
+  id                Int              @id @unique
+  startup           Startup          @relation(fields: [id], references: [id])
+  numberUsers       UserRange
+  numberCities      SizeRange
+  distributionType  DistributionType
   partners          String[]
   customers         String[]
   workedWell        String[]
   challenges        String[]
   couldImprove      String[]
   currentActivities String[]
-  hasOnlineBusiness OnlineBusiness?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  hasOnlineBusiness OnlineBusiness
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 }
 
 enum OnlineBusiness {
@@ -417,9 +417,9 @@ model StartupMarket {
   startup          Startup          @relation(fields: [id], references: [id])
   revenueStreams   RevenueStreams[]
   costHeads        CostHeads[]
-  shortTermPlan    ShortTermPlan?
-  marketSizeInCr   MarketSize?
-  marketGrowthRate GrowthRate?
+  shortTermPlan    ShortTermPlan
+  marketSizeInCr   MarketSize
+  marketGrowthRate GrowthRate
   trends           String[]
   opporunities     String[]
   threats          String[]
@@ -481,16 +481,16 @@ enum ShortTermPlan {
 model StartupFinancials {
   id                  Int                @id @unique
   startup             Startup            @relation(fields: [id], references: [id])
-  latestFundingStage  FundingStage?
+  latestFundingStage  FundingStage
   latestValuationInCr Float?
   latestCapTable      CapTable[]
   fundraisingRounds   FundraisingRound[]
-  currentRatio        DecimalRange?
-  debtEquityRatio     DecimalRange?
-  revenueLastFY       RevenueRange?
-  revenueGrowthRate   GrowthRate?
-  margin              Margin?
-  cashRunway          TimelineRange?
+  currentRatio        DecimalRange
+  debtEquityRatio     DecimalRange
+  revenueLastFY       RevenueRange
+  revenueGrowthRate   GrowthRate
+  margin              Margin
+  cashRunway          TimelineRange
   plansForUsingCash   String[]
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
@@ -524,15 +524,15 @@ enum Margin {
 }
 
 model FundraisingRound {
-  id                Int               @id @default(autoincrement())
-  startup           StartupFinancials @relation(fields: [startupID], references: [id])
-  startupID         Int
-  fundingStage      FundingStage
-  capitalRaisedInCr Float
-  valuationInCr     Float
-  keyInvestors      String?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  id                  Int               @id @default(autoincrement())
+  startupFinancials   StartupFinancials @relation(fields: [startupFinancialsID], references: [id])
+  startupFinancialsID Int
+  fundingStage        FundingStage
+  capitalRaisedInCr   Float
+  valuationInCr       Float
+  keyInvestors        String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 }
 
 model CapTable {
@@ -550,8 +550,8 @@ model StartupObjective {
   startup                 Startup               @relation(fields: [id], references: [id])
   preferredInvestorLevels InvestorLevel[]
   preferredLocations      Int[] //from Location table
-  expectedTimeline        TimelineRange?
-  promisingReturns        ReturnsRange?
+  expectedTimeline        TimelineRange
+  promisingReturns        ReturnsRange
   platformGoal            StartupPlatformGoal[]
   referSource             ReferSource[]
   pitchDeckURL            String?

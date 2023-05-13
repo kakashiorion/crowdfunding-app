@@ -34,3 +34,11 @@ export type OnboardingTimelineStepsProps = {
 export type OnboardingIntroSectionProps = {
   setCurrentSection: React.Dispatch<React.SetStateAction<number>>
 }
+
+export const getEnumValues = (enumArray: { name: string }[]) => {
+  const values: string[] = []
+  enumArray.forEach((item) => {
+    values.push(item['name'])
+  })
+  return values
+}

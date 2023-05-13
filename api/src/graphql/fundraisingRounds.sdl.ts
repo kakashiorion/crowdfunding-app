@@ -1,8 +1,8 @@
 export const schema = gql`
   type FundraisingRound {
     id: Int!
-    startup: StartupFinancials!
-    startupID: Int!
+    startupFinancials: StartupFinancials!
+    startupFinancialsID: Int!
     fundingStage: FundingStage!
     capitalRaisedInCr: Float!
     valuationInCr: Float!
@@ -28,7 +28,7 @@ export const schema = gql`
   }
 
   input CreateFundraisingRoundInput {
-    startupID: Int!
+    startupFinancialsID: Int!
     fundingStage: FundingStage!
     capitalRaisedInCr: Float!
     valuationInCr: Float!
@@ -36,7 +36,7 @@ export const schema = gql`
   }
 
   input UpdateFundraisingRoundInput {
-    startupID: Int
+    startupFinancialsID: Int
     fundingStage: FundingStage
     capitalRaisedInCr: Float
     valuationInCr: Float

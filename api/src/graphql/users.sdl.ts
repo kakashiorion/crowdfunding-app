@@ -139,6 +139,5 @@ export const schema = gql`
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
     loginPwdLessUser(email: String!): User! @requireAuth
-    resetPwdUser(email: String!): User! @requireAuth
   }
 `

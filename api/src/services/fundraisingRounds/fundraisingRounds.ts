@@ -41,7 +41,9 @@ export const deleteFundraisingRound: MutationResolvers['deleteFundraisingRound']
   }
 
 export const FundraisingRound: FundraisingRoundRelationResolvers = {
-  startup: (_obj, { root }) => {
-    return db.fundraisingRound.findUnique({ where: { id: root?.id } }).startup()
+  startupFinancials: (_obj, { root }) => {
+    return db.fundraisingRound
+      .findUnique({ where: { id: root?.id } })
+      .startupFinancials()
   },
 }
