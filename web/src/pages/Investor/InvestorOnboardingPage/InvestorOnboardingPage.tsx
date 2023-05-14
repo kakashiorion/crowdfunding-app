@@ -18,6 +18,8 @@ const INVESTOR_ONBOARDING_QUERY = gql`
   query CheckInvestorOnboarding($id: Int!) {
     user(id: $id) {
       id
+      likedOnboarding
+      isOnboarded
       investor {
         id
         investorExp {
@@ -41,27 +43,28 @@ const InvestorOnboardingPage = () => {
   const [getOnboardingData] = useLazyQuery(INVESTOR_ONBOARDING_QUERY)
 
   useEffect(() => {
-    if (currentUser?.isOnboarded == true) {
-      navigate(routes.investorHome())
-    } else {
-      const getData = async () => {
-        await getOnboardingData({ variables: { id: currentUser?.id } }).then(
-          (d) => {
-            if (!d.data.user.investor) {
-              setCurrentSection(0)
-            } else if (!d.data.user.investor.investorExp) {
-              setCurrentSection(2)
-            } else if (!d.data.user.investor.investorObjective) {
-              setCurrentSection(3)
-            } else {
-              setCurrentSection(4)
-            }
+    const getData = async () => {
+      await getOnboardingData({ variables: { id: currentUser?.id } }).then(
+        (d) => {
+          if (!d.data.user.investor) {
+            setCurrentSection(0)
+          } else if (!d.data.user.investor.investorExp) {
+            setCurrentSection(2)
+          } else if (!d.data.user.investor.investorObjective) {
+            setCurrentSection(3)
+          } else if (d.data.user.isOnboarded == false) {
+            setCurrentSection(4)
+          } else if (d.data.user.likedOnboarding == null) {
+            setCurrentSection(5)
+          } else {
+            navigate(routes.investorHome())
           }
-        )
-      }
-      getData()
+        }
+      )
     }
+    getData()
   }, [currentUser?.id, currentUser?.isOnboarded, getOnboardingData])
+
   return (
     <>
       <MetaTags

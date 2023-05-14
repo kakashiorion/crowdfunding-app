@@ -1,21 +1,28 @@
 import { useState } from 'react'
 
 import CheckIcon from 'public/icons/checkCircle.svg'
-import DownIcon from 'public/icons/thumbDown.svg'
-import UpIcon from 'public/icons/thumbUp.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
 import { TertiaryFilledButton } from 'src/components/Button/Button'
-import {
-  TitleLabel,
-  TertiarySubTitleLabel,
-  WarnSubTextLabel,
-} from 'src/components/Label/Label'
+import { TitleLabel, TertiarySubTitleLabel } from 'src/components/Label/Label'
+import OnboardingFeedbackForm from 'src/components/Onboarding/OnboardingFeedbackForm/OnboardingFeedbackForm'
+
+const STARTUP_PREFERENCES_MUTATION = gql`
+  mutation updateUser($id: Int!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+    }
+  }
+`
 
 const StartupCompleted = () => {
   const [up, setUp] = useState<boolean>(false)
   const [down, setDown] = useState<boolean>(false)
+  const { currentUser } = useAuth()
+  const [updateUser] = useMutation(STARTUP_PREFERENCES_MUTATION)
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 rounded-sm px-6 py-5 text-center  lg:px-8 lg:py-6">
@@ -24,43 +31,27 @@ const StartupCompleted = () => {
       <TertiarySubTitleLabel label="You may go to your account, start exploring the platform and making deals." />
       <TertiaryFilledButton
         label={`LET"S GO`}
-        action={() => navigate(routes.startupHome())}
+        action={async () => {
+          if (up || down) {
+            await updateUser({
+              variables: {
+                id: currentUser?.id,
+                input: {
+                  likedOnboarding: up ? true : down ? false : null,
+                },
+              },
+            }).then(() => navigate(routes.startupHome()))
+          } else {
+            navigate(routes.startupHome())
+          }
+        }}
       />
-      <div className="flex flex-col items-center gap-1 rounded-sm bg-warn-l1/30 p-3 dark:bg-warn-d2/30 lg:gap-2 lg:p-4">
-        <WarnSubTextLabel label="Did you like the onboarding process? Share your feedback" />
-        <div className="flex gap-2">
-          <UpIcon
-            className={`flex h-4 w-4 ${
-              up
-                ? 'fill-success'
-                : 'fill-black-l3 hover:fill-success-l1 dark:fill-white-d3'
-            } lg:h-5 lg:w-5`}
-            onClick={() => {
-              setDown(false)
-              if (up) {
-                setUp(false)
-              } else {
-                setUp(true)
-              }
-            }}
-          />
-          <DownIcon
-            className={`flex h-4 w-4 ${
-              down
-                ? 'fill-error'
-                : 'fill-black-l3 hover:fill-error-l1 dark:fill-white-d3'
-            } lg:h-5 lg:w-5`}
-            onClick={() => {
-              setUp(false)
-              if (down) {
-                setDown(false)
-              } else {
-                setDown(true)
-              }
-            }}
-          />
-        </div>
-      </div>
+      <OnboardingFeedbackForm
+        up={up}
+        down={down}
+        setUp={setUp}
+        setDown={setDown}
+      />
     </div>
   )
 }

@@ -1,10 +1,10 @@
+import { SubTextLabel, SubTitleLabel } from 'src/components/Label/Label'
 import { OnboardingStepsInfoType } from 'src/lib/onboardingConsts'
 
-import { SubTextLabel, SubTitleLabel } from '../Label/Label'
 import {
   PrimaryProgressIndicator,
   TertiaryProgressIndicator,
-} from '../ProgressIndicator/ProgressIndicator'
+} from './ProgressIndicator/ProgressIndicator'
 
 type StepHeaderProps = {
   currentStepInfo: OnboardingStepsInfoType[]

@@ -78,7 +78,7 @@ const StartupMarket = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
 
   const [revenueOptions, setRevenueOptions] = useState<string[]>([])
   const [costOptions, setCostOptions] = useState<string[]>([])
@@ -101,7 +101,7 @@ const StartupMarket = (props: OnboardingMainProps) => {
       })
     }
     getData()
-  }, [])
+  }, [getEnumData])
 
   //States for step 1
   const [revenueStreams, setRevenueStreams] = useState<string[]>([])
@@ -280,8 +280,8 @@ const StartupMarket = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = async () => {
+  //Match skip data and save in DB
+  const saveData = async (skippedLast: boolean) => {
     await createStartupMarket({
       variables: {
         input: {
@@ -299,7 +299,7 @@ const StartupMarket = (props: OnboardingMainProps) => {
           competitors: skipData[8]
             ? []
             : [competitors1, competitors2, competitors3],
-          xFactor: skipData[9] ? [] : xFactor,
+          xFactor: skippedLast ? null : xFactor,
         },
       },
     })
@@ -307,10 +307,10 @@ const StartupMarket = (props: OnboardingMainProps) => {
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -318,11 +318,11 @@ const StartupMarket = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -330,7 +330,7 @@ const StartupMarket = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 

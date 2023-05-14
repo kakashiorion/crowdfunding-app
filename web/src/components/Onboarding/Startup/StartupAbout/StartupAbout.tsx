@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
 
@@ -14,10 +14,6 @@ import { StartupStepHeader } from '../../StepHeader'
 import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
 import StartupSingleTextInput from '../comps/StartupSingleTextInput/StartupSingleTextInput'
 import StartupTripleTextInput from '../comps/StartupTripleTextInput/StartupTripleTextInput'
-
-const locationData = require('../../locationData.json')
-//TODO: Update sector json data
-const sectorData = require('../../sectorData.json')
 
 /*Info to be created and saved in Startup table:
   name              String
@@ -38,18 +34,13 @@ const STARTUP_ABOUT_MUTATION = gql`
 `
 
 const GET_LOCATION_SECTOR_ID_QUERY = gql`
-  query getLocationSectorIDs(
-    $state: String!
-    $city: String!
-    $sector: Sector!
-    $category: String!
-  ) {
-    getLocationID(state: $state, city: $city) {
+  query getLocationSectorData {
+    locations: locations {
       id
       state
       city
     }
-    getSectorCategoryID(sector: $sector, category: $category) {
+    sectors: sectorCategories {
       id
       sector
       category
@@ -57,20 +48,17 @@ const GET_LOCATION_SECTOR_ID_QUERY = gql`
   }
 `
 
-// const GET_ENUM_QUERY = gql`
-//   query getLocationSectorEnums {
-//     locations {
-//       id
-//       state
-//       city
-//     }
-//     sectorCategories {
-//       id
-//       sector
-//       category
-//     }
-//   }
-// `
+type Location = {
+  id: number
+  city: string
+  state: string
+}
+
+type Sector = {
+  id: number
+  sector: string
+  category: string
+}
 
 const daysMapping = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
@@ -81,11 +69,23 @@ const StartupAbout = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
 
   const { currentUser } = useAuth()
   const [createStartup] = useMutation(STARTUP_ABOUT_MUTATION)
   const [getLocationSectorData] = useLazyQuery(GET_LOCATION_SECTOR_ID_QUERY)
+  const [locations, setLocations] = useState<Location[]>([])
+  const [sectors, setSectors] = useState<Sector[]>([])
+
+  useEffect(() => {
+    const getData = async () => {
+      await getLocationSectorData().then((d) => {
+        setLocations(d.data.locations)
+        setSectors(d.data.sectors)
+      })
+    }
+    getData()
+  }, [getLocationSectorData])
 
   //States for step 1
   const [name, setName] = useState<string>('')
@@ -110,13 +110,11 @@ const StartupAbout = (props: OnboardingMainProps) => {
   const [error5, setError5] = useState<string>(' ')
 
   //States for step 6
-  const [state, setState] = useState<string>('')
-  const [city, setCity] = useState<string>('')
+  const [locationID, setLocationID] = useState<number>(0)
   const [error6, setError6] = useState<string>(' ')
 
   //States for step 7
-  const [sector, setSector] = useState<string>('')
-  const [category, setCategory] = useState<string>('')
+  const [sectorID, setSectorID] = useState<number>(0)
   const [error7, setError7] = useState<string>(' ')
 
   //Always check UI data before proceeding to next step
@@ -186,7 +184,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
     }
     //Checks for step 6
     else if (step == 6) {
-      if (city == '' || state == 'Select State' || city == 'Select City') {
+      if (locationID == 0) {
         setError6('Location is required.. You can provide the nearest city')
         return false
       } else {
@@ -195,11 +193,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
     }
     //Checks for step 7
     else if (step == 7) {
-      if (
-        category == '' ||
-        sector == 'Select Sector' ||
-        category == 'Select Category'
-      ) {
+      if (sectorID == 0) {
         setError7('Please select the business sector and category')
         return false
       } else {
@@ -230,43 +224,33 @@ const StartupAbout = (props: OnboardingMainProps) => {
   }
 
   //Match skip data and save in DB
-  const saveData = async () => {
-    //Fetch IDs to be used to create startup entry
-    await getLocationSectorData({
+  const saveData = async (skippedLast: boolean) => {
+    createStartup({
       variables: {
-        state: state,
-        city: city,
-        sector: sector,
-        category: category,
-      },
-    }).then((d) => {
-      createStartup({
-        variables: {
-          input: {
-            id: currentUser?.id,
-            name: name,
-            writeUp: writeUp,
-            dateIncorporated: new Date(
-              Number(year),
-              Number(month) - 1,
-              Number(day)
-            ),
-            linkedInURL: skipData[3] ? null : linkedInURL,
-            websiteURL: skipData[4] ? null : websiteURL,
-            locationID: d.data.getLocationID.id,
-            sectorCategoryID: d.data.getSectorCategoryID.id,
-          },
+        input: {
+          id: currentUser?.id,
+          name: name,
+          writeUp: writeUp,
+          dateIncorporated: new Date(
+            Number(year),
+            Number(month) - 1,
+            Number(day)
+          ),
+          linkedInURL: skipData[3] ? null : linkedInURL,
+          websiteURL: skipData[4] ? null : websiteURL,
+          locationID: locationID,
+          sectorCategoryID: skippedLast ? 0 : sectorID,
         },
-      })
+      },
     })
   }
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -274,11 +258,11 @@ const StartupAbout = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -286,7 +270,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 
@@ -350,22 +334,20 @@ const StartupAbout = (props: OnboardingMainProps) => {
         )}
         {step == 6 && (
           <AboutLocation
-            state={state}
-            setState={setState}
-            city={city}
-            setCity={setCity}
-            error6={error6}
-            setError6={setError6}
+            locationID={locationID}
+            setLocationID={setLocationID}
+            locationList={locations}
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
           <AboutSectorCategory
-            sector={sector}
-            setSector={setSector}
-            category={category}
-            setCategory={setCategory}
-            error7={error7}
-            setError7={setError7}
+            sectorID={sectorID}
+            setSectorID={setSectorID}
+            sectorList={sectors}
+            error={error7}
+            setError={setError7}
           />
         )}
       </div>
@@ -390,44 +372,29 @@ const StartupAbout = (props: OnboardingMainProps) => {
 }
 export default StartupAbout
 
-type CityDataType = { city: string; lat: number; long: number }
 type AboutLocationProps = {
-  state: string
-  setState: React.Dispatch<React.SetStateAction<string>>
-  city: string
-  setCity: React.Dispatch<React.SetStateAction<string>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
+  locationID: number
+  setLocationID: React.Dispatch<React.SetStateAction<number>>
+  locationList: Location[]
+  error: string
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
-const getCityList = (state: string) => {
-  const cList: string[] = []
-  locationData[state].forEach((element: CityDataType) => {
-    if (!cList.includes(element.city)) {
-      cList.push(element.city)
+const AboutLocation = (props: AboutLocationProps) => {
+  let states: string[] = []
+  props.locationList.forEach((l) => {
+    if (!states.includes(l.state)) {
+      states.push(l.state)
     }
   })
-  cList.sort().reverse().push(emptyCityList[0])
-  cList.reverse()
-  return cList
-}
-const emptyCityList = ['Select City']
-const states = Object.keys(locationData).sort().reverse()
-states.push('Select State')
-states.reverse()
+  states = states.sort()
 
-const AboutLocation = (props: AboutLocationProps) => {
-  const [cityList, setCityList] = useState(
-    props.city == '' || props.state == 'Select State'
-      ? emptyCityList
-      : getCityList(props.state)
-  )
-  const updateCityList = (state: string) => {
-    if (state == 'Select State') {
-      setCityList(emptyCityList)
-    } else {
-      setCityList(getCityList(state))
-    }
+  const getCityList = (state: string) => {
+    return props.locationList.filter((l) => l.state == state)
   }
+
+  const [selectedState, setSelectedState] = useState(states[0])
+  const [cityList, setCityList] = useState(getCityList(states[0]))
+
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <select
@@ -436,12 +403,12 @@ const AboutLocation = (props: AboutLocationProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.state}
+        value={selectedState}
         onChange={(e) => {
-          props.setState(e.target.value)
-          props.setCity(emptyCityList[0])
-          updateCityList(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
+          setSelectedState(e.target.value)
+          setCityList(getCityList(e.target.value))
+          props.setLocationID(cityList[0].id)
+          props.error != ' ' && props.setError(' ')
         }}
       >
         {states.map((s) => (
@@ -456,59 +423,49 @@ const AboutLocation = (props: AboutLocationProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.city}
+        value={props.locationID}
         onChange={(e) => {
-          props.setCity(e.target.value)
-          props.error6 != ' ' && props.setError6(' ')
+          props.setLocationID(
+            props.locationList.find((l) => l.id == Number(e.target.value))
+              ?.id ?? 0
+          )
+          props.error != ' ' && props.setError(' ')
         }}
       >
         {cityList.map((c) => (
-          <option value={c} key={c}>
-            {c}
+          <option value={c.id} key={c.id}>
+            {c.city}
           </option>
         ))}
       </select>
-      <ErrorSubTextLabel label={props.error6} />
+      <ErrorSubTextLabel label={props.error} />
     </div>
   )
 }
 
 type AboutSectorCategoryProps = {
-  sector: string
-  setSector: React.Dispatch<React.SetStateAction<string>>
-  category: string
-  setCategory: React.Dispatch<React.SetStateAction<string>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
+  sectorID: number
+  setSectorID: React.Dispatch<React.SetStateAction<number>>
+  sectorList: Sector[]
+  error: string
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
-const getCategoryList = (sector: string) => {
-  const cList: string[] = []
-  sectorData[sector].forEach((element: string) => {
-    cList.push(element)
-  })
-  cList.sort().reverse().push(emptyCategoryList[0])
-  cList.reverse()
-  return cList
-}
-
-const emptyCategoryList = ['Select Category']
-const sectors = Object.keys(sectorData).sort().reverse()
-sectors.push('Select Sector')
-sectors.reverse()
-
 const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
-  const [categoryList, setCategoryList] = useState(
-    props.category == '' || props.sector == 'Select Sector'
-      ? emptyCategoryList
-      : getCategoryList(props.sector)
-  )
-  const updateCategoryList = (sector: string) => {
-    if (sector == 'Select Sector') {
-      setCategoryList(emptyCategoryList)
-    } else {
-      setCategoryList(getCategoryList(sector))
+  let sectors: string[] = []
+  props.sectorList.forEach((l) => {
+    if (!sectors.includes(l.sector)) {
+      sectors.push(l.sector)
     }
+  })
+  sectors = sectors.sort()
+
+  const getCategoryList = (sector: string) => {
+    return props.sectorList.filter((l) => l.sector == sector)
   }
+
+  const [selectedSector, setSelectedSector] = useState(sectors[0])
+  const [categoryList, setCatergoryList] = useState(getCategoryList(sectors[0]))
+
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <select
@@ -517,12 +474,12 @@ const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.sector}
+        value={selectedSector}
         onChange={(e) => {
-          props.setSector(e.target.value)
-          props.setCategory(emptyCategoryList[0])
-          updateCategoryList(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
+          setSelectedSector(e.target.value)
+          setCatergoryList(getCategoryList(e.target.value))
+          props.setSectorID(categoryList[0].id)
+          props.error != ' ' && props.setError(' ')
         }}
       >
         {sectors.map((s) => (
@@ -537,19 +494,22 @@ const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
         className={
           ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.category}
+        value={props.sectorID}
         onChange={(e) => {
-          props.setCategory(e.target.value)
-          props.error7 != ' ' && props.setError7(' ')
+          props.setSectorID(
+            props.sectorList.find((l) => l.id == Number(e.target.value))?.id ??
+              0
+          )
+          props.error != ' ' && props.setError(' ')
         }}
       >
         {categoryList.map((c) => (
-          <option value={c} key={c}>
-            {c}
+          <option value={c.id} key={c.id}>
+            {c.category}
           </option>
         ))}
       </select>
-      <ErrorSubTextLabel label={props.error7} />
+      <ErrorSubTextLabel label={props.error} />
     </div>
   )
 }

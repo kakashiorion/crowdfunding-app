@@ -126,6 +126,7 @@ export const schema = gql`
   }
 
   input CreateInvestorObjectiveInput {
+    id: Int!
     preferredAmountToInvest: AmountRange
     preferredFundingStages: [FundingStage]!
     preferredStartupTeamSizes: [StartupTeamSize]!

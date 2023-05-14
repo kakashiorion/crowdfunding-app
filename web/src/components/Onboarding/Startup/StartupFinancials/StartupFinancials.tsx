@@ -99,7 +99,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
 
   const [stageOptions, setStageOptions] = useState<string[]>([])
   const [decimalOptions, setDecimalOptions] = useState<string[]>([])
@@ -126,7 +126,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
       })
     }
     getData()
-  }, [])
+  }, [getEnumData])
 
   //States for step 1
   const [latestFundingStage, setLatestFundingStage] = useState<string>('')
@@ -313,7 +313,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
   }
 
   //Match skip data and save in DB
-  const saveData = async () => {
+  const saveData = async (skippedLast: boolean) => {
     await createStartupFinancials({
       variables: {
         input: {
@@ -326,7 +326,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
           revenueGrowthRate: revenueGrowthRate,
           margin: margin,
           cashRunway: cashRunway,
-          plansForUsingCash: skipData[10]
+          plansForUsingCash: skippedLast
             ? []
             : [plansForUsingCash1, plansForUsingCash2, plansForUsingCash3],
         },
@@ -363,10 +363,10 @@ const StartupFinancials = (props: OnboardingMainProps) => {
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -374,11 +374,11 @@ const StartupFinancials = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -386,7 +386,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 

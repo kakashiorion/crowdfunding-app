@@ -68,7 +68,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
 
   const { currentUser } = useAuth()
   const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
@@ -86,7 +86,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
       })
     }
     getData()
-  }, [])
+  }, [getEnumData])
 
   //States for step 1
   const [valueProp, setValueProp] = useState<string>('')
@@ -256,7 +256,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
   }
 
   //Match skip data and save in DB
-  const saveData = async () => {
+  const saveData = async (skippedLast: boolean) => {
     await createStartupBackground({
       variables: {
         input: {
@@ -268,7 +268,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
           mission: skipData[4] ? null : mission,
           vision: skipData[5] ? null : vision,
           coreValues: skipData[6] ? [] : [coreValue1, coreValue2, coreValue3],
-          startupTeamSize: startupTeamSize,
+          startupTeamSize: skippedLast ? null : startupTeamSize,
         },
       },
     }).then((d) => {
@@ -291,10 +291,10 @@ const StartupBackground = (props: OnboardingMainProps) => {
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -302,11 +302,11 @@ const StartupBackground = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -314,7 +314,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 

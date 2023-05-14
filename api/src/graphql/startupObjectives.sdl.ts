@@ -64,6 +64,7 @@ export const schema = gql`
   }
 
   input CreateStartupObjectiveInput {
+    id: Int!
     preferredInvestorLevels: [InvestorLevel]!
     preferredLocations: [Int]!
     expectedTimeline: TimelineRange

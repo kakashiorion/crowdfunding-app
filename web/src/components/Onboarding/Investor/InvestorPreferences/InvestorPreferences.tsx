@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { useLazyQuery } from '@apollo/client'
+
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
+import InvestorSingleChoiceOption from '../comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
 
 /*Info to be created and saved in User table:
   messageVisibility           VisibilityLevel   @default(PUBLIC)
@@ -15,6 +20,37 @@ import { InvestorStepHeader } from '../../StepHeader'
   prefersTheme                UITheme           @default(SYSTEM)
 */
 
+const GET_ENUM_QUERY = gql`
+  query enumQueryPreferences {
+    visibility: __type(name: "VisibilityLevel") {
+      name
+      enumValues {
+        name
+      }
+    }
+    notification: __type(name: "NotificationLevel") {
+      name
+      enumValues {
+        name
+      }
+    }
+    ui: __type(name: "UITheme") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+
+const INVESTOR_PREFERENCES_MUTATION = gql`
+  mutation updateUser($id: Int!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+    }
+  }
+`
+
 const InvestorPreferences = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -22,7 +58,27 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = InvestorStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
+
+  const [visbilityOptions, setVisibilityOptions] = useState<string[]>([])
+  const [notificationOptions, setNotificationOptions] = useState<string[]>([])
+  const [uiOptions, setUIOptions] = useState<string[]>([])
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [updateUser] = useMutation(INVESTOR_PREFERENCES_MUTATION)
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        console.log(d)
+        setVisibilityOptions(getEnumValues(d.data.visibility.enumValues))
+        setNotificationOptions(getEnumValues(d.data.notification.enumValues))
+        setUIOptions(getEnumValues(d.data.ui.enumValues))
+      })
+    }
+    getData()
+  }, [getEnumData])
 
   //States for step 1
   const [messageVisibility, setMessageVisibility] = useState<string>('')
@@ -108,15 +164,29 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = async (skippedLast: boolean) => {
+    await updateUser({
+      variables: {
+        id: currentUser?.id,
+        input: {
+          messageVisibility: messageVisibility,
+          activityVisbility: activityVisbility,
+          profileVisbility: profileVisbility,
+          notificationLevel: notificationLevel,
+          prefersTheme: skippedLast ? null : prefersTheme,
+          isOnboarded: true,
+        },
+      },
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -124,11 +194,11 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -136,7 +206,7 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 
@@ -148,43 +218,48 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <PreferencesMessage
-            messageVisibility={messageVisibility}
-            setMessageVisibility={setMessageVisibility}
-            error1={error1}
-            setError1={setError1}
+          <InvestorSingleChoiceOption
+            input={messageVisibility}
+            setInput={setMessageVisibility}
+            options={visbilityOptions}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <PreferencesActivity
-            activityVisbility={activityVisbility}
-            setActivityVisbility={setActivityVisbility}
-            error2={error2}
-            setError2={setError2}
+          <InvestorSingleChoiceOption
+            input={activityVisbility}
+            setInput={setActivityVisbility}
+            options={visbilityOptions}
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <PreferencesProfile
-            profileVisbility={profileVisbility}
-            setProfileVisbility={setProfileVisbility}
-            error3={error3}
-            setError3={setError3}
+          <InvestorSingleChoiceOption
+            input={profileVisbility}
+            setInput={setProfileVisbility}
+            options={visbilityOptions}
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <PreferencesNotifications
-            notificationLevel={notificationLevel}
-            setNotificationLevel={setNotificationLevel}
-            error4={error4}
-            setError4={setError4}
+          <InvestorSingleChoiceOption
+            input={notificationLevel}
+            setInput={setNotificationLevel}
+            options={notificationOptions}
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <PreferencesTheme
-            prefersTheme={prefersTheme}
-            setPrefersTheme={setPrefersTheme}
-            error5={error5}
-            setError5={setError5}
+          <InvestorSingleChoiceOption
+            input={prefersTheme}
+            setInput={setPrefersTheme}
+            options={uiOptions}
+            error={error5}
+            setError={setError5}
           />
         )}
       </div>
@@ -209,178 +284,3 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
 }
 
 export default InvestorPreferences
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-//TODO: Update visbility options as per DB enum
-const VisibilityOptions = ['PRIVATE', 'CONNECTIONS', 'FOLLOWERS', 'PUBLIC']
-type PreferencesMessageProps = {
-  messageVisibility: string
-  setMessageVisibility: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const PreferencesMessage = (props: PreferencesMessageProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {VisibilityOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.messageVisibility
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setMessageVisibility(e)
-              props.error1 != '' && props.setError1('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-type PreferencesActivityProps = {
-  activityVisbility: string
-  setActivityVisbility: React.Dispatch<React.SetStateAction<string>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const PreferencesActivity = (props: PreferencesActivityProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {VisibilityOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.activityVisbility
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setActivityVisbility(e)
-              props.error2 != '' && props.setError2('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-type PreferencesProfileProps = {
-  profileVisbility: string
-  setProfileVisbility: React.Dispatch<React.SetStateAction<string>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const PreferencesProfile = (props: PreferencesProfileProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {VisibilityOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.profileVisbility
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setProfileVisbility(e)
-              props.error3 != '' && props.setError3('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error3} />
-    </>
-  )
-}
-
-//TODO: Update notification options as per DB enum
-const NotificationOptions = ['NONE', 'LOW', 'MEDIUM', 'HIGH']
-type PreferencesNotificationsProps = {
-  notificationLevel: string
-  setNotificationLevel: React.Dispatch<React.SetStateAction<string>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const PreferencesNotifications = (props: PreferencesNotificationsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {NotificationOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.notificationLevel
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setNotificationLevel(e)
-              props.error4 != '' && props.setError4('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-//TODO: Update theme options as per DB enum
-const ThemeOptions = ['SYSTEM', 'LIGHT', 'DARK']
-type PreferencesThemeProps = {
-  prefersTheme: string
-  setPrefersTheme: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const PreferencesTheme = (props: PreferencesThemeProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {ThemeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.prefersTheme
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setPrefersTheme(e)
-              props.error5 != '' && props.setError5('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}

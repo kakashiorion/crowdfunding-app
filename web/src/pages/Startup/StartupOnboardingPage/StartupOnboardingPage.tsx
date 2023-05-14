@@ -18,6 +18,8 @@ const STARTUP_ONBOARDING_QUERY = gql`
   query CheckStartupOnboarding($id: Int!) {
     user(id: $id) {
       id
+      likedOnboarding
+      isOnboarded
       startup {
         id
         startupBackground {
@@ -49,33 +51,33 @@ const StartupOnboardingPage = () => {
   const [getOnboardingData] = useLazyQuery(STARTUP_ONBOARDING_QUERY)
 
   useEffect(() => {
-    if (currentUser?.isOnboarded == true) {
-      navigate(routes.startupHome())
-    } else {
-      const getData = async () => {
-        await getOnboardingData({ variables: { id: currentUser?.id } }).then(
-          (d) => {
-            if (!d.data.user.startup) {
-              setCurrentSection(0)
-            } else if (!d.data.user.startup.startupBackground) {
-              setCurrentSection(2)
-            } else if (!d.data.user.startup.startupBusiness) {
-              setCurrentSection(3)
-            } else if (!d.data.user.startup.startupMarket) {
-              setCurrentSection(4)
-            } else if (!d.data.user.startup.startupFinancials) {
-              setCurrentSection(5)
-            } else if (!d.data.user.startup.startupObjective) {
-              setCurrentSection(6)
-            } else {
-              setCurrentSection(7)
-            }
+    const getData = async () => {
+      await getOnboardingData({ variables: { id: currentUser?.id } }).then(
+        (d) => {
+          if (!d.data.user.startup) {
+            setCurrentSection(0)
+          } else if (!d.data.user.startup.startupBackground) {
+            setCurrentSection(2)
+          } else if (!d.data.user.startup.startupBusiness) {
+            setCurrentSection(3)
+          } else if (!d.data.user.startup.startupMarket) {
+            setCurrentSection(4)
+          } else if (!d.data.user.startup.startupFinancials) {
+            setCurrentSection(5)
+          } else if (!d.data.user.startup.startupObjective) {
+            setCurrentSection(6)
+          } else if (d.data.user.isOnboarded == false) {
+            setCurrentSection(7)
+          } else if (d.data.user.likedOnboarding == null) {
+            setCurrentSection(8)
+          } else {
+            navigate(routes.startupHome())
           }
-        )
-      }
-      getData()
+        }
+      )
     }
-  }, [currentUser?.id, currentUser?.isOnboarded, getOnboardingData])
+    getData()
+  }, [currentUser?.id, getOnboardingData])
 
   return (
     <>

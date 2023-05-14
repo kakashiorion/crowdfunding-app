@@ -92,6 +92,7 @@ export const schema = gql`
   }
 
   input CreateInvestorInput {
+    id: Int!
     name: String!
     dateOfBirth: DateTime
     locationID: Int!

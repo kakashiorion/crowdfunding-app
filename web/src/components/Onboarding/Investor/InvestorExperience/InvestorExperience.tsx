@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { useLazyQuery } from '@apollo/client'
+
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
+import InvestorMultipleChoiceOption from '../comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
+import InvestorSingleChoiceOption from '../comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
 
 /*Info to be created and saved in InvestorExperience table:
 1  workedInStartups   SizeRange
@@ -16,8 +22,57 @@ import { InvestorStepHeader } from '../../StepHeader'
 6  successfulExits    SizeRange?
 7  returnsReceived    ReturnsRange?
 8  investedSectors    Sector[]
-9  investorLevel      (NOVICE,INTERMEDIATE,EXPERIENCED,PROFESSIONAL,SEASONED)
+9  investorLevel      InvestorLevel
 */
+
+const GET_ENUM_QUERY = gql`
+  query enumQueryExperience {
+    size: __type(name: "SizeRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    stage: __type(name: "FundingStage") {
+      name
+      enumValues {
+        name
+      }
+    }
+    amount: __type(name: "AmountRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    returns: __type(name: "ReturnsRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    sector: __type(name: "Sector") {
+      name
+      enumValues {
+        name
+      }
+    }
+    level: __type(name: "InvestorLevel") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+
+const INVESTOR_EXPERIENCE_MUTATION = gql`
+  mutation createInvestorExperience($input: CreateInvestorExperienceInput!) {
+    createInvestorExperience(input: $input) {
+      id
+    }
+  }
+`
 
 const InvestorExperience = (props: OnboardingMainProps) => {
   //Initialize steps Index
@@ -26,7 +81,32 @@ const InvestorExperience = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = InvestorStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
+
+  const [sizeOptions, setSizeOptions] = useState<string[]>([])
+  const [stageOptions, setStageOptions] = useState<string[]>([])
+  const [amountOptions, setAmountOptions] = useState<string[]>([])
+  const [returnsOptions, setReturnsOptions] = useState<string[]>([])
+  const [sectorOptions, setSectorOptions] = useState<string[]>([])
+  const [levelOptions, setLevelOptions] = useState<string[]>([])
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [createInvestorExperience] = useMutation(INVESTOR_EXPERIENCE_MUTATION)
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        setSizeOptions(getEnumValues(d.data.size.enumValues))
+        setStageOptions(getEnumValues(d.data.stage.enumValues))
+        setAmountOptions(getEnumValues(d.data.amount.enumValues))
+        setReturnsOptions(getEnumValues(d.data.returns.enumValues))
+        setSectorOptions(getEnumValues(d.data.sector.enumValues))
+        setLevelOptions(getEnumValues(d.data.level.enumValues))
+      })
+    }
+    getData()
+  }, [getEnumData])
 
   //States for step 1
   const [workedInStartup, setWorkedInStartup] = useState<string>('')
@@ -173,15 +253,32 @@ const InvestorExperience = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = (skippedLast: boolean) => {
+    createInvestorExperience({
+      variables: {
+        input: {
+          id: currentUser?.id,
+          workedInStartups: workedInStartup,
+          foundedStartups: foundedStartup,
+          investedStartups: investedStartups,
+          investedStages: skipData[3] ? [] : investedStages,
+          investedAmountLacs: investedAmountLacs,
+          successfulExits: successfulExits,
+          returnsReceived: skipData[6] ? [] : returnsReceived,
+          investedSectors: skipData[7] ? [] : investedSectors,
+          investorLevel: skippedLast ? null : investorLevel,
+        },
+      },
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -189,11 +286,11 @@ const InvestorExperience = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -201,7 +298,7 @@ const InvestorExperience = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 
@@ -213,75 +310,84 @@ const InvestorExperience = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <ExperienceExposure
-            workedInStartup={workedInStartup}
-            setWorkedInStartup={setWorkedInStartup}
-            error1={error1}
-            setError1={setError1}
+          <InvestorSingleChoiceOption
+            input={workedInStartup}
+            setInput={setWorkedInStartup}
+            options={sizeOptions}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <ExperienceFounder
-            foundedStartup={foundedStartup}
-            setFoundedStartup={setFoundedStartup}
-            error2={error2}
-            setError2={setError2}
+          <InvestorSingleChoiceOption
+            input={foundedStartup}
+            setInput={setFoundedStartup}
+            options={sizeOptions}
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <ExperienceInvestments
-            investedStartups={investedStartups}
-            setInvestedStartups={setInvestedStartups}
-            error3={error3}
-            setError3={setError3}
+          <InvestorSingleChoiceOption
+            input={investedStartups}
+            setInput={setInvestedStartups}
+            options={sizeOptions}
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <ExperienceStage
-            stages={investedStages}
-            setStages={setInvestedStages}
-            error4={error4}
-            setError4={setError4}
+          <InvestorMultipleChoiceOption
+            input={investedStages}
+            setInput={setInvestedStages}
+            options={stageOptions}
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <ExperienceAmount
-            amount={investedAmountLacs}
-            setAmount={setInvestedAmountLacs}
-            error5={error5}
-            setError5={setError5}
+          <InvestorSingleChoiceOption
+            input={investedAmountLacs}
+            setInput={setInvestedAmountLacs}
+            options={amountOptions}
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
-          <ExperienceExits
-            exits={successfulExits}
-            setExits={setSuccessfulExits}
-            error6={error6}
-            setError6={setError6}
+          <InvestorSingleChoiceOption
+            input={successfulExits}
+            setInput={setSuccessfulExits}
+            options={sizeOptions}
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
-          <ExperienceReturns
-            returns={returnsReceived}
-            setReturns={setReturnsReceived}
-            error7={error7}
-            setError7={setError7}
+          <InvestorMultipleChoiceOption
+            input={returnsReceived}
+            setInput={setReturnsReceived}
+            options={returnsOptions}
+            error={error7}
+            setError={setError7}
           />
         )}
         {step == 8 && (
-          <ExperienceSectors
-            sectors={investedSectors}
-            setSectors={setInvestedSectors}
-            error8={error8}
-            setError8={setError8}
+          <InvestorMultipleChoiceOption
+            input={investedSectors}
+            setInput={setInvestedSectors}
+            options={sectorOptions}
+            error={error8}
+            setError={setError8}
           />
         )}
         {step == 9 && (
-          <ExperienceLevel
-            level={investorLevel}
-            setLevel={setInvestorLevel}
-            error9={error9}
-            setError9={setError9}
+          <InvestorSingleChoiceOption
+            input={investorLevel}
+            options={levelOptions}
+            setInput={setInvestorLevel}
+            error={error9}
+            setError={setError9}
           />
         )}
       </div>
@@ -305,379 +411,3 @@ const InvestorExperience = (props: OnboardingMainProps) => {
   )
 }
 export default InvestorExperience
-
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-//TODO: Update size options as per DB enum
-const sizeOptions = [
-  'NONE',
-  'ONE_TO_THREE',
-  'THREE_TO_TEN',
-  'TEN_TO_TWENTY',
-  'MORE_THAN_TWENTY',
-]
-type ExperienceExposureProps = {
-  workedInStartup: string
-  setWorkedInStartup: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceExposure = (props: ExperienceExposureProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.workedInStartup
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setWorkedInStartup(e)
-              props.error1 != '' && props.setError1('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-type ExperienceFounderProps = {
-  foundedStartup: string
-  setFoundedStartup: React.Dispatch<React.SetStateAction<string>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceFounder = (props: ExperienceFounderProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.foundedStartup
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setFoundedStartup(e)
-              props.error2 != '' && props.setError2('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-type ExperienceInvestmentsProps = {
-  investedStartups: string
-  setInvestedStartups: React.Dispatch<React.SetStateAction<string>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceInvestments = (props: ExperienceInvestmentsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.investedStartups
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setInvestedStartups(e)
-              props.error3 != '' && props.setError3('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error3} />
-    </>
-  )
-}
-
-//TODO: Update stage options as per DB enum
-const stageOptions = [
-  'SEED',
-  'SERIES_A',
-  'SERIES_B',
-  'SERIES_C',
-  'SERIES_D',
-  'SERIES_E',
-  'SERIES_F',
-  'LATER',
-]
-type ExperienceStageProps = {
-  stages: string[]
-  setStages: React.Dispatch<React.SetStateAction<string[]>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceStage = (props: ExperienceStageProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {stageOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.stages.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.stages.includes(e)) {
-                props.setStages(props.stages.filter((s) => s != e))
-              } else {
-                props.setStages([...props.stages, e])
-              }
-              props.error4 != '' && props.setError4('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-//TODO: Update amount options as per DB enum
-const amountOptions = [
-  'LESS_THAN_ONE_LAC',
-  'ONE_TO_FIVE_LACS',
-  'FIVE_TO_TWENTY_LACS',
-  'TWENTY_LACS_TO_ONE_CRORE',
-  'MORE_THAN_1_CRORE',
-]
-type ExperienceAmountProps = {
-  amount: string
-  setAmount: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceAmount = (props: ExperienceAmountProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {amountOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.amount
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setAmount(e)
-              props.error5 != '' && props.setError5('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
-
-type ExperienceExitsProps = {
-  exits: string
-  setExits: React.Dispatch<React.SetStateAction<string>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceExits = (props: ExperienceExitsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {sizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.exits
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setExits(e)
-              props.error6 != '' && props.setError6('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error6} />
-    </>
-  )
-}
-
-//TODO: Update returns options as per DB enum
-const returnsOptions = [
-  'BREAKEVEN',
-  'TWO',
-  'THREE',
-  'FIVE',
-  'TEN',
-  'TWENTY',
-  'FIFTY',
-  'HUNDRED',
-]
-type ExperienceReturnsProps = {
-  returns: string[]
-  setReturns: React.Dispatch<React.SetStateAction<string[]>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceReturns = (props: ExperienceReturnsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {returnsOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.returns.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.returns.includes(e)) {
-                props.setReturns(props.returns.filter((s) => s != e))
-              } else {
-                props.setReturns([...props.returns, e])
-              }
-              props.error7 != '' && props.setError7('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error7} />
-    </>
-  )
-}
-
-//TODO: Update sector options as per DB enum
-const sectorOptions = [
-  'EDUCATION',
-  'HEALTHCARE',
-  'BANKING_AND_FINANCE',
-  'ENERGY',
-  'CONSUMER_GOODS',
-  'RETAIL_ECOMMERCE',
-  'REAL_ESTATE',
-  'FOOD_AND_BEVERAGE',
-  'IT',
-  'AGRICULTURE',
-  'MANUFACTURING',
-  'ENTERTAINMENT',
-  'TELECOM',
-  'TRANSPORTATION',
-]
-type ExperienceSectorsProps = {
-  sectors: string[]
-  setSectors: React.Dispatch<React.SetStateAction<string[]>>
-  error8: string
-  setError8: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceSectors = (props: ExperienceSectorsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {sectorOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.sectors.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.sectors.includes(e)) {
-                props.setSectors(props.sectors.filter((s) => s != e))
-              } else {
-                props.setSectors([...props.sectors, e])
-              }
-              props.error8 != '' && props.setError8('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error8} />
-    </>
-  )
-}
-
-//TODO: Update level options as per DB enum
-const levelOptions = [
-  'NOVICE',
-  'INTERMEDIATE',
-  'EXPERIENCED',
-  'PROFESSIONAL',
-  'SEASONED',
-]
-type ExperienceLevelProps = {
-  level: string
-  setLevel: React.Dispatch<React.SetStateAction<string>>
-  error9: string
-  setError9: React.Dispatch<React.SetStateAction<string>>
-}
-const ExperienceLevel = (props: ExperienceLevelProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {levelOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.level
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setLevel(e)
-              props.error9 != '' && props.setError9('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error9} />
-    </>
-  )
-}

@@ -70,7 +70,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = StartupStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
 
   const [sizeOptions, setSizeOptions] = useState<string[]>([])
   const [userOptions, setUserOptions] = useState<string[]>([])
@@ -91,7 +91,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
       })
     }
     getData()
-  }, [])
+  }, [getEnumData])
 
   //States for step 1
   const [numberUsers, setNumberUsers] = useState<string>('')
@@ -291,7 +291,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
   }
 
   //Match skip data and save in DB
-  const saveData = async () => {
+  const saveData = async (skippedLast: boolean) => {
     await createStartupBusiness({
       variables: {
         input: {
@@ -313,7 +313,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
           currentActivities: skipData[9]
             ? []
             : [currentActivities1, currentActivities2, currentActivities3],
-          hasOnlineBusiness: hasOnlineBusiness,
+          hasOnlineBusiness: skippedLast ? null : hasOnlineBusiness,
         },
       },
     })
@@ -321,10 +321,10 @@ const StartupBusiness = (props: OnboardingMainProps) => {
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -332,11 +332,11 @@ const StartupBusiness = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -344,7 +344,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 

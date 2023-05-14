@@ -135,6 +135,7 @@ export const schema = gql`
   }
 
   input CreateInvestorExperienceInput {
+    id: Int!
     workedInStartups: SizeRange!
     foundedStartups: SizeRange!
     investedStartups: SizeRange!

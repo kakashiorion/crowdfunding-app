@@ -1,17 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
 import CloseIcon from 'public/icons/close.svg'
 import SearchIcon from 'public/icons/search.svg'
 
+import { useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
 import { SmallPrimaryFilledButton } from 'src/components/Button/Button'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
 import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
 
 import { InvestorStepFooter } from '../../StepFooter'
 import { InvestorStepHeader } from '../../StepHeader'
-
-const locationData = require('../../locationData.json')
+import InvestorMultipleChoiceOption from '../comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
+import InvestorSingleChoiceOption from '../comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
 
 /*Info to be created and saved in InvestorObjective table:
 1  preferredAmountToInvest     AmountRange?
@@ -25,6 +29,83 @@ const locationData = require('../../locationData.json')
 9  referSource                 ReferSource[]
 */
 
+const GET_ENUM_QUERY = gql`
+  query enumQueryInvestorObjective {
+    amount: __type(name: "AmountRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    stage: __type(name: "FundingStage") {
+      name
+      enumValues {
+        name
+      }
+    }
+    team: __type(name: "StartupTeamSize") {
+      name
+      enumValues {
+        name
+      }
+    }
+    timeline: __type(name: "TimelineRange") {
+      name
+      enumValues {
+        name
+      }
+    }
+    risk: __type(name: "RiskApetite") {
+      name
+      enumValues {
+        name
+      }
+    }
+    sector: __type(name: "Sector") {
+      name
+      enumValues {
+        name
+      }
+    }
+    goal: __type(name: "InvestorPlatformGoal") {
+      name
+      enumValues {
+        name
+      }
+    }
+    source: __type(name: "ReferSource") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`
+
+const INVESTOR_OBJECTIVE_MUTATION = gql`
+  mutation createInvestorObjective($input: CreateInvestorObjectiveInput!) {
+    createInvestorObjective(input: $input) {
+      id
+    }
+  }
+`
+
+const GET_LOCATION_QUERY = gql`
+  query getLocationData {
+    locations {
+      id
+      state
+      city
+    }
+  }
+`
+
+type Location = {
+  id: number
+  city: string
+  state: string
+}
+
 const InvestorObjective = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -32,7 +113,41 @@ const InvestorObjective = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = InvestorStepsInfoList[props.currentSection - 1].steps
 
-  const skipData: boolean[] = []
+  const [skipData, setSkipData] = useState<boolean[]>([])
+
+  const [amountOptions, setAmountOptions] = useState<string[]>([])
+  const [stageOptions, setStageOptions] = useState<string[]>([])
+  const [teamOptions, setTeamOptions] = useState<string[]>([])
+  const [timelineOptions, setTimelineOptions] = useState<string[]>([])
+  const [riskOptions, setRiskOptions] = useState<string[]>([])
+  const [sectorOptions, setSectorOptions] = useState<string[]>([])
+  const [goalOptions, setGoalOptions] = useState<string[]>([])
+  const [sourceOptions, setSourceOptions] = useState<string[]>([])
+  const [locations, setLocations] = useState<Location[]>([])
+
+  const { currentUser } = useAuth()
+  const [getEnumData] = useLazyQuery(GET_ENUM_QUERY)
+  const [getLocationData] = useLazyQuery(GET_LOCATION_QUERY)
+  const [createInvestorObjective] = useMutation(INVESTOR_OBJECTIVE_MUTATION)
+
+  useEffect(() => {
+    const getData = async () => {
+      await getEnumData().then((d) => {
+        setAmountOptions(getEnumValues(d.data.amount.enumValues))
+        setStageOptions(getEnumValues(d.data.stage.enumValues))
+        setTeamOptions(getEnumValues(d.data.team.enumValues))
+        setTimelineOptions(getEnumValues(d.data.timeline.enumValues))
+        setRiskOptions(getEnumValues(d.data.risk.enumValues))
+        setSectorOptions(getEnumValues(d.data.sector.enumValues))
+        setGoalOptions(getEnumValues(d.data.goal.enumValues))
+        setSourceOptions(getEnumValues(d.data.source.enumValues))
+      })
+      await getLocationData().then((d) => {
+        setLocations(d.data.locations)
+      })
+    }
+    getData()
+  }, [getEnumData, getLocationData])
 
   //States for step 1
   const [preferredAmountToInvest, setPreferredAmountToInvest] =
@@ -64,7 +179,7 @@ const InvestorObjective = (props: OnboardingMainProps) => {
   const [error6, setError6] = useState<string>('')
 
   //States for step 7
-  const [preferredLocations, setPreferredLocations] = useState<string[]>([])
+  const [preferredLocations, setPreferredLocations] = useState<number[]>([])
   const [error7, setError7] = useState<string>('')
 
   //States for step 8
@@ -184,15 +299,34 @@ const InvestorObjective = (props: OnboardingMainProps) => {
     }
   }
 
-  //TODO: Type check, match skip data and save in DB
-  const saveData = () => {}
+  //Match skip data and save in DB
+  const saveData = async (skippedLast: boolean) => {
+    await createInvestorObjective({
+      variables: {
+        input: {
+          id: currentUser?.id,
+          preferredAmountToInvest: preferredAmountToInvest,
+          preferredFundingStages: skipData[1] ? [] : preferredFundingStages,
+          preferredStartupTeamSizes: skipData[2]
+            ? []
+            : preferredStartupTeamSizes,
+          preferredTimelines: skipData[3] ? [] : preferredTimelines,
+          riskApetite: riskApetite,
+          preferredSectors: skipData[5] ? [] : preferredSectors,
+          preferredLocations: skipData[6] ? [] : preferredLocations,
+          platformGoal: skipData[7] ? [] : platformGoal,
+          referSource: skippedLast ? [] : referSource,
+        },
+      },
+    })
+  }
 
   //Function to move ahead with save
   const next = () => {
-    skipData.push(false)
+    setSkipData([...skipData, false])
     if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(false)
     } else {
       setStep(step + 1)
     }
@@ -200,11 +334,11 @@ const InvestorObjective = (props: OnboardingMainProps) => {
 
   //Function to skip ahead
   const skip = () => {
-    skipData.push(true)
+    setSkipData([...skipData, true])
     clearError()
     if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
       props.setCurrentSection(props.currentSection + 1)
-      saveData()
+      saveData(true)
     } else {
       setStep(step + 1)
     }
@@ -212,7 +346,7 @@ const InvestorObjective = (props: OnboardingMainProps) => {
 
   //Function to go back
   const back = () => {
-    skipData.pop()
+    setSkipData(skipData.slice(-1))
     setStep(step - 1)
   }
 
@@ -224,75 +358,84 @@ const InvestorObjective = (props: OnboardingMainProps) => {
       />
       <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
         {step == 1 && (
-          <ObjectiveCapital
-            preferredAmountToInvest={preferredAmountToInvest}
-            setPreferredAmountToInvest={setPreferredAmountToInvest}
-            error1={error1}
-            setError1={setError1}
+          <InvestorSingleChoiceOption
+            input={preferredAmountToInvest}
+            setInput={setPreferredAmountToInvest}
+            options={amountOptions}
+            error={error1}
+            setError={setError1}
           />
         )}
         {step == 2 && (
-          <ObjectiveStages
-            preferredFundingStages={preferredFundingStages}
-            setPreferredFundingStages={setPreferredFundingStages}
-            error2={error2}
-            setError2={setError2}
+          <InvestorMultipleChoiceOption
+            input={preferredFundingStages}
+            setInput={setPreferredFundingStages}
+            options={stageOptions}
+            error={error2}
+            setError={setError2}
           />
         )}
         {step == 3 && (
-          <ObjectiveSizes
-            preferredStartupTeamSizes={preferredStartupTeamSizes}
-            setPreferredStartupTeamSizes={setPreferredStartupTeamSizes}
-            error3={error3}
-            setError3={setError3}
+          <InvestorMultipleChoiceOption
+            input={preferredStartupTeamSizes}
+            setInput={setPreferredStartupTeamSizes}
+            options={teamOptions}
+            error={error3}
+            setError={setError3}
           />
         )}
         {step == 4 && (
-          <ObjectiveTimelines
-            preferredTimelines={preferredTimelines}
-            setPreferredTimelines={setPreferredTimelines}
-            error4={error4}
-            setError4={setError4}
+          <InvestorMultipleChoiceOption
+            input={preferredTimelines}
+            setInput={setPreferredTimelines}
+            options={timelineOptions}
+            error={error4}
+            setError={setError4}
           />
         )}
         {step == 5 && (
-          <ObjectiveApetite
-            riskApetite={riskApetite}
-            setRiskApetite={setRiskApetite}
-            error5={error5}
-            setError5={setError5}
+          <InvestorSingleChoiceOption
+            input={riskApetite}
+            setInput={setRiskApetite}
+            options={riskOptions}
+            error={error5}
+            setError={setError5}
           />
         )}
         {step == 6 && (
-          <ObjectiveSectors
-            preferredSectors={preferredSectors}
-            setPreferredSectors={setPreferredSectors}
-            error6={error6}
-            setError6={setError6}
+          <InvestorMultipleChoiceOption
+            input={preferredSectors}
+            setInput={setPreferredSectors}
+            options={sectorOptions}
+            error={error6}
+            setError={setError6}
           />
         )}
         {step == 7 && (
           <ObjectiveLocations
-            preferredLocations={preferredLocations}
-            setPreferredLocations={setPreferredLocations}
-            error7={error7}
-            setError7={setError7}
+            input={preferredLocations}
+            setInput={setPreferredLocations}
+            locationList={locations}
+            error={error7}
+            setError={setError7}
           />
         )}
         {step == 8 && (
-          <ObjectiveGoals
-            platformGoal={platformGoal}
-            setPlatformGoal={setPlatformGoal}
-            error8={error8}
-            setError8={setError8}
+          <InvestorMultipleChoiceOption
+            input={platformGoal}
+            setInput={setPlatformGoal}
+            options={goalOptions}
+            error={error8}
+            setError={setError8}
           />
         )}
         {step == 9 && (
-          <ObjectiveSources
-            referSource={referSource}
-            setReferSource={setReferSource}
-            error9={error9}
-            setError9={setError9}
+          <InvestorMultipleChoiceOption
+            input={referSource}
+            setInput={setReferSource}
+            options={sourceOptions}
+            error={error9}
+            setError={setError9}
           />
         )}
       </div>
@@ -317,315 +460,21 @@ const InvestorObjective = (props: OnboardingMainProps) => {
 }
 export default InvestorObjective
 
-const Divider = () => {
-  return <div className="h-2"></div>
-}
-
-//TODO: Update amount options as per DB enum
-const amountOptions = [
-  'LESS_THAN_ONE_LAC',
-  'ONE_TO_FIVE_LACS',
-  'FIVE_TO_TWENTY_LACS',
-  'TWENTY_LACS_TO_ONE_CRORE',
-  'MORE_THAN_1_CRORE',
-]
-type ObjectiveCapitalProps = {
-  preferredAmountToInvest: string
-  setPreferredAmountToInvest: React.Dispatch<React.SetStateAction<string>>
-  error1: string
-  setError1: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveCapital = (props: ObjectiveCapitalProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {amountOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.preferredAmountToInvest
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setPreferredAmountToInvest(e)
-              props.error1 != '' && props.setError1('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error1} />
-    </>
-  )
-}
-
-//TODO: Update stage options as per DB enum
-const stageOptions = [
-  'SEED',
-  'SERIES_A',
-  'SERIES_B',
-  'SERIES_C',
-  'SERIES_D',
-  'SERIES_E',
-  'SERIES_F',
-  'LATER',
-]
-type ObjectiveStagesProps = {
-  preferredFundingStages: string[]
-  setPreferredFundingStages: React.Dispatch<React.SetStateAction<string[]>>
-  error2: string
-  setError2: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveStages = (props: ObjectiveStagesProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {stageOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.preferredFundingStages.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.preferredFundingStages.includes(e)) {
-                props.setPreferredFundingStages(
-                  props.preferredFundingStages.filter((s) => s != e)
-                )
-              } else {
-                props.setPreferredFundingStages([
-                  ...props.preferredFundingStages,
-                  e,
-                ])
-              }
-              props.error2 != '' && props.setError2('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error2} />
-    </>
-  )
-}
-
-//TODO: Update teamsize options as per DB enum
-const teamSizeOptions = [
-  'ONE',
-  'BETWEEN_1_AND_10',
-  'BETWEEN_10_AND_50',
-  'BETWEEN_50_AND_200',
-  'BETWEEN_200_AND_1000',
-  'OVER_1000',
-]
-type ObjectiveSizesProps = {
-  preferredStartupTeamSizes: string[]
-  setPreferredStartupTeamSizes: React.Dispatch<React.SetStateAction<string[]>>
-  error3: string
-  setError3: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveSizes = (props: ObjectiveSizesProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {teamSizeOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.preferredStartupTeamSizes.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.preferredStartupTeamSizes.includes(e)) {
-                props.setPreferredStartupTeamSizes(
-                  props.preferredStartupTeamSizes.filter((s) => s != e)
-                )
-              } else {
-                props.setPreferredStartupTeamSizes([
-                  ...props.preferredStartupTeamSizes,
-                  e,
-                ])
-              }
-              props.error3 != '' && props.setError3('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error3} />
-    </>
-  )
-}
-
-//TODO: Update timeline options as per DB enum
-const timelineOptions = [
-  'LESS_THAN_SIX_MONTHS',
-  'SIX_TO_TWELVE_MONTHS',
-  'ONE_TO_TWO_YEARS',
-  'TWO_TO_FIVE_YEARS',
-  'FIVE_TO_TEN_YEARS',
-  'MORE_THAN_TEN_YEARS',
-]
-type ObjectiveTimelinesProps = {
-  preferredTimelines: string[]
-  setPreferredTimelines: React.Dispatch<React.SetStateAction<string[]>>
-  error4: string
-  setError4: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveTimelines = (props: ObjectiveTimelinesProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {timelineOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.preferredTimelines.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.preferredTimelines.includes(e)) {
-                props.setPreferredTimelines(
-                  props.preferredTimelines.filter((s) => s != e)
-                )
-              } else {
-                props.setPreferredTimelines([...props.preferredTimelines, e])
-              }
-              props.error4 != '' && props.setError4('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error4} />
-    </>
-  )
-}
-
-//TODO: Update apetite options as per DB enum
-const apetiteOptions = ['LOW', 'MEDIUM', 'HIGH']
-type ObjectiveApetiteProps = {
-  riskApetite: string
-  setRiskApetite: React.Dispatch<React.SetStateAction<string>>
-  error5: string
-  setError5: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveApetite = (props: ObjectiveApetiteProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll">
-        {apetiteOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              e == props.riskApetite
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              props.setRiskApetite(e)
-              props.error5 != '' && props.setError5('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error5} />
-    </>
-  )
-}
-
-//TODO: Update sector options as per DB enum
-const sectorOptions = [
-  'EDUCATION',
-  'HEALTHCARE',
-  'BANKING_AND_FINANCE',
-  'ENERGY',
-  'CONSUMER_GOODS',
-  'RETAIL_ECOMMERCE',
-  'REAL_ESTATE',
-  'FOOD_AND_BEVERAGE',
-  'IT',
-  'AGRICULTURE',
-  'MANUFACTURING',
-  'ENTERTAINMENT',
-  'TELECOM',
-  'TRANSPORTATION',
-]
-type ObjectiveSectorsProps = {
-  preferredSectors: string[]
-  setPreferredSectors: React.Dispatch<React.SetStateAction<string[]>>
-  error6: string
-  setError6: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveSectors = (props: ObjectiveSectorsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {sectorOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.preferredSectors.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.preferredSectors.includes(e)) {
-                props.setPreferredSectors(
-                  props.preferredSectors.filter((s) => s != e)
-                )
-              } else {
-                props.setPreferredSectors([...props.preferredSectors, e])
-              }
-              props.error6 != '' && props.setError6('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error6} />
-    </>
-  )
-}
-
-//Get all Locations
-type CityDataType = { city: string; lat: number; long: number }
-const locationList: string[] = Object.keys(locationData)
-Object.keys(locationData).forEach((state: string) => {
-  locationData[state].forEach((element: CityDataType) => {
-    // if (!locationList.includes(element.city)) {
-    locationList.push(`${element.city} (${state})`)
-    // }
-  })
-})
-
 type ObjectiveLocationsProps = {
-  preferredLocations: string[]
-  setPreferredLocations: React.Dispatch<React.SetStateAction<string[]>>
-  error7: string
-  setError7: React.Dispatch<React.SetStateAction<string>>
+  input: number[]
+  setInput: React.Dispatch<React.SetStateAction<number[]>>
+  locationList: Location[]
+  error: string
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [searchResult, setSearchResult] = useState<string[]>([])
-  const [selectedLoc, setSelectedLoc] = useState<string>('')
+  const [searchResult, setSearchResult] = useState<Location[]>([])
+  const [selectedLoc, setSelectedLoc] = useState<Location>()
+
+  const getLocName = (l?: Location) => {
+    return `${l?.city} (${l?.state})`
+  }
 
   return (
     <>
@@ -647,13 +496,17 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
               className="flex h-5 w-5 fill-white lg:h-6 lg:w-6"
               onClick={() => {
                 setSearchResult(
-                  locationList.filter((l) =>
-                    l.toLowerCase().includes(searchTerm.toLowerCase())
+                  props.locationList.filter(
+                    (l) =>
+                      l.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      l.state.toLowerCase().includes(searchTerm.toLowerCase())
                   )
                 )
                 setSelectedLoc(
-                  locationList.filter((l) =>
-                    l.toLowerCase().includes(searchTerm.toLowerCase())
+                  props.locationList.filter(
+                    (l) =>
+                      l.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      l.state.toLowerCase().includes(searchTerm.toLowerCase())
                   )[0]
                 )
               }}
@@ -665,148 +518,51 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
             className={
               ' w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2    lg:px-4 lg:py-2 lg:text-b1'
             }
-            value={selectedLoc}
+            value={selectedLoc?.id}
             placeholder="Select and Add"
             onChange={(e) => {
-              setSelectedLoc(e.target.value)
+              setSelectedLoc(
+                searchResult.find((l) => l.id == Number(e.target.value))
+              )
             }}
           >
             {searchResult.map((s) => (
-              <option value={s} key={s}>
-                {s}
+              <option value={s.id} key={s.id}>
+                {getLocName(s)}
               </option>
             ))}
           </select>
           <SmallPrimaryFilledButton
             label="ADD"
             action={() => {
-              if (
-                !props.preferredLocations.includes(selectedLoc) &&
-                selectedLoc != ''
-              ) {
-                props.setPreferredLocations([
-                  ...props.preferredLocations,
-                  selectedLoc,
-                ])
-                props.error7 != '' && props.setError7('')
+              if (selectedLoc?.id && !props.input.includes(selectedLoc?.id)) {
+                props.setInput([...props.input, selectedLoc.id])
+                props.error != '' && props.setError('')
               }
             }}
           />
         </div>
       </div>
       <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
-        {props.preferredLocations.map((e) => (
+        {props.input.map((e) => (
           <div
             key={e}
-            className={`flex max-h-min w-full items-center justify-between rounded-sm bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
+            className={`mb-2 flex max-h-min w-full items-center justify-between rounded-sm bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
           >
-            <TextLabel label={e} />
+            <TextLabel
+              label={getLocName(props.locationList.find((l) => l.id == e))}
+            />
             <CloseIcon
               className="flex h-4 w-4 fill-error dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
-                props.setPreferredLocations(
-                  props.preferredLocations.filter((s) => s != e)
-                )
-                props.error7 != '' && props.setError7('')
+                props.setInput(props.input.filter((s) => s != e))
+                props.error != '' && props.setError('')
               }}
             ></CloseIcon>
           </div>
         ))}
       </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error7} />
-    </>
-  )
-}
-
-//TODO: Update goals options as per DB enum
-const goalsOptions = [
-  'INVESTING',
-  'CONNECTING',
-  'LEARNING',
-  'EXPLORING',
-  'CONSULTING',
-  'RESEARCHING',
-]
-type ObjectiveGoalsProps = {
-  platformGoal: string[]
-  setPlatformGoal: React.Dispatch<React.SetStateAction<string[]>>
-  error8: string
-  setError8: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveGoals = (props: ObjectiveGoalsProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {goalsOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.platformGoal.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.platformGoal.includes(e)) {
-                props.setPlatformGoal(props.platformGoal.filter((s) => s != e))
-              } else {
-                props.setPlatformGoal([...props.platformGoal, e])
-              }
-              props.error8 != '' && props.setError8('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error8} />
-    </>
-  )
-}
-
-//TODO: Update sources options as per DB enum
-const sourcesOptions = [
-  'WORD_OF_MOUTH',
-  'SOCIAL_MEDIA',
-  'BROWSING',
-  'REFERRAL',
-  'ADVERTISEMENT',
-  'OTHER',
-]
-type ObjectiveSourcesProps = {
-  referSource: string[]
-  setReferSource: React.Dispatch<React.SetStateAction<string[]>>
-  error9: string
-  setError9: React.Dispatch<React.SetStateAction<string>>
-}
-const ObjectiveSources = (props: ObjectiveSourcesProps) => {
-  return (
-    <>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
-        {sourcesOptions.map((e) => (
-          <button
-            key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
-              props.referSource.includes(e)
-                ? ' bg-primary'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
-            }`}
-            onClick={() => {
-              if (props.referSource.includes(e)) {
-                props.setReferSource(props.referSource.filter((s) => s != e))
-              } else {
-                props.setReferSource([...props.referSource, e])
-              }
-              props.error9 != '' && props.setError9('')
-            }}
-          >
-            {e.replaceAll('_', ' ')}
-          </button>
-        ))}
-      </div>
-      <Divider />
-      <ErrorSubTextLabel label={props.error9} />
+      <ErrorSubTextLabel label={props.error} />
     </>
   )
 }

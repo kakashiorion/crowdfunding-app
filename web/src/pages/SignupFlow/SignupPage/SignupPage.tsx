@@ -183,6 +183,8 @@ const SignupForm = (props: SignupFormProps) => {
                     //Send token in Email for user to confirnm
                     sendSignupEmailJS(enteredEmail, gToken.toString())
                     setGeneratedToken(gToken.toString())
+                    //hide gtoken from console
+                    // console.log(gToken)
                     setStage('confirm')
                   }
                 })
