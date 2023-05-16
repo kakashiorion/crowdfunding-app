@@ -24,7 +24,7 @@ export default InvestorHomePage
 
 const InvestorHomeMain = () => {
   return (
-    <div className="flex w-full min-w-[360px] flex-grow flex-col gap-2 overflow-scroll rounded-sm">
+    <div className="flex w-full min-w-[360px] flex-grow flex-col gap-2 overflow-scroll rounded">
       <TitleLabel label="Home" />
       <InvestorHomeMetricsCell />
     </div>
@@ -33,6 +33,6 @@ const InvestorHomeMain = () => {
 
 const InvestorHomeSidebar = () => {
   return (
-    <div className="hidden rounded-sm bg-white-d4 dark:bg-black-l4 lg:flex lg:min-w-[240px] "></div>
+    <div className="hidden rounded bg-white-d4 dark:bg-black-l4 lg:flex lg:min-w-[240px] "></div>
   )
 }

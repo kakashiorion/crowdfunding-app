@@ -40,11 +40,11 @@ const LoginPage = () => {
   return (
     <>
       <MetaTags title="Login" description="Login page for Dealbari platform" />
-      <div className="my-4 flex h-full overflow-hidden rounded-sm bg-white-d1/50 dark:bg-black-l2/50 lg:my-5 xl:aspect-video xl:h-auto">
+      <div className="my-4 flex h-full overflow-hidden rounded bg-white-d1/50 dark:bg-black-l2/50 lg:my-5 xl:aspect-video xl:h-auto">
         <div className="hidden lg:flex lg:flex-1">
           <img src={loginImg} alt="Login" />
         </div>
-        <div className="flex h-full flex-1 flex-col items-center justify-center gap-5 overflow-y-scroll px-4 py-5 text-center lg:flex-[2] lg:gap-2 lg:px-6 ">
+        <div className="flex h-full flex-1 flex-col items-center justify-center gap-5 overflow-y-scroll rounded px-4 py-5 text-center opacity-90  lg:flex-[2] lg:gap-2 lg:px-6 ">
           <p className="mt-2 w-full text-h5 text-black dark:text-white lg:mt-4 lg:text-h4">
             {'Log in your account'}
           </p>
@@ -53,7 +53,7 @@ const LoginPage = () => {
               'Welcome back! Please choose your method of login and enter details.'
             }
           </p>
-          <div className="flex w-full gap-1 rounded-sm bg-white-d2 p-1 dark:bg-black-l4">
+          <div className="flex w-full gap-1 rounded bg-white-d2 p-1 dark:bg-black-l4 lg:w-3/4 xl:w-2/3">
             {enabledLoginMethods.indexOf('password') >= 0 && (
               <LoginMethodSelectorButton
                 action={setLoginMethod}
@@ -83,6 +83,7 @@ const LoginPage = () => {
             )}
           </div>
           {loginMethod == 'password' && <PasswordLoginForm />}
+          {/* <PasswordLoginForm /> */}
           {loginMethod == 'phone' && <PhoneLoginForm />}
           {loginMethod == 'token' && <TokenLoginForm />}
         </div>
@@ -101,9 +102,9 @@ type LoginMethodSelectorButtonProps = {
 }
 const LoginMethodSelectorButton = (props: LoginMethodSelectorButtonProps) => {
   const activeButtonClass =
-    'rounded-sm flex flex-col justify-start items-center flex-1 py-2 lg:py-3 bg-white px-1'
+    'rounded flex flex-col justify-start items-center flex-1 py-2 lg:py-3 bg-white px-1'
   const inactiveButtonClass =
-    'rounded-sm flex flex-col justify-start items-center flex-1 py-2 lg:py-3 hover:bg-primary-l2 px-1'
+    'rounded flex flex-col justify-start items-center flex-1 py-2 lg:py-3 hover:bg-primary-l2 px-1'
 
   const activeTitleClass = 'text-b3 lg:text-b2 text-primary'
   const inactiveTitleClass = 'text-b3 lg:text-b2 text-black '

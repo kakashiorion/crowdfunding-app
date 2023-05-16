@@ -28,7 +28,7 @@ const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
     <div
       className={`fixed left-4 top-9 ${
         isMenuOpen ? 'flex' : 'hidden'
-      } z-10 shrink-0 flex-col items-center justify-start gap-4 overflow-hidden rounded-sm bg-white-d1/90 p-2 dark:bg-black-l2/90 lg:static lg:flex lg:justify-between lg:p-3`}
+      } z-10 shrink-0 flex-col items-center justify-start gap-4 overflow-hidden rounded bg-white-d1/90 p-2 dark:bg-black-l2/90 lg:static lg:flex lg:justify-between lg:p-3`}
     >
       <div className="flex flex-col items-start justify-start gap-4">
         <InvestorNavigationItem

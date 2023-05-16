@@ -6,15 +6,24 @@ import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
+import InvestorMultipleChoiceOption from 'src/components/Onboarding/Investor/comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
+import InvestorSingleChoiceOption from 'src/components/Onboarding/Investor/comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
+import InvestorSingleTextInput from 'src/components/Onboarding/Investor/comps/InvestorSingleTextInput/InvestorSingleTextInput'
+import InvestorTripleTextInput from 'src/components/Onboarding/Investor/comps/InvestorTripleTextInput/InvestorTripleTextInput'
+import { InvestorStepFooter } from 'src/components/Onboarding/StepFooter'
+import { InvestorStepHeader } from 'src/components/Onboarding/StepHeader'
+import {
+  OnboardingMainProps,
+  back,
+  daysMapping,
+  getEnumValues,
+  Location,
+  next,
+  onboardingFrameClassName,
+  onboardingSubFrameClassName,
+  skip,
+} from 'src/lib/onboardingConsts'
 import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
-
-import { InvestorStepFooter } from '../../StepFooter'
-import { InvestorStepHeader } from '../../StepHeader'
-import InvestorMultipleChoiceOption from '../comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
-import InvestorSingleChoiceOption from '../comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
-import InvestorSingleTextInput from '../comps/InvestorSingleTextInput/InvestorSingleTextInput'
-import InvestorTripleTextInput from '../comps/InvestorTripleTextInput/InvestorTripleTextInput'
 
 /*Info to be created and saved in Investor table:
 1  Name
@@ -69,14 +78,6 @@ const GET_LOCATION_QUERY = gql`
   }
 `
 
-type Location = {
-  id: number
-  city: string
-  state: string
-}
-
-const daysMapping = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
 const InvestorAbout = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -84,6 +85,7 @@ const InvestorAbout = (props: OnboardingMainProps) => {
   //Get steps info data
   const currentStepInfo = InvestorStepsInfoList[props.currentSection - 1].steps
 
+  //Capture if the steps were skipped
   const [skipData, setSkipData] = useState<boolean[]>([])
 
   const [educationOptions, setEducationOptions] = useState<string[]>([])
@@ -147,13 +149,6 @@ const InvestorAbout = (props: OnboardingMainProps) => {
   //States for step 9
   const [enteredSectors, setEnteredSectors] = useState<string[]>([])
   const [error9, setError9] = useState(' ')
-
-  // const profileData = {
-  //   enteredName,
-  //   setEnteredName,
-  //   enteredDOB,
-  //   setEnteredDOB,
-  // }
 
   //Always check UI data before proceeding to next step
   const checkUIData = () => {
@@ -302,42 +297,13 @@ const InvestorAbout = (props: OnboardingMainProps) => {
     })
   }
 
-  //Function to move ahead with save
-  const next = () => {
-    setSkipData([...skipData, false])
-    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(false)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to skip ahead
-  const skip = () => {
-    setSkipData([...skipData, true])
-    clearError()
-    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(true)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to go back
-  const back = () => {
-    setSkipData(skipData.slice(-1))
-    setStep(step - 1)
-  }
-
   return (
-    <div className="flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2">
+    <div className={onboardingFrameClassName}>
       <InvestorStepHeader
         currentStepInfo={currentStepInfo}
         currentStepNumber={step}
       />
-      <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
+      <div className={onboardingSubFrameClassName}>
         {step == 1 && (
           <InvestorSingleTextInput
             input={enteredName}
@@ -432,14 +398,36 @@ const InvestorAbout = (props: OnboardingMainProps) => {
         step={step}
         continueAction={() => {
           if (checkUIData()) {
-            next()
+            next({
+              saveData: saveData,
+              currentSection: props.currentSection,
+              setCurrentSection: props.setCurrentSection,
+              step: step,
+              setStep: setStep,
+              skipData: skipData,
+              setSkipData: setSkipData,
+            })
           }
         }}
         skipAction={() => {
-          skip()
+          skip({
+            clearError: clearError,
+            saveData: saveData,
+            currentSection: props.currentSection,
+            setCurrentSection: props.setCurrentSection,
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
         backAction={() => {
-          back()
+          back({
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
       />
     </div>
@@ -476,7 +464,7 @@ const AboutLocation = (props: AboutLocationProps) => {
         name="states"
         id="states"
         className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
         value={selectedState}
         onChange={(e) => {
@@ -496,7 +484,7 @@ const AboutLocation = (props: AboutLocationProps) => {
         name="cities"
         id="cities"
         className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
         value={props.locationID}
         onChange={(e) => {

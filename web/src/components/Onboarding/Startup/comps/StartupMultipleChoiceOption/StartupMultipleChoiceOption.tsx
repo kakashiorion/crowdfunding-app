@@ -16,7 +16,7 @@ const StartupMultipleChoiceOption = (
         {props.options.map((e) => (
           <button
             key={e}
-            className={`w-full flex-grow rounded-sm p-3 text-black shadow-md dark:text-white lg:p-4 ${
+            className={`w-full flex-grow rounded p-3 text-black shadow-md dark:text-white lg:p-4 ${
               props.input.includes(e)
                 ? ' bg-tertiary'
                 : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'

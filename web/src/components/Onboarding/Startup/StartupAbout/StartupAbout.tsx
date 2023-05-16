@@ -6,14 +6,23 @@ import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps } from 'src/lib/onboardingConsts'
+import StartupSingleTextArea from 'src/components/Onboarding/Startup/comps/StartupSingleTextArea/StartupSingleTextArea'
+import StartupSingleTextInput from 'src/components/Onboarding/Startup/comps/StartupSingleTextInput/StartupSingleTextInput'
+import StartupTripleTextInput from 'src/components/Onboarding/Startup/comps/StartupTripleTextInput/StartupTripleTextInput'
+import { StartupStepFooter } from 'src/components/Onboarding/StepFooter'
+import { StartupStepHeader } from 'src/components/Onboarding/StepHeader'
+import {
+  OnboardingMainProps,
+  Location,
+  Sector,
+  daysMapping,
+  back,
+  next,
+  onboardingFrameClassName,
+  onboardingSubFrameClassName,
+  skip,
+} from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
-
-import { StartupStepFooter } from '../../StepFooter'
-import { StartupStepHeader } from '../../StepHeader'
-import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
-import StartupSingleTextInput from '../comps/StartupSingleTextInput/StartupSingleTextInput'
-import StartupTripleTextInput from '../comps/StartupTripleTextInput/StartupTripleTextInput'
 
 /*Info to be created and saved in Startup table:
   name              String
@@ -47,20 +56,6 @@ const GET_LOCATION_SECTOR_ID_QUERY = gql`
     }
   }
 `
-
-type Location = {
-  id: number
-  city: string
-  state: string
-}
-
-type Sector = {
-  id: number
-  sector: string
-  category: string
-}
-
-const daysMapping = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 const StartupAbout = (props: OnboardingMainProps) => {
   //Initialize steps Index
@@ -245,42 +240,13 @@ const StartupAbout = (props: OnboardingMainProps) => {
     })
   }
 
-  //Function to move ahead with save
-  const next = () => {
-    setSkipData([...skipData, false])
-    if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(false)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to skip ahead
-  const skip = () => {
-    setSkipData([...skipData, true])
-    clearError()
-    if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(true)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to go back
-  const back = () => {
-    setSkipData(skipData.slice(-1))
-    setStep(step - 1)
-  }
-
   return (
-    <div className="flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2">
+    <div className={onboardingFrameClassName}>
       <StartupStepHeader
         currentStepInfo={currentStepInfo}
         currentStepNumber={step}
       />
-      <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
+      <div className={onboardingSubFrameClassName}>
         {step == 1 && (
           <StartupSingleTextInput
             input={name}
@@ -357,14 +323,36 @@ const StartupAbout = (props: OnboardingMainProps) => {
         step={step}
         continueAction={() => {
           if (checkUIData()) {
-            next()
+            next({
+              saveData: saveData,
+              currentSection: props.currentSection,
+              setCurrentSection: props.setCurrentSection,
+              step: step,
+              setStep: setStep,
+              skipData: skipData,
+              setSkipData: setSkipData,
+            })
           }
         }}
         skipAction={() => {
-          skip()
+          skip({
+            clearError: clearError,
+            saveData: saveData,
+            currentSection: props.currentSection,
+            setCurrentSection: props.setCurrentSection,
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
         backAction={() => {
-          back()
+          back({
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
       />
     </div>
@@ -401,7 +389,7 @@ const AboutLocation = (props: AboutLocationProps) => {
         name="states"
         id="states"
         className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
         value={selectedState}
         onChange={(e) => {
@@ -421,7 +409,7 @@ const AboutLocation = (props: AboutLocationProps) => {
         name="cities"
         id="cities"
         className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
         value={props.locationID}
         onChange={(e) => {
@@ -472,7 +460,7 @@ const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
         name="sectors"
         id="sectors"
         className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
         value={selectedSector}
         onChange={(e) => {
@@ -492,7 +480,7 @@ const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
         name="categories"
         id="categories"
         className={
-          ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
         value={props.sectorID}
         onChange={(e) => {

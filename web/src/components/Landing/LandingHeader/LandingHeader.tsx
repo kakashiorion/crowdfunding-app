@@ -16,7 +16,7 @@ const LandingHeader = (props: {
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
   return (
-    <div className="sticky top-0 z-10 flex w-full items-center justify-between rounded-sm  py-2 backdrop-blur-sm   lg:py-3">
+    <div className="sticky top-0 z-10 flex w-full items-center justify-between rounded  py-2 backdrop-blur-sm   lg:py-3">
       <Logo
         className="h-6 w-10 cursor-pointer lg:h-8 lg:w-12"
         onClick={() => navigate(routes.landing())}
@@ -51,7 +51,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       'hidden lg:flex lg:gap-6 lg:flex-row lg:items-center lg:justify-end lg:p-0 lg:opacity-100'
   } else {
     className =
-      'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded-sm bg-white-d1/95 py-4 px-6 dark:bg-black-l1/95 '
+      'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded bg-white-d1/95 py-4 px-6 dark:bg-black-l2/95 '
   }
 
   //  const scrollRefsList = [investorRef, startupRef, aboutRef, contactRef]

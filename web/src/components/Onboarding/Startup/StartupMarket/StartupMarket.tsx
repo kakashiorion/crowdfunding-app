@@ -5,15 +5,22 @@ import { useLazyQuery } from '@apollo/client'
 import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
+import StartupMultipleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupMultipleChoiceOption/StartupMultipleChoiceOption'
+import StartupSingleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
+import StartupSingleTextArea from 'src/components/Onboarding/Startup/comps/StartupSingleTextArea/StartupSingleTextArea'
+import StartupTripleTextArea from 'src/components/Onboarding/Startup/comps/StartupTripleTextArea/StartupTripleTextArea'
+import { StartupStepFooter } from 'src/components/Onboarding/StepFooter'
+import { StartupStepHeader } from 'src/components/Onboarding/StepHeader'
+import {
+  OnboardingMainProps,
+  back,
+  getEnumValues,
+  next,
+  onboardingFrameClassName,
+  onboardingSubFrameClassName,
+  skip,
+} from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
-
-import { StartupStepFooter } from '../../StepFooter'
-import { StartupStepHeader } from '../../StepHeader'
-import StartupMultipleChoiceOption from '../comps/StartupMultipleChoiceOption/StartupMultipleChoiceOption'
-import StartupSingleChoiceOption from '../comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
-import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
-import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupMarket table:
   revenueStreams   RevenueStreams[]
@@ -305,42 +312,13 @@ const StartupMarket = (props: OnboardingMainProps) => {
     })
   }
 
-  //Function to move ahead with save
-  const next = () => {
-    setSkipData([...skipData, false])
-    if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(false)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to skip ahead
-  const skip = () => {
-    setSkipData([...skipData, true])
-    clearError()
-    if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(true)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to go back
-  const back = () => {
-    setSkipData(skipData.slice(-1))
-    setStep(step - 1)
-  }
-
   return (
-    <div className="flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2">
+    <div className={onboardingFrameClassName}>
       <StartupStepHeader
         currentStepInfo={currentStepInfo}
         currentStepNumber={step}
       />
-      <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
+      <div className={onboardingSubFrameClassName}>
         {step == 1 && (
           <StartupMultipleChoiceOption
             input={revenueStreams}
@@ -462,14 +440,36 @@ const StartupMarket = (props: OnboardingMainProps) => {
         step={step}
         continueAction={() => {
           if (checkUIData()) {
-            next()
+            next({
+              saveData: saveData,
+              currentSection: props.currentSection,
+              setCurrentSection: props.setCurrentSection,
+              step: step,
+              setStep: setStep,
+              skipData: skipData,
+              setSkipData: setSkipData,
+            })
           }
         }}
         skipAction={() => {
-          skip()
+          skip({
+            clearError: clearError,
+            saveData: saveData,
+            currentSection: props.currentSection,
+            setCurrentSection: props.setCurrentSection,
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
         backAction={() => {
-          back()
+          back({
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
       />
     </div>

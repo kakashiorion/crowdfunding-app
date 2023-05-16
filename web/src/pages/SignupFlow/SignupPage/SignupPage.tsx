@@ -45,7 +45,7 @@ const SignupPage = (props: SignupPageProps) => {
         title="Signup"
         description="Signup page for Dealbari platform"
       />
-      <div className="my-4 flex h-full flex-col gap-2 overflow-hidden rounded-sm bg-white-d1/50 p-2 dark:bg-black-l2/50 lg:my-5 lg:flex-row lg:gap-4 lg:p-4">
+      <div className="my-4 flex h-full flex-col gap-2 overflow-hidden rounded bg-white-d1/50 p-2 dark:bg-black-l2/50 lg:my-5 lg:flex-row lg:gap-3 lg:p-3">
         <UserSignupCard
           pref={'INVESTOR'}
           selectedType={selectedType}
@@ -76,11 +76,11 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   const participle = props.pref == 'INVESTOR' ? 'an' : 'a'
 
   const activeClassName =
-    'p-4 bg-white-d2 flex-grow shadow-md dark:bg-black/50 flex h-full w-full flex-col items-center justify-center gap-2  '
+    'p-4 bg-white-d2 flex-grow shadow-md rounded dark:bg-black/50 flex h-full w-full flex-col items-center justify-center gap-2  '
 
   const inactiveClassName = `p-4 bg-white-d1 ${
     props.selectedType != '' ? 'opacity-40' : ' flex-grow'
-  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l3/70 flex w-full flex-col items-center justify-center gap-2`
+  } shadow-md hover:shadow-lg rounded hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l3/70 flex w-full flex-col items-center justify-center gap-2`
 
   const subText =
     props.pref == 'INVESTOR'

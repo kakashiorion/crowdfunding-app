@@ -93,7 +93,7 @@ type ValuePropBoxProps = {
 }
 const ValuePropBox = (props: ValuePropBoxProps) => {
   return (
-    <div className="flex flex-col gap-4 rounded-sm border-2 border-primary-l2 bg-white-d1 px-6 py-4 opacity-90   dark:border-primary-l1 dark:bg-black-l1   lg:gap-5 lg:px-8 lg:py-6 ">
+    <div className="flex flex-col gap-4 rounded border-primary-l2 bg-white-d1/30 px-6 py-4 dark:border-primary-l1 dark:bg-black-l2/30 lg:gap-5 lg:px-8 lg:py-6 ">
       <p className="text-h6 text-primary-d1 dark:text-primary-l2 lg:text-h5">
         {props.title}
       </p>
@@ -213,7 +213,7 @@ const ContactSection = forwardRef(function ContactSection(
           rows={3}
           placeholder="Your query..."
           className={
-            ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+            ' w-2/3 resize-none rounded border-2 border-black-l2 bg-white-d1 px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
           }
         ></textarea>
         <input
@@ -224,11 +224,9 @@ const ContactSection = forwardRef(function ContactSection(
           }}
           placeholder="Your email address"
           className={
-            ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+            ' w-2/3 rounded border-2 border-black-l2 bg-white-d1 px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
           }
         ></input>
-        {/* <TextInput value={query} onChange={(e) => setQuery(e.target.value)} /> */}
-        {/* <TextInput value={email} onChange={(e) => setEmail(e.target.value)} /> */}
         {sent ? (
           <DisabledFilledButton label="SENT" action={() => {}} />
         ) : (

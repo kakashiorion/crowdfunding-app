@@ -12,7 +12,7 @@ type OnboardingFeedbackFormProps = {
 
 const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
   return (
-    <div className="flex flex-col items-center gap-1 rounded-sm bg-warn-l1/30 p-3 dark:bg-warn-d2/30 lg:gap-2 lg:p-4">
+    <div className="flex flex-col items-center gap-1 rounded bg-warn-l1/30 p-3 dark:bg-warn-d2/30 lg:gap-2 lg:p-4">
       <WarnSubTextLabel label="Did you like the onboarding process? Share your feedback" />
       <div className="flex gap-2">
         <UpIcon

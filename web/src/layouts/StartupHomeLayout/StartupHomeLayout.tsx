@@ -9,12 +9,12 @@ type StartupHomeLayoutProps = {
 }
 
 const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
-  const [isMenuOpen, setMenuOpen] = useState(false)
-  const { currentUser, getCurrentUser } = useAuth()
+  // const [isMenuOpen, setMenuOpen] = useState(false)
+  const { currentUser } = useAuth()
   const [darkMode, setDarkMode] = useState('')
 
   useEffect(() => {
-    console.log(currentUser)
+    // console.log(currentUser)
     //Navigate based on user's type
     if (currentUser?.type == 'INVESTOR') {
       navigate(routes.investorHome(), { replace: true })

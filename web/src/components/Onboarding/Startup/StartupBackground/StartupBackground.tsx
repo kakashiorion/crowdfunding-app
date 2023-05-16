@@ -7,14 +7,21 @@ import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
+import StartupSingleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
+import StartupSingleTextArea from 'src/components/Onboarding/Startup/comps/StartupSingleTextArea/StartupSingleTextArea'
+import StartupTripleTextArea from 'src/components/Onboarding/Startup/comps/StartupTripleTextArea/StartupTripleTextArea'
+import { StartupStepFooter } from 'src/components/Onboarding/StepFooter'
+import { StartupStepHeader } from 'src/components/Onboarding/StepHeader'
+import {
+  OnboardingMainProps,
+  back,
+  getEnumValues,
+  next,
+  onboardingFrameClassName,
+  onboardingSubFrameClassName,
+  skip,
+} from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
-
-import { StartupStepFooter } from '../../StepFooter'
-import { StartupStepHeader } from '../../StepHeader'
-import StartupSingleChoiceOption from '../comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
-import StartupSingleTextArea from '../comps/StartupSingleTextArea/StartupSingleTextArea'
-import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupBackground table:
   valueProp       String?
@@ -289,42 +296,13 @@ const StartupBackground = (props: OnboardingMainProps) => {
     })
   }
 
-  //Function to move ahead with save
-  const next = () => {
-    setSkipData([...skipData, false])
-    if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(false)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to skip ahead
-  const skip = () => {
-    setSkipData([...skipData, true])
-    clearError()
-    if (step == StartupStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(true)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to go back
-  const back = () => {
-    setSkipData(skipData.slice(-1))
-    setStep(step - 1)
-  }
-
   return (
-    <div className="flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2">
+    <div className={onboardingFrameClassName}>
       <StartupStepHeader
         currentStepInfo={currentStepInfo}
         currentStepNumber={step}
       />
-      <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
+      <div className={onboardingSubFrameClassName}>
         {step == 1 && (
           <StartupSingleTextArea
             input={valueProp}
@@ -418,14 +396,36 @@ const StartupBackground = (props: OnboardingMainProps) => {
         step={step}
         continueAction={() => {
           if (checkUIData()) {
-            next()
+            next({
+              saveData: saveData,
+              currentSection: props.currentSection,
+              setCurrentSection: props.setCurrentSection,
+              step: step,
+              setStep: setStep,
+              skipData: skipData,
+              setSkipData: setSkipData,
+            })
           }
         }}
         skipAction={() => {
-          skip()
+          skip({
+            clearError: clearError,
+            saveData: saveData,
+            currentSection: props.currentSection,
+            setCurrentSection: props.setCurrentSection,
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
         backAction={() => {
-          back()
+          back({
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
       />
     </div>
@@ -456,7 +456,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
       <div className="grid w-full grid-cols-1 items-center justify-start gap-1 border-2 border-tertiary p-2 lg:grid-flow-row-dense lg:grid-cols-2">
         <input
           className={
-            'w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1 '
+            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1 '
           }
           value={enteredName}
           placeholder="Name of person"
@@ -467,7 +467,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         />
         <input
           className={
-            'w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1'
+            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1'
           }
           value={enteredRole}
           placeholder="Role"
@@ -478,7 +478,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         />
         <input
           className={
-            'w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
+            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
           }
           value={enteredWriteup}
           placeholder="Short job description (optional)"
@@ -489,7 +489,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         />
         <input
           className={
-            'w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
+            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
           }
           value={enteredUrl}
           placeholder="LinkedIn URL (optional)"
@@ -499,7 +499,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
           type={'url'}
         />
         <button
-          className="w-full rounded-sm border-2 border-tertiary bg-tertiary px-2 py-1 text-b3 text-white shadow-md hover:border-tertiary-d1 hover:bg-tertiary-d1 lg:col-span-2 lg:px-4 lg:py-2 lg:text-b2"
+          className="w-full rounded border-2 border-tertiary bg-tertiary px-2 py-1 text-b3 text-white shadow-md hover:border-tertiary-d1 hover:bg-tertiary-d1 lg:col-span-2 lg:px-4 lg:py-2 lg:text-b2"
           onClick={() => {
             if (
               props.keyPeople.some(
@@ -532,7 +532,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         {props.keyPeople.map((e) => (
           <div
             key={`${e.name}, ${e.role}`}
-            className={`flex max-h-min w-full items-center justify-between rounded-sm bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
+            className={`flex max-h-min w-full items-center justify-between rounded bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
           >
             <TextLabel label={`${e.name}, ${e.role}`} />
             <CloseIcon

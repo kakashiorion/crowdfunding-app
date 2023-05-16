@@ -9,13 +9,21 @@ import { useMutation } from '@redwoodjs/web'
 import { useAuth } from 'src/auth'
 import { SmallPrimaryFilledButton } from 'src/components/Button/Button'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
-import { OnboardingMainProps, getEnumValues } from 'src/lib/onboardingConsts'
+import InvestorMultipleChoiceOption from 'src/components/Onboarding/Investor/comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
+import InvestorSingleChoiceOption from 'src/components/Onboarding/Investor/comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
+import { InvestorStepFooter } from 'src/components/Onboarding/StepFooter'
+import { InvestorStepHeader } from 'src/components/Onboarding/StepHeader'
+import {
+  OnboardingMainProps,
+  back,
+  Location,
+  getEnumValues,
+  next,
+  skip,
+  onboardingFrameClassName,
+  onboardingSubFrameClassName,
+} from 'src/lib/onboardingConsts'
 import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
-
-import { InvestorStepFooter } from '../../StepFooter'
-import { InvestorStepHeader } from '../../StepHeader'
-import InvestorMultipleChoiceOption from '../comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
-import InvestorSingleChoiceOption from '../comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
 
 /*Info to be created and saved in InvestorObjective table:
 1  preferredAmountToInvest     AmountRange?
@@ -99,13 +107,6 @@ const GET_LOCATION_QUERY = gql`
     }
   }
 `
-
-type Location = {
-  id: number
-  city: string
-  state: string
-}
-
 const InvestorObjective = (props: OnboardingMainProps) => {
   //Initialize steps Index
   const [step, setStep] = useState(1)
@@ -321,42 +322,13 @@ const InvestorObjective = (props: OnboardingMainProps) => {
     })
   }
 
-  //Function to move ahead with save
-  const next = () => {
-    setSkipData([...skipData, false])
-    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(false)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to skip ahead
-  const skip = () => {
-    setSkipData([...skipData, true])
-    clearError()
-    if (step == InvestorStepsInfoList[props.currentSection - 1].steps.length) {
-      props.setCurrentSection(props.currentSection + 1)
-      saveData(true)
-    } else {
-      setStep(step + 1)
-    }
-  }
-
-  //Function to go back
-  const back = () => {
-    setSkipData(skipData.slice(-1))
-    setStep(step - 1)
-  }
-
   return (
-    <div className="flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2">
+    <div className={onboardingFrameClassName}>
       <InvestorStepHeader
         currentStepInfo={currentStepInfo}
         currentStepNumber={step}
       />
-      <div className="shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded-sm  bg-white-d2/20 p-2  dark:bg-black-l2/20">
+      <div className={onboardingSubFrameClassName}>
         {step == 1 && (
           <InvestorSingleChoiceOption
             input={preferredAmountToInvest}
@@ -445,14 +417,36 @@ const InvestorObjective = (props: OnboardingMainProps) => {
         step={step}
         continueAction={() => {
           if (checkUIData()) {
-            next()
+            next({
+              saveData: saveData,
+              currentSection: props.currentSection,
+              setCurrentSection: props.setCurrentSection,
+              step: step,
+              setStep: setStep,
+              skipData: skipData,
+              setSkipData: setSkipData,
+            })
           }
         }}
         skipAction={() => {
-          skip()
+          skip({
+            clearError: clearError,
+            saveData: saveData,
+            currentSection: props.currentSection,
+            setCurrentSection: props.setCurrentSection,
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
         backAction={() => {
-          back()
+          back({
+            step: step,
+            setStep: setStep,
+            skipData: skipData,
+            setSkipData: setSkipData,
+          })
         }}
       />
     </div>
@@ -482,7 +476,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
         <div className="flex w-full items-center justify-between gap-2 ">
           <input
             className={
-              ' w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2   lg:px-4 lg:py-2 lg:text-b1'
+              ' w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2   lg:px-4 lg:py-2 lg:text-b1'
             }
             value={searchTerm}
             placeholder="Search location"
@@ -516,7 +510,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
         <div className="flex w-full items-center justify-between gap-2">
           <select
             className={
-              ' w-full rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2    lg:px-4 lg:py-2 lg:text-b1'
+              ' w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2    lg:px-4 lg:py-2 lg:text-b1'
             }
             value={selectedLoc?.id}
             placeholder="Select and Add"
@@ -547,7 +541,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
         {props.input.map((e) => (
           <div
             key={e}
-            className={`mb-2 flex max-h-min w-full items-center justify-between rounded-sm bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
+            className={`mb-2 flex max-h-min w-full items-center justify-between rounded bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
           >
             <TextLabel
               label={getLocName(props.locationList.find((l) => l.id == e))}

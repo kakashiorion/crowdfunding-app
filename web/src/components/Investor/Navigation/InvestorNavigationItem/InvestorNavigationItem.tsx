@@ -8,7 +8,7 @@ export type InvestorNavigationItemProps = {
 const InvestorNavigationItem = (props: InvestorNavigationItemProps) => {
   return (
     <button
-      className={`flex w-full justify-center rounded-sm p-2 xl:items-center xl:justify-start xl:gap-2
+      className={`flex w-full justify-center rounded p-2 xl:items-center xl:justify-start xl:gap-2
       ${
         props.selected
           ? ' bg-white shadow-sm dark:bg-white-d1 '

@@ -7,7 +7,7 @@ import { PrimaryTextLabel } from 'src/components/Label/Label'
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('')
   return (
-    <div className="absolute right-0 top-9 z-10 flex max-w-full flex-col items-center gap-2 rounded-sm bg-white-d1/95 px-2 py-2 dark:bg-white-d3/95 lg:min-w-[480px] ">
+    <div className="absolute right-0 top-9 z-10 flex max-w-full flex-col items-center gap-2 rounded bg-white-d1/95 px-2 py-2 dark:bg-white-d3/95 lg:min-w-[480px] ">
       <div className="flex w-full items-center justify-start gap-2">
         <SearchIcon className="flex h-5 w-5 fill-black-l4 " />
         <input

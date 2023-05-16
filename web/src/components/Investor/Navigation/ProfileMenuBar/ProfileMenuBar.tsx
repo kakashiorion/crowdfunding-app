@@ -9,7 +9,7 @@ type ProfileMenuBarProps = {
 }
 const ProfileMenuBar = (props: ProfileMenuBarProps) => {
   const className =
-    'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded-sm bg-white-d1/95 p-4 dark:bg-black-l2/95 '
+    'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded bg-white-d1/95 p-4 dark:bg-black-l2/95 '
 
   return (
     <div className={className}>
@@ -56,7 +56,7 @@ const InvestorSupportNavigationItem = (
 ) => {
   return (
     <button
-      className={`flex w-full items-center justify-start gap-3 rounded-sm py-2`}
+      className={`flex w-full items-center justify-start gap-3 rounded py-2`}
       onClick={props.action}
     >
       <props.icon className={`h-5 w-5 fill-black dark:fill-white`} />

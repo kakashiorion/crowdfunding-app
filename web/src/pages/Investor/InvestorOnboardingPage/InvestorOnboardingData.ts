@@ -115,7 +115,7 @@ const InvestorExperienceSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 2,
-    title: 'Hpw many statups have you founded?',
+    title: 'How many statups have you founded?',
     display: 'Founder',
     help: 'This enables us to guage your profile for relevant feed and suggestions.',
     skippable: false,
