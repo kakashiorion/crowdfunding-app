@@ -39,8 +39,8 @@ export const InvestorStepFooter = (props: StepFooterProps) => {
             <SecondaryOutlineButton
               label={
                 // props.step == props.currentStepInfo.length
-                //   ? 'SKIP AND CONTINUE'
-                //   :
+                // ? 'SKIP AND CONTINUE'
+                // :
                 'SKIP'
               }
               action={props.skipAction}
@@ -48,10 +48,9 @@ export const InvestorStepFooter = (props: StepFooterProps) => {
           )}
           <PrimaryFilledButton
             label={
-              // props.step == props.currentStepInfo.length
-              //   ? 'SAVE AND CONTINUE'
-              //   :
-              'SAVE'
+              props.step == props.currentStepInfo.length
+                ? 'SAVE AND CONTINUE'
+                : 'SAVE'
             }
             action={props.continueAction}
           />
@@ -90,10 +89,9 @@ export const StartupStepFooter = (props: StepFooterProps) => {
           )}
           <TertiaryFilledButton
             label={
-              // props.step == props.currentStepInfo.length
-              //   ? 'SAVE AND CONTINUE'
-              //   :
-              'SAVE'
+              props.step == props.currentStepInfo.length
+                ? 'SAVE AND CONTINUE'
+                : 'SAVE'
             }
             action={props.continueAction}
           />

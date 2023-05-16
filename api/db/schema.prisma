@@ -75,6 +75,24 @@ enum UserType {
   GUEST
 }
 
+model Lead {
+  id        Int      @id @default(autoincrement())
+  email     String
+  phone     String
+  gToken    String
+  type      UserType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LandingContact {
+  id        Int      @id @default(autoincrement())
+  email     String
+  query     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Connection {
   id             Int              @id @default(autoincrement())
   requestingUser User             @relation("Requester", fields: [requesterID], references: [id])

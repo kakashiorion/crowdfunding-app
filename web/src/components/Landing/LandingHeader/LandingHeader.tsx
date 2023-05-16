@@ -18,7 +18,7 @@ const LandingHeader = (props: {
   return (
     <div className="sticky top-0 z-10 flex w-full items-center justify-between rounded-sm  py-2 backdrop-blur-sm   lg:py-3">
       <Logo
-        className="h-6 w-10 lg:h-8 lg:w-12"
+        className="h-6 w-10 cursor-pointer lg:h-8 lg:w-12"
         onClick={() => navigate(routes.landing())}
       />
       <HeaderMenu size="large" scrollRefsList={props.scrollRefsList} />

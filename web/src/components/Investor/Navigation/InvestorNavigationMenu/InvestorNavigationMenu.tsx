@@ -11,6 +11,7 @@ import ProfileIcon from 'public/icons/profile.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
+import { useAuth } from 'src/auth'
 import { MenuOpenContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
 import InvestorNavigationItem from '../InvestorNavigationItem/InvestorNavigationItem'
@@ -21,6 +22,8 @@ type InvestorNavigationMenuProps = {
 
 const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
   const { isMenuOpen, setMenuOpen } = useContext(MenuOpenContext)
+  const { logOut } = useAuth()
+
   return (
     <div
       className={`fixed left-4 top-9 ${
@@ -99,7 +102,7 @@ const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
           label={'Logout'}
           action={() => {
             setMenuOpen(false)
-            askLogout()
+            logOut()
           }}
           selected={'Logout' == props.selectedPage}
         />
@@ -110,4 +113,4 @@ const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
 export default InvestorNavigationMenu
 
 //TODO: Logout modal
-const askLogout = () => {}
+// const askLogout = () => {}

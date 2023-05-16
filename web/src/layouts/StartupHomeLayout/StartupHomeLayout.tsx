@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
 
@@ -9,9 +9,13 @@ type StartupHomeLayoutProps = {
 }
 
 const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
-  const { currentUser } = useAuth()
+  const [isMenuOpen, setMenuOpen] = useState(false)
+  const { currentUser, getCurrentUser } = useAuth()
+  const [darkMode, setDarkMode] = useState('')
 
   useEffect(() => {
+    console.log(currentUser)
+    //Navigate based on user's type
     if (currentUser?.type == 'INVESTOR') {
       navigate(routes.investorHome(), { replace: true })
     } else if (currentUser?.type == 'GUEST') {
@@ -22,11 +26,21 @@ const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
     ) {
       navigate(routes.startupOnboarding(), { replace: true })
     }
-  }, [currentUser?.type, currentUser?.isOnboarded])
+    //Set dark mode
+    if (currentUser?.prefersTheme == 'DARK') {
+      setDarkMode('dark')
+    } else if (currentUser?.prefersTheme == 'SYSTEM') {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setDarkMode('dark')
+      }
+    }
+  }, [currentUser?.type, currentUser?.isOnboarded, currentUser?.prefersTheme])
   return (
-    <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
-      <div className="flex h-full xl:mx-auto xl:max-w-screen-xl ">
-        {children}
+    <div className={darkMode}>
+      <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
+        <div className="flex h-full xl:mx-auto xl:max-w-screen-xl ">
+          {children}
+        </div>
       </div>
     </div>
   )

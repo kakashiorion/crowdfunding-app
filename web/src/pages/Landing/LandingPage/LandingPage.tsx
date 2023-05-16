@@ -1,10 +1,19 @@
-import { LegacyRef, forwardRef, useRef } from 'react'
+import { LegacyRef, forwardRef, useRef, useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 
-import { LargePrimaryFilledButton } from 'src/components/Button/Button'
-import { HeadingLabel, PrimarySubTitleLabel } from 'src/components/Label/Label'
+import {
+  DisabledFilledButton,
+  LargePrimaryFilledButton,
+  PrimaryFilledButton,
+} from 'src/components/Button/Button'
+import {
+  GradientHeadingLabel,
+  SubTitleLabel,
+  SuccessSubTextLabel,
+  TextLabel,
+} from 'src/components/Label/Label'
 import LandingFooter from 'src/components/Landing/LandingFooter/LandingFooter'
 import LandingHeader from 'src/components/Landing/LandingHeader/LandingHeader'
 
@@ -51,10 +60,12 @@ const HeroSection = () => {
 const HeroTextSection = () => {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center lg:gap-8 ">
-      <HeadingLabel label={' Become a part of the Indian growth story'} />
-      <PrimarySubTitleLabel
+      <GradientHeadingLabel
+        label={' Become a part of the Indian growth story'}
+      />
+      <SubTitleLabel
         label={
-          'Explore and connect with a community of investors and startups driving innovation in India'
+          'Connect with a community of investors and startups driving innovation in India'
         }
       />
       <LargePrimaryFilledButton
@@ -123,7 +134,7 @@ const InvestorSection = forwardRef(function InvestorSection(
       <SectionHeader title="FOR INVESTORS" />
       <ValuePropSection valuePropList={investorValuePropList} />
       <LargePrimaryFilledButton
-        action={() => navigate(routes.signup({ type: 'Investor' }))}
+        action={() => navigate(routes.signup({ type: 'INVESTOR' }))}
         label="START INVESTING"
       />
     </div>
@@ -143,7 +154,7 @@ const StartupSection = forwardRef(function StartupSection(
       <SectionHeader title="FOR STARTUPS" />
       <ValuePropSection valuePropList={startValuePropList} />
       <LargePrimaryFilledButton
-        action={() => navigate(routes.signup({ type: 'Startup' }))}
+        action={() => navigate(routes.signup({ type: 'STARTUP' }))}
         label="RAISE FUNDS"
       />{' '}
     </div>
@@ -166,18 +177,77 @@ const AboutSection = forwardRef(function AboutSection(
   )
 })
 
+const FEEDBACK_MUTATION = gql`
+  mutation feedbackMutation($input: CreateLandingContactInput!) {
+    createLandingContact(input: $input) {
+      id
+    }
+  }
+`
+
 //TODO
 const ContactSection = forwardRef(function ContactSection(
   props,
   ref: LegacyRef<HTMLDivElement>
 ) {
+  const [query, setQuery] = useState('')
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+
+  const [createLandingContact] = useMutation(FEEDBACK_MUTATION)
+
   return (
     <div
       ref={ref}
-      className="flex min-h-screen flex-col items-center gap-6 py-9 lg:justify-between lg:py-11 "
+      className="flex flex-col items-center gap-6 py-9 lg:justify-start lg:gap-8 lg:py-11 "
     >
       <SectionHeader title="CONTACT US" />
-      <ValuePropSection valuePropList={aboutValuePropList} />
+      <div className="flex flex-col items-center justify-center gap-4 lg:gap-6">
+        <TextLabel label="Have a query or feedback about the platform? Let us know." />
+        <textarea
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setSent(false)
+          }}
+          rows={3}
+          placeholder="Your query..."
+          className={
+            ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          }
+        ></textarea>
+        <input
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            setSent(false)
+          }}
+          placeholder="Your email address"
+          className={
+            ' w-2/3 rounded-sm border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          }
+        ></input>
+        {/* <TextInput value={query} onChange={(e) => setQuery(e.target.value)} /> */}
+        {/* <TextInput value={email} onChange={(e) => setEmail(e.target.value)} /> */}
+        {sent ? (
+          <DisabledFilledButton label="SENT" action={() => {}} />
+        ) : (
+          <PrimaryFilledButton
+            label="SEND"
+            action={async () => {
+              setSent(true)
+              await createLandingContact({
+                variables: { input: { query: query, email: email } },
+              })
+            }}
+          />
+        )}
+        {sent ? (
+          <SuccessSubTextLabel label="We have received your email.. Thanks!" />
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   )
 })

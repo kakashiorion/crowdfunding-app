@@ -16,7 +16,7 @@ export const InvestorStepHeader = (props: StepHeaderProps) => {
       <SubTitleLabel
         label={props.currentStepInfo[props.currentStepNumber - 1].title}
       />
-      <div className="flex flex-col items-start gap-1 lg:items-end">
+      <div className="flex flex-col items-start gap-1 whitespace-nowrap lg:items-end">
         <PrimaryProgressIndicator
           current={props.currentStepNumber}
           total={props.currentStepInfo.length}
@@ -46,7 +46,7 @@ export const StartupStepHeader = (props: StepHeaderProps) => {
           current={props.currentStepNumber}
           total={props.currentStepInfo.length}
         />
-        <div className="flex items-center justify-end gap-1">
+        <div className="flex items-center justify-end gap-1 whitespace-nowrap">
           <SubTextLabel
             label={`Step ${props.currentStepNumber} of ${props.currentStepInfo.length}`}
           />

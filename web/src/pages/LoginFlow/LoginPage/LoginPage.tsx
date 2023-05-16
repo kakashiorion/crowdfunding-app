@@ -40,7 +40,7 @@ const LoginPage = () => {
   return (
     <>
       <MetaTags title="Login" description="Login page for Dealbari platform" />
-      <div className="my-4 flex h-full overflow-hidden rounded-sm bg-white-d1/50 dark:bg-black-l2/50 lg:my-5">
+      <div className="my-4 flex h-full overflow-hidden rounded-sm bg-white-d1/50 dark:bg-black-l2/50 lg:my-5 xl:aspect-video xl:h-auto">
         <div className="hidden lg:flex lg:flex-1">
           <img src={loginImg} alt="Login" />
         </div>

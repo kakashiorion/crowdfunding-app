@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
 
@@ -10,6 +10,7 @@ type LandingPageLayoutProps = {
 
 const LandingPageLayout = ({ children }: LandingPageLayoutProps) => {
   const { currentUser } = useAuth()
+  const [darkMode, setDarkMode] = useState('')
 
   useEffect(() => {
     if (currentUser?.type == 'STARTUP') {
@@ -17,10 +18,13 @@ const LandingPageLayout = ({ children }: LandingPageLayoutProps) => {
     } else if (currentUser?.type == 'INVESTOR') {
       navigate(routes.investorHome(), { replace: true })
     }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setDarkMode('dark')
+    }
   }, [currentUser?.type])
   return (
-    <div className="bg-white bg-gradient-to-tr from-white from-30% via-white-d1 via-70% to-primary-l2 px-4 dark:bg-black-l1 dark:bg-gradient-to-tr dark:from-black dark:from-10% dark:via-black-l1 dark:via-70% dark:to-primary-d2 lg:px-5 ">
-      {children}
+    <div className={darkMode}>
+      <div className="bg-white px-4 dark:bg-black-l1 lg:px-5 ">{children}</div>
     </div>
   )
 }

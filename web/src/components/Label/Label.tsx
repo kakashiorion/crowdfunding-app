@@ -10,6 +10,14 @@ export const HeadingLabel = (props: LabelProps) => {
   )
 }
 
+export const GradientHeadingLabel = (props: LabelProps) => {
+  return (
+    <p className="bg-gradient-to-r from-primary from-10% via-black-l4 via-70%  to-primary-l2 to-100%  bg-clip-text text-h2 font-extrabold text-transparent dark:from-primary  dark:to-white  lg:text-h1">
+      {props.label}
+    </p>
+  )
+}
+
 export const TextLabel = (props: LabelProps) => {
   return (
     <p className="text-b2 text-black dark:text-white lg:text-b1">

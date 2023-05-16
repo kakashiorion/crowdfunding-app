@@ -21,7 +21,7 @@ const STARTUP_PREFERENCES_MUTATION = gql`
 const StartupCompleted = () => {
   const [up, setUp] = useState<boolean>(false)
   const [down, setDown] = useState<boolean>(false)
-  const { currentUser } = useAuth()
+  const { currentUser, reauthenticate } = useAuth()
   const [updateUser] = useMutation(STARTUP_PREFERENCES_MUTATION)
 
   return (
@@ -32,6 +32,7 @@ const StartupCompleted = () => {
       <TertiaryFilledButton
         label={`LET"S GO`}
         action={async () => {
+          await reauthenticate()
           if (up || down) {
             await updateUser({
               variables: {
@@ -40,9 +41,9 @@ const StartupCompleted = () => {
                   likedOnboarding: up ? true : down ? false : null,
                 },
               },
-            }).then(() => navigate(routes.startupHome()))
+            }).then(() => navigate(routes.startupHome(), { replace: true }))
           } else {
-            navigate(routes.startupHome())
+            navigate(routes.startupHome(), { replace: true })
           }
         }}
       />

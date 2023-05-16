@@ -20,7 +20,7 @@ const INVESTOR_PREFERENCES_MUTATION = gql`
 const InvestorCompleted = () => {
   const [up, setUp] = useState<boolean>(false)
   const [down, setDown] = useState<boolean>(false)
-  const { currentUser } = useAuth()
+  const { currentUser, reauthenticate } = useAuth()
   const [updateUser] = useMutation(INVESTOR_PREFERENCES_MUTATION)
 
   return (
@@ -31,6 +31,7 @@ const InvestorCompleted = () => {
       <PrimaryFilledButton
         label={`LET"S GO`}
         action={async () => {
+          await reauthenticate()
           if (up || down) {
             await updateUser({
               variables: {

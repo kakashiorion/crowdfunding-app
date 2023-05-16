@@ -106,7 +106,7 @@ const StartupOnboardingPage = () => {
           )}
         </div>
       </div>
-      <div className=" relative mb-4 mt-2 flex h-full overflow-hidden lg:mb-5 lg:mt-3 lg:gap-4 ">
+      <div className=" relative mb-4 mt-2 flex h-full overflow-hidden lg:mb-5 lg:mt-3 lg:gap-4 xl:aspect-video xl:h-auto ">
         <StartupOnboardingMain
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}

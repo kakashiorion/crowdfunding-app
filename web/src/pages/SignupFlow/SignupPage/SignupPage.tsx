@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 
 import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import {
@@ -76,11 +76,11 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   const participle = props.pref == 'INVESTOR' ? 'an' : 'a'
 
   const activeClassName =
-    'p-4 bg-white-d2 flex-grow shadow-md dark:bg-black-l1 flex h-full w-full flex-col items-center justify-center gap-2  '
+    'p-4 bg-white-d2 flex-grow shadow-md dark:bg-black/50 flex h-full w-full flex-col items-center justify-center gap-2  '
 
   const inactiveClassName = `p-4 bg-white-d1 ${
-    props.selectedType != '' ? 'opacity-60' : ' flex-grow'
-  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l1 flex w-full flex-col items-center justify-center gap-2`
+    props.selectedType != '' ? 'opacity-40' : ' flex-grow'
+  } shadow-md hover:shadow-lg hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l3/70 flex w-full flex-col items-center justify-center gap-2`
 
   const subText =
     props.pref == 'INVESTOR'
@@ -110,6 +110,14 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   )
 }
 
+const LEAD_MUTATION = gql`
+  mutation leadMutation($input: CreateLeadInput!) {
+    createLead(input: $input) {
+      id
+    }
+  }
+`
+
 type SignupFormProps = {
   userType: string
 }
@@ -128,6 +136,7 @@ const SignupForm = (props: SignupFormProps) => {
 
   const { signUp } = useAuth()
   const [checkDB] = useLazyQuery(SIGNUP_QUERY)
+  const [createLead] = useMutation(LEAD_MUTATION)
 
   return (
     <div className="flex  w-full flex-col items-center justify-center gap-2 ">
@@ -173,7 +182,7 @@ const SignupForm = (props: SignupFormProps) => {
                 //Check if email or phone already exists in DB
                 checkDB({
                   variables: { email: enteredEmail, mobile: enteredPhone },
-                }).then((d) => {
+                }).then(async (d) => {
                   if (d.data.user1) {
                     setEmailError('Email is already registered!')
                   } else if (d.data.user2) {
@@ -183,8 +192,16 @@ const SignupForm = (props: SignupFormProps) => {
                     //Send token in Email for user to confirnm
                     sendSignupEmailJS(enteredEmail, gToken.toString())
                     setGeneratedToken(gToken.toString())
-                    //hide gtoken from console
-                    // console.log(gToken)
+                    await createLead({
+                      variables: {
+                        input: {
+                          phone: enteredPhone,
+                          email: enteredEmail,
+                          gToken: gToken.toString(),
+                          type: props.userType,
+                        },
+                      },
+                    })
                     setStage('confirm')
                   }
                 })

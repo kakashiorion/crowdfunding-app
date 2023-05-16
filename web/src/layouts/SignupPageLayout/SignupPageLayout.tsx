@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
 
@@ -14,6 +14,7 @@ type SignupPageLayoutProps = {
 
 const SignupPageLayout = ({ children }: SignupPageLayoutProps) => {
   const { currentUser } = useAuth()
+  const [darkMode, setDarkMode] = useState('')
 
   useEffect(() => {
     if (currentUser?.type == 'STARTUP') {
@@ -21,12 +22,17 @@ const SignupPageLayout = ({ children }: SignupPageLayoutProps) => {
     } else if (currentUser?.type == 'INVESTOR') {
       navigate(routes.investorHome(), { replace: true })
     }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setDarkMode('dark')
+    }
   }, [currentUser?.type])
   return (
-    <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
-      <div className="flex h-full flex-col xl:mx-auto xl:max-w-screen-xl ">
-        <SignupHeader />
-        {children}
+    <div className={darkMode}>
+      <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
+        <div className="flex h-full flex-col xl:mx-auto xl:max-w-screen-xl ">
+          <SignupHeader />
+          {children}
+        </div>
       </div>
     </div>
   )
