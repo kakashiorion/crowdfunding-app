@@ -1,25 +1,21 @@
-import { Link, routes } from '@redwoodjs/router'
+import { useContext, useEffect } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
 
+import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
+
 const MyInvestorProfilePage = () => {
+  const { setPageSelected } = useContext(InvestorPageContext)
+
+  useEffect(() => {
+    setPageSelected('Profile')
+  }, [setPageSelected])
   return (
     <>
       <MetaTags
         title="MyInvestorProfile"
         description="MyInvestorProfile page"
       />
-
-      <h1>MyInvestorProfilePage</h1>
-      <p>
-        Find me in{' '}
-        <code>
-          ./web/src/pages/MyInvestorProfilePage/MyInvestorProfilePage.tsx
-        </code>
-      </p>
-      <p>
-        My default route is named <code>myInvestorProfile</code>, link to me
-        with `<Link to={routes.myInvestorProfile()}>MyInvestorProfile</Link>`
-      </p>
     </>
   )
 }

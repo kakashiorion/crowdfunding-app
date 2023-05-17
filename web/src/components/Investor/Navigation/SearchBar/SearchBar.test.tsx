@@ -1,6 +1,6 @@
 import { render } from '@redwoodjs/testing/web'
 
-import SearchBar from './SearchBar'
+import InvestorSearchBar from './SearchBar'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
@@ -8,7 +8,7 @@ import SearchBar from './SearchBar'
 describe('SearchBar', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<SearchBar />)
+      render(<InvestorSearchBar />)
     }).not.toThrow()
   })
 })

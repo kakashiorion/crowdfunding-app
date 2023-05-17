@@ -13,13 +13,13 @@
 
 import type { ComponentMeta } from '@storybook/react'
 
-import SearchBar from './SearchBar'
+import InvestorSearchBar from './SearchBar'
 
 export const generated = () => {
-  return <SearchBar />
+  return <InvestorSearchBar />
 }
 
 export default {
   title: 'Components/SearchBar',
-  component: SearchBar,
-} as ComponentMeta<typeof SearchBar>
+  component: InvestorSearchBar,
+} as ComponentMeta<typeof InvestorSearchBar>

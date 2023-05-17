@@ -6,111 +6,75 @@ import ConversationIcon from 'public/icons/conversation.svg'
 import ExploreIcon from 'public/icons/explore.svg'
 import HelpIcon from 'public/icons/help.svg'
 import HomeIcon from 'public/icons/home.svg'
-import LogoutIcon from 'public/icons/logout.svg'
-import ProfileIcon from 'public/icons/profile.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
-import { useAuth } from 'src/auth'
-import { MenuOpenContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
-
-import InvestorNavigationItem from '../InvestorNavigationItem/InvestorNavigationItem'
+import InvestorNavigationItem from 'src/components/Investor/Navigation/InvestorNavigationItem/InvestorNavigationItem'
+import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
 type InvestorNavigationMenuProps = {
-  selectedPage?: string
+  isMenuOpen: string
+  setMenuOpen: React.Dispatch<React.SetStateAction<string>>
 }
 
 const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
-  const { isMenuOpen, setMenuOpen } = useContext(MenuOpenContext)
-  const { logOut } = useAuth()
-
+  const { pageSelected } = useContext(InvestorPageContext)
   return (
     <div
       className={`fixed left-4 top-9 ${
-        isMenuOpen ? 'flex' : 'hidden'
-      } z-10 shrink-0 flex-col items-center justify-start gap-4 overflow-hidden rounded bg-white-d1/90 p-2 dark:bg-black-l2/90 lg:static lg:flex lg:justify-between lg:p-3`}
+        props.isMenuOpen == 'Main' ? 'flex' : 'hidden'
+      } z-10 shrink-0 flex-col items-center justify-start gap-4 rounded bg-white-d2/95 p-2 shadow-sm dark:bg-black-l3/95 lg:static lg:flex lg:flex-row lg:justify-between lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent`}
     >
-      <div className="flex flex-col items-start justify-start gap-4">
-        <InvestorNavigationItem
-          icon={HomeIcon}
-          label={'Home'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.investorHome())
-          }}
-          selected={'Home' == props.selectedPage}
-        />
-        <InvestorNavigationItem
-          icon={BidIcon}
-          label={'Bids'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.investorMyBids())
-          }}
-          selected={'Bids' == props.selectedPage}
-        />
-        <InvestorNavigationItem
-          icon={ConnectionIcon}
-          label={'Connections'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.investorMyConnections())
-          }}
-          selected={'Connections' == props.selectedPage}
-        />
-        <InvestorNavigationItem
-          icon={ConversationIcon}
-          label={'Conversations'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.investorMyConversations())
-          }}
-          selected={'Conversations' == props.selectedPage}
-        />
-        <InvestorNavigationItem
-          icon={ExploreIcon}
-          label={'Explore'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.investorExplore())
-          }}
-          selected={'Explore' == props.selectedPage}
-        />
-      </div>
-      <div className="flex h-[2px] w-full bg-black-l3 dark:bg-white-d2 lg:hidden xl:bg-white-d2 xl:dark:bg-black-l3 "></div>
-      <div className="flex w-full flex-col items-start justify-start gap-4 ">
-        <InvestorNavigationItem
-          icon={HelpIcon}
-          label={'Help'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.investorHelp())
-          }}
-          selected={'Help' == props.selectedPage}
-        />
-        <InvestorNavigationItem
-          icon={ProfileIcon}
-          label={'Profile'}
-          action={() => {
-            setMenuOpen(false)
-            navigate(routes.myInvestorProfile())
-          }}
-          selected={'Profile' == props.selectedPage}
-        />
-        <InvestorNavigationItem
-          icon={LogoutIcon}
-          label={'Logout'}
-          action={() => {
-            setMenuOpen(false)
-            logOut()
-          }}
-          selected={'Logout' == props.selectedPage}
-        />
-      </div>
+      <InvestorNavigationItem
+        icon={HomeIcon}
+        action={() => {
+          props.setMenuOpen('None')
+          navigate(routes.investorHome())
+        }}
+        selected={'Home' == pageSelected}
+      />
+      <InvestorNavigationItem
+        icon={BidIcon}
+        action={() => {
+          props.setMenuOpen('None')
+          navigate(routes.investorMyBids())
+        }}
+        selected={'Bids' == pageSelected}
+      />
+      <InvestorNavigationItem
+        icon={ConnectionIcon}
+        action={() => {
+          props.setMenuOpen('None')
+          navigate(routes.investorMyConnections())
+        }}
+        selected={'Connections' == pageSelected}
+      />
+      <InvestorNavigationItem
+        icon={ConversationIcon}
+        action={() => {
+          props.setMenuOpen('None')
+          navigate(routes.investorMyConversations())
+        }}
+        selected={'Conversations' == pageSelected}
+      />
+      <InvestorNavigationItem
+        icon={ExploreIcon}
+        action={() => {
+          props.setMenuOpen('None')
+          navigate(routes.investorExplore())
+        }}
+        selected={'Explore' == pageSelected}
+      />
+      <InvestorNavigationItem
+        icon={HelpIcon}
+        action={() => {
+          props.setMenuOpen('None')
+          navigate(routes.investorHelp())
+        }}
+        selected={'Help' == pageSelected}
+      />
     </div>
   )
 }
-export default InvestorNavigationMenu
 
-//TODO: Logout modal
-// const askLogout = () => {}
+export default InvestorNavigationMenu

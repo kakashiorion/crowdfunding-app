@@ -376,13 +376,22 @@ const AboutLocation = (props: AboutLocationProps) => {
   })
   states = states.sort()
 
-  const getCityList = (state: string) => {
+  const getCityList = (state: string | undefined) => {
     return props.locationList.filter((l) => l.state == state)
   }
 
-  const [selectedState, setSelectedState] = useState(states[0])
-  const [cityList, setCityList] = useState(getCityList(states[0]))
-
+  const [selectedState, setSelectedState] = useState(
+    props.locationID == 0
+      ? states[0]
+      : props.locationList.find((l) => l.id == props.locationID)?.state
+  )
+  const [cityList, setCityList] = useState(
+    getCityList(
+      props.locationID == 0
+        ? states[0]
+        : props.locationList.find((l) => l.id == props.locationID)?.state
+    )
+  )
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <select
@@ -447,13 +456,22 @@ const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
   })
   sectors = sectors.sort()
 
-  const getCategoryList = (sector: string) => {
+  const getCategoryList = (sector: string | undefined) => {
     return props.sectorList.filter((l) => l.sector == sector)
   }
 
-  const [selectedSector, setSelectedSector] = useState(sectors[0])
-  const [categoryList, setCatergoryList] = useState(getCategoryList(sectors[0]))
-
+  const [selectedSector, setSelectedSector] = useState(
+    props.sectorID == 0
+      ? sectors[0]
+      : props.sectorList.find((l) => l.id == props.sectorID)?.sector
+  )
+  const [categoryList, setCatergoryList] = useState(
+    getCategoryList(
+      props.sectorID == 0
+        ? sectors[0]
+        : props.sectorList.find((l) => l.id == props.sectorID)?.sector
+    )
+  )
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <select

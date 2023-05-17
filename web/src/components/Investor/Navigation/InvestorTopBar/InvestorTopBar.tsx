@@ -1,97 +1,63 @@
 import { useState } from 'react'
 
-import CloseIcon from 'public/icons/close.svg'
 import MenuIcon from 'public/icons/menu.svg'
-import NotificationIcon from 'public/icons/notification.svg'
-import SearchIcon from 'public/icons/search.svg'
+import UpIcon from 'public/icons/up.svg'
 import LogoBlack from 'public/logo/LogoBlack.svg'
 import LogoWhite from 'public/logo/LogoWhite.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
-import NotificationBar from 'src/components/Investor/Navigation/NotificationBar/NotificationBar'
-import SearchBar from 'src/components/Investor/Navigation/SearchBar/SearchBar'
+import InvestorNavigationMenu from 'src/components/Investor/Navigation/InvestorNavigationMenu/InvestorNavigationMenu'
+import InvestorNotificationBar from 'src/components/Investor/Navigation/NotificationBar/NotificationBar'
+import InvestorProfileBar from 'src/components/Investor/Navigation/ProfileMenuBar/ProfileMenuBar'
+import InvestorSearchBar from 'src/components/Investor/Navigation/SearchBar/SearchBar'
 
-type InvestorTopBarProps = {
-  isMenuOpen: boolean
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-const InvestorTopBar = (props: InvestorTopBarProps) => {
+const InvestorTopBar = () => {
+  const [isMenuOpen, setMenuOpen] = useState('None')
   return (
-    <div className="sticky left-0 top-0 z-10 flex w-full items-center justify-between gap-4 border-b-[1px] border-b-white-d2 py-3 dark:border-b-black-l3 ">
+    <div className="sticky left-0 top-0 z-10 flex w-full items-center justify-between gap-4 py-3">
       <div className="flex items-center justify-start gap-4">
-        {props.isMenuOpen ? (
+        {isMenuOpen == 'Main' ? (
           <>
-            <CloseIcon
-              className="flex h-5 w-5 fill-primary dark:fill-primary-l1  lg:hidden"
-              onClick={() => props.setMenuOpen(false)}
+            <UpIcon
+              className={
+                'flex h-5 w-5 cursor-pointer fill-primary dark:fill-primary-l1 lg:hidden'
+              }
+              onClick={() => setMenuOpen('None')}
             />
           </>
         ) : (
           <MenuIcon
-            className="flex h-5 w-5 fill-black dark:fill-white lg:hidden"
-            onClick={() => props.setMenuOpen(true)}
+            className={
+              'flex h-5 w-5 cursor-pointer fill-black hover:fill-primary dark:fill-white dark:hover:fill-primary-l1 lg:hidden'
+            }
+            onClick={() => setMenuOpen('Main')}
           />
         )}
         <LogoBlack
-          className="flex h-6 w-10 content-start dark:hidden"
-          onClick={() => navigate(routes.investorHome())}
+          className="flex h-6 w-10 cursor-pointer content-start dark:hidden"
+          onClick={() => {
+            navigate(routes.investorHome())
+          }}
         />
         <LogoWhite
-          className="hidden h-6 w-10 content-start dark:flex"
+          className="hidden h-6 w-10 cursor-pointer content-start dark:flex"
           onClick={() => navigate(routes.investorHome())}
         />
       </div>
-      <div className="flex w-full items-center justify-end gap-4 ">
-        <ExpandableSearch />
-        <Notification />
+      <InvestorNavigationMenu
+        isMenuOpen={isMenuOpen}
+        setMenuOpen={setMenuOpen}
+      />
+      <div className="flex items-center justify-end gap-4 lg:gap-5 ">
+        <InvestorSearchBar isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
+        <InvestorNotificationBar
+          isMenuOpen={isMenuOpen}
+          setMenuOpen={setMenuOpen}
+        />
+        <InvestorProfileBar isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
       </div>
     </div>
   )
 }
-
 export default InvestorTopBar
-
-const ExpandableSearch = () => {
-  const [isSearchOpen, setSearchOpen] = useState(false)
-  return (
-    <>
-      {isSearchOpen ? (
-        <>
-          <CloseIcon
-            className="flex h-5 w-5 fill-primary dark:fill-primary-l1"
-            onClick={() => setSearchOpen(false)}
-          />
-          <SearchBar />
-        </>
-      ) : (
-        <SearchIcon
-          className="flex h-5 w-5 fill-black dark:fill-white"
-          onClick={() => setSearchOpen(true)}
-        />
-      )}
-    </>
-  )
-}
-
-const Notification = () => {
-  const [isNotificationOpen, setNotificationOpen] = useState(false)
-  return (
-    <>
-      {isNotificationOpen ? (
-        <>
-          <CloseIcon
-            className="flex h-5 w-5 fill-primary dark:fill-primary-l1 "
-            onClick={() => setNotificationOpen(false)}
-          />
-          <NotificationBar />
-        </>
-      ) : (
-        <NotificationIcon
-          className="flex h-5 w-5 fill-black dark:fill-white "
-          onClick={() => setNotificationOpen(true)}
-        />
-      )}
-    </>
-  )
-}

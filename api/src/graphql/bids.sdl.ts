@@ -26,6 +26,7 @@ export const schema = gql`
 
   type Query {
     bids: [Bid!]! @requireAuth
+    bidsByUserId: [Bid!]! @requireAuth
     bid(id: Int!): Bid @requireAuth
   }
 

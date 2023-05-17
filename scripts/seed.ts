@@ -1,7 +1,8 @@
 // import type { Prisma } from '@prisma/client'
-import { db } from 'api/src/lib/db'
+// import { db } from 'api/src/lib/db'
+import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 
-const locations = require('./csvjson.json')
+// const locations = require('./csvjson.json')
 
 export default async () => {
   try {
@@ -34,16 +35,15 @@ export default async () => {
     //     console.log(record)
     //   })
     // )
-    const createMany = await db.location.createMany({
-      data: locations,
-      skipDuplicates: true, // Skip 'Bobo'
-    })
-    console.log(createMany.count)
+    // const createMany = await db.location.createMany({
+    //   data: locations,
+    //   skipDuplicates: true, // Skip 'Bobo'
+    // })
+    // console.log(createMany.count)
     // If using dbAuth and seeding users, you'll need to add a `hashedPassword`
     // and associated `salt` to their record. Here's how to create them using
     // the same algorithm that dbAuth uses internally:
     //
-    //   import { hashPassword } from '@redwoodjs/auth-dbauth-api'
     //
     //   const users = [
     //     { name: 'john', email: 'john@example.com', password: 'secret1' },
@@ -61,6 +61,10 @@ export default async () => {
     //       }
     //     })
     //   }
+
+    const [hashedPassword, salt] = hashPassword('12345678')
+    console.log(hashedPassword)
+    console.log(salt)
   } catch (error) {
     console.warn('Please define your seed data.')
     console.error(error)

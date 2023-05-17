@@ -1,21 +1,26 @@
+import { useContext, useEffect } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
 
 import InvestorHomeMetricsCell from 'src/components/Investor/Home/InvestorHomeMetricsCell'
-import InvestorNavigationMenu from 'src/components/Investor/Navigation/InvestorNavigationMenu/InvestorNavigationMenu'
 import { TitleLabel } from 'src/components/Label/Label'
+import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
 const InvestorHomePage = () => {
+  const { setPageSelected } = useContext(InvestorPageContext)
+
+  useEffect(() => {
+    setPageSelected('Home')
+  }, [setPageSelected])
+
   return (
     <>
       <MetaTags
         title="Investor Home"
         description="Investor Home page for Dealbari platform."
       />
-      <div className="flex w-full flex-grow flex-row gap-2 overflow-hidden py-2 lg:gap-4 lg:py-4">
-        <InvestorNavigationMenu selectedPage="Home" />
-        <InvestorHomeMain />
-        <InvestorHomeSidebar />
-      </div>
+      <InvestorHomeMain />
+      <InvestorHomeSidebar />
     </>
   )
 }
@@ -24,7 +29,7 @@ export default InvestorHomePage
 
 const InvestorHomeMain = () => {
   return (
-    <div className="flex w-full min-w-[360px] flex-grow flex-col gap-2 overflow-scroll rounded">
+    <div className="h-full w-full rounded lg:w-2/3">
       <TitleLabel label="Home" />
       <InvestorHomeMetricsCell />
     </div>
@@ -33,6 +38,6 @@ const InvestorHomeMain = () => {
 
 const InvestorHomeSidebar = () => {
   return (
-    <div className="hidden rounded bg-white-d4 dark:bg-black-l4 lg:flex lg:min-w-[240px] "></div>
+    <div className="hidden lg:flex lg:h-full lg:w-1/3 lg:rounded lg:bg-white-d1 dark:lg:bg-black-l2 "></div>
   )
 }

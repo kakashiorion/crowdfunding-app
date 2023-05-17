@@ -1,68 +1,68 @@
-import HelpIcon from 'public/icons/help.svg'
+import { useContext } from 'react'
+
 import LogoutIcon from 'public/icons/logout.svg'
 import ProfileIcon from 'public/icons/profile.svg'
+import UpIcon from 'public/icons/up.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
-type ProfileMenuBarProps = {
-  setProfileOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-const ProfileMenuBar = (props: ProfileMenuBarProps) => {
-  const className =
-    'absolute z-10 lg:hidden right-4 top-9 flex flex-col items-center justify-start gap-5 rounded bg-white-d1/95 p-4 dark:bg-black-l2/95 '
+import { useAuth } from 'src/auth'
+import {
+  profileMenuItemClassName,
+  upIconClassName,
+} from 'src/components/Investor/Navigation/InvestorNavigationConsts'
+import { SubTextLabel } from 'src/components/Label/Label'
+import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
+type InvestorProfileBarProps = {
+  isMenuOpen: string
+  setMenuOpen: React.Dispatch<React.SetStateAction<string>>
+}
+const InvestorProfileBar = (props: InvestorProfileBarProps) => {
   return (
-    <div className={className}>
-      <InvestorSupportNavigationItem
-        icon={HelpIcon}
-        label={'Help'}
-        action={() => {
-          props.setProfileOpen(false)
-          navigate(routes.investorHelp())
-        }}
-      />
-      <InvestorSupportNavigationItem
-        icon={ProfileIcon}
-        label={'Profile'}
-        action={() => {
-          props.setProfileOpen(false)
-          navigate(routes.myInvestorProfile())
-        }}
-      />
-      <InvestorSupportNavigationItem
-        icon={LogoutIcon}
-        label={'Logout'}
-        action={() => {
-          props.setProfileOpen(false)
-          askLogout()
-        }}
-      />
-    </div>
+    <>
+      {props.isMenuOpen == 'Profile' ? (
+        <>
+          <UpIcon
+            className={upIconClassName}
+            onClick={() => props.setMenuOpen('None')}
+          />
+          <InvestorProfileMenu
+            isMenuOpen={props.isMenuOpen}
+            setMenuOpen={props.setMenuOpen}
+          />
+        </>
+      ) : (
+        <button
+          className="flex h-5 w-5 rounded-full bg-black-l2 hover:bg-primary dark:bg-white-d1 dark:hover:bg-primary-l1"
+          onClick={() => props.setMenuOpen('Profile')}
+        />
+      )}
+    </>
   )
 }
+export default InvestorProfileBar
 
-//TODO: Logout modal
-const askLogout = () => {}
-
-export default ProfileMenuBar
-
-type InvestorSupportNavigationItemProps = {
-  action: () => void
-  icon: React.FC<React.SVGProps<SVGSVGElement>>
-  label: string
-}
-const InvestorSupportNavigationItem = (
-  props: InvestorSupportNavigationItemProps
-) => {
+const InvestorProfileMenu = (props: InvestorProfileBarProps) => {
+  const { logOut } = useAuth()
+  const { setPageSelected } = useContext(InvestorPageContext)
   return (
-    <button
-      className={`flex w-full items-center justify-start gap-3 rounded py-2`}
-      onClick={props.action}
-    >
-      <props.icon className={`h-5 w-5 fill-black dark:fill-white`} />
-      <p className={`flex text-b2 text-black dark:text-white lg:hidden `}>
-        {props.label}
-      </p>
-    </button>
+    <div className="absolute right-0 top-9 z-10 flex flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l3/95">
+      <button
+        onClick={() => {
+          navigate(routes.myInvestorProfile())
+          props.setMenuOpen('None')
+          setPageSelected('Profile')
+        }}
+        className={profileMenuItemClassName}
+      >
+        <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white" />
+        <SubTextLabel label="Profile" />
+      </button>
+      <button onClick={() => logOut()} className={profileMenuItemClassName}>
+        <LogoutIcon className="flex h-5 w-5 fill-error dark:fill-error-l1" />
+        <SubTextLabel label="Logout" />
+      </button>
+    </div>
   )
 }

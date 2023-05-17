@@ -102,6 +102,16 @@ export const BlackOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+export const SmallBlackOutlineButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded border-2 border-black-l2 px-2 py-1 text-b3 text-black-l2 hover:border-black hover:text-black dark:border-white-d2 dark:text-white-d2 dark:hover:border-white dark:hover:text-white lg:px-4 lg:py-2 lg:text-b2"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
 export const PrimaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -188,7 +198,7 @@ export const HoverPrimaryTextButton = (props: ButtonProps) => {
 export const SmallHoverPrimaryTextButton = (props: ButtonProps) => {
   return (
     <button
-      className="text-b3 text-black-l2 underline hover:text-primary dark:text-white-d2 dark:hover:text-primary-l1  lg:text-b2"
+      className="text-b3 text-black-l2 underline hover:text-primary dark:text-white-d2 dark:hover:text-primary-l1 lg:text-b2"
       onClick={props.action}
     >
       {props.label}
@@ -210,7 +220,7 @@ export const HoverTertiaryTextButton = (props: ButtonProps) => {
 export const SmallHoverTertiaryTextButton = (props: ButtonProps) => {
   return (
     <button
-      className="text-b3 text-black-l2 underline hover:text-tertiary dark:text-white-d2 dark:hover:text-tertiary-l1  lg:text-b2"
+      className="text-b3 text-black-l2 underline hover:text-tertiary dark:text-white-d2 dark:hover:text-tertiary-l1 lg:text-b2"
       onClick={props.action}
     >
       {props.label}

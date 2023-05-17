@@ -261,8 +261,8 @@ const InvestorExperience = (props: OnboardingMainProps) => {
   }
 
   //Match skip data and save in DB
-  const saveData = (skippedLast: boolean) => {
-    createInvestorExperience({
+  const saveData = async (skippedLast: boolean) => {
+    await createInvestorExperience({
       variables: {
         input: {
           id: currentUser?.id,

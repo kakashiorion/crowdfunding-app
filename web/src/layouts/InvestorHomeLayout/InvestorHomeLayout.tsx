@@ -3,26 +3,27 @@ import { createContext, useEffect, useState } from 'react'
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
+import { investorPageClassName } from 'src/components/Investor/Navigation/InvestorNavigationConsts'
 import InvestorTopBar from 'src/components/Investor/Navigation/InvestorTopBar/InvestorTopBar'
 
 type InvestorHomeLayoutProps = {
   children?: React.ReactNode
 }
 
-type MenuContextProps = {
-  isMenuOpen: boolean
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
+type InvestorPageContextProps = {
+  pageSelected: string
+  setPageSelected: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const MenuOpenContext = createContext<MenuContextProps>({
-  isMenuOpen: false,
-  setMenuOpen: () => {},
+export const InvestorPageContext = createContext<InvestorPageContextProps>({
+  pageSelected: 'Home',
+  setPageSelected: () => {},
 })
 
 const InvestorHomeLayout = ({ children }: InvestorHomeLayoutProps) => {
-  const [isMenuOpen, setMenuOpen] = useState(false)
   const { currentUser } = useAuth()
   const [darkMode, setDarkMode] = useState('')
+  const [pageSelected, setPageSelected] = useState('Home')
 
   //TODO: Phase 2 - Implment isUserOnline feature
   useEffect(() => {
@@ -47,16 +48,16 @@ const InvestorHomeLayout = ({ children }: InvestorHomeLayoutProps) => {
     }
   }, [currentUser?.type, currentUser?.isOnboarded, currentUser?.prefersTheme])
   return (
-    <MenuOpenContext.Provider value={{ isMenuOpen, setMenuOpen }}>
+    <InvestorPageContext.Provider value={{ pageSelected, setPageSelected }}>
       <div className={darkMode}>
-        <div className={`h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 `}>
-          <div className="relative flex h-full w-full flex-col xl:mx-auto xl:max-w-screen-xl ">
-            <InvestorTopBar setMenuOpen={setMenuOpen} isMenuOpen={isMenuOpen} />
-            {children}
+        <div className="h-screen bg-white px-4 pb-4 dark:bg-black-l1 lg:px-5 lg:pb-5 ">
+          <div className="relative flex h-full flex-col gap-4  xl:mx-auto xl:max-w-screen-xl ">
+            <InvestorTopBar />
+            <div className={investorPageClassName}>{children}</div>
           </div>
         </div>
       </div>
-    </MenuOpenContext.Provider>
+    </InvestorPageContext.Provider>
   )
 }
 

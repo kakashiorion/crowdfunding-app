@@ -6,8 +6,14 @@ import { SubTextLabel, TitleLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query InvestorHomeMetricsQuery {
-    bids {
+    bids: bidsByUserId {
       id
+      status
+    }
+    connections: connectionsByUserId {
+      id
+      accepterID
+      requesterID
       status
     }
   }
@@ -15,18 +21,17 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
-
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({
   bids,
+  connections,
 }: CellSuccessProps<InvestorHomeMetricsQuery>) => {
   return (
-    <div className="flex w-full gap-4 ">
-      <div className="flex flex-col items-start gap-2 p-4">
+    <div className="flex w-full gap-4 overflow-x-scroll">
+      <div className="flex flex-col items-start gap-2 rounded bg-white-d1 p-4 dark:bg-black-l2">
         <TitleLabel
           label={
             bids
@@ -34,7 +39,17 @@ export const Success = ({
               .length.toString() ?? 0
           }
         />
-        <SubTextLabel label={'Bids in progress'} />
+        <SubTextLabel label={'Ongoing Bids'} />
+      </div>
+      <div className="flex flex-col items-start gap-2 rounded bg-white-d1 p-4 dark:bg-black-l2">
+        <TitleLabel
+          label={
+            connections
+              .filter((c) => c.status == 'ACCEPTED')
+              .length.toString() ?? 0
+          }
+        />
+        <SubTextLabel label={'Connections'} />
       </div>
     </div>
   )

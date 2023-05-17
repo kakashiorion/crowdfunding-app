@@ -276,8 +276,8 @@ const InvestorAbout = (props: OnboardingMainProps) => {
   }
 
   //Match skip data and save in DB
-  const saveData = (skippedLast: boolean) => {
-    createInvestor({
+  const saveData = async (skippedLast: boolean) => {
+    await createInvestor({
       variables: {
         input: {
           id: currentUser?.id,
@@ -451,12 +451,22 @@ const AboutLocation = (props: AboutLocationProps) => {
   })
   states = states.sort()
 
-  const getCityList = (state: string) => {
+  const getCityList = (state: string | undefined) => {
     return props.locationList.filter((l) => l.state == state)
   }
 
-  const [selectedState, setSelectedState] = useState(states[0])
-  const [cityList, setCityList] = useState(getCityList(states[0]))
+  const [selectedState, setSelectedState] = useState(
+    props.locationID == 0
+      ? states[0]
+      : props.locationList.find((l) => l.id == props.locationID)?.state
+  )
+  const [cityList, setCityList] = useState(
+    getCityList(
+      props.locationID == 0
+        ? states[0]
+        : props.locationList.find((l) => l.id == props.locationID)?.state
+    )
+  )
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">

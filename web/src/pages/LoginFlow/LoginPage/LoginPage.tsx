@@ -199,6 +199,8 @@ const PasswordLoginForm = () => {
                 navigate(routes.investorHome())
               } else if (loggedInUser?.type === 'STARTUP') {
                 navigate(routes.startupHome())
+              } else if (loggedInUser?.type === 'ADMIN') {
+                navigate(routes.startupOnboarding())
               }
             }
           }

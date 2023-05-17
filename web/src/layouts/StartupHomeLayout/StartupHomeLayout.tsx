@@ -1,17 +1,28 @@
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
+import StartupMenuBar from 'src/components/Startup/Navigation/StartupMenuBar/StartupMenuBar'
+import { startupPageClassName } from 'src/components/Startup/Navigation/StartupNavigationConsts'
 
 type StartupHomeLayoutProps = {
   children?: React.ReactNode
 }
 
+type PageContextProps = {
+  pageSelected: string
+  setPageSelected: React.Dispatch<React.SetStateAction<string>>
+}
+export const StartupPageContext = createContext<PageContextProps>({
+  pageSelected: 'Home',
+  setPageSelected: () => {},
+})
+
 const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
-  // const [isMenuOpen, setMenuOpen] = useState(false)
   const { currentUser } = useAuth()
   const [darkMode, setDarkMode] = useState('')
+  const [pageSelected, setPageSelected] = useState('Home')
 
   useEffect(() => {
     // console.log(currentUser)
@@ -36,13 +47,16 @@ const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
     }
   }, [currentUser?.type, currentUser?.isOnboarded, currentUser?.prefersTheme])
   return (
-    <div className={darkMode}>
-      <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
-        <div className="flex h-full xl:mx-auto xl:max-w-screen-xl ">
-          {children}
+    <StartupPageContext.Provider value={{ pageSelected, setPageSelected }}>
+      <div className={darkMode}>
+        <div className="h-screen bg-white px-4 pb-4 dark:bg-black-l1 lg:px-5 lg:pb-5 ">
+          <div className="relative flex h-full flex-col gap-4  xl:mx-auto xl:max-w-screen-xl ">
+            <StartupMenuBar />
+            <div className={startupPageClassName}>{children}</div>
+          </div>
         </div>
       </div>
-    </div>
+    </StartupPageContext.Provider>
   )
 }
 

@@ -34,7 +34,6 @@ const Routes = () => {
         <Route path="/signup" page={SignupFlowSignupPage} name="signup" />
       </Set>
       <Set wrap={[StartupHomeLayout]} private unauthenticated="login">
-        {/* <Set wrap={[StartupHomeLayout]} unauthenticated="landing" roles={['ADMIN', 'STARTUP']}> */}
         <Route path="/startup/home" page={StartupStartupHomePage} name="startupHome" />
         <Route path="/startup/myOffer" page={StartupStartupMyOfferPage} name="startupMyOffer" />
         <Route path="/startup/myConnections" page={StartupStartupMyConnectionsPage} name="startupMyConnections" />
@@ -46,11 +45,9 @@ const Routes = () => {
         <Route path="/startup/post" page={StartupStartupPostPage} name="startupPost" />
       </Set>
       <Set wrap={[StartupOnboardingLayout]} private unauthenticated="login">
-        {/* <Set wrap={[StartupOnboardingLayout]} unauthenticated="landing" roles={['ADMIN', 'STARTUP']}> */}
         <Route path="/startup/onboarding" page={StartupStartupOnboardingPage} name="startupOnboarding" />
       </Set>
       <Set wrap={[InvestorHomeLayout]} private unauthenticated="login">
-        {/* <Set wrap={[InvestorHomeLayout]} unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}> */}
         <Route path="/investor/home" page={InvestorInvestorHomePage} name="investorHome" />
         <Route path="/investor/myBids" page={InvestorInvestorMyBidsPage} name="investorMyBids" />
         <Route path="/investor/myConnections" page={InvestorInvestorMyConnectionsPage} name="investorMyConnections" />
@@ -62,7 +59,6 @@ const Routes = () => {
         <Route path="/investor/startupProfile" page={InvestorStartupProfilePage} name="investorStartupProfile" />
         <Route path="/investor/post" page={InvestorInvestorPostPage} name="investorPost" />
       </Set>
-      {/* <Set wrap={[InvestorOnboardingLayout]} private unauthenticated="landing" roles={['ADMIN', 'INVESTOR']}> */}
       <Set wrap={[InvestorOnboardingLayout]} private unauthenticated="login">
         <Route path="/investor/onboarding" page={InvestorInvestorOnboardingPage} name="investorOnboarding" />
       </Set>

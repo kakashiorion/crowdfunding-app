@@ -1,19 +1,23 @@
+import { useContext, useEffect } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
 
-import InvestorNavigationMenu from 'src/components/Investor/Navigation/InvestorNavigationMenu/InvestorNavigationMenu'
+import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
 const InvestorMyConnectionsPage = () => {
+  const { setPageSelected } = useContext(InvestorPageContext)
+
+  useEffect(() => {
+    setPageSelected('Connections')
+  }, [setPageSelected])
   return (
     <>
       <MetaTags
         title="Investor Connections"
         description="Investor Connections page for Dealbari platform."
       />
-      <div className="flex w-full flex-grow flex-row gap-2 overflow-hidden py-2 lg:gap-4 lg:py-4">
-        <InvestorNavigationMenu selectedPage="Connections" />
-        <InvestorConnectionsMain />
-        <InvestorConnectionsSidebar />
-      </div>
+      <InvestorConnectionsMain />
+      <InvestorConnectionsSidebar />
     </>
   )
 }

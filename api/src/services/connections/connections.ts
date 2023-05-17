@@ -10,6 +10,17 @@ export const connections: QueryResolvers['connections'] = () => {
   return db.connection.findMany()
 }
 
+export const connectionsByUserId = () => {
+  return db.connection.findMany({
+    where: {
+      OR: [
+        { accepterID: context.currentUser?.id },
+        { requesterID: context.currentUser?.id },
+      ],
+    },
+  })
+}
+
 export const connection: QueryResolvers['connection'] = ({ id }) => {
   return db.connection.findUnique({
     where: { id },

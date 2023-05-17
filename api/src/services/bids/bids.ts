@@ -16,6 +16,14 @@ export const bid: QueryResolvers['bid'] = ({ id }) => {
   })
 }
 
+export const bidsByUserId = () => {
+  return db.bid.findMany({
+    where: {
+      investorID: context.currentUser?.id,
+    },
+  })
+}
+
 export const createBid: MutationResolvers['createBid'] = ({ input }) => {
   return db.bid.create({
     data: input,

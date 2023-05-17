@@ -1,8 +1,42 @@
-//TODO: Notification bar UI
-const NotificationBar = () => {
+import NotificationIcon from 'public/icons/notification.svg'
+import UpIcon from 'public/icons/up.svg'
+
+import {
+  menuExpandDivClassName,
+  menuIconClassName,
+  upIconClassName,
+} from 'src/components/Investor/Navigation/InvestorNavigationConsts'
+
+type InvestorNotificationBarProps = {
+  isMenuOpen: string
+  setMenuOpen: React.Dispatch<React.SetStateAction<string>>
+}
+const InvestorNotificationBar = (props: InvestorNotificationBarProps) => {
   return (
-    <div className="absolute right-0 top-9 z-10 flex max-w-full flex-col items-center gap-2 rounded bg-white-d2/95 px-2 py-2 dark:bg-white-d3/95 lg:min-w-[480px] "></div>
+    <>
+      {props.isMenuOpen == 'Notification' ? (
+        <>
+          <UpIcon
+            className={upIconClassName}
+            onClick={() => props.setMenuOpen('None')}
+          />
+          <InvestorNotificationMenu />
+        </>
+      ) : (
+        <NotificationIcon
+          className={menuIconClassName}
+          onClick={() => props.setMenuOpen('Notification')}
+        />
+      )}
+    </>
   )
 }
+export default InvestorNotificationBar
 
-export default NotificationBar
+const InvestorNotificationMenu = () => {
+  return (
+    <div className={menuExpandDivClassName}>
+      <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l2"></div>
+    </div>
+  )
+}

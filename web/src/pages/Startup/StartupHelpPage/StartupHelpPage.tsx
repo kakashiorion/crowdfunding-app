@@ -1,20 +1,18 @@
-import { Link, routes } from '@redwoodjs/router'
+import { useContext, useEffect } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
 
+import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
+
 const StartupHelpPage = () => {
+  const { setPageSelected } = useContext(StartupPageContext)
+
+  useEffect(() => {
+    setPageSelected('Help')
+  }, [setPageSelected])
   return (
     <>
       <MetaTags title="StartupHelp" description="StartupHelp page" />
-
-      <h1>StartupHelpPage</h1>
-      <p>
-        Find me in{' '}
-        <code>./web/src/pages/StartupHelpPage/StartupHelpPage.tsx</code>
-      </p>
-      <p>
-        My default route is named <code>startupHelp</code>, link to me with `
-        <Link to={routes.startupHelp()}>StartupHelp</Link>`
-      </p>
     </>
   )
 }
