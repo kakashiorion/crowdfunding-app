@@ -98,6 +98,14 @@ export const DisabledSubTitleLabel = (props: LabelProps) => {
   )
 }
 
+export const QuestionLabel = (props: LabelProps) => {
+  return (
+    <p className=" text-h6 text-black dark:text-white lg:text-h5">
+      {props.label}
+    </p>
+  )
+}
+
 export const TitleLabel = (props: LabelProps) => {
   return (
     <p className=" text-h5 text-black dark:text-white  lg:text-h4">

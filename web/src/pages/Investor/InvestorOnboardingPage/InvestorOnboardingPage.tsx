@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import CloseIcon from 'public/icons/close.svg'
-import InfoIcon from 'public/icons/info.svg'
+import BookIcon from 'public/icons/book.svg'
+import UpIcon from 'public/icons/up.svg'
 import LogoBlack from 'public/logo/LogoBlack.svg'
 import LogoWhite from 'public/logo/LogoWhite.svg'
 
@@ -76,13 +76,13 @@ const InvestorOnboardingPage = () => {
         <LogoWhite className="hidden h-6 w-10 dark:flex lg:h-8 lg:w-12" />
         <div className="flex items-center justify-end gap-2 lg:gap-4">
           {isMenuOpen ? (
-            <CloseIcon
-              className="flex h-6 w-6 fill-black dark:fill-white lg:hidden"
+            <UpIcon
+              className="flex h-6 w-6 fill-primary dark:fill-primary-l1 lg:hidden"
               onClick={() => setMenuOpen(false)}
             />
           ) : (
-            <InfoIcon
-              className="flex h-6 w-6 fill-black dark:fill-white lg:hidden"
+            <BookIcon
+              className="flex h-6 w-6 fill-black hover:fill-primary dark:fill-white hover:dark:fill-primary-l1 lg:hidden"
               onClick={() => setMenuOpen(true)}
             />
           )}

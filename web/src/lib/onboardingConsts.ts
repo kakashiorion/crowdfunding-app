@@ -1,5 +1,3 @@
-import { InvestorStepsInfoList } from 'src/pages/Investor/InvestorOnboardingPage/InvestorOnboardingData'
-
 export type OnboardingSectionInfoType = {
   index: number
   title: string
@@ -59,13 +57,12 @@ type skipProps = {
   saveData: (skippedLast: boolean) => void
   step: number
   setStep: (value: React.SetStateAction<number>) => void
+  currentStepInfo: OnboardingStepsInfoType[]
 }
 export const skip = (props: skipProps) => {
   props.setSkipData([...props.skipData, true])
   props.clearError()
-  if (
-    props.step == InvestorStepsInfoList[props.currentSection - 1].steps.length
-  ) {
+  if (props.step == props.currentStepInfo.length) {
     props.setCurrentSection(props.currentSection + 1)
     props.saveData(true)
   } else {
@@ -81,12 +78,11 @@ type nextProps = {
   saveData: (skippedLast: boolean) => void
   step: number
   setStep: (value: React.SetStateAction<number>) => void
+  currentStepInfo: OnboardingStepsInfoType[]
 }
 export const next = (props: nextProps) => {
   props.setSkipData([...props.skipData, false])
-  if (
-    props.step == InvestorStepsInfoList[props.currentSection - 1].steps.length
-  ) {
+  if (props.step == props.currentStepInfo.length) {
     props.setCurrentSection(props.currentSection + 1)
     props.saveData(false)
   } else {

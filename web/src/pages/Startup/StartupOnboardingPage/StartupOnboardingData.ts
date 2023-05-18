@@ -108,7 +108,7 @@ const StartupAboutSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 7,
-    title: 'Select which sector/category your business caters.',
+    title: 'Select which sector and category your business caters.',
     display: 'Sector',
     help: 'This will help investors to find you in filtered results.',
     skippable: false,
@@ -120,21 +120,21 @@ const StartupBackgroundSteps: OnboardingStepsInfoType[] = [
     index: 1,
     title: 'What value do you provide to your customers?',
     display: 'Value',
-    help: 'This will help investors know more about what you do.',
+    help: 'This will help investors know more about your startup.',
     skippable: true,
   },
   {
     index: 2,
     title: 'How did you get the idea for this startup?',
     display: 'Idea',
-    help: 'This will make investors connect with your story.',
+    help: 'This will make investors connect with your startup.',
     skippable: true,
   },
   {
     index: 3,
     title: 'Why this business and not something else?',
     display: 'Why This',
-    help: 'This can win over investors about your dedication.',
+    help: 'This can convince investors about your dedication.',
     skippable: true,
   },
   {
@@ -148,7 +148,7 @@ const StartupBackgroundSteps: OnboardingStepsInfoType[] = [
     index: 5,
     title: 'What is the mission of your startup?',
     display: 'Mission',
-    help: 'This will help investors connect with your mission.',
+    help: 'This will help investors connect with your startup.',
     skippable: true,
   },
   {

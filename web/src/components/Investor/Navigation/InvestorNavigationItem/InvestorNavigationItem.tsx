@@ -19,7 +19,7 @@ const InvestorNavigationItem = (props: InvestorNavigationItemProps) => {
       <props.icon
         className={`h-5 w-5 ${
           props.selected
-            ? 'fill-primary-l1 dark:fill-primary'
+            ? 'fill-primary-l2 dark:fill-primary'
             : 'fill-black dark:fill-white'
         }`}
       />

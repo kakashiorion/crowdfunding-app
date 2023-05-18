@@ -406,6 +406,7 @@ const InvestorAbout = (props: OnboardingMainProps) => {
               setStep: setStep,
               skipData: skipData,
               setSkipData: setSkipData,
+              currentStepInfo: currentStepInfo,
             })
           }
         }}
@@ -419,6 +420,7 @@ const InvestorAbout = (props: OnboardingMainProps) => {
             setStep: setStep,
             skipData: skipData,
             setSkipData: setSkipData,
+            currentStepInfo: currentStepInfo,
           })
         }}
         backAction={() => {

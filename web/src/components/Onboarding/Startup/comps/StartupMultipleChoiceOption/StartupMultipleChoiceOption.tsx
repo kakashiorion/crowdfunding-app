@@ -1,3 +1,5 @@
+import DoneIcon from 'public/icons/done.svg'
+
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 
 type StartupMultipleChoiceOptionProps = {
@@ -16,9 +18,9 @@ const StartupMultipleChoiceOption = (
         {props.options.map((e) => (
           <button
             key={e}
-            className={`w-full flex-grow rounded p-3 text-black shadow-md dark:text-white lg:p-4 ${
+            className={`flex w-full flex-grow items-center justify-center gap-2 rounded p-3 text-black shadow-md dark:text-white lg:gap-4 lg:p-4 ${
               props.input.includes(e)
-                ? ' bg-tertiary'
+                ? ' bg-tertiary text-white'
                 : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
             }`}
             onClick={() => {
@@ -30,7 +32,10 @@ const StartupMultipleChoiceOption = (
               props.error != '' && props.setError('')
             }}
           >
-            {e.replaceAll('_', ' ')}
+            <div className="mx-auto flex w-2/3 items-center justify-start gap-5 whitespace-nowrap text-b2 lg:gap-6 lg:text-b1">
+              {props.input.includes(e) ? <SelectedBox /> : <UnselectedBox />}
+              {e.replaceAll('_', ' ')}
+            </div>{' '}
           </button>
         ))}
       </div>
@@ -40,3 +45,17 @@ const StartupMultipleChoiceOption = (
 }
 
 export default StartupMultipleChoiceOption
+
+const SelectedBox = () => {
+  return (
+    <div className="flex h-5 w-5 shrink-0 rounded bg-white ">
+      <DoneIcon className="m-auto h-5 w-5 fill-tertiary" />
+    </div>
+  )
+}
+
+const UnselectedBox = () => {
+  return (
+    <div className="flex h-5 w-5 shrink-0 rounded border-2 border-black dark:border-white "></div>
+  )
+}

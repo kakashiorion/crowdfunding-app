@@ -494,6 +494,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
               setStep: setStep,
               skipData: skipData,
               setSkipData: setSkipData,
+              currentStepInfo: currentStepInfo,
             })
           }
         }}
@@ -507,6 +508,7 @@ const StartupFinancials = (props: OnboardingMainProps) => {
             setStep: setStep,
             skipData: skipData,
             setSkipData: setSkipData,
+            currentStepInfo: currentStepInfo,
           })
         }}
         backAction={() => {

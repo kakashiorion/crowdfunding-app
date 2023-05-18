@@ -16,6 +16,7 @@
 type ButtonProps = {
   action: () => void
   label: string
+  icon?: JSX.Element
 }
 
 export const PrimaryFilledButton = (props: ButtonProps) => {
@@ -28,6 +29,19 @@ export const PrimaryFilledButton = (props: ButtonProps) => {
     </button>
   )
 }
+
+export const IconBlackFilledButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="flex items-center justify-between gap-1 rounded bg-white-d1 p-2 text-b2 text-black shadow-sm hover:bg-white-d2 dark:bg-black-l2 dark:text-white dark:hover:bg-black-l3 lg:text-b1"
+      onClick={props.action}
+    >
+      {props.icon}
+      {props.label}
+    </button>
+  )
+}
+
 export const SmallPrimaryFilledButton = (props: ButtonProps) => {
   return (
     <button
@@ -60,6 +74,7 @@ export const TertiaryFilledButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const SmallTertiaryFilledButton = (props: ButtonProps) => {
   return (
     <button
@@ -92,6 +107,7 @@ export const DisabledFilledButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const BlackOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -102,6 +118,7 @@ export const BlackOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const SmallBlackOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -112,6 +129,7 @@ export const SmallBlackOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const PrimaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -122,6 +140,7 @@ export const PrimaryOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const SmallPrimaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -132,6 +151,7 @@ export const SmallPrimaryOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const TertiaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -142,6 +162,7 @@ export const TertiaryOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const SmallTertiaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -152,6 +173,7 @@ export const SmallTertiaryOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const SecondaryOutlineButton = (props: ButtonProps) => {
   return (
     <button
@@ -162,6 +184,7 @@ export const SecondaryOutlineButton = (props: ButtonProps) => {
     </button>
   )
 }
+
 export const SmallSecondaryOutlineButton = (props: ButtonProps) => {
   return (
     <button

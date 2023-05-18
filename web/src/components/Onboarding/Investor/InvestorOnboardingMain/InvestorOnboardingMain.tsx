@@ -1,4 +1,4 @@
-import { PrimaryTitleLabel } from 'src/components/Label/Label'
+import { PrimarySubTitleLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
 import {
   InvestorOnboardingSections,
@@ -17,10 +17,12 @@ const InvestorOnboardingMain = (props: OnboardingMainProps) => {
     const componentsList = InvestorStepsInfoList[props.currentSection - 1]
     return (
       <div className="flex h-full w-full flex-col gap-3 overflow-hidden lg:gap-4">
-        <PrimaryTitleLabel
-          label={`Section ${props.currentSection}: ${
-            InvestorOnboardingSections[props.currentSection - 1].title
-          }`}
+        <PrimarySubTitleLabel
+          label={`SECTION ${
+            props.currentSection
+          } : ${InvestorOnboardingSections[
+            props.currentSection - 1
+          ].title.toUpperCase()}`}
         />
         {
           <componentsList.component

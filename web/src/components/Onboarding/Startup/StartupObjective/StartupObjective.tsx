@@ -382,6 +382,7 @@ const StartupObjective = (props: OnboardingMainProps) => {
               setStep: setStep,
               skipData: skipData,
               setSkipData: setSkipData,
+              currentStepInfo: currentStepInfo,
             })
           }
         }}
@@ -395,6 +396,7 @@ const StartupObjective = (props: OnboardingMainProps) => {
             setStep: setStep,
             skipData: skipData,
             setSkipData: setSkipData,
+            currentStepInfo: currentStepInfo,
           })
         }}
         backAction={() => {

@@ -254,6 +254,7 @@ const StartupPreferences = (props: OnboardingMainProps) => {
               setStep: setStep,
               skipData: skipData,
               setSkipData: setSkipData,
+              currentStepInfo: currentStepInfo,
             })
           }
         }}
@@ -267,6 +268,7 @@ const StartupPreferences = (props: OnboardingMainProps) => {
             setStep: setStep,
             skipData: skipData,
             setSkipData: setSkipData,
+            currentStepInfo: currentStepInfo,
           })
         }}
         backAction={() => {

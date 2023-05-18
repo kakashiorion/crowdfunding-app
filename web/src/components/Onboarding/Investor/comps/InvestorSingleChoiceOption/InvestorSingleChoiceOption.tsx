@@ -14,9 +14,9 @@ const InvestorSingleChoiceOption = (props: InvestorSingleChoiceOptionProps) => {
         {props.options.map((e) => (
           <button
             key={e}
-            className={`w-full flex-grow rounded p-3 text-black shadow-md dark:text-white lg:p-4 ${
+            className={`w-full flex-grow rounded p-3 text-b2 text-black shadow-md dark:text-white lg:p-4 lg:text-b1 ${
               e == props.input
-                ? ' bg-primary'
+                ? ' bg-primary text-white'
                 : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
             }`}
             onClick={() => {

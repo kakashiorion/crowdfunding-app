@@ -1,31 +1,21 @@
-import { useState } from 'react'
-
 import CheckIcon from 'public/icons/checkCircle.svg'
-import InfoIcon from 'public/icons/info.svg'
 
-import {
-  SmallHoverTertiaryTextButton,
-  TertiaryFilledButton,
-} from 'src/components/Button/Button'
-import {
-  TitleLabel,
-  TertiarySubTitleLabel,
-  WarnSubTextLabel,
-} from 'src/components/Label/Label'
+import { LargeTertiaryFilledButton } from 'src/components/Button/Button'
+import { TitleLabel, TertiarySubTitleLabel } from 'src/components/Label/Label'
 import { OnboardingIntroSectionProps } from 'src/lib/onboardingConsts'
 
 const StartupIntro = (props: OnboardingIntroSectionProps) => {
-  const [infoShown, setInfoShown] = useState(false)
+  // const [infoShown, setInfoShown] = useState(false)
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 rounded px-6 py-5 text-center  lg:px-8 lg:py-6">
       <CheckIcon className="flex h-9 w-9 fill-success-d1 dark:fill-success-l1 lg:h-10 lg:w-10" />
       <TitleLabel label="Congrats! You have successfully signed up." />
       <TertiarySubTitleLabel label="Now, let's get you onboard with our platform." />
-      <TertiaryFilledButton
-        label="GET STARTED"
+      <LargeTertiaryFilledButton
+        label="LET'S GET STARTED"
         action={() => props.setCurrentSection(1)}
       />
-      <InfoIcon
+      {/* <InfoIcon
         className="flex h-4 w-4 shrink-0 fill-warn-d1 dark:fill-warn-l1 lg:h-5 lg:w-5"
         onClick={() => setInfoShown(true)}
       />
@@ -39,7 +29,7 @@ const StartupIntro = (props: OnboardingIntroSectionProps) => {
             action={() => setInfoShown(false)}
           />
         </div>
-      )}
+      )} */}
     </div>
   )
 }

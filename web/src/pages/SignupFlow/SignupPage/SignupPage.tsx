@@ -139,7 +139,7 @@ const SignupForm = (props: SignupFormProps) => {
   const [createLead] = useMutation(LEAD_MUTATION)
 
   return (
-    <div className="my-2 flex w-full flex-col items-center justify-center gap-2 lg:my-4 ">
+    <div className="my-2 flex w-full flex-col items-center justify-center gap-2 text-center lg:my-4 ">
       {stage == 'email' && (
         //Step 1: Provide Email and Phone number
         <>

@@ -220,7 +220,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
 
   //Match skip data and save in DB
   const saveData = async (skippedLast: boolean) => {
-    createStartup({
+    await createStartup({
       variables: {
         input: {
           id: currentUser?.id,
@@ -237,7 +237,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
           sectorCategoryID: skippedLast ? 0 : sectorID,
         },
       },
-    })
+    }).then((d) => console.log(d))
   }
 
   return (
@@ -251,7 +251,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
           <StartupSingleTextInput
             input={name}
             setInput={setName}
-            placeholder={'Name of statup'}
+            placeholder={'Name of startup'}
             error={error1}
             setError={setError1}
           />
@@ -331,6 +331,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
               setStep: setStep,
               skipData: skipData,
               setSkipData: setSkipData,
+              currentStepInfo: currentStepInfo,
             })
           }
         }}
@@ -344,6 +345,7 @@ const StartupAbout = (props: OnboardingMainProps) => {
             setStep: setStep,
             skipData: skipData,
             setSkipData: setSkipData,
+            currentStepInfo: currentStepInfo,
           })
         }}
         backAction={() => {
@@ -500,7 +502,7 @@ const AboutSectorCategory = (props: AboutSectorCategoryProps) => {
         className={
           ' w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
         }
-        value={props.sectorID}
+        value={props.sectorID != 0 ? props.sectorID : categoryList[0].id}
         onChange={(e) => {
           props.setSectorID(
             props.sectorList.find((l) => l.id == Number(e.target.value))?.id ??

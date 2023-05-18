@@ -76,7 +76,7 @@ const StartupTimelineSteps = (props: OnboardingTimelineStepsProps) => {
       <div
         className={
           divClassName +
-          ' border-l-4 border-l-tertiary dark:border-l-tertiary-l1'
+          ' border-l-0 border-l-tertiary dark:border-l-tertiary-l1 lg:border-l-4'
         }
       >
         <props.icon className="flex h-6 w-6 fill-tertiary dark:fill-tertiary-l1" />

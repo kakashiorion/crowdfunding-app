@@ -1,4 +1,4 @@
-import { TertiaryTitleLabel } from 'src/components/Label/Label'
+import { TertiarySubTitleLabel } from 'src/components/Label/Label'
 import { OnboardingMainProps } from 'src/lib/onboardingConsts'
 import {
   StartupOnboardingSections,
@@ -17,10 +17,10 @@ const StartupOnboardingMain = (props: OnboardingMainProps) => {
     const componentsList = StartupStepsInfoList[props.currentSection - 1]
     return (
       <div className="flex h-full w-full flex-col gap-3 overflow-hidden lg:gap-4">
-        <TertiaryTitleLabel
-          label={`Section ${props.currentSection}: ${
-            StartupOnboardingSections[props.currentSection - 1].title
-          }`}
+        <TertiarySubTitleLabel
+          label={`SECTION ${props.currentSection} : ${StartupOnboardingSections[
+            props.currentSection - 1
+          ].title.toUpperCase()}`}
         />
         {
           <componentsList.component

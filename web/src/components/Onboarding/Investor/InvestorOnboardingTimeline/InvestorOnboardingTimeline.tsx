@@ -73,7 +73,8 @@ const InvestorTimelineSteps = (props: OnboardingTimelineStepsProps) => {
     return (
       <div
         className={
-          divClassName + ' border-l-4 border-l-primary dark:border-l-primary-l1'
+          divClassName +
+          ' border-l-0 border-l-primary dark:border-l-primary-l1 lg:border-l-4'
         }
       >
         <props.icon className="flex h-6 w-6 fill-primary dark:fill-primary-l1" />

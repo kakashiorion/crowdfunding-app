@@ -275,11 +275,11 @@ const StartupBackground = (props: OnboardingMainProps) => {
           mission: skipData[4] ? null : mission,
           vision: skipData[5] ? null : vision,
           coreValues: skipData[6] ? [] : [coreValue1, coreValue2, coreValue3],
-          startupTeamSize: skippedLast ? null : startupTeamSize,
+          startupTeamSize: startupTeamSize,
         },
       },
     }).then((d) => {
-      !skipData[8] &&
+      !skippedLast &&
         keyPeople.forEach(async (item) => {
           await createKeyPeople({
             variables: {
@@ -404,6 +404,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
               setStep: setStep,
               skipData: skipData,
               setSkipData: setSkipData,
+              currentStepInfo: currentStepInfo,
             })
           }
         }}
@@ -417,6 +418,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
             setStep: setStep,
             skipData: skipData,
             setSkipData: setSkipData,
+            currentStepInfo: currentStepInfo,
           })
         }}
         backAction={() => {
