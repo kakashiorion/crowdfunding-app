@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -8,14 +10,33 @@ import {
   PrimaryFilledButton,
   SmallHoverPrimaryTextButton,
 } from 'src/components/Button/Button'
-import { TextInput } from 'src/components/Input/Input'
+import {} from 'src/components/Input/Input'
 import {
   ErrorSubTextLabel,
+  SubTextLabel,
   SuccessSubTextLabel,
   TextLabel,
+  TitleLabel,
 } from 'src/components/Label/Label'
 
+import {
+  FormWrapperClassName,
+  ImageWrapperClassName,
+  LoginFormClassName,
+  PageWrapperClassName,
+  TextInputClassName,
+} from '../loginConsts'
+
 import forgotImg from './forgot.jpg'
+
+const EMAIL_QUERY = gql`
+  query CheckUser($email: String!) {
+    user: userByEmail(email: $email) {
+      id
+      email
+    }
+  }
+`
 
 type ForgotPasswordPageProps = {
   email?: string
@@ -26,6 +47,7 @@ const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
   const [success, setSuccess] = useState(false)
 
   const { forgotPassword } = useAuth()
+  const [checkDB] = useLazyQuery(EMAIL_QUERY)
 
   return (
     <>
@@ -33,56 +55,66 @@ const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
         title="Forgot Password"
         description="Forgot Password page for Dealbari platform"
       />
-      <div className="my-4 flex h-full overflow-hidden rounded bg-white-d1/50 dark:bg-black-l2/50 lg:my-5 xl:aspect-video xl:h-auto">
-        <div className="hidden lg:flex lg:flex-1">
+      <div id="forgotPwdPageWrapper" className={PageWrapperClassName}>
+        <div id="imageWrapper" className={ImageWrapperClassName}>
           <img src={forgotImg} alt="Forgot Password" />
         </div>
-        <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-4 overflow-y-scroll px-4 py-5 text-center lg:flex-[2] lg:px-6">
-          <p className="mt-2 w-full text-h5 text-black dark:text-white lg:mt-4 lg:text-h4">
-            {'Forgot password?'}
-          </p>
-          <p className="w-full text-b3 text-black-l2 dark:text-white-d2 lg:text-b2">
-            {
-              "Don't worry! We will send you an email to help you reset your password."
-            }
-          </p>
-          <TextLabel label={'Confirm your Email'} />
-          <TextInput
-            value={enteredEmail}
-            type="text"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEnteredEmail(e.target.value)
-              emailMsg != '' && setEmailMsg('')
-            }}
-          />
-          {success ? (
-            <SuccessSubTextLabel label={emailMsg} />
-          ) : (
-            <ErrorSubTextLabel label={emailMsg} />
-          )}
-          <PrimaryFilledButton
-            action={async () => {
-              if (enteredEmail.length == 0) {
-                setEmailMsg(`Don't leave it blank`)
-              } else {
-                //Send forgot pwd link to user*/
-                const user = await forgotPassword(enteredEmail)
-                if (user.error) {
-                  setEmailMsg('Email does not exist in our records!')
+        <div id="formWrapper" className={FormWrapperClassName}>
+          <div id="forgotPasswordForm" className={LoginFormClassName}>
+            <TitleLabel label="Forgot password?" />
+            <SubTextLabel label="Don't worry! We will send you an email to help you reset your password." />
+            <Divider />
+            <TextLabel label={'Confirm your email ID'} />
+            <input
+              value={enteredEmail}
+              type="text"
+              className={TextInputClassName}
+              onChange={(e) => {
+                setEnteredEmail(e.target.value)
+                emailMsg != '' && setEmailMsg('')
+              }}
+            />
+            {success ? (
+              <SuccessSubTextLabel label={emailMsg} />
+            ) : (
+              <ErrorSubTextLabel label={emailMsg} />
+            )}
+            <Divider />
+            <PrimaryFilledButton
+              action={async () => {
+                if (
+                  enteredEmail.length < 5 ||
+                  !enteredEmail.includes('@') ||
+                  !enteredEmail.includes('.')
+                ) {
+                  setEmailMsg(`Provide a proper email ID`)
                 } else {
-                  setSuccess(true)
-                  setEmailMsg('Reset link sent to your email!')
+                  //Check if email exists
+                  checkDB({
+                    variables: { email: enteredEmail },
+                  }).then(async (d) => {
+                    if (!d.data.user) {
+                      //Error if no user
+                      setEmailMsg('Email does not exist in our records!')
+                    } else {
+                      //Send forgot pwd link to user*/
+                      await forgotPassword(enteredEmail)
+                      setSuccess(true)
+                      setEmailMsg('Reset link sent to your email!')
+                    }
+                  })
                 }
-              }
-            }}
-            label={'RESET PASSWORD'}
-          />
-          <SmallHoverPrimaryTextButton
-            action={() => {
-              navigate(routes.login())
-            }}
-            label={'Oh.. I remember my password!'}
-          />
+              }}
+              label={'RESET PASSWORD'}
+            />
+            <Divider />
+            <SmallHoverPrimaryTextButton
+              action={() => {
+                navigate(routes.login())
+              }}
+              label={'Oh.. I remember my password!'}
+            />
+          </div>
         </div>
       </div>
     </>
@@ -90,3 +122,7 @@ const ForgotPasswordPage = (props: ForgotPasswordPageProps) => {
 }
 
 export default ForgotPasswordPage
+
+const Divider = () => {
+  return <div className="h-2" />
+}

@@ -32,7 +32,7 @@ export default InvestorHomePage
 
 const InvestorHomeMain = () => {
   return (
-    <div className="flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-scroll rounded lg:w-2/3">
+    <div className="flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-scroll rounded lg:w-2/3 lg:gap-6">
       <InvestorBreadCrumbs />
       <InvestorHomeMetricsCell />
       <InvestorFeedBlock />

@@ -52,12 +52,30 @@ export const Investor: InvestorRelationResolvers = {
       .findUnique({ where: { id: root?.id } })
       .investorObjective()
   },
-  bids: (_obj, { root }) => {
-    return db.investor.findUnique({ where: { id: root?.id } }).bids()
-  },
-  successfulOffers: (_obj, { root }) => {
+  participatingInOffers: (_obj, { root }) => {
     return db.investor
       .findUnique({ where: { id: root?.id } })
-      .successfulOffers()
+      .participatingInOffers()
+  },
+  waitingInRoomQueues: (_obj, { root }) => {
+    return db.investor
+      .findUnique({ where: { id: root?.id } })
+      .waitingInRoomQueues()
+  },
+  kickedFromOffers: (_obj, { root }) => {
+    return db.investor
+      .findUnique({ where: { id: root?.id } })
+      .kickedFromOffers()
+  },
+  negotiatingOffers: (_obj, { root }) => {
+    return db.investor
+      .findUnique({ where: { id: root?.id } })
+      .negotiatingOffers()
+  },
+  dealsJoined: (_obj, { root }) => {
+    return db.investor.findUnique({ where: { id: root?.id } }).dealsJoined()
+  },
+  askedQuestions: (_obj, { root }) => {
+    return db.investor.findUnique({ where: { id: root?.id } }).askedQuestions()
   },
 }

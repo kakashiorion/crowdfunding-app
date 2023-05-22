@@ -42,12 +42,10 @@ export const Offer: OfferRelationResolvers = {
   startup: (_obj, { root }) => {
     return db.offer.findUnique({ where: { id: root?.id } }).startup()
   },
-  bids: (_obj, { root }) => {
-    return db.offer.findUnique({ where: { id: root?.id } }).bids()
+  offerRoom: (_obj, { root }) => {
+    return db.offer.findUnique({ where: { id: root?.id } }).offerRoom()
   },
-  successfulInvestors: (_obj, { root }) => {
-    return db.offer
-      .findUnique({ where: { id: root?.id } })
-      .successfulInvestors()
+  successfulDealers: (_obj, { root }) => {
+    return db.offer.findUnique({ where: { id: root?.id } }).successfulDealers()
   },
 }

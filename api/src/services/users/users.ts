@@ -5,7 +5,6 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
-import { sendTokenEmail, resetPwdEmail } from 'src/lib/email'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -17,19 +16,13 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const userByEmail = ({ email }: { email: string }) => {
+export const userByEmail: QueryResolvers['userByEmail'] = ({
+  email,
+}: {
+  email: string
+}) => {
   return db.user.findUnique({
-    where: {
-      email: email,
-    },
-  })
-}
-
-export const userByMobile = ({ mobile }: { mobile: string }) => {
-  return db.user.findUnique({
-    where: {
-      mobile: mobile,
-    },
+    where: { email: email },
   })
 }
 
@@ -85,21 +78,17 @@ export const User: UserRelationResolvers = {
   startup: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).startup()
   },
-  sentMessages: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).sentMessages()
+  offerRoomMessages: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).offerRoomMessages()
   },
-  receivedMessages: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).receivedMessages()
+  negotitionMessages: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).negotitionMessages()
   },
-  startedConversations: (_obj, { root }) => {
-    return db.user
-      .findUnique({ where: { id: root?.id } })
-      .startedConversations()
+  directMessages: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).directMessages()
   },
-  respondedConversations: (_obj, { root }) => {
-    return db.user
-      .findUnique({ where: { id: root?.id } })
-      .respondedConversations()
+  directConversations: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).directConversations()
   },
   posts: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).posts()
@@ -113,13 +102,8 @@ export const User: UserRelationResolvers = {
   likedComments: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).likedComments()
   },
-  connectionsRequested: (_obj, { root }) => {
-    return db.user
-      .findUnique({ where: { id: root?.id } })
-      .connectionsRequested()
-  },
-  connectionsAccepted: (_obj, { root }) => {
-    return db.user.findUnique({ where: { id: root?.id } }).connectionsAccepted()
+  connections: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).connections()
   },
   followedBy: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).followedBy()

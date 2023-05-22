@@ -20,16 +20,10 @@ import {
 import { sendSignupEmailJS } from 'src/lib/sendEmail'
 
 const SIGNUP_QUERY = gql`
-  query CheckUser($email: String!, $mobile: String!) {
-    user1: userByEmail(email: $email) {
+  query CheckUser($email: String!) {
+    user: userByEmail(email: $email) {
       id
       email
-      mobile
-    }
-    user2: userByMobile(mobile: $mobile) {
-      id
-      email
-      mobile
     }
   }
 `
@@ -64,7 +58,6 @@ const SignupPage = (props: SignupPageProps) => {
     </>
   )
 }
-
 export default SignupPage
 
 type UserSignupCardProps = {
@@ -118,21 +111,23 @@ const LEAD_MUTATION = gql`
   }
 `
 
+const Divider = () => {
+  return <div className="h-2" />
+}
+
 type SignupFormProps = {
   userType: string
 }
 const SignupForm = (props: SignupFormProps) => {
   const [stage, setStage] = useState('email')
-  const [emailError, setEmailError] = useState('')
-  const [phoneError, setPhoneError] = useState('')
-  const [pwdError, setPwdError] = useState('')
-  const [codeError, setCodeError] = useState('')
   const [enteredEmail, setEnteredEmail] = useState('')
-  const [enteredPhone, setEnteredPhone] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [enteredCode, setEnteredCode] = useState('')
+  const [codeError, setCodeError] = useState('')
+  const [generatedToken, setGeneratedToken] = useState('')
   const [enteredPwd, setEnteredPwd] = useState('')
   const [enteredConfirmPwd, setEnteredConfirmPwd] = useState('')
-  const [enteredCode, setEnteredCode] = useState('')
-  const [generatedToken, setGeneratedToken] = useState('')
+  const [pwdError, setPwdError] = useState('')
 
   const { signUp } = useAuth()
   const [checkDB] = useLazyQuery(SIGNUP_QUERY)
@@ -141,11 +136,10 @@ const SignupForm = (props: SignupFormProps) => {
   return (
     <div className="my-2 flex w-full flex-col items-center justify-center gap-2 text-center lg:my-4 ">
       {stage == 'email' && (
-        //Step 1: Provide Email and Phone number
+        //Step 1: Provide Email
         <>
-          <SubTextLabel
-            label={'Please provide some details required for signup.'}
-          />
+          <SubTextLabel label={'Please provide your email ID for signup.'} />
+          <Divider />
           <TextLabel label={'Email'} />
           <TextInput
             value={enteredEmail}
@@ -156,37 +150,23 @@ const SignupForm = (props: SignupFormProps) => {
             }}
           />
           <ErrorSubTextLabel label={emailError} />
-          <TextLabel label="Phone Number" />
-          <TextInput
-            value={enteredPhone}
-            type="tel"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEnteredPhone(e.target.value)
-              phoneError != '' && setPhoneError('')
-            }}
-          />
-          <ErrorSubTextLabel label={phoneError} />
+          <Divider />
           <PrimaryFilledButton
             action={() => {
-              if (enteredEmail.length < 5) {
-                setEmailError(`Email is required for signup!`)
-              } else if (
+              //Check email pattern on UI
+              if (
+                enteredEmail.length < 5 ||
                 !enteredEmail.includes('@') ||
                 !enteredEmail.includes('.')
               ) {
-                //Check email pattern
-                setEmailError('Invalid email')
-              } else if (enteredPhone.length < 10) {
-                setPhoneError('Phone number should be at least 10 digits')
+                setEmailError(`Proper email ID is required for signup`)
               } else {
-                //Check if email or phone already exists in DB
+                //Check if email already exists in DB
                 checkDB({
-                  variables: { email: enteredEmail, mobile: enteredPhone },
+                  variables: { email: enteredEmail },
                 }).then(async (d) => {
-                  if (d.data.user1) {
+                  if (d.data.user) {
                     setEmailError('Email is already registered!')
-                  } else if (d.data.user2) {
-                    setPhoneError('Phone is already registered!')
                   } else {
                     const gToken = Math.floor(100000 + Math.random() * 900000)
                     //Send token in Email for user to confirnm
@@ -195,7 +175,6 @@ const SignupForm = (props: SignupFormProps) => {
                     await createLead({
                       variables: {
                         input: {
-                          phone: enteredPhone,
                           email: enteredEmail,
                           gToken: gToken.toString(),
                           type: props.userType,
@@ -220,6 +199,7 @@ const SignupForm = (props: SignupFormProps) => {
               'Check your email.. We have sent you a code for signup confirmation.'
             }
           />
+          <Divider />
           <TextLabel label="Enter Code" />
           <TextInput
             value={enteredCode}
@@ -230,6 +210,7 @@ const SignupForm = (props: SignupFormProps) => {
             }}
           />
           <ErrorSubTextLabel label={codeError} />
+          <Divider />
           <PrimaryFilledButton
             action={() => {
               if (enteredCode.length != 6) {
@@ -242,7 +223,7 @@ const SignupForm = (props: SignupFormProps) => {
             }}
             label="CONFIRM"
           />
-          <div className="h-4 lg:h-6"></div>
+          <Divider />
           <WarnSubTextLabel label={`Not ${enteredEmail}?`} />
           <SmallHoverPrimaryTextButton
             action={() => {
@@ -259,7 +240,7 @@ const SignupForm = (props: SignupFormProps) => {
           <SubTextLabel
             label={`Great.. Let's create a password for your account to complete signup.`}
           />
-          <div className="h-4 lg:h-6"></div>
+          <Divider />
           <TextLabel label="Choose a password" />
           <TextInput
             value={enteredPwd}
@@ -269,7 +250,8 @@ const SignupForm = (props: SignupFormProps) => {
               pwdError != '' && setPwdError('')
             }}
           />
-          <TextLabel label="Enter password again to confirm" />
+          <Divider />
+          <TextLabel label="Confirm password" />
           <TextInput
             value={enteredConfirmPwd}
             type="password"
@@ -279,6 +261,7 @@ const SignupForm = (props: SignupFormProps) => {
             }}
           />
           <ErrorSubTextLabel label={pwdError} />
+          <Divider />
           <PrimaryFilledButton
             action={async () => {
               if (enteredPwd.length < 8 || enteredConfirmPwd.length < 8) {
@@ -290,7 +273,6 @@ const SignupForm = (props: SignupFormProps) => {
                 await signUp({
                   username: enteredEmail,
                   password: enteredPwd,
-                  mobile: enteredPhone,
                   type: props.userType,
                 }).then((d) => {
                   if (d.error) {

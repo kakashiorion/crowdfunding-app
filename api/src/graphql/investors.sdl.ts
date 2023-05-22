@@ -7,14 +7,18 @@ export const schema = gql`
     locationID: Int!
     linkedInURL: String
     websiteURL: String
-    eduBG: EducationBG
-    yearsOfWorkEx: SizeRange
-    numberOfCompanies: SizeRange
+    eduBG: EducationBG!
+    yearsOfWorkEx: SizeRange!
+    numberOfCompanies: SizeRange!
     workedInSectors: [Sector]!
     investorExp: InvestorExperience
     investorObjective: InvestorObjective
-    bids: [Bid]!
-    successfulOffers: [Offer]!
+    participatingInOffers: [OfferRoom]!
+    waitingInRoomQueues: [OfferRoom]!
+    kickedFromOffers: [OfferRoom]!
+    negotiatingOffers: [NegotiationTable]!
+    dealsJoined: [Deal]!
+    askedQuestions: [OfferQuestion]!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -98,9 +102,9 @@ export const schema = gql`
     locationID: Int!
     linkedInURL: String
     websiteURL: String
-    eduBG: EducationBG
-    yearsOfWorkEx: SizeRange
-    numberOfCompanies: SizeRange
+    eduBG: EducationBG!
+    yearsOfWorkEx: SizeRange!
+    numberOfCompanies: SizeRange!
     workedInSectors: [Sector]!
   }
 

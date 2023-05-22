@@ -6,9 +6,9 @@ export const schema = gql`
     salt: String!
     resetToken: String
     resetTokenExpiresAt: DateTime
-    lastLogin: DateTime!
     profilePicURL: String
-    mobile: String!
+    lastActive: DateTime!
+    mobile: String
     otp: String
     otpExpiresAt: DateTime
     webAuthnChallenge: String
@@ -16,19 +16,17 @@ export const schema = gql`
     type: UserType!
     investor: Investor
     startup: Startup
-    isLoggedIn: Boolean!
     isOnboarded: Boolean!
     likedOnboarding: Boolean
-    sentMessages: [Message]!
-    receivedMessages: [Message]!
-    startedConversations: [Conversation]!
-    respondedConversations: [Conversation]!
+    offerRoomMessages: [RoomGroupMessage]!
+    negotitionMessages: [NegotiationMessage]!
+    directMessages: [DirectMessage]!
+    directConversations: [DirectConversation]!
     posts: [Post]!
     comments: [Comment]!
     likedPosts: [Post]!
     likedComments: [Comment]!
-    connectionsRequested: [Connection]!
-    connectionsAccepted: [Connection]!
+    connections: [Connection]!
     followedBy: [User]!
     following: [User]!
     messageVisibility: VisibilityLevel!
@@ -85,7 +83,6 @@ export const schema = gql`
     users: [User!]! @requireAuth
     user(id: Int!): User @requireAuth
     userByEmail(email: String!): User @requireAuth
-    userByMobile(mobile: String!): User @requireAuth
   }
 
   input CreateUserInput {
@@ -94,14 +91,13 @@ export const schema = gql`
     salt: String!
     resetToken: String
     resetTokenExpiresAt: DateTime
-    lastLogin: DateTime!
     profilePicURL: String
-    mobile: String!
+    lastActive: DateTime!
+    mobile: String
     otp: String
     otpExpiresAt: DateTime
     webAuthnChallenge: String
     type: UserType!
-    isLoggedIn: Boolean!
     isOnboarded: Boolean!
     likedOnboarding: Boolean
     messageVisibility: VisibilityLevel!
@@ -117,14 +113,13 @@ export const schema = gql`
     salt: String
     resetToken: String
     resetTokenExpiresAt: DateTime
-    lastLogin: DateTime
     profilePicURL: String
+    lastActive: DateTime
     mobile: String
     otp: String
     otpExpiresAt: DateTime
     webAuthnChallenge: String
     type: UserType
-    isLoggedIn: Boolean
     isOnboarded: Boolean
     likedOnboarding: Boolean
     messageVisibility: VisibilityLevel
@@ -138,6 +133,5 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
-    loginPwdLessUser(email: String!): User! @requireAuth
   }
 `

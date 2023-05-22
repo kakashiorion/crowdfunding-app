@@ -1,30 +1,21 @@
 export const schema = gql`
   type Offer {
     id: Int!
-    startup: Startup!
     startupID: Int!
-    bids: [Bid]!
-    status: OfferStatus!
-    extended: Boolean!
+    startup: Startup!
     capitalTargetLacs: Float!
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
     maxTicketSizeLacs: Float!
     fundingStage: FundingStage
-    numberOfInvestors: Int
+    numberOfInvestors: Int!
     willUseFundsFor: [String]!
     needHelpWith: [String]!
-    timelineDays: Int!
-    successfulInvestors: [Investor]!
+    offerRoom: OfferRoom
+    successfulDealers: [Deal]!
+    status: OfferStatus!
     createdAt: DateTime!
     updatedAt: DateTime!
-  }
-
-  enum OfferStatus {
-    CREATED
-    EXCEEDED
-    RAISED
-    CLOSED
   }
 
   enum FundingStage {
@@ -38,6 +29,13 @@ export const schema = gql`
     LATER
   }
 
+  enum OfferStatus {
+    CREATED
+    EXCEEDED
+    DISCARDED
+    CLOSED
+  }
+
   type Query {
     offers: [Offer!]! @requireAuth
     offer(id: Int!): Offer @requireAuth
@@ -45,23 +43,19 @@ export const schema = gql`
 
   input CreateOfferInput {
     startupID: Int!
-    status: OfferStatus!
-    extended: Boolean!
     capitalTargetLacs: Float!
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
     maxTicketSizeLacs: Float!
     fundingStage: FundingStage
-    numberOfInvestors: Int
+    numberOfInvestors: Int!
     willUseFundsFor: [String]!
     needHelpWith: [String]!
-    timelineDays: Int!
+    status: OfferStatus!
   }
 
   input UpdateOfferInput {
     startupID: Int
-    status: OfferStatus
-    extended: Boolean
     capitalTargetLacs: Float
     equityBeingIssued: Float
     minTicketSizeLacs: Float
@@ -70,7 +64,7 @@ export const schema = gql`
     numberOfInvestors: Int
     willUseFundsFor: [String]!
     needHelpWith: [String]!
-    timelineDays: Int
+    status: OfferStatus
   }
 
   type Mutation {

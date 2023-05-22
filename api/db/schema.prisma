@@ -13,44 +13,42 @@ generator client {
 
 //TODO: Implement SupaBase Storage for profile pic
 model User {
-  id                     Int               @id @default(autoincrement())
-  email                  String            @unique
-  hashedPassword         String            @default("")
-  salt                   String            @default("")
-  resetToken             String?
-  resetTokenExpiresAt    DateTime?
-  lastLogin              DateTime          @default(now())
-  profilePicURL          String?
-  mobile                 String            @unique
-  otp                    String?
-  otpExpiresAt           DateTime?
-  webAuthnChallenge      String?           @unique
-  credentials            UserCredential[]
-  type                   UserType          @default(GUEST)
-  investor               Investor?
-  startup                Startup?
-  isLoggedIn             Boolean           @default(false)
-  isOnboarded            Boolean           @default(false)
-  likedOnboarding        Boolean?
-  sentMessages           Message[]         @relation("Sender")
-  receivedMessages       Message[]         @relation("Receiver")
-  startedConversations   Conversation[]    @relation("ConvStarter")
-  respondedConversations Conversation[]    @relation("ConvResponder")
-  posts                  Post[]            @relation("Poster")
-  comments               Comment[]         @relation("Commenter")
-  likedPosts             Post[]            @relation("UserLikesPost")
-  likedComments          Comment[]         @relation("UserLikesComment")
-  connectionsRequested   Connection[]      @relation("Requester")
-  connectionsAccepted    Connection[]      @relation("Accepter")
-  followedBy             User[]            @relation("UserFollows")
-  following              User[]            @relation("UserFollows")
-  messageVisibility      VisibilityLevel   @default(PUBLIC)
-  activityVisbility      VisibilityLevel   @default(PUBLIC)
-  profileVisbility       VisibilityLevel   @default(FOLLOWERS)
-  notificationLevel      NotificationLevel @default(HIGH)
-  prefersTheme           UITheme           @default(SYSTEM)
-  createdAt              DateTime          @default(now())
-  updatedAt              DateTime          @updatedAt
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  hashedPassword      String               @default("")
+  salt                String               @default("")
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  profilePicURL       String?
+  lastActive          DateTime             @default(now()) //When the user interacted with the platform last
+  mobile              String? //Not required during signup
+  otp                 String?
+  otpExpiresAt        DateTime?
+  webAuthnChallenge   String?              @unique
+  credentials         UserCredential[]
+  type                UserType             @default(GUEST)
+  investor            Investor?
+  startup             Startup?
+  isOnboarded         Boolean              @default(false)
+  likedOnboarding     Boolean?
+  offerRoomMessages   RoomGroupMessage[]   @relation("RoomGroupMessageSender")
+  negotitionMessages  NegotiationMessage[] @relation("NegotiationMessageSender")
+  directMessages      DirectMessage[]      @relation("DMSender")
+  directConversations DirectConversation[] @relation("DM")
+  posts               Post[]               @relation("Poster")
+  comments            Comment[]            @relation("Commenter")
+  likedPosts          Post[]               @relation("UserLikesPost")
+  likedComments       Comment[]            @relation("UserLikesComment")
+  connections         Connection[]         @relation("Connection")
+  followedBy          User[]               @relation("UserFollows")
+  following           User[]               @relation("UserFollows")
+  messageVisibility   VisibilityLevel      @default(PUBLIC)
+  activityVisbility   VisibilityLevel      @default(PUBLIC)
+  profileVisbility    VisibilityLevel      @default(FOLLOWERS)
+  notificationLevel   NotificationLevel    @default(HIGH)
+  prefersTheme        UITheme              @default(SYSTEM)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 }
 
 enum UITheme {
@@ -78,7 +76,6 @@ enum UserType {
 model Lead {
   id        Int      @id @default(autoincrement())
   email     String
-  phone     String
   gToken    String
   type      UserType
   createdAt DateTime @default(now())
@@ -94,16 +91,11 @@ model LandingContact {
 }
 
 model Connection {
-  id             Int              @id @default(autoincrement())
-  requestingUser User             @relation("Requester", fields: [requesterID], references: [id])
-  requesterID    Int
-  acceptingUser  User             @relation("Accepter", fields: [accepterID], references: [id])
-  accepterID     Int
-  status         ConnectionStatus @default(PENDING)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-
-  @@unique([requesterID, accepterID])
+  id        Int              @id @default(autoincrement())
+  users     User[]           @relation("Connection")
+  status    ConnectionStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }
 
 enum ConnectionStatus {
@@ -113,23 +105,27 @@ enum ConnectionStatus {
 }
 
 model Investor {
-  id                Int                 @id @unique
-  user              User                @relation(fields: [id], references: [id])
-  name              String
-  dateOfBirth       DateTime?
-  locationID        Int //from Location table
-  linkedInURL       String?
-  websiteURL        String?
-  eduBG             EducationBG
-  yearsOfWorkEx     SizeRange
-  numberOfCompanies SizeRange
-  workedInSectors   Sector[] // from Sector table
-  investorExp       InvestorExperience?
-  investorObjective InvestorObjective?
-  bids              Bid[]
-  successfulOffers  Offer[]             @relation("SuccessfulDeal")
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  id                    Int                 @id
+  user                  User                @relation(fields: [id], references: [id])
+  name                  String
+  dateOfBirth           DateTime?
+  locationID            Int //from Location table
+  linkedInURL           String?
+  websiteURL            String?
+  eduBG                 EducationBG
+  yearsOfWorkEx         SizeRange
+  numberOfCompanies     SizeRange
+  workedInSectors       Sector[] // from Sector table
+  investorExp           InvestorExperience?
+  investorObjective     InvestorObjective?
+  participatingInOffers OfferRoom[]         @relation("Participant")
+  waitingInRoomQueues   OfferRoom[]         @relation("Waiting")
+  kickedFromOffers      OfferRoom[]         @relation("Kicked")
+  negotiatingOffers     NegotiationTable[]  @relation("Negotiator")
+  dealsJoined           Deal[]              @relation("DealJoiners")
+  askedQuestions        OfferQuestion[]     @relation("OfferQuestions")
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
 }
 
 //TODO: Need to upload city data in Location table
@@ -153,7 +149,7 @@ enum EducationBG {
 }
 
 model InvestorExperience {
-  id                 Int            @id @unique
+  id                 Int            @id
   investor           Investor       @relation(fields: [id], references: [id])
   workedInStartups   SizeRange
   foundedStartups    SizeRange
@@ -215,7 +211,7 @@ enum AmountRange {
 }
 
 model InvestorObjective {
-  id                        Int                    @id @unique
+  id                        Int                    @id
   investor                  Investor               @relation(fields: [id], references: [id])
   preferredAmountToInvest   AmountRange
   preferredFundingStages    FundingStage[]
@@ -287,7 +283,7 @@ enum NotificationLevel {
 }
 
 model Startup {
-  id                Int                @id @unique
+  id                Int                @id
   user              User               @relation(fields: [id], references: [id])
   name              String
   writeUp           String
@@ -362,7 +358,7 @@ enum Sector {
 }
 
 model StartupBackground {
-  id              Int             @id @unique
+  id              Int             @id
   startup         Startup         @relation(fields: [id], references: [id])
   valueProp       String?
   idea            String?
@@ -390,7 +386,7 @@ model KeyPeople {
 }
 
 model StartupBusiness {
-  id                Int              @id @unique
+  id                Int              @id
   startup           Startup          @relation(fields: [id], references: [id])
   numberUsers       UserRange
   numberCities      SizeRange
@@ -431,7 +427,7 @@ enum DistributionType {
 }
 
 model StartupMarket {
-  id               Int              @id @unique
+  id               Int              @id
   startup          Startup          @relation(fields: [id], references: [id])
   revenueStreams   RevenueStreams[]
   costHeads        CostHeads[]
@@ -497,7 +493,7 @@ enum ShortTermPlan {
 }
 
 model StartupFinancials {
-  id                  Int                @id @unique
+  id                  Int                @id
   startup             Startup            @relation(fields: [id], references: [id])
   latestFundingStage  FundingStage
   latestValuationInCr Float?
@@ -564,7 +560,7 @@ model CapTable {
 }
 
 model StartupObjective {
-  id                      Int                   @id @unique
+  id                      Int                   @id
   startup                 Startup               @relation(fields: [id], references: [id])
   preferredInvestorLevels InvestorLevel[]
   preferredLocations      Int[] //from Location table
@@ -586,69 +582,110 @@ enum StartupPlatformGoal {
 }
 
 model Offer {
-  id                  Int           @id @default(autoincrement())
-  startup             Startup       @relation("OffersByStartup", fields: [startupID], references: [id])
-  startupID           Int
-  bids                Bid[]
-  status              OfferStatus   @default(CREATED)
-  extended            Boolean       @default(false)
-  capitalTargetLacs   Float
-  equityBeingIssued   Float
-  minTicketSizeLacs   Float         @default(1.0)
-  maxTicketSizeLacs   Float
-  fundingStage        FundingStage?
-  numberOfInvestors   Int?
-  willUseFundsFor     String[]
-  needHelpWith        String[]
-  timelineDays        Int           @default(30)
-  successfulInvestors Investor[]    @relation("SuccessfulDeal")
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  id                Int           @id @default(autoincrement())
+  startupID         Int
+  startup           Startup       @relation("OffersByStartup", fields: [startupID], references: [id])
+  capitalTargetLacs Float
+  equityBeingIssued Float
+  minTicketSizeLacs Float         @default(1.0)
+  maxTicketSizeLacs Float
+  fundingStage      FundingStage?
+  maxInvestors      Int
+  willUseFundsFor   String[]
+  needHelpWith      String[]
+  offerRoom         OfferRoom?    @relation("OfferRoom")
+  successfulDealers Deal[]        @relation("SuccessfulDeal")
+  status            OfferStatus   @default(CREATED)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
 enum OfferStatus {
   CREATED
   EXCEEDED
-  RAISED
+  DISCARDED
   CLOSED
 }
 
-model Bid {
-  id               Int           @id @default(autoincrement())
-  offer            Offer         @relation(fields: [offerID], references: [id])
-  offerID          Int
-  investor         Investor      @relation(fields: [investorID], references: [id])
-  investorID       Int
-  status           BidStatus     @default(CREATED)
-  rebid            Boolean       @default(false)
-  capitalAvailable Float
-  equityNeeded     Float
-  counterCapital   Float?
-  counterEquity    Float?
-  canHelpWith      String[]
-  questions        BidQuestion[]
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-
-  @@unique([offerID, investorID]) //An investor can only bid once on an offer
+model OfferRoom {
+  id                Int                @id
+  offer             Offer              @relation("OfferRoom", fields: [id], references: [id])
+  isPublic          Boolean            @default(true)
+  passcode          String?
+  roomGroupMessages RoomGroupMessage[] @relation("RoomGroupMessages")
+  participants      Investor[]         @relation("Participant")
+  waitingList       Investor[]         @relation("Waiting")
+  kickedList        Investor[]         @relation("Kicked")
+  negotiationTable  NegotiationTable?  @relation("NegotiationTable")
+  questions         OfferQuestion[]    @relation("Questions")
+  resourceLinks     String[]
+  //TODO: Implement other offer room features such as polling, bidding, etc.
+  joinLimit         Int                @default(50)
+  timelineDays      Int                @default(15)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
-enum BidStatus {
-  CREATED
-  COUNTER
-  ACCEPTED
-  DECLINED
+model NegotiationTable {
+  id                  Int                  @id
+  offerRoom           OfferRoom            @relation("NegotiationTable", fields: [id], references: [id])
+  negotiators         Investor[]           @relation("Negotiator")
+  negotiationMessages NegotiationMessage[] @relation("NegotiationMessages")
+  isHidden            Boolean              @default(true)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 }
 
-model BidQuestion {
-  id        Int      @id @default(autoincrement())
-  bid       Bid      @relation(fields: [bidID], references: [id])
-  bidID     Int
-  question  String
-  answered  Boolean  @default(false)
-  answer    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Deal {
+  id                Int      @id @default(autoincrement())
+  offerID           Int
+  offer             Offer    @relation("SuccessfulDeal", fields: [offerID], references: [id])
+  investorID        Int
+  investor          Investor @relation("DealJoiners", fields: [investorID], references: [id])
+  fundingAmountLacs Float
+  isJoining         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// model Bid {
+//   id               Int           @id @default(autoincrement())
+//   offer            Offer         @relation(fields: [offerID], references: [id])
+//   offerID          Int
+//   investor         Investor      @relation(fields: [investorID], references: [id])
+//   investorID       Int
+//   status           BidStatus     @default(CREATED)
+//   rebid            Boolean       @default(false)
+//   capitalAvailable Float
+//   equityNeeded     Float
+//   counterCapital   Float?
+//   counterEquity    Float?
+//   canHelpWith      String[]
+//   questions        BidQuestion[]
+//   createdAt        DateTime      @default(now())
+//   updatedAt        DateTime      @updatedAt
+
+//   @@unique([offerID, investorID]) //An investor can only bid once on an offer
+// }
+
+// enum BidStatus {
+//   CREATED
+//   COUNTER
+//   ACCEPTED
+//   DECLINED
+// }
+
+model OfferQuestion {
+  id          Int       @id @default(autoincrement())
+  offerRoom   OfferRoom @relation("Questions", fields: [offerRoomID], references: [id])
+  offerRoomID Int
+  asker       Investor  @relation("OfferQuestions", fields: [askerID], references: [id])
+  askerID     Int
+  question    String
+  answered    Boolean   @default(false)
+  answer      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Post {
@@ -678,32 +715,48 @@ model Comment {
   updatedAt     DateTime @updatedAt
 }
 
-model Conversation {
-  id                      Int       @id @default(autoincrement())
-  conversationStarter     User      @relation("ConvStarter", fields: [conversationStarterID], references: [id])
-  conversationStarterID   Int
-  conversationResponder   User      @relation("ConvResponder", fields: [conversationResponderID], references: [id])
-  conversationResponderID Int
-  messages                Message[]
-  isFavoriteByStarter     Boolean   @default(false)
-  isFavoriteByResponder   Boolean   @default(false)
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
-
-  @@unique([conversationStarterID, conversationResponderID])
+model DirectConversation {
+  id        Int             @id @default(autoincrement())
+  users     User[]          @relation("DM") //the 2 DMers
+  messages  DirectMessage[]
+  isActive  Boolean         @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }
 
-model Message {
-  id             Int          @id @default(autoincrement())
-  conversation   Conversation @relation(fields: [conversationID], references: [id])
+model DirectMessage {
+  id             Int                @id @default(autoincrement())
+  conversation   DirectConversation @relation(fields: [conversationID], references: [id])
   conversationID Int
-  sender         User         @relation("Sender", fields: [senderID], references: [id])
+  sender         User               @relation("DMSender", fields: [senderID], references: [id])
   senderID       Int
-  receiver       User         @relation("Receiver", fields: [receiverID], references: [id])
-  receiverID     Int
   content        String
   attachmentURL  String?
-  unread         Boolean      @default(true)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  unread         Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model RoomGroupMessage {
+  id            Int       @id @default(autoincrement())
+  offerRoom     OfferRoom @relation("RoomGroupMessages", fields: [offerRoomId], references: [id])
+  offerRoomId   Int
+  sender        User      @relation("RoomGroupMessageSender", fields: [senderID], references: [id])
+  senderID      Int
+  content       String
+  attachmentURL String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model NegotiationMessage {
+  id                 Int              @id @default(autoincrement())
+  negotiationTable   NegotiationTable @relation("NegotiationMessages", fields: [negotiationTableID], references: [id])
+  negotiationTableID Int
+  sender             User             @relation("NegotiationMessageSender", fields: [senderID], references: [id])
+  senderID           Int
+  content            String
+  attachmentURL      String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 }

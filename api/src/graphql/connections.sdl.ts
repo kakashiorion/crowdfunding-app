@@ -1,10 +1,7 @@
 export const schema = gql`
   type Connection {
     id: Int!
-    requestingUser: User!
-    requesterID: Int!
-    acceptingUser: User!
-    accepterID: Int!
+    users: [User]!
     status: ConnectionStatus!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -18,19 +15,15 @@ export const schema = gql`
 
   type Query {
     connections: [Connection!]! @requireAuth
-    connectionsByUserId: [Connection!]! @requireAuth
     connection(id: Int!): Connection @requireAuth
+    connectionsByUserId: [Connection!]! @requireAuth
   }
 
   input CreateConnectionInput {
-    requesterID: Int!
-    accepterID: Int!
     status: ConnectionStatus!
   }
 
   input UpdateConnectionInput {
-    requesterID: Int
-    accepterID: Int
     status: ConnectionStatus
   }
 

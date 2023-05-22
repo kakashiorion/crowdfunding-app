@@ -116,7 +116,6 @@ export const handler = async (
           email: username,
           hashedPassword: hashedPassword,
           salt: salt,
-          mobile: userAttributes?.mobile ?? '',
           type: <UserType>userAttributes?.type,
         },
       })

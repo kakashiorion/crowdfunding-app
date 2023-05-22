@@ -57,28 +57,7 @@ export const QUERY = gql`
     }
     feedConnections: connections {
       id
-      accepterID
-      acceptingUser {
-        profilePicURL
-        type
-        investor {
-          name
-        }
-        startup {
-          name
-        }
-      }
-      requesterID
-      requestingUser {
-        profilePicURL
-        type
-        investor {
-          name
-        }
-        startup {
-          name
-        }
-      }
+
       status
       createdAt
     }
@@ -96,7 +75,8 @@ export const Failure = ({
 )
 
 export const Success = ({
-  investorHomeFeed,
+  feedPosts,
+  feedConnections,
 }: CellSuccessProps<
   FindInvestorHomeFeedQuery,
   FindInvestorHomeFeedQueryVariables

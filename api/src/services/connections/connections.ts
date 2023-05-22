@@ -10,16 +10,12 @@ export const connections: QueryResolvers['connections'] = () => {
   return db.connection.findMany()
 }
 
-export const connectionsByUserId = () => {
-  return db.connection.findMany({
-    where: {
-      OR: [
-        { accepterID: context.currentUser?.id },
-        { requesterID: context.currentUser?.id },
-      ],
-    },
-  })
-}
+export const connectionsByUserId: QueryResolvers['connectionsByUserId'] =
+  () => {
+    return db.connection.findMany({
+      where: { users: { some: { email: context.currentUser?.email } } },
+    })
+  }
 
 export const connection: QueryResolvers['connection'] = ({ id }) => {
   return db.connection.findUnique({
@@ -54,12 +50,7 @@ export const deleteConnection: MutationResolvers['deleteConnection'] = ({
 }
 
 export const Connection: ConnectionRelationResolvers = {
-  requestingUser: (_obj, { root }) => {
-    return db.connection
-      .findUnique({ where: { id: root?.id } })
-      .requestingUser()
-  },
-  acceptingUser: (_obj, { root }) => {
-    return db.connection.findUnique({ where: { id: root?.id } }).acceptingUser()
+  users: (_obj, { root }) => {
+    return db.connection.findUnique({ where: { id: root?.id } }).users()
   },
 }

@@ -2,7 +2,6 @@ export const schema = gql`
   type Lead {
     id: Int!
     email: String!
-    phone: String!
     gToken: String!
     type: UserType!
     createdAt: DateTime!
@@ -23,14 +22,12 @@ export const schema = gql`
 
   input CreateLeadInput {
     email: String!
-    phone: String!
     gToken: String!
     type: UserType!
   }
 
   input UpdateLeadInput {
     email: String
-    phone: String
     gToken: String
     type: UserType
   }
