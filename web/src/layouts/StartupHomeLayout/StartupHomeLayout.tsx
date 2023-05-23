@@ -20,32 +20,41 @@ export const StartupPageContext = createContext<PageContextProps>({
 })
 
 const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
-  const { currentUser } = useAuth()
+  const { currentUser, reauthenticate } = useAuth()
   const [darkMode, setDarkMode] = useState('')
   const [pageSelected, setPageSelected] = useState('Home')
 
   useEffect(() => {
-    // console.log(currentUser)
     //Navigate based on user's type
-    if (currentUser?.type == 'INVESTOR') {
-      navigate(routes.investorHome(), { replace: true })
-    } else if (currentUser?.type == 'GUEST') {
-      navigate(routes.landing(), { replace: true })
-    } else if (
-      currentUser?.type == 'STARTUP' &&
-      currentUser?.isOnboarded == false
-    ) {
-      navigate(routes.startupOnboarding(), { replace: true })
+    const getData = async () => {
+      await reauthenticate().then(() => {
+        if (currentUser?.type == 'INVESTOR') {
+          navigate(routes.investorHome(), { replace: true })
+        } else if (currentUser?.type == 'GUEST') {
+          navigate(routes.landing(), { replace: true })
+        } else if (
+          currentUser?.type == 'STARTUP' &&
+          currentUser?.isOnboarded == false
+        ) {
+          navigate(routes.startupOnboarding(), { replace: true })
+        }
+        //Set dark mode
+        if (currentUser?.prefersTheme == 'DARK') {
+          setDarkMode('dark')
+        } else if (currentUser?.prefersTheme == 'SYSTEM') {
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setDarkMode('dark')
+          }
+        }
+      })
     }
-    //Set dark mode
-    if (currentUser?.prefersTheme == 'DARK') {
-      setDarkMode('dark')
-    } else if (currentUser?.prefersTheme == 'SYSTEM') {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setDarkMode('dark')
-      }
-    }
-  }, [currentUser?.type, currentUser?.isOnboarded, currentUser?.prefersTheme])
+    getData()
+  }, [
+    currentUser?.type,
+    currentUser?.isOnboarded,
+    currentUser?.prefersTheme,
+    reauthenticate,
+  ])
   return (
     <StartupPageContext.Provider value={{ pageSelected, setPageSelected }}>
       <div className={darkMode}>

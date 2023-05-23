@@ -16,7 +16,7 @@ export const InvestorOnboardingSections: OnboardingSectionInfoType[] = [
   {
     index: 1,
     title: 'About You',
-    subTitle: 'Capturing basic details to create your profile',
+    subTitle: 'Capturing basic details to create your investor profile',
     icon: AboutIcon,
   },
   {
@@ -44,21 +44,21 @@ const InvestorAboutSteps: OnboardingStepsInfoType[] = [
     index: 1,
     title: `Let's start with your name.`,
     display: 'Name',
-    help: 'This name will be displayed on your profile.',
+    help: 'This name will be displayed on your profile and used to identify you.',
     skippable: false,
   },
   {
     index: 2,
     title: 'When were you born?',
     display: 'DOB',
-    help: 'This info will be used for internal purposes.',
+    help: 'This info will be used for internal purposes only.',
     skippable: true,
   },
   {
     index: 3,
     title: 'Where are you located?',
     display: 'Location',
-    help: 'This will help startups or other investors to find you in filtered results.',
+    help: 'This will help startups or other investors to find you in filtered results. You can provide the nearest city',
     skippable: false,
   },
   {
@@ -84,7 +84,7 @@ const InvestorAboutSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 7,
-    title: 'Do you have any work experience (in years)?',
+    title: 'How much work experience do you have in years?',
     display: 'Work',
     help: 'This enables us to guage your profile for relevant feed and suggestions.',
     skippable: false,
@@ -109,7 +109,7 @@ const InvestorExperienceSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
     title: 'How many startups have you worked in as an employee?',
-    display: 'Exposure',
+    display: 'Employee',
     help: 'This enables us to guage your profile for relevant feed and suggestions.',
     skippable: false,
   },
@@ -175,30 +175,28 @@ const InvestorExperienceSteps: OnboardingStepsInfoType[] = [
 const InvestorObjectiveSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title: 'How much capital are you planning to invest here?',
+    title: 'How much capital are you planning to invest?',
     display: 'Capital',
     help: 'This will help us provide you better matches.',
     skippable: false,
   },
   {
     index: 2,
-    title:
-      'Select all the funding stages you would like to participate in here.',
+    title: 'Select all the funding stages you would like to participate in.',
     display: 'Stages',
     help: 'This will help us provide you better matches.',
     skippable: true,
   },
   {
     index: 3,
-    title:
-      'Select all the startup sizes you are comfortable to invest in here.',
-    display: 'Sizes',
+    title: 'Select all the startup team sizes you are looking to invest in.',
+    display: 'Team Size',
     help: 'This will help us provide you better matches.',
     skippable: true,
   },
   {
     index: 4,
-    title: 'Select all the time horizons you are looking to invest for.',
+    title: 'Select all the time horizons you would prefer to invest for.',
     display: 'Timelines',
     help: 'This will help us provide you better matches.',
     skippable: true,
@@ -212,21 +210,21 @@ const InvestorObjectiveSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 6,
-    title: 'Select all the sectors you are looking to invest in here.',
+    title: 'Select all the sectors you are interested to invest in.',
     display: 'Sectors',
     help: 'This will help us provide you better matches.',
     skippable: true,
   },
   {
     index: 7,
-    title: 'Search and add any locations you would prefer to invest in.',
+    title: 'Search and add your preferred locations, if any, to invest in.',
     display: 'Locations',
     help: 'This will help us provide you better matches.',
     skippable: true,
   },
   {
     index: 8,
-    title: 'What all would be your goals here?',
+    title: 'What are your goals here?',
     display: 'Goals',
     help: 'This will help us provide you better matches.',
     skippable: true,
@@ -264,9 +262,9 @@ const InvestorPreferencesSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 4,
-    title: 'Choose the level of in-app notifications you want to receive',
-    display: 'Notifications',
-    help: 'Notifications include real-time updates about connection requests, receiving messages, likes and comments on your posts, etc.',
+    title: 'Choose the amount of app notifications you want to receive',
+    display: 'Notification',
+    help: 'Notifications include real-time updates about connection requests, received messages, likes and comments on your posts, etc.',
     skippable: true,
   },
   {

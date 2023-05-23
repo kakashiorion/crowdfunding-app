@@ -21,32 +21,42 @@ export const InvestorPageContext = createContext<InvestorPageContextProps>({
 })
 
 const InvestorHomeLayout = ({ children }: InvestorHomeLayoutProps) => {
-  const { currentUser } = useAuth()
+  const { currentUser, reauthenticate } = useAuth()
   const [darkMode, setDarkMode] = useState('')
   const [pageSelected, setPageSelected] = useState('Home')
 
   //TODO: Phase 2 - Implment isUserOnline feature
   useEffect(() => {
     //Navigate based on user's type
-    if (currentUser?.type == 'STARTUP') {
-      navigate(routes.startupHome(), { replace: true })
-    } else if (currentUser?.type == 'GUEST') {
-      navigate(routes.landing(), { replace: true })
-    } else if (
-      currentUser?.type == 'INVESTOR' &&
-      currentUser?.isOnboarded == false
-    ) {
-      navigate(routes.investorOnboarding(), { replace: true })
+    const getData = async () => {
+      await reauthenticate().then(() => {
+        if (currentUser?.type == 'STARTUP') {
+          navigate(routes.startupHome(), { replace: true })
+        } else if (currentUser?.type == 'GUEST') {
+          navigate(routes.landing(), { replace: true })
+        } else if (
+          currentUser?.type == 'INVESTOR' &&
+          currentUser?.isOnboarded == false
+        ) {
+          navigate(routes.investorOnboarding(), { replace: true })
+        }
+        //Set dark mode
+        if (currentUser?.prefersTheme == 'DARK') {
+          setDarkMode('dark')
+        } else if (currentUser?.prefersTheme == 'SYSTEM') {
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setDarkMode('dark')
+          }
+        }
+      })
     }
-    //Set dark mode
-    if (currentUser?.prefersTheme == 'DARK') {
-      setDarkMode('dark')
-    } else if (currentUser?.prefersTheme == 'SYSTEM') {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setDarkMode('dark')
-      }
-    }
-  }, [currentUser?.type, currentUser?.isOnboarded, currentUser?.prefersTheme])
+    getData()
+  }, [
+    currentUser?.type,
+    currentUser?.isOnboarded,
+    currentUser?.prefersTheme,
+    reauthenticate,
+  ])
   return (
     <InvestorPageContext.Provider value={{ pageSelected, setPageSelected }}>
       <div className={darkMode}>

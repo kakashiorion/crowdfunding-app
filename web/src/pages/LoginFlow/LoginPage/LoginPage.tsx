@@ -197,12 +197,10 @@ const PasswordLoginForm = () => {
               setPwdError(response.error)
             } else {
               const loggedInUser = await getCurrentUser()
-              if (loggedInUser?.type === 'INVESTOR') {
-                navigate(routes.investorHome())
-              } else if (loggedInUser?.type === 'STARTUP') {
-                navigate(routes.startupHome())
-              } else if (loggedInUser?.type === 'ADMIN') {
-                navigate(routes.startupOnboarding())
+              if (loggedInUser?.type == 'INVESTOR') {
+                navigate(routes.investorHome(), { replace: true })
+              } else if (loggedInUser?.type == 'STARTUP') {
+                navigate(routes.startupHome(), { replace: true })
               }
             }
           }

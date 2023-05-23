@@ -28,7 +28,7 @@ export const StartupOnboardingSections: OnboardingSectionInfoType[] = [
   {
     index: 2,
     title: 'Background',
-    subTitle: 'Learning about your background and story',
+    subTitle: 'Learning about your origin story and history',
     icon: BackgroundIcon,
   },
   {
@@ -40,13 +40,13 @@ export const StartupOnboardingSections: OnboardingSectionInfoType[] = [
   {
     index: 4,
     title: 'Market',
-    subTitle: 'Analyzing your target market conditions',
+    subTitle: 'Analyzing your target market condition',
     icon: MarketIcon,
   },
   {
     index: 5,
     title: 'Financials',
-    subTitle: 'Looking at your financial numbers',
+    subTitle: 'Looking at your numbers and metrics',
     icon: FinancialsIcon,
   },
   {
@@ -68,7 +68,7 @@ const StartupAboutSteps: OnboardingStepsInfoType[] = [
     index: 1,
     title: `Let's start with the name of your startup.`,
     display: 'Name',
-    help: 'This name will be displayed on your profile.',
+    help: 'This name will be displayed on your profile and used to identify your startup.',
     skippable: false,
   },
   {
@@ -80,7 +80,7 @@ const StartupAboutSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 3,
-    title: 'When did your company start?',
+    title: 'When was your company founded?',
     display: 'Date',
     help: 'This date will be displayed on your profile.',
     skippable: false,
@@ -101,14 +101,14 @@ const StartupAboutSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 6,
-    title: 'Where is your startup based?',
+    title: 'Where is your startup located?',
     display: 'Location',
     help: 'This will help investors to find you in filtered results.',
     skippable: false,
   },
   {
     index: 7,
-    title: 'Select which sector and category your business caters.',
+    title: 'Select the business sector and sub-category of your startup.',
     display: 'Sector',
     help: 'This will help investors to find you in filtered results.',
     skippable: false,
@@ -119,21 +119,21 @@ const StartupBackgroundSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
     title: 'What value do you provide to your customers?',
-    display: 'Value',
+    display: 'Value Prop',
     help: 'This will help investors know more about your startup.',
     skippable: true,
   },
   {
     index: 2,
     title: 'How did you get the idea for this startup?',
-    display: 'Idea',
+    display: 'Origin',
     help: 'This will make investors connect with your startup.',
     skippable: true,
   },
   {
     index: 3,
     title: 'Why this business and not something else?',
-    display: 'Why This',
+    display: 'Motivation',
     help: 'This can convince investors about your dedication.',
     skippable: true,
   },
@@ -160,7 +160,7 @@ const StartupBackgroundSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 7,
-    title: 'What are your top 3 core values?',
+    title: 'What are the top 3 core values driving your startup?',
     display: 'Core Values',
     help: 'This will help investors know more about your company culture.',
     skippable: true,
@@ -200,19 +200,19 @@ const StartupBusinessSteps: OnboardingStepsInfoType[] = [
     index: 3,
     title: 'What is your distribution type?',
     display: 'Distribution',
-    help: 'This will help investors find you in filtered results.',
+    help: 'This will help investors find you in filtered results. B2B: Your customers are other businesses. B2C: Your customers are common people.',
     skippable: false,
   },
   {
     index: 4,
-    title: 'Tell us about your key partners/suppliers.',
+    title: 'Tell us about your key partners or suppliers.',
     display: 'Partners',
     help: 'This will help investors know more about your business.',
     skippable: true,
   },
   {
     index: 5,
-    title: 'Tell us about your target customer segments.',
+    title: 'Tell us about your key customer segments.',
     display: 'Customers',
     help: 'This will help investors know more about your business.',
     skippable: true,
@@ -258,7 +258,7 @@ const StartupBusinessSteps: OnboardingStepsInfoType[] = [
 const StartupMarketSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title: 'How do you make money?',
+    title: 'How do you mainly make money?',
     display: 'Revenue',
     help: 'This will help investors find you in filtered results.',
     skippable: true,
@@ -272,7 +272,7 @@ const StartupMarketSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 3,
-    title: 'What is you short term plan?',
+    title: 'What is your short term plan?',
     display: 'Plan',
     help: 'This will help investors find you in filtered results.',
     skippable: false,
@@ -287,7 +287,7 @@ const StartupMarketSteps: OnboardingStepsInfoType[] = [
   {
     index: 5,
     title: 'What is the annual growth rate of this market (in %)?',
-    display: 'Rate',
+    display: 'Growth',
     help: 'This will help investors know more about your business market.',
     skippable: false,
   },
@@ -307,21 +307,22 @@ const StartupMarketSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 8,
-    title: 'What are the major threats to this market?',
+    title: 'What do you think are the major threats to this market?',
     display: 'Threats',
     help: 'This will help investors know more about your business market.',
     skippable: true,
   },
   {
     index: 9,
-    title: 'Tell us about your market competitors.',
+    title: 'Tell us about your key market competitors.',
     display: 'Competitors',
     help: 'This will help investors know more about your business market.',
     skippable: true,
   },
   {
     index: 10,
-    title: 'What is the X-factor that will help your startup succeed?',
+    title:
+      'What do you think is the X-factor that will help your startup succeed?',
     display: 'X-Factor',
     help: 'This will help investors connect with your business idea.',
     skippable: true,
@@ -331,7 +332,7 @@ const StartupMarketSteps: OnboardingStepsInfoType[] = [
 const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title: 'What was your latest funding stage?',
+    title: 'What was your last funding stage?',
     display: 'Stage',
     help: 'This will help investors find you in filtered results.',
     skippable: false,
@@ -345,7 +346,7 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 3,
-    title: 'Tell us how your cap table looks like.',
+    title: 'Tell us how your cap table looks like now.',
     display: 'Cap Table',
     help: 'This will help investors know more about your statup.',
     skippable: true,
@@ -373,21 +374,21 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 7,
-    title: 'What was your revenue in last FY?',
+    title: 'How much was your revenue in the last FY?',
     display: 'Revenue',
     help: 'This will help investors know more about your statup.',
     skippable: false,
   },
   {
     index: 8,
-    title: 'What has been your annual revenue growth rate (in %)?',
+    title: 'What has been your average annual revenue growth rate (in %)?',
     display: 'Growth',
     help: 'This will help investors know more about your statup.',
     skippable: false,
   },
   {
     index: 9,
-    title: 'What does your margin look like?',
+    title: 'What does your annual profit/loss margin look like (in %)?',
     display: 'Margin',
     help: 'This will help investors know more about your statup.',
     skippable: false,
@@ -401,7 +402,7 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 11,
-    title: 'Where do you plan to use this cash?',
+    title: 'Where do you plan to use the cash?',
     display: 'Plans',
     help: 'This will help investors know more about your statup.',
     skippable: true,
@@ -411,15 +412,15 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
 const StartupObjectiveSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title:
-      'Select all the kinds of investors you are comfortable to connect with here.',
+    title: 'Select the level of investors you are comfortable to connect with.',
     display: 'Investors',
     help: 'This will help us provide you better matches.',
     skippable: true,
   },
   {
     index: 2,
-    title: 'Search and add any locations you would prefer to raise funds from.',
+    title:
+      'Search and add any specific locations you would prefer to raise funds from.',
     display: 'Locations',
     help: 'This will help us provide you better matches.',
     skippable: true,
@@ -434,14 +435,14 @@ const StartupObjectiveSteps: OnboardingStepsInfoType[] = [
   {
     index: 4,
     title:
-      'How much expected returns can you promise investors in this timeline?',
+      'How much expected returns/growth can you promise investors in this timeline?',
     display: 'Returns',
     help: 'This will help us provide you better matches.',
     skippable: false,
   },
   {
     index: 5,
-    title: 'What all would be your goals here?',
+    title: 'What are your goals here?',
     display: 'Goals',
     help: 'This will help us provide you better matches.',
     skippable: true,
@@ -455,14 +456,14 @@ const StartupObjectiveSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 7,
-    title: 'You may provide your pitch deck for reference',
+    title: 'You may provide your pitch deck for reference.',
     display: 'Pitch',
     help: 'This will help investors understand more about your startup.',
     skippable: true,
   },
   {
     index: 8,
-    title: 'You may provide product or business demo videos/resources',
+    title: 'You may provide any product or business demo videos/resources.',
     display: 'Demo',
     help: 'This will help investors understand more about your startup.',
     skippable: true,
@@ -493,7 +494,7 @@ const StartupPreferencesSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 4,
-    title: 'Choose the level of in-app notifications you want to receive',
+    title: 'Choose the level of app notifications you want to receive',
     display: 'Notifications',
     help: 'Notifications include real-time updates about connection requests, receiving messages, likes and comments on your posts, etc.',
     skippable: false,

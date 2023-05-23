@@ -279,9 +279,9 @@ const SignupForm = (props: SignupFormProps) => {
                     setPwdError(d.error)
                   } else {
                     if (props.userType == 'INVESTOR') {
-                      navigate(routes.investorOnboarding())
-                    } else {
-                      navigate(routes.startupOnboarding())
+                      navigate(routes.investorOnboarding(), { replace: true })
+                    } else if (props.userType == 'STARTUP') {
+                      navigate(routes.startupOnboarding(), { replace: true })
                     }
                   }
                 })

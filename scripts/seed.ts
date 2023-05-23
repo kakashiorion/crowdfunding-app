@@ -1,6 +1,6 @@
 // import type { Prisma } from '@prisma/client'
 // import { db } from 'api/src/lib/db'
-import { hashPassword } from '@redwoodjs/auth-dbauth-api'
+// import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 
 // const locations = require('./csvjson.json')
 
@@ -61,10 +61,9 @@ export default async () => {
     //       }
     //     })
     //   }
-
-    const [hashedPassword, salt] = hashPassword('12345678')
-    console.log(hashedPassword)
-    console.log(salt)
+    // const [hashedPassword, salt] = hashPassword('12345678')
+    // console.log(hashedPassword)
+    // console.log(salt)
   } catch (error) {
     console.warn('Please define your seed data.')
     console.error(error)

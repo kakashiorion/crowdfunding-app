@@ -8,7 +8,7 @@ CREATE TYPE "UserType" AS ENUM ('INVESTOR', 'STARTUP', 'ADMIN', 'GUEST');
 CREATE TYPE "ConnectionStatus" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "EducationBG" AS ENUM ('HIGH_SCHOOL', 'BACHELORS', 'MASTERS', 'PHD');
+CREATE TYPE "EducationBG" AS ENUM ('NONE', 'HIGH_SCHOOL', 'BACHELORS', 'MASTERS', 'PHD');
 
 -- CreateEnum
 CREATE TYPE "SizeRange" AS ENUM ('NONE', 'ONE_TO_THREE', 'THREE_TO_TEN', 'TEN_TO_TWENTY', 'MORE_THAN_TWENTY');
@@ -20,10 +20,10 @@ CREATE TYPE "ReturnsRange" AS ENUM ('BREAKEVEN', 'TWO', 'THREE', 'FIVE', 'TEN', 
 CREATE TYPE "InvestorLevel" AS ENUM ('NOVICE', 'INTERMEDIATE', 'EXPERIENCED', 'PROFESSIONAL', 'SEASONED');
 
 -- CreateEnum
-CREATE TYPE "FundingStage" AS ENUM ('SEED', 'SERIES_A', 'SERIES_B', 'SERIES_C', 'SERIES_D', 'SERIES_E', 'SERIES_F', 'LATER');
+CREATE TYPE "FundingStage" AS ENUM ('PRE_SEED', 'SEED', 'SERIES_A', 'SERIES_B', 'SERIES_C', 'SERIES_D', 'SERIES_E', 'LATER');
 
 -- CreateEnum
-CREATE TYPE "AmountRange" AS ENUM ('LESS_THAN_ONE_LAC', 'ONE_TO_FIVE_LACS', 'FIVE_TO_TWENTY_LACS', 'TWENTY_LACS_TO_ONE_CRORE', 'MORE_THAN_1_CRORE');
+CREATE TYPE "AmountRange" AS ENUM ('NONE', 'LESS_THAN_ONE_LAC', 'ONE_TO_FIVE_LACS', 'FIVE_TO_TWENTY_LACS', 'TWENTY_LACS_TO_ONE_CRORE', 'MORE_THAN_1_CRORE');
 
 -- CreateEnum
 CREATE TYPE "TimelineRange" AS ENUM ('LESS_THAN_SIX_MONTHS', 'SIX_TO_TWELVE_MONTHS', 'ONE_TO_TWO_YEARS', 'TWO_TO_FIVE_YEARS', 'FIVE_TO_TEN_YEARS', 'MORE_THAN_TEN_YEARS');
@@ -44,7 +44,7 @@ CREATE TYPE "ReferSource" AS ENUM ('WORD_OF_MOUTH', 'SOCIAL_MEDIA', 'BROWSING', 
 CREATE TYPE "VisibilityLevel" AS ENUM ('PRIVATE', 'CONNECTIONS', 'FOLLOWERS', 'PUBLIC');
 
 -- CreateEnum
-CREATE TYPE "NotificationLevel" AS ENUM ('NONE', 'LOW', 'MEDIUM', 'HIGH');
+CREATE TYPE "NotificationLevel" AS ENUM ('NONE', 'ONLY_CRITICAL', 'MEDIUM', 'HIGH');
 
 -- CreateEnum
 CREATE TYPE "Sector" AS ENUM ('EDUCATION', 'HEALTHCARE', 'PHARMACEUTICALS', 'BANKING_AND_FINANCE', 'ENERGY', 'CONSUMER_GOODS', 'RETAIL_ECOMMERCE', 'REAL_ESTATE', 'FOOD_AND_BEVERAGE', 'IT', 'IOT', 'AGRICULTURE', 'MANUFACTURING', 'FASHION', 'MEDIA', 'GAMING', 'ENTERTAINMENT', 'TELECOM', 'LOGISTICS', 'TRANSPORTATION', 'AUTOMOTIVE', 'AVIATION', 'HEAVY_MACHINERY', 'CHEMICAL', 'CONSTRUCTION', 'DEFENCE', 'ELECTRONICS', 'FISHERIES', 'MINING', 'BIOTECHNOLOGY', 'LEGAL', 'SPORTS_AND_FITNESS', 'WASTE_MANAGEMENT', 'WATER_MANAGEMENT', 'TRAVEL_AND_HOSPITALITY', 'SECURITY', 'SOCIAL_SERVICE', 'MARKETING', 'HUMAN_RESOURCES', 'BUSINESS_MANAGEMENT', 'AUTOMATION');
@@ -65,7 +65,7 @@ CREATE TYPE "MarketSize" AS ENUM ('LESS_THAN_10_CR', 'BETWEEN_10_AND_100_CR', 'B
 CREATE TYPE "GrowthRate" AS ENUM ('LESS_THAN_5', 'BETWEEN_5_TO_10', 'BETWEEN_10_TO_20', 'BETWEEN_20_TO_50', 'BETWEEN_50_TO_100', 'MORE_THAN_100');
 
 -- CreateEnum
-CREATE TYPE "RevenueStreams" AS ENUM ('SELLING_GOODS', 'RENTAL_OR_LEASING', 'ADS_OR_SPONSORS', 'COMMISSION_FEE', 'SUBSCRIPTION_OR_LICENSING', 'DONATIONS', 'FREEMIUM', 'OTHER');
+CREATE TYPE "RevenueStreams" AS ENUM ('SELLING_GOODS_OR_SERVICES', 'RENTAL_OR_LEASING', 'ADS_OR_SPONSORS', 'COMMISSION_FEE', 'SUBSCRIPTION_OR_LICENSING', 'DONATIONS', 'PAY_PER_USE', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "CostHeads" AS ENUM ('MATERIAL', 'WAGES', 'RENT', 'INTEREST', 'EQUIPMENT', 'MARKETING', 'ADMIN', 'OTHER');
@@ -86,27 +86,23 @@ CREATE TYPE "Margin" AS ENUM ('LOSS_OVER_50', 'LOSS_BETWEEN_20_AND_50', 'LOSS_LE
 CREATE TYPE "StartupPlatformGoal" AS ENUM ('RAISING_FUNDS', 'EXPLORING', 'CONNECTING', 'GETTING_ADVICE');
 
 -- CreateEnum
-CREATE TYPE "OfferStatus" AS ENUM ('CREATED', 'EXCEEDED', 'RAISED', 'CLOSED');
-
--- CreateEnum
-CREATE TYPE "BidStatus" AS ENUM ('CREATED', 'COUNTER', 'ACCEPTED', 'DECLINED');
+CREATE TYPE "OfferStatus" AS ENUM ('CREATED', 'EXCEEDED', 'DISCARDED', 'CLOSED');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
-    "hashedPassword" TEXT NOT NULL,
-    "salt" TEXT NOT NULL,
+    "hashedPassword" TEXT NOT NULL DEFAULT '',
+    "salt" TEXT NOT NULL DEFAULT '',
     "resetToken" TEXT,
     "resetTokenExpiresAt" TIMESTAMP(3),
-    "lastLogin" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "profilePicURL" TEXT,
-    "mobile" TEXT NOT NULL,
+    "lastActive" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "mobile" TEXT,
     "otp" TEXT,
     "otpExpiresAt" TIMESTAMP(3),
     "webAuthnChallenge" TEXT,
     "type" "UserType" NOT NULL DEFAULT 'GUEST',
-    "isLoggedIn" BOOLEAN NOT NULL DEFAULT false,
     "isOnboarded" BOOLEAN NOT NULL DEFAULT false,
     "likedOnboarding" BOOLEAN,
     "messageVisibility" "VisibilityLevel" NOT NULL DEFAULT 'PUBLIC',
@@ -132,10 +128,31 @@ CREATE TABLE "UserCredential" (
 );
 
 -- CreateTable
+CREATE TABLE "Lead" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "gToken" TEXT NOT NULL,
+    "type" "UserType" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Lead_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "LandingContact" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "query" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "LandingContact_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Connection" (
     "id" SERIAL NOT NULL,
-    "requesterID" INTEGER NOT NULL,
-    "accepterID" INTEGER NOT NULL,
     "status" "ConnectionStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -151,9 +168,9 @@ CREATE TABLE "Investor" (
     "locationID" INTEGER NOT NULL,
     "linkedInURL" TEXT,
     "websiteURL" TEXT,
-    "eduBG" "EducationBG",
-    "yearsOfWorkEx" "SizeRange",
-    "numberOfCompanies" "SizeRange",
+    "eduBG" "EducationBG" NOT NULL,
+    "yearsOfWorkEx" "SizeRange" NOT NULL,
+    "numberOfCompanies" "SizeRange" NOT NULL,
     "workedInSectors" "Sector"[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -181,8 +198,8 @@ CREATE TABLE "InvestorExperience" (
     "foundedStartups" "SizeRange" NOT NULL,
     "investedStartups" "SizeRange" NOT NULL,
     "investedStages" "FundingStage"[],
-    "investedAmountLacs" "AmountRange",
-    "successfulExits" "SizeRange",
+    "investedAmountLacs" "AmountRange" NOT NULL,
+    "successfulExits" "SizeRange" NOT NULL,
     "returnsReceived" "ReturnsRange"[],
     "investedSectors" "Sector"[],
     "investorLevel" "InvestorLevel" NOT NULL,
@@ -195,11 +212,11 @@ CREATE TABLE "InvestorExperience" (
 -- CreateTable
 CREATE TABLE "InvestorObjective" (
     "id" INTEGER NOT NULL,
-    "preferredAmountToInvest" "AmountRange",
+    "preferredAmountToInvest" "AmountRange" NOT NULL,
     "preferredFundingStages" "FundingStage"[],
     "preferredStartupTeamSizes" "StartupTeamSize"[],
     "preferredTimelines" "TimelineRange"[],
-    "riskApetite" "RiskApetite",
+    "riskApetite" "RiskApetite" NOT NULL,
     "preferredSectors" "Sector"[],
     "preferredLocations" INTEGER[],
     "platformGoal" "InvestorPlatformGoal"[],
@@ -243,11 +260,11 @@ CREATE TABLE "StartupBackground" (
     "valueProp" TEXT,
     "idea" TEXT,
     "whyThis" TEXT,
-    "foundedBefore" "SizeRange",
+    "foundedBefore" "SizeRange" NOT NULL,
     "mission" TEXT,
     "vision" TEXT,
     "coreValues" TEXT[],
-    "startupTeamSize" "StartupTeamSize",
+    "startupTeamSize" "StartupTeamSize" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -271,16 +288,16 @@ CREATE TABLE "KeyPeople" (
 -- CreateTable
 CREATE TABLE "StartupBusiness" (
     "id" INTEGER NOT NULL,
-    "numberUsers" "UserRange",
-    "numberCities" "SizeRange",
-    "distributionType" "DistributionType",
+    "numberUsers" "UserRange" NOT NULL,
+    "numberCities" "SizeRange" NOT NULL,
+    "distributionType" "DistributionType" NOT NULL,
     "partners" TEXT[],
     "customers" TEXT[],
     "workedWell" TEXT[],
     "challenges" TEXT[],
     "couldImprove" TEXT[],
     "currentActivities" TEXT[],
-    "hasOnlineBusiness" "OnlineBusiness",
+    "hasOnlineBusiness" "OnlineBusiness" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -292,9 +309,9 @@ CREATE TABLE "StartupMarket" (
     "id" INTEGER NOT NULL,
     "revenueStreams" "RevenueStreams"[],
     "costHeads" "CostHeads"[],
-    "shortTermPlan" "ShortTermPlan",
-    "marketSizeInCr" "MarketSize",
-    "marketGrowthRate" "GrowthRate",
+    "shortTermPlan" "ShortTermPlan" NOT NULL,
+    "marketSizeInCr" "MarketSize" NOT NULL,
+    "marketGrowthRate" "GrowthRate" NOT NULL,
     "trends" TEXT[],
     "opporunities" TEXT[],
     "threats" TEXT[],
@@ -309,14 +326,14 @@ CREATE TABLE "StartupMarket" (
 -- CreateTable
 CREATE TABLE "StartupFinancials" (
     "id" INTEGER NOT NULL,
-    "latestFundingStage" "FundingStage",
+    "latestFundingStage" "FundingStage" NOT NULL,
     "latestValuationInCr" DOUBLE PRECISION,
-    "currentRatio" "DecimalRange",
-    "debtEquityRatio" "DecimalRange",
-    "revenueLastFY" "RevenueRange",
-    "revenueGrowthRate" "GrowthRate",
-    "margin" "Margin",
-    "cashRunway" "TimelineRange",
+    "currentRatio" "DecimalRange" NOT NULL,
+    "debtEquityRatio" "DecimalRange" NOT NULL,
+    "revenueLastFY" "RevenueRange" NOT NULL,
+    "revenueGrowthRate" "GrowthRate" NOT NULL,
+    "margin" "Margin" NOT NULL,
+    "cashRunway" "TimelineRange" NOT NULL,
     "plansForUsingCash" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -327,7 +344,7 @@ CREATE TABLE "StartupFinancials" (
 -- CreateTable
 CREATE TABLE "FundraisingRound" (
     "id" SERIAL NOT NULL,
-    "startupID" INTEGER NOT NULL,
+    "startupFinancialsID" INTEGER NOT NULL,
     "fundingStage" "FundingStage" NOT NULL,
     "capitalRaisedInCr" DOUBLE PRECISION NOT NULL,
     "valuationInCr" DOUBLE PRECISION NOT NULL,
@@ -355,8 +372,8 @@ CREATE TABLE "StartupObjective" (
     "id" INTEGER NOT NULL,
     "preferredInvestorLevels" "InvestorLevel"[],
     "preferredLocations" INTEGER[],
-    "expectedTimeline" "TimelineRange",
-    "promisingReturns" "ReturnsRange",
+    "expectedTimeline" "TimelineRange" NOT NULL,
+    "promisingReturns" "ReturnsRange" NOT NULL,
     "platformGoal" "StartupPlatformGoal"[],
     "referSource" "ReferSource"[],
     "pitchDeckURL" TEXT,
@@ -371,17 +388,15 @@ CREATE TABLE "StartupObjective" (
 CREATE TABLE "Offer" (
     "id" SERIAL NOT NULL,
     "startupID" INTEGER NOT NULL,
-    "status" "OfferStatus" NOT NULL DEFAULT 'CREATED',
-    "extended" BOOLEAN NOT NULL DEFAULT false,
     "capitalTargetLacs" DOUBLE PRECISION NOT NULL,
     "equityBeingIssued" DOUBLE PRECISION NOT NULL,
     "minTicketSizeLacs" DOUBLE PRECISION NOT NULL DEFAULT 1.0,
     "maxTicketSizeLacs" DOUBLE PRECISION NOT NULL,
-    "fundingStage" "FundingStage",
-    "numberOfInvestors" INTEGER,
+    "fundingStage" "FundingStage" NOT NULL,
+    "maxInvestors" INTEGER NOT NULL,
     "willUseFundsFor" TEXT[],
     "needHelpWith" TEXT[],
-    "timelineDays" INTEGER NOT NULL DEFAULT 30,
+    "status" "OfferStatus" NOT NULL DEFAULT 'CREATED',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -389,34 +404,54 @@ CREATE TABLE "Offer" (
 );
 
 -- CreateTable
-CREATE TABLE "Bid" (
-    "id" SERIAL NOT NULL,
-    "offerID" INTEGER NOT NULL,
-    "investorID" INTEGER NOT NULL,
-    "status" "BidStatus" NOT NULL DEFAULT 'CREATED',
-    "rebid" BOOLEAN NOT NULL DEFAULT false,
-    "capitalAvailable" DOUBLE PRECISION NOT NULL,
-    "equityNeeded" DOUBLE PRECISION NOT NULL,
-    "counterCapital" DOUBLE PRECISION,
-    "counterEquity" DOUBLE PRECISION,
-    "canHelpWith" TEXT[],
+CREATE TABLE "OfferRoom" (
+    "id" INTEGER NOT NULL,
+    "isPublic" BOOLEAN NOT NULL DEFAULT true,
+    "passcode" TEXT,
+    "resourceLinks" TEXT[],
+    "joinLimit" INTEGER NOT NULL DEFAULT 50,
+    "timelineDays" INTEGER NOT NULL DEFAULT 15,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Bid_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "OfferRoom_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "BidQuestion" (
+CREATE TABLE "NegotiationTable" (
+    "id" INTEGER NOT NULL,
+    "isHidden" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "NegotiationTable_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Deal" (
     "id" SERIAL NOT NULL,
-    "bidID" INTEGER NOT NULL,
+    "offerID" INTEGER NOT NULL,
+    "investorID" INTEGER NOT NULL,
+    "fundingAmountLacs" DOUBLE PRECISION NOT NULL,
+    "isJoining" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Deal_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OfferQuestion" (
+    "id" SERIAL NOT NULL,
+    "offerRoomID" INTEGER NOT NULL,
+    "askerID" INTEGER NOT NULL,
     "question" TEXT NOT NULL,
     "answered" BOOLEAN NOT NULL DEFAULT false,
     "answer" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "BidQuestion_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "OfferQuestion_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -447,31 +482,53 @@ CREATE TABLE "Comment" (
 );
 
 -- CreateTable
-CREATE TABLE "Conversation" (
+CREATE TABLE "DirectConversation" (
     "id" SERIAL NOT NULL,
-    "conversationStarterID" INTEGER NOT NULL,
-    "conversationResponderID" INTEGER NOT NULL,
-    "isFavoriteByStarter" BOOLEAN NOT NULL DEFAULT false,
-    "isFavoriteByResponder" BOOLEAN NOT NULL DEFAULT false,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Conversation_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "DirectConversation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Message" (
+CREATE TABLE "DirectMessage" (
     "id" SERIAL NOT NULL,
     "conversationID" INTEGER NOT NULL,
     "senderID" INTEGER NOT NULL,
-    "receiverID" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
     "attachmentURL" TEXT,
     "unread" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "DirectMessage_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "RoomGroupMessage" (
+    "id" SERIAL NOT NULL,
+    "offerRoomId" INTEGER NOT NULL,
+    "senderID" INTEGER NOT NULL,
+    "content" TEXT NOT NULL,
+    "attachmentURL" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "RoomGroupMessage_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NegotiationMessage" (
+    "id" SERIAL NOT NULL,
+    "negotiationTableID" INTEGER NOT NULL,
+    "senderID" INTEGER NOT NULL,
+    "content" TEXT NOT NULL,
+    "attachmentURL" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "NegotiationMessage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -481,7 +538,31 @@ CREATE TABLE "_UserFollows" (
 );
 
 -- CreateTable
-CREATE TABLE "_SuccessfulDeal" (
+CREATE TABLE "_Connection" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_Participant" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_Waiting" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_Kicked" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_Negotiator" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -498,56 +579,23 @@ CREATE TABLE "_UserLikesComment" (
     "B" INTEGER NOT NULL
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+-- CreateTable
+CREATE TABLE "_DM" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_mobile_key" ON "User"("mobile");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_webAuthnChallenge_key" ON "User"("webAuthnChallenge");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Connection_requesterID_accepterID_key" ON "Connection"("requesterID", "accepterID");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Investor_id_key" ON "Investor"("id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Location_state_city_key" ON "Location"("state", "city");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "InvestorExperience_id_key" ON "InvestorExperience"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "InvestorObjective_id_key" ON "InvestorObjective"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Startup_id_key" ON "Startup"("id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "SectorCategory_sector_category_key" ON "SectorCategory"("sector", "category");
-
--- CreateIndex
-CREATE UNIQUE INDEX "StartupBackground_id_key" ON "StartupBackground"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "StartupBusiness_id_key" ON "StartupBusiness"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "StartupMarket_id_key" ON "StartupMarket"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "StartupFinancials_id_key" ON "StartupFinancials"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "StartupObjective_id_key" ON "StartupObjective"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Bid_offerID_investorID_key" ON "Bid"("offerID", "investorID");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Conversation_conversationStarterID_conversationResponderID_key" ON "Conversation"("conversationStarterID", "conversationResponderID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_UserFollows_AB_unique" ON "_UserFollows"("A", "B");
@@ -556,10 +604,34 @@ CREATE UNIQUE INDEX "_UserFollows_AB_unique" ON "_UserFollows"("A", "B");
 CREATE INDEX "_UserFollows_B_index" ON "_UserFollows"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_SuccessfulDeal_AB_unique" ON "_SuccessfulDeal"("A", "B");
+CREATE UNIQUE INDEX "_Connection_AB_unique" ON "_Connection"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_SuccessfulDeal_B_index" ON "_SuccessfulDeal"("B");
+CREATE INDEX "_Connection_B_index" ON "_Connection"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_Participant_AB_unique" ON "_Participant"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_Participant_B_index" ON "_Participant"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_Waiting_AB_unique" ON "_Waiting"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_Waiting_B_index" ON "_Waiting"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_Kicked_AB_unique" ON "_Kicked"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_Kicked_B_index" ON "_Kicked"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_Negotiator_AB_unique" ON "_Negotiator"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_Negotiator_B_index" ON "_Negotiator"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_UserLikesPost_AB_unique" ON "_UserLikesPost"("A", "B");
@@ -573,14 +645,14 @@ CREATE UNIQUE INDEX "_UserLikesComment_AB_unique" ON "_UserLikesComment"("A", "B
 -- CreateIndex
 CREATE INDEX "_UserLikesComment_B_index" ON "_UserLikesComment"("B");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_DM_AB_unique" ON "_DM"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_DM_B_index" ON "_DM"("B");
+
 -- AddForeignKey
 ALTER TABLE "UserCredential" ADD CONSTRAINT "UserCredential_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Connection" ADD CONSTRAINT "Connection_requesterID_fkey" FOREIGN KEY ("requesterID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Connection" ADD CONSTRAINT "Connection_accepterID_fkey" FOREIGN KEY ("accepterID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Investor" ADD CONSTRAINT "Investor_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -610,7 +682,7 @@ ALTER TABLE "StartupMarket" ADD CONSTRAINT "StartupMarket_id_fkey" FOREIGN KEY (
 ALTER TABLE "StartupFinancials" ADD CONSTRAINT "StartupFinancials_id_fkey" FOREIGN KEY ("id") REFERENCES "Startup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FundraisingRound" ADD CONSTRAINT "FundraisingRound_startupID_fkey" FOREIGN KEY ("startupID") REFERENCES "StartupFinancials"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FundraisingRound" ADD CONSTRAINT "FundraisingRound_startupFinancialsID_fkey" FOREIGN KEY ("startupFinancialsID") REFERENCES "StartupFinancials"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "CapTable" ADD CONSTRAINT "CapTable_startupFinancialsID_fkey" FOREIGN KEY ("startupFinancialsID") REFERENCES "StartupFinancials"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -622,13 +694,22 @@ ALTER TABLE "StartupObjective" ADD CONSTRAINT "StartupObjective_id_fkey" FOREIGN
 ALTER TABLE "Offer" ADD CONSTRAINT "Offer_startupID_fkey" FOREIGN KEY ("startupID") REFERENCES "Startup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Bid" ADD CONSTRAINT "Bid_offerID_fkey" FOREIGN KEY ("offerID") REFERENCES "Offer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "OfferRoom" ADD CONSTRAINT "OfferRoom_id_fkey" FOREIGN KEY ("id") REFERENCES "Offer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Bid" ADD CONSTRAINT "Bid_investorID_fkey" FOREIGN KEY ("investorID") REFERENCES "Investor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NegotiationTable" ADD CONSTRAINT "NegotiationTable_id_fkey" FOREIGN KEY ("id") REFERENCES "OfferRoom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "BidQuestion" ADD CONSTRAINT "BidQuestion_bidID_fkey" FOREIGN KEY ("bidID") REFERENCES "Bid"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Deal" ADD CONSTRAINT "Deal_offerID_fkey" FOREIGN KEY ("offerID") REFERENCES "Offer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Deal" ADD CONSTRAINT "Deal_investorID_fkey" FOREIGN KEY ("investorID") REFERENCES "Investor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OfferQuestion" ADD CONSTRAINT "OfferQuestion_offerRoomID_fkey" FOREIGN KEY ("offerRoomID") REFERENCES "OfferRoom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OfferQuestion" ADD CONSTRAINT "OfferQuestion_askerID_fkey" FOREIGN KEY ("askerID") REFERENCES "Investor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_posterID_fkey" FOREIGN KEY ("posterID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -640,19 +721,22 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_commenterID_fkey" FOREIGN KEY ("co
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postID_fkey" FOREIGN KEY ("postID") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Conversation" ADD CONSTRAINT "Conversation_conversationStarterID_fkey" FOREIGN KEY ("conversationStarterID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DirectMessage" ADD CONSTRAINT "DirectMessage_conversationID_fkey" FOREIGN KEY ("conversationID") REFERENCES "DirectConversation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Conversation" ADD CONSTRAINT "Conversation_conversationResponderID_fkey" FOREIGN KEY ("conversationResponderID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DirectMessage" ADD CONSTRAINT "DirectMessage_senderID_fkey" FOREIGN KEY ("senderID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Message" ADD CONSTRAINT "Message_conversationID_fkey" FOREIGN KEY ("conversationID") REFERENCES "Conversation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RoomGroupMessage" ADD CONSTRAINT "RoomGroupMessage_offerRoomId_fkey" FOREIGN KEY ("offerRoomId") REFERENCES "OfferRoom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Message" ADD CONSTRAINT "Message_senderID_fkey" FOREIGN KEY ("senderID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RoomGroupMessage" ADD CONSTRAINT "RoomGroupMessage_senderID_fkey" FOREIGN KEY ("senderID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Message" ADD CONSTRAINT "Message_receiverID_fkey" FOREIGN KEY ("receiverID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NegotiationMessage" ADD CONSTRAINT "NegotiationMessage_negotiationTableID_fkey" FOREIGN KEY ("negotiationTableID") REFERENCES "NegotiationTable"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NegotiationMessage" ADD CONSTRAINT "NegotiationMessage_senderID_fkey" FOREIGN KEY ("senderID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserFollows" ADD CONSTRAINT "_UserFollows_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -661,10 +745,34 @@ ALTER TABLE "_UserFollows" ADD CONSTRAINT "_UserFollows_A_fkey" FOREIGN KEY ("A"
 ALTER TABLE "_UserFollows" ADD CONSTRAINT "_UserFollows_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_SuccessfulDeal" ADD CONSTRAINT "_SuccessfulDeal_A_fkey" FOREIGN KEY ("A") REFERENCES "Investor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Connection" ADD CONSTRAINT "_Connection_A_fkey" FOREIGN KEY ("A") REFERENCES "Connection"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_SuccessfulDeal" ADD CONSTRAINT "_SuccessfulDeal_B_fkey" FOREIGN KEY ("B") REFERENCES "Offer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Connection" ADD CONSTRAINT "_Connection_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Participant" ADD CONSTRAINT "_Participant_A_fkey" FOREIGN KEY ("A") REFERENCES "Investor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Participant" ADD CONSTRAINT "_Participant_B_fkey" FOREIGN KEY ("B") REFERENCES "OfferRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Waiting" ADD CONSTRAINT "_Waiting_A_fkey" FOREIGN KEY ("A") REFERENCES "Investor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Waiting" ADD CONSTRAINT "_Waiting_B_fkey" FOREIGN KEY ("B") REFERENCES "OfferRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Kicked" ADD CONSTRAINT "_Kicked_A_fkey" FOREIGN KEY ("A") REFERENCES "Investor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Kicked" ADD CONSTRAINT "_Kicked_B_fkey" FOREIGN KEY ("B") REFERENCES "OfferRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Negotiator" ADD CONSTRAINT "_Negotiator_A_fkey" FOREIGN KEY ("A") REFERENCES "Investor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Negotiator" ADD CONSTRAINT "_Negotiator_B_fkey" FOREIGN KEY ("B") REFERENCES "NegotiationTable"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserLikesPost" ADD CONSTRAINT "_UserLikesPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -677,3 +785,9 @@ ALTER TABLE "_UserLikesComment" ADD CONSTRAINT "_UserLikesComment_A_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "_UserLikesComment" ADD CONSTRAINT "_UserLikesComment_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_DM" ADD CONSTRAINT "_DM_A_fkey" FOREIGN KEY ("A") REFERENCES "DirectConversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_DM" ADD CONSTRAINT "_DM_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

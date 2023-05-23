@@ -142,6 +142,7 @@ model Location {
 }
 
 enum EducationBG {
+  NONE
   HIGH_SCHOOL
   BACHELORS
   MASTERS
@@ -192,17 +193,18 @@ enum InvestorLevel {
 }
 
 enum FundingStage {
+  PRE_SEED
   SEED
   SERIES_A
   SERIES_B
   SERIES_C
   SERIES_D
   SERIES_E
-  SERIES_F
   LATER
 }
 
 enum AmountRange {
+  NONE
   LESS_THAN_ONE_LAC
   ONE_TO_FIVE_LACS
   FIVE_TO_TWENTY_LACS
@@ -277,7 +279,7 @@ enum VisibilityLevel {
 
 enum NotificationLevel {
   NONE
-  LOW
+  ONLY_CRITICAL
   MEDIUM
   HIGH
 }
@@ -462,13 +464,13 @@ enum GrowthRate {
 }
 
 enum RevenueStreams {
-  SELLING_GOODS
+  SELLING_GOODS_OR_SERVICES
   RENTAL_OR_LEASING
   ADS_OR_SPONSORS
   COMMISSION_FEE
   SUBSCRIPTION_OR_LICENSING
   DONATIONS
-  FREEMIUM
+  PAY_PER_USE
   OTHER
 }
 
@@ -582,22 +584,22 @@ enum StartupPlatformGoal {
 }
 
 model Offer {
-  id                Int           @id @default(autoincrement())
+  id                Int          @id @default(autoincrement())
   startupID         Int
-  startup           Startup       @relation("OffersByStartup", fields: [startupID], references: [id])
+  startup           Startup      @relation("OffersByStartup", fields: [startupID], references: [id])
   capitalTargetLacs Float
   equityBeingIssued Float
-  minTicketSizeLacs Float         @default(1.0)
+  minTicketSizeLacs Float        @default(1.0)
   maxTicketSizeLacs Float
-  fundingStage      FundingStage?
+  fundingStage      FundingStage
   maxInvestors      Int
   willUseFundsFor   String[]
   needHelpWith      String[]
-  offerRoom         OfferRoom?    @relation("OfferRoom")
-  successfulDealers Deal[]        @relation("SuccessfulDeal")
-  status            OfferStatus   @default(CREATED)
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
+  offerRoom         OfferRoom?   @relation("OfferRoom")
+  successfulDealers Deal[]       @relation("SuccessfulDeal")
+  status            OfferStatus  @default(CREATED)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
 
 enum OfferStatus {
