@@ -4,8 +4,8 @@ export const schema = gql`
     startup: Startup!
     preferredInvestorLevels: [InvestorLevel]!
     preferredLocations: [Int]!
-    expectedTimeline: TimelineRange
-    promisingReturns: ReturnsRange
+    expectedTimeline: TimelineRange!
+    promisingReturns: ReturnsRange!
     platformGoal: [StartupPlatformGoal]!
     referSource: [ReferSource]!
     pitchDeckURL: String
@@ -47,6 +47,7 @@ export const schema = gql`
     EXPLORING
     CONNECTING
     GETTING_ADVICE
+    OTHER
   }
 
   enum ReferSource {
@@ -67,8 +68,8 @@ export const schema = gql`
     id: Int!
     preferredInvestorLevels: [InvestorLevel]!
     preferredLocations: [Int]!
-    expectedTimeline: TimelineRange
-    promisingReturns: ReturnsRange
+    expectedTimeline: TimelineRange!
+    promisingReturns: ReturnsRange!
     platformGoal: [StartupPlatformGoal]!
     referSource: [ReferSource]!
     pitchDeckURL: String

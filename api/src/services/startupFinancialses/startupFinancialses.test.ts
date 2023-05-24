@@ -44,7 +44,7 @@ describe('startupFinancialses', () => {
       const result = await createStartupFinancials({
         input: {
           id: scenario.startupFinancials.two.id,
-          latestFundingStage: 'SEED',
+          latestFundingStage: 'PRE_SEED',
           currentRatio: 'LESS_THAN_HALF',
           debtEquityRatio: 'LESS_THAN_HALF',
           revenueLastFY: 'LESS_THAN_10_LACS',
@@ -52,12 +52,12 @@ describe('startupFinancialses', () => {
           margin: 'LOSS_OVER_50',
           cashRunway: 'LESS_THAN_SIX_MONTHS',
           plansForUsingCash: 'String',
-          updatedAt: '2023-05-13T21:49:36.584Z',
+          updatedAt: '2023-05-24T18:16:11.102Z',
         },
       })
 
       expect(result.id).toEqual(scenario.startupFinancials.two.id)
-      expect(result.latestFundingStage).toEqual('SEED')
+      expect(result.latestFundingStage).toEqual('PRE_SEED')
       expect(result.currentRatio).toEqual('LESS_THAN_HALF')
       expect(result.debtEquityRatio).toEqual('LESS_THAN_HALF')
       expect(result.revenueLastFY).toEqual('LESS_THAN_10_LACS')
@@ -65,7 +65,7 @@ describe('startupFinancialses', () => {
       expect(result.margin).toEqual('LOSS_OVER_50')
       expect(result.cashRunway).toEqual('LESS_THAN_SIX_MONTHS')
       expect(result.plansForUsingCash).toEqual('String')
-      expect(result.updatedAt).toEqual(new Date('2023-05-13T21:49:36.584Z'))
+      expect(result.updatedAt).toEqual(new Date('2023-05-24T18:16:11.102Z'))
     }
   )
 

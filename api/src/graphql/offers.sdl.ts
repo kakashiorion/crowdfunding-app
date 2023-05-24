@@ -7,8 +7,8 @@ export const schema = gql`
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
     maxTicketSizeLacs: Float!
-    fundingStage: FundingStage
-    numberOfInvestors: Int!
+    fundingStage: FundingStage!
+    maxInvestors: Int!
     willUseFundsFor: [String]!
     needHelpWith: [String]!
     offerRoom: OfferRoom
@@ -19,13 +19,13 @@ export const schema = gql`
   }
 
   enum FundingStage {
+    PRE_SEED
     SEED
     SERIES_A
     SERIES_B
     SERIES_C
     SERIES_D
     SERIES_E
-    SERIES_F
     LATER
   }
 
@@ -47,8 +47,8 @@ export const schema = gql`
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
     maxTicketSizeLacs: Float!
-    fundingStage: FundingStage
-    numberOfInvestors: Int!
+    fundingStage: FundingStage!
+    maxInvestors: Int!
     willUseFundsFor: [String]!
     needHelpWith: [String]!
     status: OfferStatus!
@@ -61,7 +61,7 @@ export const schema = gql`
     minTicketSizeLacs: Float
     maxTicketSizeLacs: Float
     fundingStage: FundingStage
-    numberOfInvestors: Int
+    maxInvestors: Int
     willUseFundsFor: [String]!
     needHelpWith: [String]!
     status: OfferStatus

@@ -2,11 +2,11 @@ export const schema = gql`
   type InvestorObjective {
     id: Int!
     investor: Investor!
-    preferredAmountToInvest: AmountRange
+    preferredAmountToInvest: AmountRange!
     preferredFundingStages: [FundingStage]!
     preferredStartupTeamSizes: [StartupTeamSize]!
     preferredTimelines: [TimelineRange]!
-    riskApetite: RiskApetite
+    riskApetite: RiskApetite!
     preferredSectors: [Sector]!
     preferredLocations: [Int]!
     platformGoal: [InvestorPlatformGoal]!
@@ -16,6 +16,7 @@ export const schema = gql`
   }
 
   enum AmountRange {
+    NONE
     LESS_THAN_ONE_LAC
     ONE_TO_FIVE_LACS
     FIVE_TO_TWENTY_LACS
@@ -24,13 +25,13 @@ export const schema = gql`
   }
 
   enum FundingStage {
+    PRE_SEED
     SEED
     SERIES_A
     SERIES_B
     SERIES_C
     SERIES_D
     SERIES_E
-    SERIES_F
     LATER
   }
 
@@ -109,6 +110,7 @@ export const schema = gql`
     EXPLORING
     CONSULTING
     RESEARCHING
+    OTHER
   }
 
   enum ReferSource {
@@ -127,11 +129,11 @@ export const schema = gql`
 
   input CreateInvestorObjectiveInput {
     id: Int!
-    preferredAmountToInvest: AmountRange
+    preferredAmountToInvest: AmountRange!
     preferredFundingStages: [FundingStage]!
     preferredStartupTeamSizes: [StartupTeamSize]!
     preferredTimelines: [TimelineRange]!
-    riskApetite: RiskApetite
+    riskApetite: RiskApetite!
     preferredSectors: [Sector]!
     preferredLocations: [Int]!
     platformGoal: [InvestorPlatformGoal]!

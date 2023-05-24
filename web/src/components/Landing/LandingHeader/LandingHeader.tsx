@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
-import CloseIcon from 'public/icons/close.svg'
 import MenuIcon from 'public/icons/menu.svg'
+import UpIcon from 'public/icons/up.svg'
 import Logo from 'public/logo/LogoOrig.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
 import { HoverPrimaryTextButton } from 'src/components/Button/Button'
-import { IconClassName, LogoClassName } from 'src/layouts/LayoutConsts'
+import { LogoClassName } from 'src/layouts/LayoutConsts'
 
 const LandingHeader = (props: {
   scrollRefsList: React.RefObject<HTMLDivElement>[]
@@ -24,12 +24,19 @@ const LandingHeader = (props: {
         <HeaderMenu size="small" scrollRefsList={props.scrollRefsList} />
       )}
       {isMenuOpen ? (
-        <CloseIcon
-          className={IconClassName}
+        <UpIcon
+          className={
+            'flex h-7 w-7 fill-primary-l1 dark:fill-primary-l1 lg:hidden'
+          }
           onClick={() => setMenuOpen(false)}
-        ></CloseIcon>
+        />
       ) : (
-        <MenuIcon className={IconClassName} onClick={() => setMenuOpen(true)} />
+        <MenuIcon
+          className={
+            'flex h-7 w-7 fill-black hover:fill-primary-d1 dark:fill-white dark:hover:fill-primary-l1 lg:hidden'
+          }
+          onClick={() => setMenuOpen(true)}
+        />
       )}
     </div>
   )
@@ -43,7 +50,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const className = `${
     props.size == 'large'
       ? 'hidden lg:flex lg:gap-7 lg:flex-row lg:items-center lg:justify-end lg:p-0 lg:opacity-100'
-      : 'absolute z-10 lg:hidden right-4 top-10 flex flex-col items-center justify-start gap-6 rounded bg-white-d1/95 py-4 px-6 dark:bg-black-l1/95 '
+      : 'absolute z-10 lg:hidden right-0 top-9 flex flex-col items-center justify-start gap-6 rounded bg-white-d1/95 py-4 px-6 dark:bg-black-l1/95 '
   }`
 
   //  const scrollRefsList = [investorRef, startupRef, aboutRef, contactRef]

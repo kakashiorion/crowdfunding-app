@@ -117,7 +117,7 @@ const ValuePropSection = (props: ValuePropSectionProps) => {
 }
 
 const SectionClassName =
-  'flex min-h-screen flex-col items-center gap-6 py-10 lg:justify-between lg:py-12'
+  'flex min-h-screen flex-col items-center gap-6 py-10 justify-start lg:py-12'
 
 //Investor section
 const InvestorSection = forwardRef(function InvestorSection(

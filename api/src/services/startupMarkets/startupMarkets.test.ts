@@ -35,24 +35,30 @@ describe('startupMarkets', () => {
     const result = await createStartupMarket({
       input: {
         id: scenario.startupMarket.two.id,
-        revenueStreams: 'SELLING_GOODS',
+        revenueStreams: 'SELLING_GOODS_OR_SERVICES',
         costHeads: 'MATERIAL',
+        shortTermPlan: 'EXPAND_GEOGRAPHICALLY',
+        marketSizeInCr: 'LESS_THAN_10_CR',
+        marketGrowthRate: 'LESS_THAN_5',
         trends: 'String',
         opporunities: 'String',
         threats: 'String',
         competitors: 'String',
-        updatedAt: '2023-05-09T21:11:54.272Z',
+        updatedAt: '2023-05-24T18:15:12.482Z',
       },
     })
 
     expect(result.id).toEqual(scenario.startupMarket.two.id)
-    expect(result.revenueStreams).toEqual('SELLING_GOODS')
+    expect(result.revenueStreams).toEqual('SELLING_GOODS_OR_SERVICES')
     expect(result.costHeads).toEqual('MATERIAL')
+    expect(result.shortTermPlan).toEqual('EXPAND_GEOGRAPHICALLY')
+    expect(result.marketSizeInCr).toEqual('LESS_THAN_10_CR')
+    expect(result.marketGrowthRate).toEqual('LESS_THAN_5')
     expect(result.trends).toEqual('String')
     expect(result.opporunities).toEqual('String')
     expect(result.threats).toEqual('String')
     expect(result.competitors).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:11:54.272Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-24T18:15:12.482Z'))
   })
 
   scenario('updates a startupMarket', async (scenario: StandardScenario) => {

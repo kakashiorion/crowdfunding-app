@@ -1,4 +1,4 @@
-import { QuestionLabel, SubTextLabel } from 'src/components/Label/Label'
+import { SubTitleLabel, SubTextLabel } from 'src/components/Label/Label'
 import { OnboardingStepsInfoType } from 'src/lib/onboardingConsts'
 
 import {
@@ -13,7 +13,7 @@ type StepHeaderProps = {
 export const InvestorStepHeader = (props: StepHeaderProps) => {
   return (
     <div className="flex shrink-0 flex-col-reverse items-start justify-between gap-2 overflow-hidden lg:flex-row lg:items-center lg:gap-4 ">
-      <QuestionLabel
+      <SubTitleLabel
         label={props.currentStepInfo[props.currentStepNumber - 1].title}
       />
       <div className="flex flex-col items-start gap-1 lg:items-end">
@@ -38,7 +38,7 @@ export const InvestorStepHeader = (props: StepHeaderProps) => {
 export const StartupStepHeader = (props: StepHeaderProps) => {
   return (
     <div className="flex shrink-0 flex-col-reverse items-start justify-between gap-2 overflow-hidden lg:flex-row lg:items-center lg:gap-4 ">
-      <QuestionLabel
+      <SubTitleLabel
         label={props.currentStepInfo[props.currentStepNumber - 1].title}
       />
       <div className="flex flex-col items-start gap-1 lg:items-end">

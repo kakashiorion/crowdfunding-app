@@ -21,9 +21,9 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
   const { pageSelected } = useContext(StartupPageContext)
   return (
     <div
-      className={`fixed left-4 top-9 ${
+      className={`fixed left-4 top-10 ${
         props.isMenuOpen == 'Main' ? 'flex' : 'hidden'
-      } z-10 shrink-0 flex-col items-center justify-start gap-4 rounded bg-white-d2/95 p-2 shadow-sm dark:bg-black-l3/95 lg:static lg:flex lg:flex-row lg:justify-between lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent`}
+      } z-10 shrink-0 flex-col items-center justify-start gap-4 rounded bg-white-d2/95 p-2 shadow-sm dark:bg-black-l2/95 lg:static lg:flex lg:flex-row lg:justify-between lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent`}
     >
       <StartupNavigationItem
         icon={HomeIcon}

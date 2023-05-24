@@ -5,11 +5,11 @@ export const schema = gql`
     valueProp: String
     idea: String
     whyThis: String
-    foundedBefore: SizeRange
+    foundedBefore: SizeRange!
     mission: String
     vision: String
     coreValues: [String]!
-    startupTeamSize: StartupTeamSize
+    startupTeamSize: StartupTeamSize!
     keyPeople: [KeyPeople]!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -42,11 +42,11 @@ export const schema = gql`
     valueProp: String
     idea: String
     whyThis: String
-    foundedBefore: SizeRange
+    foundedBefore: SizeRange!
     mission: String
     vision: String
     coreValues: [String]!
-    startupTeamSize: StartupTeamSize
+    startupTeamSize: StartupTeamSize!
   }
 
   input UpdateStartupBackgroundInput {

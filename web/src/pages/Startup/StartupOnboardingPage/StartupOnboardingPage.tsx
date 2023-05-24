@@ -109,7 +109,7 @@ const StartupOnboardingPage = () => {
           </div>
           <LogoutIcon
             className="flex h-7 w-7 cursor-pointer fill-black hover:fill-error-d1 dark:fill-white hover:dark:fill-error-l1 lg:hidden"
-            onClick={() => setMenuOpen(true)}
+            onClick={async () => await logOut()}
           />
         </div>
       </div>

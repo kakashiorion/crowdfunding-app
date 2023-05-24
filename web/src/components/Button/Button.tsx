@@ -22,7 +22,7 @@ type ButtonProps = {
 export const PrimaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded bg-primary-d1 px-4 py-2 text-b2 text-white  hover:bg-primary-d2  dark:bg-primary-l1 dark:text-black dark:hover:bg-primary-l2 lg:px-6 lg:py-3 lg:text-b1"
+      className="rounded bg-primary-d1 px-5 py-2.5 text-b2 text-white  hover:bg-primary-d2  dark:bg-primary-l1 dark:text-black dark:hover:bg-primary-l2 lg:px-6 lg:py-3 lg:text-b1"
       onClick={props.action}
     >
       {props.label}
@@ -33,11 +33,11 @@ export const PrimaryFilledButton = (props: ButtonProps) => {
 export const IconBlackFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="flex items-center justify-between gap-1 rounded bg-black p-2 text-b2 text-white shadow-sm hover:bg-black-l1 dark:bg-white dark:text-black dark:hover:bg-white-d1 lg:text-b1"
+      className="flex items-center justify-center gap-1 rounded border-2 border-black-l1 fill-black-l1 px-3 py-1.5 text-b3 text-black-l1 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:text-black lg:gap-2 lg:px-4 lg:py-2 lg:text-b2"
       onClick={props.action}
     >
       {props.icon}
-      {props.label}
+      <p className="align-text-bottom">{props.label}</p>
     </button>
   )
 }
@@ -45,7 +45,7 @@ export const IconBlackFilledButton = (props: ButtonProps) => {
 export const SmallPrimaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded  bg-primary-d1 px-2 py-1 text-b3 text-white  hover:bg-primary-d2  dark:bg-primary-l1 dark:text-black  dark:hover:bg-primary-l2 lg:px-4 lg:py-2 lg:text-b2"
+      className="rounded  bg-primary-d1 px-4 py-2 text-b3 text-white  hover:bg-primary-d2  dark:bg-primary-l1 dark:text-black  dark:hover:bg-primary-l2 lg:px-5 lg:py-2.5 lg:text-b2"
       onClick={props.action}
     >
       {props.label}
@@ -56,7 +56,7 @@ export const SmallPrimaryFilledButton = (props: ButtonProps) => {
 export const LargePrimaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded  bg-primary-d1 px-6 py-3 text-b1 text-white  hover:bg-primary-d2 dark:bg-primary-l1 dark:text-black dark:hover:bg-primary-l2 lg:px-7 lg:py-4 lg:text-h7"
+      className="rounded  bg-primary-d1 px-6 py-3 text-b1 text-white  hover:bg-primary-d2 dark:bg-primary-l1 dark:text-black dark:hover:bg-primary-l2 lg:px-7 lg:py-4 lg:text-h6"
       onClick={props.action}
     >
       {props.label}
@@ -67,7 +67,7 @@ export const LargePrimaryFilledButton = (props: ButtonProps) => {
 export const TertiaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded bg-tertiary-d1 px-4 py-2 text-b2 text-white hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-6 lg:py-3 lg:text-b1"
+      className="rounded bg-tertiary-d1 px-5 py-2.5 text-b2 text-white hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-6 lg:py-3 lg:text-b1"
       onClick={props.action}
     >
       {props.label}
@@ -78,7 +78,7 @@ export const TertiaryFilledButton = (props: ButtonProps) => {
 export const SmallTertiaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded bg-tertiary-d1 px-2 py-1 text-b3 text-white hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-4 lg:py-2 lg:text-b2"
+      className="rounded bg-tertiary-d1 px-4 py-2 text-b3 text-white hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-5 lg:py-2.5 lg:text-b2"
       onClick={props.action}
     >
       {props.label}
@@ -89,7 +89,40 @@ export const SmallTertiaryFilledButton = (props: ButtonProps) => {
 export const LargeTertiaryFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded bg-tertiary-d1 px-6 py-3 text-b1 text-white hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-7 lg:py-4 lg:text-h7"
+      className="rounded bg-tertiary-d1 px-6 py-3 text-b1 text-white hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-7 lg:py-4 lg:text-h6"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
+
+export const SecondaryFilledButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded bg-secondary-d1 px-5 py-2.5 text-b2 text-white hover:bg-secondary-d2 dark:bg-secondary-l1 dark:text-black dark:hover:bg-secondary-l2 lg:px-6 lg:py-3 lg:text-b1"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
+
+export const SmallSecondaryFilledButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded bg-secondary-d1 px-4 py-2 text-b3 text-white hover:bg-secondary-d2 dark:bg-secondary-l1 dark:text-black dark:hover:bg-secondary-l2 lg:px-5 lg:py-2.5 lg:text-b2"
+      onClick={props.action}
+    >
+      {props.label}
+    </button>
+  )
+}
+
+export const LargeSecondaryFilledButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="rounded bg-secondary-d1 px-6 py-3 text-b1 text-white hover:bg-secondary-d2 dark:bg-secondary-l1 dark:text-black dark:hover:bg-secondary-l2 lg:px-7 lg:py-4 lg:text-h6"
       onClick={props.action}
     >
       {props.label}
@@ -100,7 +133,7 @@ export const LargeTertiaryFilledButton = (props: ButtonProps) => {
 export const DisabledFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="rounded  bg-black-l4 px-4 py-2 text-b2 text-white-d2 dark:bg-white-d4 dark:text-black-l2 lg:px-5 lg:py-3 lg:text-b1"
+      className="rounded  bg-black-l4 px-5 py-2.5 text-b2 text-white-d2 dark:bg-white-d4 dark:text-black-l2 lg:px-6 lg:py-3 lg:text-b1"
       onClick={props.action}
     >
       {props.label}

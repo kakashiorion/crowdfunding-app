@@ -47,11 +47,13 @@ describe('investorExperiences', () => {
           workedInStartups: 'NONE',
           foundedStartups: 'NONE',
           investedStartups: 'NONE',
-          investedStages: 'SEED',
+          investedStages: 'PRE_SEED',
+          investedAmountLacs: 'NONE',
+          successfulExits: 'NONE',
           returnsReceived: 'BREAKEVEN',
           investedSectors: 'EDUCATION',
           investorLevel: 'NOVICE',
-          updatedAt: '2023-05-09T21:04:15.392Z',
+          updatedAt: '2023-05-24T18:06:20.209Z',
         },
       })
 
@@ -59,11 +61,13 @@ describe('investorExperiences', () => {
       expect(result.workedInStartups).toEqual('NONE')
       expect(result.foundedStartups).toEqual('NONE')
       expect(result.investedStartups).toEqual('NONE')
-      expect(result.investedStages).toEqual('SEED')
+      expect(result.investedStages).toEqual('PRE_SEED')
+      expect(result.investedAmountLacs).toEqual('NONE')
+      expect(result.successfulExits).toEqual('NONE')
       expect(result.returnsReceived).toEqual('BREAKEVEN')
       expect(result.investedSectors).toEqual('EDUCATION')
       expect(result.investorLevel).toEqual('NOVICE')
-      expect(result.updatedAt).toEqual(new Date('2023-05-09T21:04:15.392Z'))
+      expect(result.updatedAt).toEqual(new Date('2023-05-24T18:06:20.209Z'))
     }
   )
 

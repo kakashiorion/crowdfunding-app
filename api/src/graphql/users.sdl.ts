@@ -68,7 +68,7 @@ export const schema = gql`
 
   enum NotificationLevel {
     NONE
-    LOW
+    ONLY_CRITICAL
     MEDIUM
     HIGH
   }

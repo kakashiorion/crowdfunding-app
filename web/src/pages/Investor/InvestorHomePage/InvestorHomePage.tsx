@@ -69,11 +69,9 @@ const InvestorFeedBlock = () => {
             <option>New</option>
           </select> */}
           <IconBlackFilledButton
-            label="Create"
+            label="NEW POST"
             action={() => {}}
-            icon={
-              <AddIcon className="h-4 w-4 fill-black dark:fill-white lg:h-5 lg:w-5" />
-            }
+            icon={<AddIcon className="h-4 w-4 fill-inherit lg:h-5 lg:w-5" />}
           />
         </div>
       </div>

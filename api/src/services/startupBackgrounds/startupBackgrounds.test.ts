@@ -44,14 +44,18 @@ describe('startupBackgrounds', () => {
       const result = await createStartupBackground({
         input: {
           id: scenario.startupBackground.two.id,
+          foundedBefore: 'NONE',
           coreValues: 'String',
-          updatedAt: '2023-05-09T21:07:40.645Z',
+          startupTeamSize: 'ONE',
+          updatedAt: '2023-05-24T18:14:01.471Z',
         },
       })
 
       expect(result.id).toEqual(scenario.startupBackground.two.id)
+      expect(result.foundedBefore).toEqual('NONE')
       expect(result.coreValues).toEqual('String')
-      expect(result.updatedAt).toEqual(new Date('2023-05-09T21:07:40.645Z'))
+      expect(result.startupTeamSize).toEqual('ONE')
+      expect(result.updatedAt).toEqual(new Date('2023-05-24T18:14:01.471Z'))
     }
   )
 
@@ -63,10 +67,10 @@ describe('startupBackgrounds', () => {
       })) as StartupBackground
       const result = await updateStartupBackground({
         id: original.id,
-        input: { coreValues: 'String2' },
+        input: { foundedBefore: 'MORE_THAN_TWENTY' },
       })
 
-      expect(result.coreValues).toEqual('String2')
+      expect(result.foundedBefore).toEqual('MORE_THAN_TWENTY')
     }
   )
 

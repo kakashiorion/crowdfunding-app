@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import BidIcon from 'public/icons/bid.svg'
+import OfferIcon from 'public/icons/bid.svg'
 import ConnectionIcon from 'public/icons/connection.svg'
 import ConversationIcon from 'public/icons/conversation.svg'
 import ExploreIcon from 'public/icons/explore.svg'
@@ -21,9 +21,9 @@ const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
   const { pageSelected } = useContext(InvestorPageContext)
   return (
     <div
-      className={`fixed left-4 top-9 ${
+      className={`fixed left-4 top-10 ${
         props.isMenuOpen == 'Main' ? 'flex' : 'hidden'
-      } z-10 shrink-0 flex-col items-center justify-start gap-4 rounded bg-white-d2/95 p-2 shadow-sm dark:bg-black-l3/95 lg:static lg:flex lg:flex-row lg:justify-between lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent`}
+      } z-10 shrink-0 flex-col items-center justify-start gap-4 rounded bg-white-d2/95 p-2 shadow-sm dark:bg-black-l2/95 lg:static lg:flex lg:flex-row lg:justify-between lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent`}
     >
       <InvestorNavigationItem
         icon={HomeIcon}
@@ -34,12 +34,12 @@ const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
         selected={'Home' == pageSelected}
       />
       <InvestorNavigationItem
-        icon={BidIcon}
+        icon={OfferIcon}
         action={() => {
           props.setMenuOpen('None')
-          navigate(routes.investorMyBids())
+          navigate(routes.investorOffers())
         }}
-        selected={'Bids' == pageSelected}
+        selected={'Offers' == pageSelected}
       />
       <InvestorNavigationItem
         icon={ConnectionIcon}

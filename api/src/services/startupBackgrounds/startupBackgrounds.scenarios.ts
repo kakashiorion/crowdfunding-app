@@ -5,23 +5,22 @@ export const standard = defineScenario<Prisma.StartupBackgroundCreateArgs>({
   startupBackground: {
     one: {
       data: {
+        foundedBefore: 'NONE',
         coreValues: 'String',
-        updatedAt: '2023-05-09T21:07:41.250Z',
+        startupTeamSize: 'ONE',
+        updatedAt: '2023-05-24T18:14:02.298Z',
         startup: {
           create: {
             name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-05-09T21:07:41.250Z',
-            locationID: 351049,
-            sectorCategoryID: 1805998,
-            updatedAt: '2023-05-09T21:07:41.250Z',
+            dateIncorporated: '2023-05-24T18:14:02.298Z',
+            locationID: 4181897,
+            sectorCategoryID: 4121191,
+            updatedAt: '2023-05-24T18:14:02.298Z',
             user: {
               create: {
-                email: 'String8136332',
-                hashedPassword: 'String',
-                salt: 'String',
-                mobile: 'String4760147',
-                updatedAt: '2023-05-09T21:07:41.250Z',
+                email: 'String3769843',
+                updatedAt: '2023-05-24T18:14:02.298Z',
               },
             },
           },
@@ -30,23 +29,22 @@ export const standard = defineScenario<Prisma.StartupBackgroundCreateArgs>({
     },
     two: {
       data: {
+        foundedBefore: 'NONE',
         coreValues: 'String',
-        updatedAt: '2023-05-09T21:07:41.251Z',
+        startupTeamSize: 'ONE',
+        updatedAt: '2023-05-24T18:14:02.298Z',
         startup: {
           create: {
             name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-05-09T21:07:41.251Z',
-            locationID: 7775483,
-            sectorCategoryID: 8249285,
-            updatedAt: '2023-05-09T21:07:41.251Z',
+            dateIncorporated: '2023-05-24T18:14:02.298Z',
+            locationID: 4730954,
+            sectorCategoryID: 7484810,
+            updatedAt: '2023-05-24T18:14:02.298Z',
             user: {
               create: {
-                email: 'String7242609',
-                hashedPassword: 'String',
-                salt: 'String',
-                mobile: 'String9746841',
-                updatedAt: '2023-05-09T21:07:41.251Z',
+                email: 'String2469123',
+                updatedAt: '2023-05-24T18:14:02.298Z',
               },
             },
           },

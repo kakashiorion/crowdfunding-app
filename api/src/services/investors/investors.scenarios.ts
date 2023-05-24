@@ -6,16 +6,16 @@ export const standard = defineScenario<Prisma.InvestorCreateArgs>({
     one: {
       data: {
         name: 'String',
-        locationID: 8447597,
+        locationID: 3385056,
+        eduBG: 'NONE',
+        yearsOfWorkEx: 'NONE',
+        numberOfCompanies: 'NONE',
         workedInSectors: 'EDUCATION',
-        updatedAt: '2023-05-09T21:02:19.923Z',
+        updatedAt: '2023-05-24T18:00:50.675Z',
         user: {
           create: {
-            email: 'String3822651',
-            hashedPassword: 'String',
-            salt: 'String',
-            mobile: 'String2763973',
-            updatedAt: '2023-05-09T21:02:19.923Z',
+            email: 'String5636610',
+            updatedAt: '2023-05-24T18:00:50.675Z',
           },
         },
       },
@@ -23,16 +23,16 @@ export const standard = defineScenario<Prisma.InvestorCreateArgs>({
     two: {
       data: {
         name: 'String',
-        locationID: 3031258,
+        locationID: 340604,
+        eduBG: 'NONE',
+        yearsOfWorkEx: 'NONE',
+        numberOfCompanies: 'NONE',
         workedInSectors: 'EDUCATION',
-        updatedAt: '2023-05-09T21:02:19.923Z',
+        updatedAt: '2023-05-24T18:00:50.675Z',
         user: {
           create: {
-            email: 'String2863622',
-            hashedPassword: 'String',
-            salt: 'String',
-            mobile: 'String664992',
-            updatedAt: '2023-05-09T21:02:19.923Z',
+            email: 'String7329430',
+            updatedAt: '2023-05-24T18:00:50.675Z',
           },
         },
       },

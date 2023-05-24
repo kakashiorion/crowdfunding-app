@@ -24,6 +24,7 @@ export const schema = gql`
   }
 
   enum EducationBG {
+    NONE
     HIGH_SCHOOL
     BACHELORS
     MASTERS

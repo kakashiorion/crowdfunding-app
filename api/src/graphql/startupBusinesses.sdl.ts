@@ -2,16 +2,16 @@ export const schema = gql`
   type StartupBusiness {
     id: Int!
     startup: Startup!
-    numberUsers: UserRange
-    numberCities: SizeRange
-    distributionType: DistributionType
+    numberUsers: UserRange!
+    numberCities: SizeRange!
+    distributionType: DistributionType!
     partners: [String]!
     customers: [String]!
     workedWell: [String]!
     challenges: [String]!
     couldImprove: [String]!
     currentActivities: [String]!
-    hasOnlineBusiness: OnlineBusiness
+    hasOnlineBusiness: OnlineBusiness!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -55,16 +55,16 @@ export const schema = gql`
 
   input CreateStartupBusinessInput {
     id: Int!
-    numberUsers: UserRange
-    numberCities: SizeRange
-    distributionType: DistributionType
+    numberUsers: UserRange!
+    numberCities: SizeRange!
+    distributionType: DistributionType!
     partners: [String]!
     customers: [String]!
     workedWell: [String]!
     challenges: [String]!
     couldImprove: [String]!
     currentActivities: [String]!
-    hasOnlineBusiness: OnlineBusiness
+    hasOnlineBusiness: OnlineBusiness!
   }
 
   input UpdateStartupBusinessInput {

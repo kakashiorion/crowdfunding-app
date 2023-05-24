@@ -33,17 +33,23 @@ describe('investors', () => {
       input: {
         id: scenario.investor.two.id,
         name: 'String',
-        locationID: 8592345,
+        locationID: 3037671,
+        eduBG: 'NONE',
+        yearsOfWorkEx: 'NONE',
+        numberOfCompanies: 'NONE',
         workedInSectors: 'EDUCATION',
-        updatedAt: '2023-05-09T21:02:19.871Z',
+        updatedAt: '2023-05-24T18:00:50.621Z',
       },
     })
 
     expect(result.id).toEqual(scenario.investor.two.id)
     expect(result.name).toEqual('String')
-    expect(result.locationID).toEqual(8592345)
+    expect(result.locationID).toEqual(3037671)
+    expect(result.eduBG).toEqual('NONE')
+    expect(result.yearsOfWorkEx).toEqual('NONE')
+    expect(result.numberOfCompanies).toEqual('NONE')
     expect(result.workedInSectors).toEqual('EDUCATION')
-    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:02:19.871Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-24T18:00:50.621Z'))
   })
 
   scenario('updates a investor', async (scenario: StandardScenario) => {

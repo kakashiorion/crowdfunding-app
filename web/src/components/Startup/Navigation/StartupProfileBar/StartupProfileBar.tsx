@@ -34,7 +34,7 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
         </>
       ) : (
         <button
-          className="flex h-5 w-5 rounded-full bg-black-l2 hover:bg-tertiary dark:bg-white-d1 dark:hover:bg-tertiary-l1"
+          className="flex h-6 w-6 rounded-full bg-black-l1 hover:bg-tertiary-d1 dark:bg-white-d1 dark:hover:bg-tertiary-l1 lg:h-7 lg:w-7"
           onClick={() => props.setMenuOpen('Profile')}
         />
       )}
@@ -47,7 +47,7 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
   const { logOut } = useAuth()
   const { setPageSelected } = useContext(StartupPageContext)
   return (
-    <div className="absolute right-0 top-9 z-10 flex flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l3/95">
+    <div className="absolute right-0 top-10 z-10 flex flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l2/95">
       <button
         onClick={() => {
           navigate(routes.startupMyProfile())
@@ -56,11 +56,11 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
         }}
         className={profileMenuItemClassName}
       >
-        <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white" />
+        <ProfileIcon className="flex h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
         <SubTextLabel label="Profile" />
       </button>
       <button onClick={() => logOut()} className={profileMenuItemClassName}>
-        <LogoutIcon className="flex h-5 w-5 fill-error dark:fill-error-l1" />
+        <LogoutIcon className="flex h-6 w-6 fill-error-d1 dark:fill-error-l1 lg:h-7 lg:w-7" />
         <SubTextLabel label="Logout" />
       </button>
     </div>

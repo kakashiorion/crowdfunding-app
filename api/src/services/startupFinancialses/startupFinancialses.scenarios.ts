@@ -5,7 +5,7 @@ export const standard = defineScenario<Prisma.StartupFinancialsCreateArgs>({
   startupFinancials: {
     one: {
       data: {
-        latestFundingStage: 'SEED',
+        latestFundingStage: 'PRE_SEED',
         currentRatio: 'LESS_THAN_HALF',
         debtEquityRatio: 'LESS_THAN_HALF',
         revenueLastFY: 'LESS_THAN_10_LACS',
@@ -13,20 +13,19 @@ export const standard = defineScenario<Prisma.StartupFinancialsCreateArgs>({
         margin: 'LOSS_OVER_50',
         cashRunway: 'LESS_THAN_SIX_MONTHS',
         plansForUsingCash: 'String',
-        updatedAt: '2023-05-13T21:49:36.810Z',
+        updatedAt: '2023-05-24T18:16:11.461Z',
         startup: {
           create: {
             name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-05-13T21:49:36.810Z',
-            locationID: 5890603,
-            sectorCategoryID: 5999994,
-            updatedAt: '2023-05-13T21:49:36.810Z',
+            dateIncorporated: '2023-05-24T18:16:11.461Z',
+            locationID: 5412069,
+            sectorCategoryID: 3566828,
+            updatedAt: '2023-05-24T18:16:11.461Z',
             user: {
               create: {
-                email: 'String7160213',
-                mobile: 'String4571964',
-                updatedAt: '2023-05-13T21:49:36.810Z',
+                email: 'String7947905',
+                updatedAt: '2023-05-24T18:16:11.461Z',
               },
             },
           },
@@ -35,7 +34,7 @@ export const standard = defineScenario<Prisma.StartupFinancialsCreateArgs>({
     },
     two: {
       data: {
-        latestFundingStage: 'SEED',
+        latestFundingStage: 'PRE_SEED',
         currentRatio: 'LESS_THAN_HALF',
         debtEquityRatio: 'LESS_THAN_HALF',
         revenueLastFY: 'LESS_THAN_10_LACS',
@@ -43,20 +42,19 @@ export const standard = defineScenario<Prisma.StartupFinancialsCreateArgs>({
         margin: 'LOSS_OVER_50',
         cashRunway: 'LESS_THAN_SIX_MONTHS',
         plansForUsingCash: 'String',
-        updatedAt: '2023-05-13T21:49:36.810Z',
+        updatedAt: '2023-05-24T18:16:11.461Z',
         startup: {
           create: {
             name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-05-13T21:49:36.810Z',
-            locationID: 4259257,
-            sectorCategoryID: 258420,
-            updatedAt: '2023-05-13T21:49:36.810Z',
+            dateIncorporated: '2023-05-24T18:16:11.461Z',
+            locationID: 7589607,
+            sectorCategoryID: 9297800,
+            updatedAt: '2023-05-24T18:16:11.461Z',
             user: {
               create: {
-                email: 'String5690206',
-                mobile: 'String3949842',
-                updatedAt: '2023-05-13T21:49:36.810Z',
+                email: 'String1581124',
+                updatedAt: '2023-05-24T18:16:11.461Z',
               },
             },
           },

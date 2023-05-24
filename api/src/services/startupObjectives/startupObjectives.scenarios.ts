@@ -6,26 +6,25 @@ export const standard = defineScenario<Prisma.StartupObjectiveCreateArgs>({
     one: {
       data: {
         preferredInvestorLevels: 'NOVICE',
-        preferredLocations: 9328527,
+        preferredLocations: 9802012,
+        expectedTimeline: 'LESS_THAN_SIX_MONTHS',
+        promisingReturns: 'BREAKEVEN',
         platformGoal: 'RAISING_FUNDS',
         referSource: 'WORD_OF_MOUTH',
         demoURL: 'String',
-        updatedAt: '2023-05-09T21:14:55.717Z',
+        updatedAt: '2023-05-24T18:16:49.828Z',
         startup: {
           create: {
             name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-05-09T21:14:55.717Z',
-            locationID: 6617178,
-            sectorCategoryID: 9039369,
-            updatedAt: '2023-05-09T21:14:55.717Z',
+            dateIncorporated: '2023-05-24T18:16:49.828Z',
+            locationID: 4858105,
+            sectorCategoryID: 279356,
+            updatedAt: '2023-05-24T18:16:49.828Z',
             user: {
               create: {
-                email: 'String8124911',
-                hashedPassword: 'String',
-                salt: 'String',
-                mobile: 'String2452458',
-                updatedAt: '2023-05-09T21:14:55.717Z',
+                email: 'String2759133',
+                updatedAt: '2023-05-24T18:16:49.828Z',
               },
             },
           },
@@ -35,26 +34,25 @@ export const standard = defineScenario<Prisma.StartupObjectiveCreateArgs>({
     two: {
       data: {
         preferredInvestorLevels: 'NOVICE',
-        preferredLocations: 2991172,
+        preferredLocations: 1151300,
+        expectedTimeline: 'LESS_THAN_SIX_MONTHS',
+        promisingReturns: 'BREAKEVEN',
         platformGoal: 'RAISING_FUNDS',
         referSource: 'WORD_OF_MOUTH',
         demoURL: 'String',
-        updatedAt: '2023-05-09T21:14:55.717Z',
+        updatedAt: '2023-05-24T18:16:49.829Z',
         startup: {
           create: {
             name: 'String',
             writeUp: 'String',
-            dateIncorporated: '2023-05-09T21:14:55.717Z',
-            locationID: 9695674,
-            sectorCategoryID: 2769390,
-            updatedAt: '2023-05-09T21:14:55.717Z',
+            dateIncorporated: '2023-05-24T18:16:49.829Z',
+            locationID: 638732,
+            sectorCategoryID: 1386530,
+            updatedAt: '2023-05-24T18:16:49.829Z',
             user: {
               create: {
-                email: 'String6202296',
-                hashedPassword: 'String',
-                salt: 'String',
-                mobile: 'String4991925',
-                updatedAt: '2023-05-09T21:14:55.717Z',
+                email: 'String697826',
+                updatedAt: '2023-05-24T18:16:49.829Z',
               },
             },
           },

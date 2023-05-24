@@ -34,10 +34,10 @@ describe('startups', () => {
         id: scenario.startup.two.id,
         name: 'String',
         writeUp: 'String',
-        dateIncorporated: '2023-05-09T21:05:26.963Z',
-        locationID: 7196652,
-        sectorCategoryID: 4491564,
-        updatedAt: '2023-05-09T21:05:26.963Z',
+        dateIncorporated: '2023-05-24T18:12:58.102Z',
+        locationID: 5544333,
+        sectorCategoryID: 2387867,
+        updatedAt: '2023-05-24T18:12:58.102Z',
       },
     })
 
@@ -45,11 +45,11 @@ describe('startups', () => {
     expect(result.name).toEqual('String')
     expect(result.writeUp).toEqual('String')
     expect(result.dateIncorporated).toEqual(
-      new Date('2023-05-09T21:05:26.963Z')
+      new Date('2023-05-24T18:12:58.102Z')
     )
-    expect(result.locationID).toEqual(7196652)
-    expect(result.sectorCategoryID).toEqual(4491564)
-    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:05:26.963Z'))
+    expect(result.locationID).toEqual(5544333)
+    expect(result.sectorCategoryID).toEqual(2387867)
+    expect(result.updatedAt).toEqual(new Date('2023-05-24T18:12:58.102Z'))
   })
 
   scenario('updates a startup', async (scenario: StandardScenario) => {

@@ -43,11 +43,13 @@ const InvestorSearchMenu = () => {
 }
 
 const SearchInput = () => {
-  return <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l2"></div>
+  return (
+    <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l1 lg:h-9"></div>
+  )
 }
 
 const SearchResults = () => {
   return (
-    <div className="h-10 w-full rounded bg-white-d1 dark:bg-black-l2"></div>
+    <div className="h-10 w-full rounded bg-white-d1 dark:bg-black-l1 lg:h-11"></div>
   )
 }

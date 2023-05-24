@@ -6,8 +6,8 @@ export const schema = gql`
     foundedStartups: SizeRange!
     investedStartups: SizeRange!
     investedStages: [FundingStage]!
-    investedAmountLacs: AmountRange
-    successfulExits: SizeRange
+    investedAmountLacs: AmountRange!
+    successfulExits: SizeRange!
     returnsReceived: [ReturnsRange]!
     investedSectors: [Sector]!
     investorLevel: InvestorLevel!
@@ -40,17 +40,18 @@ export const schema = gql`
   }
 
   enum FundingStage {
+    PRE_SEED
     SEED
     SERIES_A
     SERIES_B
     SERIES_C
     SERIES_D
     SERIES_E
-    SERIES_F
     LATER
   }
 
   enum AmountRange {
+    NONE
     LESS_THAN_ONE_LAC
     ONE_TO_FIVE_LACS
     FIVE_TO_TWENTY_LACS
@@ -140,8 +141,8 @@ export const schema = gql`
     foundedStartups: SizeRange!
     investedStartups: SizeRange!
     investedStages: [FundingStage]!
-    investedAmountLacs: AmountRange
-    successfulExits: SizeRange
+    investedAmountLacs: AmountRange!
+    successfulExits: SizeRange!
     returnsReceived: [ReturnsRange]!
     investedSectors: [Sector]!
     investorLevel: InvestorLevel!

@@ -78,7 +78,6 @@ const InvestorPreferences = (props: OnboardingMainProps) => {
   useEffect(() => {
     const getData = async () => {
       await getEnumData().then((d) => {
-        console.log(d)
         setVisibilityOptions(getEnumValues(d.data.visibility.enumValues))
         setNotificationOptions(getEnumValues(d.data.notification.enumValues))
         setUIOptions(getEnumValues(d.data.ui.enumValues))

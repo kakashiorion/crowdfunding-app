@@ -19,7 +19,7 @@ const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
           className={`flex h-5 w-5 ${
             props.up
               ? 'fill-success-d1 dark:fill-success-l1'
-              : 'fill-black-l3 hover:fill-success-d1 dark:fill-white-d3 dark:hover:fill-success-l1'
+              : 'fill-black-l3 hover:animate-bounce hover:fill-success-d1 dark:fill-white-d3 dark:hover:fill-success-l1'
           } lg:h-6 lg:w-6`}
           onClick={() => {
             if (props.up) {
@@ -34,7 +34,7 @@ const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
           className={`flex h-5 w-5 ${
             props.down
               ? 'fill-error-d1 dark:fill-error-l1'
-              : 'fill-black-l3 hover:fill-error-d1 dark:fill-white-d3 dark:hover:fill-error-l1'
+              : 'fill-black-l3 hover:animate-bounce hover:fill-error-d1 dark:fill-white-d3 dark:hover:fill-error-l1'
           } lg:h-6 lg:w-6`}
           onClick={() => {
             if (props.down) {

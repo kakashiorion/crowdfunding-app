@@ -26,32 +26,36 @@ describe('offers', () => {
     const result = await createOffer({
       input: {
         startupID: scenario.offer.two.startupID,
-        capitalTargetLacs: 5458151.898149641,
-        equityBeingIssued: 8127595.845174325,
-        maxTicketSizeLacs: 4191638.686924868,
+        capitalTargetLacs: 2990432.3355316673,
+        equityBeingIssued: 6734148.280064267,
+        maxTicketSizeLacs: 7916520.010963997,
+        fundingStage: 'PRE_SEED',
+        maxInvestors: 5852146,
         willUseFundsFor: 'String',
         needHelpWith: 'String',
-        updatedAt: '2023-05-09T21:15:47.334Z',
+        updatedAt: '2023-05-24T18:19:43.711Z',
       },
     })
 
     expect(result.startupID).toEqual(scenario.offer.two.startupID)
-    expect(result.capitalTargetLacs).toEqual(5458151.898149641)
-    expect(result.equityBeingIssued).toEqual(8127595.845174325)
-    expect(result.maxTicketSizeLacs).toEqual(4191638.686924868)
+    expect(result.capitalTargetLacs).toEqual(2990432.3355316673)
+    expect(result.equityBeingIssued).toEqual(6734148.280064267)
+    expect(result.maxTicketSizeLacs).toEqual(7916520.010963997)
+    expect(result.fundingStage).toEqual('PRE_SEED')
+    expect(result.maxInvestors).toEqual(5852146)
     expect(result.willUseFundsFor).toEqual('String')
     expect(result.needHelpWith).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:15:47.334Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-24T18:19:43.711Z'))
   })
 
   scenario('updates a offer', async (scenario: StandardScenario) => {
     const original = (await offer({ id: scenario.offer.one.id })) as Offer
     const result = await updateOffer({
       id: original.id,
-      input: { capitalTargetLacs: 9176689.308878 },
+      input: { capitalTargetLacs: 4489713.776365991 },
     })
 
-    expect(result.capitalTargetLacs).toEqual(9176689.308878)
+    expect(result.capitalTargetLacs).toEqual(4489713.776365991)
   })
 
   scenario('deletes a offer', async (scenario: StandardScenario) => {

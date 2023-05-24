@@ -4,9 +4,9 @@ export const schema = gql`
     startup: Startup!
     revenueStreams: [RevenueStreams]!
     costHeads: [CostHeads]!
-    shortTermPlan: ShortTermPlan
-    marketSizeInCr: MarketSize
-    marketGrowthRate: GrowthRate
+    shortTermPlan: ShortTermPlan!
+    marketSizeInCr: MarketSize!
+    marketGrowthRate: GrowthRate!
     trends: [String]!
     opporunities: [String]!
     threats: [String]!
@@ -17,13 +17,13 @@ export const schema = gql`
   }
 
   enum RevenueStreams {
-    SELLING_GOODS
+    SELLING_GOODS_OR_SERVICES
     RENTAL_OR_LEASING
     ADS_OR_SPONSORS
     COMMISSION_FEE
     SUBSCRIPTION_OR_LICENSING
     DONATIONS
-    FREEMIUM
+    PAY_PER_USE
     OTHER
   }
 
@@ -74,9 +74,9 @@ export const schema = gql`
     id: Int!
     revenueStreams: [RevenueStreams]!
     costHeads: [CostHeads]!
-    shortTermPlan: ShortTermPlan
-    marketSizeInCr: MarketSize
-    marketGrowthRate: GrowthRate
+    shortTermPlan: ShortTermPlan!
+    marketSizeInCr: MarketSize!
+    marketGrowthRate: GrowthRate!
     trends: [String]!
     opporunities: [String]!
     threats: [String]!

@@ -36,7 +36,7 @@ export default StartupNotificationBar
 const StartupNotificationMenu = () => {
   return (
     <div className={menuExpandDivClassName}>
-      <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l2"></div>
+      <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l1 lg:h-9"></div>
     </div>
   )
 }

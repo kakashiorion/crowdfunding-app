@@ -43,21 +43,25 @@ describe('startupObjectives', () => {
       input: {
         id: scenario.startupObjective.two.id,
         preferredInvestorLevels: 'NOVICE',
-        preferredLocations: 2876518,
+        preferredLocations: 8610911,
+        expectedTimeline: 'LESS_THAN_SIX_MONTHS',
+        promisingReturns: 'BREAKEVEN',
         platformGoal: 'RAISING_FUNDS',
         referSource: 'WORD_OF_MOUTH',
         demoURL: 'String',
-        updatedAt: '2023-05-09T21:14:54.646Z',
+        updatedAt: '2023-05-24T18:16:49.126Z',
       },
     })
 
     expect(result.id).toEqual(scenario.startupObjective.two.id)
     expect(result.preferredInvestorLevels).toEqual('NOVICE')
-    expect(result.preferredLocations).toEqual(2876518)
+    expect(result.preferredLocations).toEqual(8610911)
+    expect(result.expectedTimeline).toEqual('LESS_THAN_SIX_MONTHS')
+    expect(result.promisingReturns).toEqual('BREAKEVEN')
     expect(result.platformGoal).toEqual('RAISING_FUNDS')
     expect(result.referSource).toEqual('WORD_OF_MOUTH')
     expect(result.demoURL).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2023-05-09T21:14:54.646Z'))
+    expect(result.updatedAt).toEqual(new Date('2023-05-24T18:16:49.126Z'))
   })
 
   scenario('updates a startupObjective', async (scenario: StandardScenario) => {

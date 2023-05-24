@@ -44,26 +44,30 @@ describe('investorObjectives', () => {
       const result = await createInvestorObjective({
         input: {
           id: scenario.investorObjective.two.id,
-          preferredFundingStages: 'SEED',
+          preferredAmountToInvest: 'NONE',
+          preferredFundingStages: 'PRE_SEED',
           preferredStartupTeamSizes: 'ONE',
           preferredTimelines: 'LESS_THAN_SIX_MONTHS',
+          riskApetite: 'LOW',
           preferredSectors: 'EDUCATION',
-          preferredLocations: 7261874,
+          preferredLocations: 5311751,
           platformGoal: 'INVESTING',
           referSource: 'WORD_OF_MOUTH',
-          updatedAt: '2023-05-09T21:04:47.487Z',
+          updatedAt: '2023-05-24T18:07:31.221Z',
         },
       })
 
       expect(result.id).toEqual(scenario.investorObjective.two.id)
-      expect(result.preferredFundingStages).toEqual('SEED')
+      expect(result.preferredAmountToInvest).toEqual('NONE')
+      expect(result.preferredFundingStages).toEqual('PRE_SEED')
       expect(result.preferredStartupTeamSizes).toEqual('ONE')
       expect(result.preferredTimelines).toEqual('LESS_THAN_SIX_MONTHS')
+      expect(result.riskApetite).toEqual('LOW')
       expect(result.preferredSectors).toEqual('EDUCATION')
-      expect(result.preferredLocations).toEqual(7261874)
+      expect(result.preferredLocations).toEqual(5311751)
       expect(result.platformGoal).toEqual('INVESTING')
       expect(result.referSource).toEqual('WORD_OF_MOUTH')
-      expect(result.updatedAt).toEqual(new Date('2023-05-09T21:04:47.487Z'))
+      expect(result.updatedAt).toEqual(new Date('2023-05-24T18:07:31.221Z'))
     }
   )
 
@@ -75,10 +79,10 @@ describe('investorObjectives', () => {
       })) as InvestorObjective
       const result = await updateInvestorObjective({
         id: original.id,
-        input: { preferredFundingStages: 'LATER' },
+        input: { preferredAmountToInvest: 'MORE_THAN_1_CRORE' },
       })
 
-      expect(result.preferredFundingStages).toEqual('LATER')
+      expect(result.preferredAmountToInvest).toEqual('MORE_THAN_1_CRORE')
     }
   )
 
