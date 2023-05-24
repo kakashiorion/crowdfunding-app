@@ -17,7 +17,7 @@ const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
     <div
       className={`absolute ${
         props.isMenuOpen ? 'flex' : 'hidden'
-      } right-0 top-0 min-w-[200px] flex-col gap-2 overflow-scroll rounded bg-white-d1 p-3 shadow-md dark:bg-black-l2/95 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:border-l-2  lg:border-l-white-d2 lg:bg-transparent lg:py-1 lg:pl-3 lg:pr-0 lg:shadow-none dark:lg:border-l-black-l2 lg:dark:bg-transparent`}
+      } right-0 top-0 min-w-[256px] flex-col gap-2 overflow-scroll rounded bg-white-d1 p-3 shadow-md dark:bg-black-l1 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:rounded-none lg:border-l-2 lg:border-l-white-d2 lg:bg-transparent lg:py-1 lg:pl-3 lg:pr-0 lg:shadow-none dark:lg:border-l-black-l2 lg:dark:bg-transparent`}
     >
       <PrimaryTextLabel
         label={`ONBOARDING SECTIONS (${
@@ -44,15 +44,15 @@ export default InvestorOnboardingTimeline
 const InvestorTimelineSteps = (props: OnboardingTimelineStepsProps) => {
   const divClassName = `grid rounded grid-cols-[1fr,6fr] w-full items-start justify-center text-center gap-1 p-2 lg:gap-2 ${
     props.sectionNumber == props.currentNumber
-      ? 'bg-white dark:bg-black-l1 lg:bg-white-d1 lg:dark:bg-black-l2'
+      ? 'bg-white dark:bg-black lg:bg-white-d1 lg:dark:bg-black-l1'
       : ''
   }`
-  const subClassName = 'flex flex-[5] flex-col gap-1 items-start text-start'
+  const subClassName = 'flex flex-[6] flex-col gap-1 items-start text-start'
 
   if (props.sectionNumber < props.currentNumber) {
     return (
       <div className={divClassName}>
-        <props.icon className="flex h-6 w-6 fill-primary dark:fill-primary-l1" />
+        <props.icon className="flex h-7 w-7 fill-primary-d1 dark:fill-primary-l1" />
         <div className={subClassName}>
           <PrimarySubTitleLabel label={props.title} />
           <PrimarySubTextLabel label={props.subTitle} />
@@ -62,7 +62,7 @@ const InvestorTimelineSteps = (props: OnboardingTimelineStepsProps) => {
   } else if (props.sectionNumber > props.currentNumber) {
     return (
       <div className={divClassName}>
-        <props.icon className="flex h-6 w-6 fill-black-l4 dark:fill-white-d4" />
+        <props.icon className="flex h-7 w-7 fill-black-l4 dark:fill-white-d4" />
         <div className={subClassName}>
           <DisabledSubTitleLabel label={props.title} />
           <DisabledSubTextLabel label={props.subTitle} />
@@ -74,10 +74,10 @@ const InvestorTimelineSteps = (props: OnboardingTimelineStepsProps) => {
       <div
         className={
           divClassName +
-          ' border-l-0 border-l-primary dark:border-l-primary-l1 lg:border-l-4'
+          ' border-l-0 border-l-primary-d1 dark:border-l-primary-l1 lg:border-l-4'
         }
       >
-        <props.icon className="flex h-6 w-6 fill-primary dark:fill-primary-l1" />
+        <props.icon className="flex h-7 w-7 fill-primary-d1 dark:fill-primary-l1" />
         <div className={subClassName}>
           <PrimarySubTitleLabel label={props.title} />
           <PrimarySubTextLabel label={props.subTitle} />

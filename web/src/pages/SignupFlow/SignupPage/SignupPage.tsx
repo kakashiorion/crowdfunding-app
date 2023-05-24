@@ -10,14 +10,19 @@ import {
   PrimaryFilledButton,
   SmallHoverPrimaryTextButton,
 } from 'src/components/Button/Button'
-import { TextInput } from 'src/components/Input/Input'
 import {
   ErrorSubTextLabel,
+  PrimarySubHeadingLabel,
   SubTextLabel,
+  SubTitleLabel,
   TextLabel,
   WarnSubTextLabel,
 } from 'src/components/Label/Label'
 import { sendSignupEmailJS } from 'src/lib/sendEmail'
+import {
+  CodeInputClassName,
+  TextInputClassName,
+} from 'src/pages/LoginFlow/loginConsts'
 
 const SIGNUP_QUERY = gql`
   query CheckUser($email: String!) {
@@ -39,7 +44,7 @@ const SignupPage = (props: SignupPageProps) => {
         title="Signup"
         description="Signup page for Dealbari platform"
       />
-      <div className="my-4 flex h-full flex-col gap-2 overflow-hidden rounded bg-white-d1/50 p-2 dark:bg-black-l2/50 lg:my-5 lg:flex-row lg:gap-3 lg:p-3">
+      <div className="my-4 flex h-full flex-col gap-2 overflow-hidden rounded bg-white-d1/50 p-2 dark:bg-black-l1/50 lg:my-6 lg:flex-row lg:gap-3 lg:p-3">
         <UserSignupCard
           pref={'INVESTOR'}
           selectedType={selectedType}
@@ -69,11 +74,11 @@ const UserSignupCard = (props: UserSignupCardProps) => {
   const participle = props.pref == 'INVESTOR' ? 'an' : 'a'
 
   const activeClassName =
-    'p-4 bg-white-d2 flex-grow shadow-md rounded dark:bg-black/50 flex h-full w-full flex-col items-center justify-center gap-2  '
+    'p-4 bg-white-d2 flex-grow shadow-md rounded dark:bg-black-l2 flex h-full w-full flex-col items-center justify-center gap-2'
 
   const inactiveClassName = `p-4 bg-white-d1 ${
-    props.selectedType != '' ? 'opacity-40' : ' flex-grow'
-  } shadow-md hover:shadow-lg rounded hover:bg-primary-l2 dark:hover:bg-primary-d2 dark:bg-black-l3/70 flex w-full flex-col items-center justify-center gap-2`
+    props.selectedType != '' ? 'opacity-50' : ' flex-grow'
+  } shadow-md hover:shadow-lg rounded hover:bg-primary-l3 dark:hover:bg-primary-d3 dark:bg-black-l1 flex w-full flex-col items-center justify-center gap-2`
 
   const subText =
     props.pref == 'INVESTOR'
@@ -89,14 +94,14 @@ const UserSignupCard = (props: UserSignupCardProps) => {
       tabIndex={0}
       aria-hidden="true"
     >
-      <p className="text-h6 text-black dark:text-white lg:text-h5">
-        {props.pref == props.selectedType
-          ? `Signing up as ${participle}`
-          : `I am ${participle}`}
-      </p>
-      <p className="text-h3  text-primary-d1 dark:text-primary-l1 lg:text-h2">
-        {props.pref}
-      </p>
+      <SubTitleLabel
+        label={
+          props.pref == props.selectedType
+            ? `Signing up as ${participle}`
+            : `I am ${participle}`
+        }
+      />
+      <PrimarySubHeadingLabel label={props.pref} />
       {props.pref != props.selectedType && <SubTextLabel label={subText} />}
       {props.pref == props.selectedType && <SignupForm userType={props.pref} />}
     </div>
@@ -134,14 +139,15 @@ const SignupForm = (props: SignupFormProps) => {
   const [createLead] = useMutation(LEAD_MUTATION)
 
   return (
-    <div className="my-2 flex w-full flex-col items-center justify-center gap-2 text-center lg:my-4 ">
+    <div className="my-2 flex w-full flex-col items-center justify-center gap-2 text-center lg:my-4">
       {stage == 'email' && (
         //Step 1: Provide Email
         <>
           <SubTextLabel label={'Please provide your email ID for signup.'} />
           <Divider />
           <TextLabel label={'Email'} />
-          <TextInput
+          <input
+            className={TextInputClassName}
             value={enteredEmail}
             type="email"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,7 +207,8 @@ const SignupForm = (props: SignupFormProps) => {
           />
           <Divider />
           <TextLabel label="Enter Code" />
-          <TextInput
+          <input
+            className={CodeInputClassName}
             value={enteredCode}
             type="password"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,7 +249,8 @@ const SignupForm = (props: SignupFormProps) => {
           />
           <Divider />
           <TextLabel label="Choose a password" />
-          <TextInput
+          <input
+            className={TextInputClassName}
             value={enteredPwd}
             type="password"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -252,7 +260,8 @@ const SignupForm = (props: SignupFormProps) => {
           />
           <Divider />
           <TextLabel label="Confirm password" />
-          <TextInput
+          <input
+            className={TextInputClassName}
             value={enteredConfirmPwd}
             type="password"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

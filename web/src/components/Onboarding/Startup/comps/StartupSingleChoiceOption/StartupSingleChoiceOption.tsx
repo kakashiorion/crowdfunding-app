@@ -14,10 +14,10 @@ const StartupSingleChoiceOption = (props: StartupSingleChoiceOptionProps) => {
         {props.options.map((e) => (
           <button
             key={e}
-            className={`w-full flex-grow rounded p-3 text-b2 text-black shadow-md dark:text-white lg:p-4 lg:text-b1 ${
+            className={`w-full flex-grow rounded p-3 text-b2 shadow-md lg:p-4 lg:text-b1 ${
               e == props.input
-                ? ' bg-tertiary text-white'
-                : 'bg-white hover:bg-tertiary-l2 dark:bg-black-l1 dark:hover:bg-tertiary-l1'
+                ? ' bg-tertiary-d1 text-white dark:bg-tertiary-l1 dark:text-black '
+                : 'bg-white-d2 text-black hover:bg-tertiary-d3 hover:text-white dark:bg-black-l2 dark:text-white dark:hover:bg-tertiary-l3 hover:dark:text-black'
             }`}
             onClick={() => {
               props.setInput(e)

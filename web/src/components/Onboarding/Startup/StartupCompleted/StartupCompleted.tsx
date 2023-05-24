@@ -6,7 +6,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-import { TertiaryFilledButton } from 'src/components/Button/Button'
+import { LargeTertiaryFilledButton } from 'src/components/Button/Button'
 import { TitleLabel, TertiarySubTitleLabel } from 'src/components/Label/Label'
 import OnboardingFeedbackForm from 'src/components/Onboarding/OnboardingFeedbackForm/OnboardingFeedbackForm'
 
@@ -25,11 +25,11 @@ const StartupCompleted = () => {
   const [updateUser] = useMutation(STARTUP_PREFERENCES_MUTATION)
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-6 rounded px-6 py-5 text-center  lg:px-8 lg:py-6">
-      <CheckIcon className="flex h-9 w-9 fill-success-d1 dark:fill-success-l1 lg:h-10 lg:w-10" />
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6 rounded px-7 py-6 text-center lg:px-9 lg:py-7">
+      <CheckIcon className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
       <TitleLabel label="Awesome.. we have collected everything we needed!" />
-      <TertiarySubTitleLabel label="You may go to your account, start exploring the platform and making deals." />
-      <TertiaryFilledButton
+      <TertiarySubTitleLabel label="You may go to your account, start exploring the platform and making deals with investors." />
+      <LargeTertiaryFilledButton
         label={`LET"S GO`}
         action={async () => {
           await reauthenticate()

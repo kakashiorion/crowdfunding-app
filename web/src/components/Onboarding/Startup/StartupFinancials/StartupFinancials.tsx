@@ -542,10 +542,10 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
 
   return (
     <>
-      <div className="grid w-full grid-flow-row-dense grid-cols-2 items-center justify-start gap-1 border-2 border-tertiary p-2">
+      <div className="grid w-full grid-cols-1 items-center justify-start gap-2 border-2 border-tertiary-d1 p-2 dark:border-tertiary-l1 lg:grid-flow-row-dense lg:grid-cols-2">
         <input
           className={
-            'col-span-2 w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:px-4 lg:py-2 lg:text-b1 '
+            'col-span-2 w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1  focus:outline-none dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredName}
           placeholder="Name of shareholder"
@@ -556,7 +556,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
         />
         <input
           className={
-            'col-span-2 w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1'
+            'col-span-2 w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1  focus:outline-none dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:col-span-1 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredEquity}
           placeholder="Equity share"
@@ -566,7 +566,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
           type={'text'}
         />
         <button
-          className="col-span-2 w-full rounded border-2 border-tertiary bg-tertiary px-2 py-1 text-b3 text-white shadow-md hover:border-tertiary-d1 hover:bg-tertiary-d1 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b2"
+          className="col-span-2 w-full rounded bg-tertiary-d1 px-4 py-2 text-b2 text-white shadow-md hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:col-span-1 lg:px-5 lg:py-2.5 lg:text-b1"
           onClick={() => {
             if (
               props.latestCapTable.some((s) => s.shareholderName == enteredName)
@@ -602,7 +602,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
           >
             <TextLabel label={`${e.shareholderName}, ${e.equityShare}%`} />
             <CloseIcon
-              className="flex h-4 w-4 fill-error dark:fill-error-l1 lg:h-5 lg:w-5"
+              className="fill-error flex h-4 w-4 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setLatestCapTable(
                   props.latestCapTable.filter((s) => s != e)
@@ -640,12 +640,12 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
 
   return (
     <>
-      <div className="grid w-full grid-flow-row-dense grid-cols-1 items-center justify-start gap-1 border-2 border-tertiary p-2 lg:grid-cols-3">
+      <div className="grid w-full grid-cols-1 items-center justify-start gap-2 border-2 border-tertiary-d1 p-2 dark:border-tertiary-l1 lg:grid-flow-row-dense lg:grid-cols-3">
         <select
           name="stage"
           id="stage"
           className={
-            ' col-span-1 w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1  focus:outline-none dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredStage}
           placeholder="Select funding stage"
@@ -662,7 +662,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
         </select>
         <input
           className={
-            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:px-4 lg:py-2 lg:text-b1 '
+            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1  focus:outline-none dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredCapital}
           placeholder="Raised (in Cr)"
@@ -673,7 +673,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
         />
         <input
           className={
-            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:px-4 lg:py-2 lg:text-b1'
+            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1  focus:outline-none dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredValuation}
           placeholder="Valuation (in Cr)"
@@ -684,7 +684,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
         />
         <textarea
           className={
-            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2 lg:px-4 lg:py-2 lg:text-b1'
+            'col-span-1 w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1  focus:outline-none dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:col-span-2 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredKeyInvestors}
           placeholder="Key investors (optional)"
@@ -694,7 +694,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
           rows={2}
         />
         <button
-          className="col-span-1 w-full rounded border-2 border-tertiary bg-tertiary px-2 py-1 text-b3 text-white shadow-md hover:border-tertiary-d1 hover:bg-tertiary-d1 lg:px-4 lg:py-2 lg:text-b2"
+          className="col-span-1 w-full rounded bg-tertiary-d1 px-4 py-2 text-b2 text-white shadow-md hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:px-5 lg:py-2.5 lg:text-b1"
           onClick={() => {
             if (
               props.fundraisingRounds.some(
@@ -740,7 +740,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
               label={`${e.fundingStage}: Raised ${e.capitalRaisedInCr} Cr`}
             />
             <CloseIcon
-              className="flex h-4 w-4 fill-error dark:fill-error-l1 lg:h-5 lg:w-5"
+              className="fill-error flex h-4 w-4 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setFundraisingRounds(
                   props.fundraisingRounds.filter((s) => s != e)

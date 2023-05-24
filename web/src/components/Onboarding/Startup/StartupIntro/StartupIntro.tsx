@@ -8,7 +8,7 @@ const StartupIntro = (props: OnboardingIntroSectionProps) => {
   // const [infoShown, setInfoShown] = useState(false)
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 rounded px-6 py-5 text-center  lg:px-8 lg:py-6">
-      <CheckIcon className="flex h-9 w-9 fill-success-d1 dark:fill-success-l1 lg:h-10 lg:w-10" />
+      <CheckIcon className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
       <TitleLabel label="Congrats! You have successfully signed up." />
       <TertiarySubTitleLabel label="Now, let's get you onboard with our platform." />
       <LargeTertiaryFilledButton

@@ -6,6 +6,11 @@ import { useAuth } from 'src/auth'
 import StartupMenuBar from 'src/components/Startup/Navigation/StartupMenuBar/StartupMenuBar'
 import { startupPageClassName } from 'src/components/Startup/Navigation/StartupNavigationConsts'
 
+import {
+  HomeLayoutWrapperClassName,
+  HomePageWrapperClassName,
+} from '../LayoutConsts'
+
 type StartupHomeLayoutProps = {
   children?: React.ReactNode
 }
@@ -57,9 +62,9 @@ const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
   ])
   return (
     <StartupPageContext.Provider value={{ pageSelected, setPageSelected }}>
-      <div className={darkMode}>
-        <div className="h-screen bg-white px-4 pb-4 dark:bg-black-l1 lg:px-5 lg:pb-5 ">
-          <div className="relative flex h-full flex-col gap-4  xl:mx-auto xl:max-w-screen-xl ">
+      <div id="darkModeWrapper" className={darkMode}>
+        <div id="layoutWrapper" className={HomeLayoutWrapperClassName}>
+          <div id="pageWrapper" className={HomePageWrapperClassName}>
             <StartupMenuBar />
             <div className={startupPageClassName}>{children}</div>
           </div>

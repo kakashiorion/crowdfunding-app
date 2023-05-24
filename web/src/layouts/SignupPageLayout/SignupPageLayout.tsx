@@ -3,10 +3,17 @@ import { useEffect, useState } from 'react'
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
-import { SmallSecondaryOutlineButton } from 'src/components/Button/Button'
+import { HoverSecondaryTextButton } from 'src/components/Button/Button'
 import { DisabledSubTextLabel } from 'src/components/Label/Label'
 
 import LogoOrig from '../../../public/logo/LogoOrig.svg'
+import {
+  ActionClassName,
+  HeaderClassName,
+  LayoutWrapperClassName,
+  LogoClassName,
+  PageWrapperClassName,
+} from '../LayoutConsts'
 
 type SignupPageLayoutProps = {
   children?: React.ReactNode
@@ -27,9 +34,9 @@ const SignupPageLayout = ({ children }: SignupPageLayoutProps) => {
     }
   }, [currentUser?.type])
   return (
-    <div className={darkMode}>
-      <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
-        <div className="flex h-full flex-col xl:mx-auto xl:max-w-screen-xl ">
+    <div id="darkModeWrapper" className={darkMode}>
+      <div id="layoutWrapper" className={LayoutWrapperClassName}>
+        <div id="pageWrapper" className={PageWrapperClassName}>
           <SignupHeader />
           {children}
         </div>
@@ -41,14 +48,14 @@ export default SignupPageLayout
 
 const SignupHeader = () => {
   return (
-    <div className="flex items-center justify-between py-2 lg:py-3">
+    <div className={HeaderClassName}>
       <LogoOrig
-        className="flex h-6 w-10 cursor-pointer content-start lg:h-8 lg:w-12"
+        className={LogoClassName}
         onClick={() => navigate(routes.landing())}
       />
-      <div className="flex items-center justify-end gap-2 lg:gap-3">
+      <div className={ActionClassName}>
         <DisabledSubTextLabel label={`Already have an account?`} />
-        <SmallSecondaryOutlineButton
+        <HoverSecondaryTextButton
           action={() => navigate(routes.login())}
           label="LOGIN"
         />

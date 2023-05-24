@@ -18,10 +18,10 @@ const StartupTripleTextArea = (props: StartupTripleTextAreaProps) => {
     <>
       <textarea
         className={
-          ' mb-2 w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          'm-2 w-2/3 rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1'
         }
         value={props.input1}
-        rows={2}
+        rows={3}
         placeholder={props.placeholder1}
         onChange={(e) => {
           props.setInput1(e.target.value)
@@ -30,11 +30,11 @@ const StartupTripleTextArea = (props: StartupTripleTextAreaProps) => {
       />
       <textarea
         className={
-          ' mb-2 w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          'm-2 w-2/3 rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1'
         }
         value={props.input2}
-        rows={2}
-        placeholder={props.placeholder1}
+        rows={3}
+        placeholder={props.placeholder2}
         onChange={(e) => {
           props.setInput2(e.target.value)
           props.error != ' ' && props.setError(' ')
@@ -42,11 +42,11 @@ const StartupTripleTextArea = (props: StartupTripleTextAreaProps) => {
       />
       <textarea
         className={
-          ' mb-2 w-2/3 rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary  focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2 dark:placeholder:text-white-d3  dark:focus:border-tertiary-l2  lg:px-4 lg:py-2 lg:text-b1'
+          'm-2 w-2/3 rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1'
         }
         value={props.input3}
-        rows={2}
-        placeholder={props.placeholder1}
+        rows={3}
+        placeholder={props.placeholder3}
         onChange={(e) => {
           props.setInput3(e.target.value)
           props.error != ' ' && props.setError(' ')

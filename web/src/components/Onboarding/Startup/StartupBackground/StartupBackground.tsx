@@ -307,7 +307,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
           <StartupSingleTextArea
             input={valueProp}
             setInput={setValueProp}
-            placeholder="Tell us what your value proposition..."
+            placeholder="Tell us about your value proposition..."
             error={error1}
             setError={setError1}
           />
@@ -316,7 +316,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
           <StartupSingleTextArea
             input={idea}
             setInput={setIdea}
-            placeholder="Tell us how you got the idea..."
+            placeholder="Tell us how you got the idea for this startup..."
             error={error2}
             setError={setError2}
           />
@@ -325,7 +325,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
           <StartupSingleTextArea
             input={whyThis}
             setInput={setWhyThis}
-            placeholder="Tell us why this business and not something else..."
+            placeholder="Tell us what motivated you to start this business..."
             error={error3}
             setError={setError3}
           />
@@ -352,7 +352,7 @@ const StartupBackground = (props: OnboardingMainProps) => {
           <StartupSingleTextArea
             input={vision}
             setInput={setVision}
-            placeholder="Tell us about your company vision..."
+            placeholder="Tell us about your company's vision..."
             error={error6}
             setError={setError6}
           />
@@ -455,10 +455,10 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
 
   return (
     <>
-      <div className="grid w-full grid-cols-1 items-center justify-start gap-1 border-2 border-tertiary p-2 lg:grid-flow-row-dense lg:grid-cols-2">
+      <div className="grid w-full grid-cols-1 items-center justify-start gap-2 border-2 border-tertiary-d1 p-2 dark:border-tertiary-l1 lg:grid-flow-row-dense lg:grid-cols-2">
         <input
           className={
-            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1 '
+            'w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none  dark:border-white-d2 dark:bg-black dark:text-tertiary-l1  dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:col-span-1 lg:px-5 lg:py-2.5 lg:text-b1 '
           }
           value={enteredName}
           placeholder="Name of person"
@@ -469,7 +469,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         />
         <input
           className={
-            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none disabled:bg-black-l4  dark:border-white-d2 dark:bg-black-l2 dark:text-tertiary-l2  dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-1 lg:px-4 lg:py-2 lg:text-b1'
+            'w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none  dark:border-white-d2 dark:bg-black dark:text-tertiary-l1  dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:col-span-1 lg:px-5 lg:py-2.5 lg:text-b1'
           }
           value={enteredRole}
           placeholder="Role"
@@ -480,7 +480,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         />
         <input
           className={
-            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
+            'w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none  dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:col-span-2   lg:px-5 lg:py-2.5 lg:text-b1'
           }
           value={enteredWriteup}
           placeholder="Short job description (optional)"
@@ -491,7 +491,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         />
         <input
           className={
-            'w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-tertiary placeholder:text-black-l3 focus:border-tertiary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2  dark:text-tertiary-l2 dark:placeholder:text-white-d3 dark:focus:border-tertiary-l2 lg:col-span-2   lg:px-4 lg:py-2 lg:text-b1'
+            'w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none  dark:border-white-d2 dark:bg-black  dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:col-span-2   lg:px-5 lg:py-2.5 lg:text-b1'
           }
           value={enteredUrl}
           placeholder="LinkedIn URL (optional)"
@@ -501,7 +501,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
           type={'url'}
         />
         <button
-          className="w-full rounded border-2 border-tertiary bg-tertiary px-2 py-1 text-b3 text-white shadow-md hover:border-tertiary-d1 hover:bg-tertiary-d1 lg:col-span-2 lg:px-4 lg:py-2 lg:text-b2"
+          className="w-full rounded bg-tertiary-d1 px-4 py-2 text-b2 text-white shadow-md hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:text-black dark:hover:bg-tertiary-l2 lg:col-span-2 lg:px-5 lg:py-2.5 lg:text-b1"
           onClick={() => {
             if (
               props.keyPeople.some(
@@ -534,11 +534,11 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
         {props.keyPeople.map((e) => (
           <div
             key={`${e.name}, ${e.role}`}
-            className={`flex max-h-min w-full items-center justify-between rounded bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
+            className={`flex max-h-min w-full items-center justify-between rounded bg-white px-6 py-3 text-black shadow-md dark:bg-black dark:text-white lg:px-7 lg:py-4`}
           >
             <TextLabel label={`${e.name}, ${e.role}`} />
             <CloseIcon
-              className="flex h-4 w-4 fill-error dark:fill-error-l1 lg:h-5 lg:w-5"
+              className="flex h-4 w-4 fill-error-d1 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setKeyPeople(props.keyPeople.filter((s) => s != e))
                 props.error9 != '' && props.setError9('')

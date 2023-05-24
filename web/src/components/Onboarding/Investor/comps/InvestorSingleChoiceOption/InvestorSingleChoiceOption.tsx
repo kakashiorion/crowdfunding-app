@@ -14,10 +14,10 @@ const InvestorSingleChoiceOption = (props: InvestorSingleChoiceOptionProps) => {
         {props.options.map((e) => (
           <button
             key={e}
-            className={`w-full flex-grow rounded p-3 text-b2 text-black shadow-md dark:text-white lg:p-4 lg:text-b1 ${
+            className={`w-full flex-grow rounded p-3 text-b2 shadow-md lg:p-4 lg:text-b1 ${
               e == props.input
-                ? ' bg-primary text-white'
-                : 'bg-white hover:bg-primary-l2 dark:bg-black-l1 dark:hover:bg-primary-l1'
+                ? ' bg-primary-d1 text-white dark:bg-primary-l1 dark:text-black '
+                : 'bg-white-d2 text-black hover:bg-primary-d3 hover:text-white dark:bg-black-l2 dark:text-white dark:hover:bg-primary-l3 hover:dark:text-black'
             }`}
             onClick={() => {
               props.setInput(e)

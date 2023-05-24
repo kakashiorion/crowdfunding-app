@@ -4,6 +4,8 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 
+import { PageWrapperClassName, LandingWrapperClassName } from '../LayoutConsts'
+
 type LandingPageLayoutProps = {
   children?: React.ReactNode
 }
@@ -23,8 +25,12 @@ const LandingPageLayout = ({ children }: LandingPageLayoutProps) => {
     }
   }, [currentUser?.type])
   return (
-    <div className={darkMode}>
-      <div className="bg-white px-4 dark:bg-black-l1 lg:px-5 ">{children}</div>
+    <div id="darkModeWrapper" className={darkMode}>
+      <div id="layoutWrapper" className={LandingWrapperClassName}>
+        <div id="pageWrapper" className={PageWrapperClassName}>
+          {children}
+        </div>
+      </div>
     </div>
   )
 }

@@ -259,6 +259,7 @@ enum InvestorPlatformGoal {
   EXPLORING
   CONSULTING
   RESEARCHING
+  OTHER
 }
 
 enum ReferSource {
@@ -581,6 +582,7 @@ enum StartupPlatformGoal {
   EXPLORING
   CONNECTING
   GETTING_ADVICE
+  OTHER
 }
 
 model Offer {

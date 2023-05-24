@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
+import AddIcon from 'public/icons/add.svg'
 import CloseIcon from 'public/icons/close.svg'
 import SearchIcon from 'public/icons/search.svg'
 
 import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-import { SmallPrimaryFilledButton } from 'src/components/Button/Button'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 import InvestorMultipleChoiceOption from 'src/components/Onboarding/Investor/comps/InvestorMultipleChoiceOption/InvestorMultipleChoiceOption'
 import InvestorSingleChoiceOption from 'src/components/Onboarding/Investor/comps/InvestorSingleChoiceOption/InvestorSingleChoiceOption'
@@ -474,11 +474,11 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-between gap-2 border-2 border-primary p-2 lg:p-4 ">
+      <div className="flex w-full flex-col items-center justify-between gap-2 border-2 border-primary-d1 p-2 dark:border-primary-l1 lg:p-4 ">
         <div className="flex w-full items-center justify-between gap-2 ">
           <input
             className={
-              ' w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2   lg:px-4 lg:py-2 lg:text-b1'
+              'w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-primary-d1 placeholder:text-black-l4 focus:border-primary-d1 focus:outline-none dark:border-white-d2 dark:bg-black dark:text-primary-l1 dark:placeholder:text-white-d4 dark:focus:border-primary-l1 lg:px-5 lg:py-2.5 lg:text-b1'
             }
             value={searchTerm}
             placeholder="Search location"
@@ -487,9 +487,9 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
             }}
             type={'text'}
           />
-          <div className="rounded-full bg-primary p-2 shadow-md hover:bg-primary-d1">
+          <div className="rounded bg-primary-d1 p-2 shadow-md hover:bg-primary-d2 dark:bg-primary-l1 dark:hover:bg-primary-l2 lg:p-2.5">
             <SearchIcon
-              className="flex h-5 w-5 fill-white lg:h-6 lg:w-6"
+              className="flex h-5 w-5 fill-white dark:fill-black lg:h-6 lg:w-6"
               onClick={() => {
                 setSearchResult(
                   props.locationList.filter(
@@ -512,7 +512,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
         <div className="flex w-full items-center justify-between gap-2">
           <select
             className={
-              ' w-full rounded border-2 border-black-l2 bg-white px-2 py-2 text-center text-b2 text-primary placeholder:text-black-l3 focus:border-primary focus:outline-none  disabled:border-none disabled:bg-black-l4 dark:border-white-d2  dark:bg-black-l2 dark:text-primary-l2 dark:placeholder:text-white-d3 dark:focus:border-primary-l2    lg:px-4 lg:py-2 lg:text-b1'
+              'w-full rounded border-2 border-black-l2 bg-white px-4 py-2 text-center text-b2 text-primary-d1 placeholder:text-black-l4 focus:border-primary-d1 focus:outline-none dark:border-white-d2 dark:bg-black dark:text-primary-l1 dark:placeholder:text-white-d4 dark:focus:border-primary-l1 lg:px-5 lg:py-2.5 lg:text-b1'
             }
             value={selectedLoc?.id}
             placeholder="Select and Add"
@@ -528,28 +528,30 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
               </option>
             ))}
           </select>
-          <SmallPrimaryFilledButton
-            label="ADD"
-            action={() => {
-              if (selectedLoc?.id && !props.input.includes(selectedLoc?.id)) {
-                props.setInput([...props.input, selectedLoc.id])
-                props.error != '' && props.setError('')
-              }
-            }}
-          />
+          <div className="rounded bg-primary-d1 p-2 shadow-md hover:bg-primary-d2 dark:bg-primary-l1 dark:hover:bg-primary-l2 lg:p-2.5">
+            <AddIcon
+              className="flex h-5 w-5 fill-white dark:fill-black lg:h-6 lg:w-6"
+              onClick={() => {
+                if (selectedLoc?.id && !props.input.includes(selectedLoc?.id)) {
+                  props.setInput([...props.input, selectedLoc.id])
+                  props.error != '' && props.setError('')
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
         {props.input.map((e) => (
           <div
             key={e}
-            className={`mb-2 flex max-h-min w-full items-center justify-between rounded bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
+            className={`flex max-h-min w-full items-center justify-between rounded bg-white p-3 text-black shadow-md dark:bg-black dark:text-white lg:p-4`}
           >
             <TextLabel
               label={getLocName(props.locationList.find((l) => l.id == e))}
             />
             <CloseIcon
-              className="flex h-4 w-4 fill-error dark:fill-error-l1 lg:h-5 lg:w-5"
+              className="flex h-4 w-4 fill-error-d1 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setInput(props.input.filter((s) => s != e))
                 props.error != '' && props.setError('')

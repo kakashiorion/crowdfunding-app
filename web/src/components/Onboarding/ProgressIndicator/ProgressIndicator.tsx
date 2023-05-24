@@ -31,48 +31,48 @@ export const TertiaryProgressIndicator = (props: ProgressIndicatorProps) => {
 
 export const SuccessCirle = () => {
   return (
-    <div className="h-2 w-2 rounded-full bg-success dark:bg-success-l1 lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded bg-success-d1 dark:bg-success-l1 lg:h-3 lg:w-3"></div>
   )
 }
 
 export const PrimaryCirle = () => {
   return (
-    <div className="h-2 w-2 rounded-full bg-primary dark:bg-primary-l1 lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded bg-primary-d1 dark:bg-primary-l1 lg:h-3 lg:w-3"></div>
   )
 }
 
 export const PrimaryOutlineCirle = () => {
   return (
-    <div className="h-2 w-2 rounded-full border-[2px] border-primary bg-black-l4 dark:border-primary-l1 dark:bg-white-d3 lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded border-[2px] border-primary-d1 bg-black-l4 dark:border-primary-l1 dark:bg-white-d4 lg:h-3 lg:w-3"></div>
   )
 }
 
 export const TertiaryCirle = () => {
   return (
-    <div className="h-2 w-2 rounded-full bg-tertiary dark:bg-tertiary-l1 lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded bg-tertiary-d1 dark:bg-tertiary-l1 lg:h-3 lg:w-3"></div>
   )
 }
 
 export const Cirle = () => {
   return (
-    <div className="h-2 w-2 rounded-full bg-black dark:bg-white lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded bg-black dark:bg-white lg:h-3 lg:w-3"></div>
   )
 }
 
 export const PrimaryEllipse = () => {
   return (
-    <div className="h-2 w-5 rounded-full bg-primary dark:bg-primary-l1 lg:h-3 lg:w-7"></div>
+    <div className="h-2 w-5 rounded bg-primary-d1 dark:bg-primary-l1 lg:h-3 lg:w-7"></div>
   )
 }
 
 export const TertiaryEllipse = () => {
   return (
-    <div className="h-2 w-5 rounded-full bg-tertiary dark:bg-tertiary-l1 lg:h-3 lg:w-7"></div>
+    <div className="h-2 w-5 rounded bg-tertiary-d1 dark:bg-tertiary-l1 lg:h-3 lg:w-7"></div>
   )
 }
 
 export const DisabledCircle = () => {
   return (
-    <div className="h-2 w-2 rounded-full bg-black-l4 dark:bg-white-d3 lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded bg-black-l4 dark:bg-white-d4 lg:h-3 lg:w-3"></div>
   )
 }

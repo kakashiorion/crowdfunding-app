@@ -4,6 +4,8 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 
+import { LayoutWrapperClassName, PageWrapperClassName } from '../LayoutConsts'
+
 type InvestorOnboardingLayoutProps = {
   children?: React.ReactNode
 }
@@ -30,9 +32,9 @@ const InvestorOnboardingLayout = ({
     }
   }, [currentUser?.prefersTheme, currentUser?.type])
   return (
-    <div className={darkMode}>
-      <div className="h-screen bg-white px-4 dark:bg-black-l1 lg:px-5 ">
-        <div className="flex h-full flex-col xl:mx-auto xl:max-w-screen-xl ">
+    <div id="darkModeWrapper" className={darkMode}>
+      <div id="layoutWrapper" className={LayoutWrapperClassName}>
+        <div id="pageWrapper" className={PageWrapperClassName}>
           {children}
         </div>
       </div>

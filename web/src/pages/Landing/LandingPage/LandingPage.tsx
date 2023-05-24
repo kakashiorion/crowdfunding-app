@@ -10,6 +10,7 @@ import {
 } from 'src/components/Button/Button'
 import {
   GradientHeadingLabel,
+  PrimarySubTitleLabel,
   SubTitleLabel,
   SuccessSubTextLabel,
   TextLabel,
@@ -27,17 +28,15 @@ const LandingPage = () => {
   return (
     <>
       <MetaTags title="Welcome" description="Welcome to Dealbari platform" />
-      <div className="flex flex-col gap-4 lg:gap-5 xl:mx-auto xl:max-w-screen-xl ">
-        <LandingHeader scrollRefsList={scrollRefsList} />
-        <div className="flex flex-col gap-8 lg:gap-10">
-          <HeroSection />
-          <InvestorSection ref={investorRef} />
-          <StartupSection ref={startupRef} />
-          <AboutSection ref={aboutRef} />
-          <ContactSection ref={contactRef} />
-        </div>
-        <LandingFooter />
+      <LandingHeader scrollRefsList={scrollRefsList} />
+      <div className="flex flex-col gap-10 lg:gap-11">
+        <HeroSection />
+        <InvestorSection ref={investorRef} />
+        <StartupSection ref={startupRef} />
+        <AboutSection ref={aboutRef} />
+        <ContactSection ref={contactRef} />
       </div>
+      <LandingFooter />
     </>
   )
 }
@@ -59,7 +58,7 @@ const HeroSection = () => {
 
 const HeroTextSection = () => {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center lg:gap-8 ">
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 p-2 text-center lg:gap-8 lg:p-6 ">
       <GradientHeadingLabel
         label={' Become a part of the Indian growth story'}
       />
@@ -81,7 +80,7 @@ type SectionHeaderProps = {
 }
 const SectionHeader = (props: SectionHeaderProps) => {
   return (
-    <p className="text-bold border-b-2 border-primary text-b1 font-semibold text-black-l1 dark:border-primary-l1 dark:text-white-d1 lg:text-h6">
+    <p className="text-bold border-b-2 border-primary-d1 text-b1 font-semibold text-black-l1 dark:border-primary-l1 dark:text-white-d1 lg:text-h7">
       {props.title}
     </p>
   )
@@ -93,13 +92,9 @@ type ValuePropBoxProps = {
 }
 const ValuePropBox = (props: ValuePropBoxProps) => {
   return (
-    <div className="flex flex-col gap-4 rounded border-primary-l2 bg-white-d1/30 px-6 py-4 dark:border-primary-l1 dark:bg-black-l2/30 lg:gap-5 lg:px-8 lg:py-6 ">
-      <p className="text-h6 text-primary-d1 dark:text-primary-l2 lg:text-h5">
-        {props.title}
-      </p>
-      <p className="text-b2 text-black-l2 dark:text-white-d2 lg:text-b1">
-        {props.content}
-      </p>
+    <div className="flex flex-col gap-4 rounded border-primary-d1 bg-white-d1/30 px-7 py-4 dark:border-primary-l1 dark:bg-black-l1/30 lg:gap-6 lg:px-9 lg:py-7">
+      <PrimarySubTitleLabel label={props.title} />
+      <TextLabel label={props.content} />
     </div>
   )
 }
@@ -109,7 +104,7 @@ type ValuePropSectionProps = {
 }
 const ValuePropSection = (props: ValuePropSectionProps) => {
   return (
-    <div className="mx-6 flex flex-col gap-5 lg:mx-8 lg:grid lg:grid-cols-2 lg:gap-6 ">
+    <div className="mx-7 flex flex-col gap-6 lg:mx-9 lg:grid lg:grid-cols-2 lg:gap-7 ">
       {props.valuePropList.map((item: ValuePropBoxProps) => (
         <ValuePropBox
           title={item.title}
@@ -121,16 +116,16 @@ const ValuePropSection = (props: ValuePropSectionProps) => {
   )
 }
 
+const SectionClassName =
+  'flex min-h-screen flex-col items-center gap-6 py-10 lg:justify-between lg:py-12'
+
 //Investor section
 const InvestorSection = forwardRef(function InvestorSection(
   props,
   ref: LegacyRef<HTMLDivElement>
 ) {
   return (
-    <div
-      ref={ref}
-      className="flex min-h-screen flex-col items-center gap-6 py-9 lg:justify-between lg:py-11 "
-    >
+    <div ref={ref} className={SectionClassName}>
       <SectionHeader title="FOR INVESTORS" />
       <ValuePropSection valuePropList={investorValuePropList} />
       <LargePrimaryFilledButton
@@ -147,10 +142,7 @@ const StartupSection = forwardRef(function StartupSection(
   ref: LegacyRef<HTMLDivElement>
 ) {
   return (
-    <div
-      ref={ref}
-      className="flex min-h-screen flex-col items-center gap-6 py-9 lg:justify-between lg:py-11 "
-    >
+    <div ref={ref} className={SectionClassName}>
       <SectionHeader title="FOR STARTUPS" />
       <ValuePropSection valuePropList={startValuePropList} />
       <LargePrimaryFilledButton
@@ -167,10 +159,7 @@ const AboutSection = forwardRef(function AboutSection(
   ref: LegacyRef<HTMLDivElement>
 ) {
   return (
-    <div
-      ref={ref}
-      className="flex min-h-screen flex-col items-center gap-6 py-9 lg:justify-between lg:py-11 "
-    >
+    <div ref={ref} className={SectionClassName}>
       <SectionHeader title="ABOUT" />
       <ValuePropSection valuePropList={aboutValuePropList} />
     </div>
@@ -197,10 +186,7 @@ const ContactSection = forwardRef(function ContactSection(
   const [createLandingContact] = useMutation(FEEDBACK_MUTATION)
 
   return (
-    <div
-      ref={ref}
-      className="flex flex-col items-center gap-6 py-9 lg:justify-start lg:gap-8 lg:py-11 "
-    >
+    <div ref={ref} className={SectionClassName}>
       <SectionHeader title="CONTACT US" />
       <div className="flex flex-col items-center justify-center gap-4 lg:gap-6">
         <TextLabel label="Have a query or feedback about the platform? Let us know." />
@@ -213,7 +199,7 @@ const ContactSection = forwardRef(function ContactSection(
           rows={3}
           placeholder="Your query..."
           className={
-            ' w-2/3 resize-none rounded border-2 border-black-l2 bg-white-d1 px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+            ' w-2/3 resize-none rounded border-2 border-black-l2 bg-white-d1 p-2 text-center text-b2 text-primary-d1 placeholder:text-b3 placeholder:text-black-l4 focus:border-primary-d1 focus:outline-none dark:border-white-d2 dark:bg-black-l1 dark:text-primary-l1 dark:placeholder:text-white-d4 dark:focus:border-primary-l1 lg:px-4 lg:py-2 lg:text-b1 lg:placeholder:text-b2'
           }
         ></textarea>
         <input
@@ -224,7 +210,7 @@ const ContactSection = forwardRef(function ContactSection(
           }}
           placeholder="Your email address"
           className={
-            ' w-2/3 rounded border-2 border-black-l2 bg-white-d1 px-2 py-2 text-center text-b2 text-primary  focus:border-primary focus:outline-none disabled:border-none  disabled:bg-black-l4 dark:border-white-d2 dark:bg-black-l2 dark:text-primary-l2  dark:focus:border-primary-l2  lg:px-4 lg:py-2 lg:text-b1'
+            'w-2/3 rounded border-2 border-black-l2 bg-white-d1 p-2 text-center text-b2 text-primary-d1 placeholder:text-b3 placeholder:text-black-l4 focus:border-primary-d1 focus:outline-none dark:border-white-d2 dark:bg-black-l1 dark:text-primary-l1 dark:placeholder:text-white-d4 dark:focus:border-primary-l1 lg:px-4 lg:py-2 lg:text-b1 lg:placeholder:text-b2'
           }
         ></input>
         {sent ? (
@@ -233,10 +219,12 @@ const ContactSection = forwardRef(function ContactSection(
           <PrimaryFilledButton
             label="SEND"
             action={async () => {
-              setSent(true)
-              await createLandingContact({
-                variables: { input: { query: query, email: email } },
-              })
+              if (email.length > 5 && query.length > 0) {
+                setSent(true)
+                await createLandingContact({
+                  variables: { input: { query: query, email: email } },
+                })
+              }
             }}
           />
         )}

@@ -8,7 +8,7 @@ import { PrimarySubTextLabel, TextLabel } from 'src/components/Label/Label'
 
 const LandingFooter = () => {
   return (
-    <div className="grid max-w-full grid-cols-2 flex-col items-start justify-start gap-6  py-12 lg:grid-cols-4 lg:py-14 ">
+    <div className="grid max-w-full grid-cols-2 flex-col items-start justify-start gap-4 py-13 lg:grid-cols-4 lg:gap-7 lg:py-15">
       <BrandBlock />
       <InfoList header="PLATFORM" infoList={platformInfoList} />
       <InfoList header="LEGAL" infoList={legalInfoList} />
@@ -21,13 +21,13 @@ const BrandBlock = () => {
   return (
     <div className="order-last flex flex-col items-start gap-2 lg:order-first lg:gap-3">
       <BlackLogo
-        className="flex h-6 w-10 dark:hidden lg:h-8 lg:w-12"
+        className="flex h-6 w-11 dark:hidden lg:h-7 lg:w-12"
         onClick={() => {
           navigate(routes.landing())
         }}
       />
       <WhiteLogo
-        className="hidden h-6 w-10 dark:flex lg:h-8 lg:w-12"
+        className="hidden h-6 w-11 dark:flex lg:h-7 lg:w-12"
         onClick={() => {
           navigate(routes.landing())
         }}

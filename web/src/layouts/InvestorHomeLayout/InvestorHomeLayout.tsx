@@ -6,6 +6,11 @@ import { useAuth } from 'src/auth'
 import { investorPageClassName } from 'src/components/Investor/Navigation/InvestorNavigationConsts'
 import InvestorTopBar from 'src/components/Investor/Navigation/InvestorTopBar/InvestorTopBar'
 
+import {
+  HomeLayoutWrapperClassName,
+  HomePageWrapperClassName,
+} from '../LayoutConsts'
+
 type InvestorHomeLayoutProps = {
   children?: React.ReactNode
 }
@@ -59,9 +64,9 @@ const InvestorHomeLayout = ({ children }: InvestorHomeLayoutProps) => {
   ])
   return (
     <InvestorPageContext.Provider value={{ pageSelected, setPageSelected }}>
-      <div className={darkMode}>
-        <div className="h-screen bg-white px-4 pb-4 dark:bg-black-l1 lg:px-5 lg:pb-5 ">
-          <div className="relative flex h-full flex-col gap-4  xl:mx-auto xl:max-w-screen-xl ">
+      <div id="darkModeWrapper" className={darkMode}>
+        <div id="layoutWrapper" className={HomeLayoutWrapperClassName}>
+          <div id="pageWrapper" className={HomePageWrapperClassName}>
             <InvestorTopBar />
             <div className={investorPageClassName}>{children}</div>
           </div>

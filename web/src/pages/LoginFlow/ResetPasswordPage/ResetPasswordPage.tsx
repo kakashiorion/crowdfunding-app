@@ -113,7 +113,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
           )}
           {step == 'success' && (
             <div id="successForm" className={SuccessFormClassName}>
-              <CheckIcon className="flex h-9 w-9 fill-success-d1 dark:fill-success-l1 lg:h-10 lg:w-10" />
+              <CheckIcon className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
               <TitleLabel label="Great!" />
               <SubTextLabel
                 label={'Your password has been reset.. Use it to login now.'}

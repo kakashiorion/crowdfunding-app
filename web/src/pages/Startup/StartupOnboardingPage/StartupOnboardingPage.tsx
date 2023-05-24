@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
 import BookIcon from 'public/icons/book.svg'
+import LogoutIcon from 'public/icons/logout.svg'
 import UpIcon from 'public/icons/up.svg'
 import LogoBlack from 'public/logo/LogoBlack.svg'
 import LogoWhite from 'public/logo/LogoWhite.svg'
@@ -86,27 +87,33 @@ const StartupOnboardingPage = () => {
         description="Startup Onboarding page for Dealbari platform"
       />
       <div className="relative flex items-center justify-between py-2 lg:py-3">
-        <LogoBlack className="flex h-6 w-10 dark:hidden lg:h-8 lg:w-12" />
-        <LogoWhite className="hidden h-6 w-10 dark:flex lg:h-8 lg:w-12" />
-        <div className="flex items-center justify-end gap-2 lg:gap-4">
+        <LogoBlack className="flex h-7 w-12 dark:hidden lg:h-8 lg:w-13" />
+        <LogoWhite className="hidden h-7 w-12 dark:flex lg:h-8 lg:w-13" />
+        <div className="flex items-center justify-end gap-4 lg:gap-6">
           {isMenuOpen ? (
             <UpIcon
-              className="flex h-6 w-6 fill-tertiary dark:fill-tertiary-l1 lg:hidden"
+              className="flex h-7 w-7 cursor-pointer fill-tertiary-d1 dark:fill-tertiary-l1 lg:hidden"
               onClick={() => setMenuOpen(false)}
             />
           ) : (
             <BookIcon
-              className="flex h-6 w-6 fill-black hover:fill-tertiary dark:fill-white hover:dark:fill-tertiary-l1 lg:hidden"
+              className="flex h-7 w-7 cursor-pointer fill-black hover:fill-tertiary-d1 dark:fill-white hover:dark:fill-tertiary-l1 lg:hidden"
               onClick={() => setMenuOpen(true)}
             />
           )}
-          <SmallBlackOutlineButton
-            label="Logout"
-            action={async () => await logOut()}
+          <div className="hidden lg:block">
+            <SmallBlackOutlineButton
+              label="LOGOUT"
+              action={async () => await logOut()}
+            />
+          </div>
+          <LogoutIcon
+            className="flex h-7 w-7 cursor-pointer fill-black hover:fill-error-d1 dark:fill-white hover:dark:fill-error-l1 lg:hidden"
+            onClick={() => setMenuOpen(true)}
           />
         </div>
       </div>
-      <div className=" relative mb-4 mt-2 flex h-full overflow-hidden lg:mb-5 lg:mt-3 lg:gap-4 xl:aspect-video xl:h-auto ">
+      <div className="relative my-4 flex h-full overflow-hidden lg:my-6 lg:gap-4 xl:aspect-video xl:h-auto">
         <StartupOnboardingMain
           currentSection={currentSection}
           setCurrentSection={setCurrentSection}

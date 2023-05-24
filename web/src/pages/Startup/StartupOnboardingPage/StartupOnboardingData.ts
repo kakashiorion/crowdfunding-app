@@ -160,7 +160,7 @@ const StartupBackgroundSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 7,
-    title: 'What are the top 3 core values driving your startup?',
+    title: 'What are the top 3 core values that drive your startup?',
     display: 'Core Values',
     help: 'This will help investors know more about your company culture.',
     skippable: true,
@@ -346,7 +346,7 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 3,
-    title: 'Tell us how your cap table looks like now.',
+    title: 'Tell us what your cap table looks like.',
     display: 'Cap Table',
     help: 'This will help investors know more about your statup.',
     skippable: true,
@@ -381,7 +381,7 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
   },
   {
     index: 8,
-    title: 'What has been your average annual revenue growth rate (in %)?',
+    title: 'How fast have you grown your revenue annually (in %)?',
     display: 'Growth',
     help: 'This will help investors know more about your statup.',
     skippable: false,
@@ -412,7 +412,7 @@ const StartupFinancialsSteps: OnboardingStepsInfoType[] = [
 const StartupObjectiveSteps: OnboardingStepsInfoType[] = [
   {
     index: 1,
-    title: 'Select the level of investors you are comfortable to connect with.',
+    title: 'Select the level of investors you want to connect with.',
     display: 'Investors',
     help: 'This will help us provide you better matches.',
     skippable: true,
