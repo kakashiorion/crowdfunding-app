@@ -41,7 +41,7 @@ const Routes = () => {
         <Route path="/startup/explore" page={StartupStartupExplorePage} name="startupExplore" />
         <Route path="/startup/myProfile" page={StartupStartupMyProfilePage} name="startupMyProfile" />
         <Route path="/startup/help" page={StartupStartupHelpPage} name="startupHelp" />
-        <Route path="/startup/investorProfile/{id:Int}" page={StartupInvestorProfilePage} name="startupInvestorProfile" />
+        <Route path="/startup/investorProfile/{id:Int}" page={StartupStartupInvestorProfilePage} name="startupInvestorProfile" />
         <Route path="/startup/viewPost/{id:Int}" page={StartupStartupPostPage} name="startupPost" />
         <Route path="/startup/createPost" page={StartupStartupCreatePostPage} name="startupCreatePost" />
         <Route path="/startup/createOffer" page={StartupStartupCreateOfferPage} name="startupCreateOffer" />

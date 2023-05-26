@@ -38,6 +38,7 @@ model User {
   posts               Post[]               @relation("Poster")
   comments            Comment[]            @relation("Commenter")
   likedPosts          Post[]               @relation("UserLikesPost")
+  //TODO: Save post
   likedComments       Comment[]            @relation("UserLikesComment")
   connections         Connection[]         @relation("Connection")
   followedBy          User[]               @relation("UserFollows")
@@ -700,23 +701,23 @@ model Post {
   likedByUsers  User[]          @relation("UserLikesPost")
   title         String
   writeup       String?
-  attachmentURL String?
+  attachmentURL String? //Attached link
+  imageURL      String?
   visibility    VisibilityLevel @default(PUBLIC)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 }
 
 model Comment {
-  id            Int      @id @default(autoincrement())
-  commenter     User     @relation("Commenter", fields: [commenterID], references: [id])
-  commenterID   Int
-  post          Post     @relation(fields: [postID], references: [id])
-  postID        Int
-  content       String
-  attachmentURL String?
-  likedByUsers  User[]   @relation("UserLikesComment")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  commenter    User     @relation("Commenter", fields: [commenterID], references: [id])
+  commenterID  Int
+  post         Post     @relation(fields: [postID], references: [id])
+  postID       Int
+  content      String
+  likedByUsers User[]   @relation("UserLikesComment")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model DirectConversation {

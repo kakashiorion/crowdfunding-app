@@ -133,5 +133,7 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
+    # addPostLike(postId: Int!): User! @requireAuth
+    # removePostLike(postId: Int!): User! @requireAuth
   }
 `

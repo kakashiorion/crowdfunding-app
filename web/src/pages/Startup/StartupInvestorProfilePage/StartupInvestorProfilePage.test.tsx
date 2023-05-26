@@ -1,6 +1,6 @@
 import { render } from '@redwoodjs/testing/web'
 
-import InvestorProfilePage from './InvestorProfilePage'
+import StartupInvestorProfilePage from './StartupInvestorProfilePage'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
@@ -8,7 +8,7 @@ import InvestorProfilePage from './InvestorProfilePage'
 describe('InvestorProfilePage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<InvestorProfilePage />)
+      render(<StartupInvestorProfilePage />)
     }).not.toThrow()
   })
 })

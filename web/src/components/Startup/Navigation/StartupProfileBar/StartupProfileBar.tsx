@@ -19,6 +19,7 @@ type StartupProfileBarProps = {
   setMenuOpen: React.Dispatch<React.SetStateAction<string>>
 }
 const StartupProfileBar = (props: StartupProfileBarProps) => {
+  const { currentUser } = useAuth()
   return (
     <>
       {props.isMenuOpen == 'Profile' ? (
@@ -34,9 +35,11 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
         </>
       ) : (
         <button
-          className="flex h-6 w-6 rounded-full bg-black-l1 hover:bg-tertiary-d1 dark:bg-white-d1 dark:hover:bg-tertiary-l1 lg:h-7 lg:w-7"
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-black-l1 text-b3 text-white hover:bg-tertiary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-tertiary-l1 lg:h-7 lg:w-7 lg:text-b2"
           onClick={() => props.setMenuOpen('Profile')}
-        />
+        >
+          {currentUser?.email[0].toUpperCase()}
+        </button>
       )}
     </>
   )

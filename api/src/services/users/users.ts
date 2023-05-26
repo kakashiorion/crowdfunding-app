@@ -62,6 +62,38 @@ export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
   })
 }
 
+// export const addPostLike = ({ postId }: { postId: number }) => {
+//   console.log(context.currentUser?.id)
+//   return db.user.update({
+//     where: {
+//       id: context.currentUser?.id,
+//     },
+//     data: {
+//       likedPosts: {
+//         connect: {
+//           id: postId,
+//         },
+//       },
+//     },
+//   })
+// }
+
+// export const removePostLike = ({ postId }: { postId: number }) => {
+//   console.log(context.currentUser?.id)
+//   return db.user.update({
+//     where: {
+//       id: context.currentUser?.id,
+//     },
+//     data: {
+//       likedPosts: {
+//         disconnect: {
+//           id: postId,
+//         },
+//       },
+//     },
+//   })
+// }
+
 export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
   return db.user.delete({
     where: { id },

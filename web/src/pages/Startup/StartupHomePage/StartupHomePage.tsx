@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { MetaTags } from '@redwoodjs/web'
 
+import StartupHomeFeedCell from 'src/components/Startup/Home/StartupHomeFeedCell'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
 const StartupHomePage = () => {
@@ -27,7 +28,9 @@ export default StartupHomePage
 
 const StartupHomeMain = () => {
   return (
-    <div className="h-full w-full rounded bg-white-d1 dark:bg-black-l1 lg:w-2/3"></div>
+    <div className="h-full w-full rounded  lg:w-2/3">
+      <StartupHomeFeedCell />
+    </div>
   )
 }
 
