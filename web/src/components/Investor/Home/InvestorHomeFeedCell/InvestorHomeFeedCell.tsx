@@ -38,7 +38,6 @@ export const QUERY = gql`
       comments {
         commenterID
         content
-        attachmentURL
         createdAt
         likedByUsers {
           id
@@ -57,7 +56,9 @@ export const QUERY = gql`
     }
     feedConnections: connections {
       id
-
+      users {
+        id
+      }
       status
       createdAt
     }

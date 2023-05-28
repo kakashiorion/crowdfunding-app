@@ -62,38 +62,6 @@ export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
   })
 }
 
-// export const addPostLike = ({ postId }: { postId: number }) => {
-//   console.log(context.currentUser?.id)
-//   return db.user.update({
-//     where: {
-//       id: context.currentUser?.id,
-//     },
-//     data: {
-//       likedPosts: {
-//         connect: {
-//           id: postId,
-//         },
-//       },
-//     },
-//   })
-// }
-
-// export const removePostLike = ({ postId }: { postId: number }) => {
-//   console.log(context.currentUser?.id)
-//   return db.user.update({
-//     where: {
-//       id: context.currentUser?.id,
-//     },
-//     data: {
-//       likedPosts: {
-//         disconnect: {
-//           id: postId,
-//         },
-//       },
-//     },
-//   })
-// }
-
 export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
   return db.user.delete({
     where: { id },
@@ -131,6 +99,9 @@ export const User: UserRelationResolvers = {
   likedPosts: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).likedPosts()
   },
+  savedPosts: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).savedPosts()
+  },
   likedComments: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).likedComments()
   },
@@ -142,5 +113,11 @@ export const User: UserRelationResolvers = {
   },
   following: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).following()
+  },
+  blockedBy: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).blockedBy()
+  },
+  blocking: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).blocking()
   },
 }

@@ -15,8 +15,8 @@ import StartupSearchBar from 'src/components/Startup/Navigation/StartupSearchBar
 const StartupMenuBar = () => {
   const [isMenuOpen, setMenuOpen] = useState('None')
   return (
-    <div className="sticky left-0 top-0 z-10 flex w-full items-center justify-between gap-4 py-3">
-      <div className="flex items-center justify-start gap-4">
+    <div className="sticky left-0 top-0 z-10 flex w-full items-center justify-between gap-4 py-2 lg:py-3">
+      <div className="flex items-center justify-start gap-3">
         {isMenuOpen == 'Main' ? (
           <>
             <UpIcon

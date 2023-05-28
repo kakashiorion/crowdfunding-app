@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 
+import HelpIcon from 'public/icons/help.svg'
 import LogoutIcon from 'public/icons/logout.svg'
 import ProfileIcon from 'public/icons/profile.svg'
 import UpIcon from 'public/icons/up.svg'
@@ -10,7 +11,7 @@ import { useAuth } from 'src/auth'
 import { SubTextLabel } from 'src/components/Label/Label'
 import {
   profileMenuItemClassName,
-  upIconClassName,
+  profileUpIconClassName,
 } from 'src/components/Startup/Navigation/StartupNavigationConsts'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
@@ -25,7 +26,7 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
       {props.isMenuOpen == 'Profile' ? (
         <>
           <UpIcon
-            className={upIconClassName}
+            className={profileUpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <StartupProfileMenu
@@ -35,9 +36,10 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
         </>
       ) : (
         <button
-          className="flex h-6 w-6 items-center justify-center rounded-full bg-black-l1 text-b3 text-white hover:bg-tertiary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-tertiary-l1 lg:h-7 lg:w-7 lg:text-b2"
+          className="flex h-7 w-7 items-center justify-center rounded-full bg-black-l1 text-b3 text-white hover:bg-tertiary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-tertiary-l1 lg:h-8 lg:w-8 lg:text-b2"
           onClick={() => props.setMenuOpen('Profile')}
         >
+          {/* //TODO: apply profile pic as BG */}
           {currentUser?.email[0].toUpperCase()}
         </button>
       )}
@@ -59,11 +61,22 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
         }}
         className={profileMenuItemClassName}
       >
-        <ProfileIcon className="flex h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
+        <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Profile" />
       </button>
+      <button
+        onClick={() => {
+          navigate(routes.startupHelp())
+          props.setMenuOpen('None')
+          setPageSelected('Help')
+        }}
+        className={profileMenuItemClassName}
+      >
+        <HelpIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
+        <SubTextLabel label="Help" />
+      </button>
       <button onClick={() => logOut()} className={profileMenuItemClassName}>
-        <LogoutIcon className="flex h-6 w-6 fill-error-d1 dark:fill-error-l1 lg:h-7 lg:w-7" />
+        <LogoutIcon className="flex h-5 w-5 fill-error-d1 dark:fill-error-l1 lg:h-6 lg:w-6" />
         <SubTextLabel label="Logout" />
       </button>
     </div>

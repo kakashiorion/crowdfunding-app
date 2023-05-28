@@ -34,6 +34,38 @@ export const updateComment: MutationResolvers['updateComment'] = ({
   })
 }
 
+export const addCommentLike = ({ id }: { id: number }) => {
+  console.log(context.currentUser?.id)
+  return db.comment.update({
+    where: {
+      id: id,
+    },
+    data: {
+      likedByUsers: {
+        connect: {
+          id: context.currentUser?.id,
+        },
+      },
+    },
+  })
+}
+
+export const removeCommentLike = ({ id }: { id: number }) => {
+  console.log(context.currentUser?.id)
+  return db.comment.update({
+    where: {
+      id: id,
+    },
+    data: {
+      likedByUsers: {
+        disconnect: {
+          id: context.currentUser?.id,
+        },
+      },
+    },
+  })
+}
+
 export const deleteComment: MutationResolvers['deleteComment'] = ({ id }) => {
   return db.comment.delete({
     where: { id },

@@ -6,7 +6,6 @@ export const schema = gql`
     post: Post!
     postID: Int!
     content: String!
-    attachmentURL: String
     likedByUsers: [User]!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -21,19 +20,19 @@ export const schema = gql`
     commenterID: Int!
     postID: Int!
     content: String!
-    attachmentURL: String
   }
 
   input UpdateCommentInput {
     commenterID: Int
     postID: Int
     content: String
-    attachmentURL: String
   }
 
   type Mutation {
     createComment(input: CreateCommentInput!): Comment! @requireAuth
     updateComment(id: Int!, input: UpdateCommentInput!): Comment! @requireAuth
     deleteComment(id: Int!): Comment! @requireAuth
+    addCommentLike(id: Int!): Comment! @requireAuth
+    removeCommentLike(id: Int!): Comment! @requireAuth
   }
 `

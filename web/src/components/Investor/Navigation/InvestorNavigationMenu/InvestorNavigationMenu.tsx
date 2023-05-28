@@ -4,7 +4,6 @@ import OfferIcon from 'public/icons/bid.svg'
 import ConnectionIcon from 'public/icons/connection.svg'
 import ConversationIcon from 'public/icons/conversation.svg'
 import ExploreIcon from 'public/icons/explore.svg'
-import HelpIcon from 'public/icons/help.svg'
 import HomeIcon from 'public/icons/home.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -64,14 +63,6 @@ const InvestorNavigationMenu = (props: InvestorNavigationMenuProps) => {
           navigate(routes.investorExplore())
         }}
         selected={'Explore' == pageSelected}
-      />
-      <InvestorNavigationItem
-        icon={HelpIcon}
-        action={() => {
-          props.setMenuOpen('None')
-          navigate(routes.investorHelp())
-        }}
-        selected={'Help' == pageSelected}
       />
     </div>
   )

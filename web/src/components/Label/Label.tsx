@@ -79,6 +79,14 @@ export const TitleLabel = (props: LabelProps) => {
   )
 }
 
+export const GreyTitleLabel = (props: LabelProps) => {
+  return (
+    <p className="text-h6 text-black-l3 dark:text-white-d3 lg:text-h5">
+      {props.label}
+    </p>
+  )
+}
+
 export const PrimaryTitleLabel = (props: LabelProps) => {
   return (
     <p className="text-h6 text-primary-d1 dark:text-primary-l1 lg:text-h5">
@@ -128,6 +136,14 @@ export const SubTitleLabel = (props: LabelProps) => {
   )
 }
 
+export const GreySubTitleLabel = (props: LabelProps) => {
+  return (
+    <p className="text-h7 text-black-l3 dark:text-white-d3 lg:text-h6">
+      {props.label}
+    </p>
+  )
+}
+
 export const PrimarySubTitleLabel = (props: LabelProps) => {
   return (
     <p className="text-h7 text-primary-d1 dark:text-primary-l1 lg:text-h6">
@@ -168,10 +184,35 @@ export const DisabledSubTitleLabel = (props: LabelProps) => {
   )
 }
 
+//Medium - h7/b1
+export const MediumLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b1 font-bold text-black dark:text-white lg:text-h7">
+      {props.label}
+    </p>
+  )
+}
+
+export const TertiaryMediumLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b1 text-tertiary-d1 dark:text-tertiary-l1 lg:text-h7">
+      {props.label}
+    </p>
+  )
+}
+
 //Text - b1/b2
 export const TextLabel = (props: LabelProps) => {
   return (
     <p className="text-b2 text-black dark:text-white lg:text-b1">
+      {props.label}
+    </p>
+  )
+}
+
+export const GreyTextLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b2 text-black-l3 dark:text-white-d3 lg:text-b1">
       {props.label}
     </p>
   )
@@ -221,6 +262,14 @@ export const DisabledTextLabel = (props: LabelProps) => {
 export const SubTextLabel = (props: LabelProps) => {
   return (
     <p className="text-b3 text-black-l1 dark:text-white-d1 lg:text-b2">
+      {props.label}
+    </p>
+  )
+}
+
+export const GreySubTextLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b3 text-black-l3 dark:text-white-d3 lg:text-b2">
       {props.label}
     </p>
   )

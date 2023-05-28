@@ -29,7 +29,7 @@ export const updatePost: MutationResolvers['updatePost'] = ({ id, input }) => {
   })
 }
 
-export const addUserLike = ({ id }: { id: number }) => {
+export const addPostLike = ({ id }: { id: number }) => {
   console.log(context.currentUser?.id)
   return db.post.update({
     where: {
@@ -45,7 +45,7 @@ export const addUserLike = ({ id }: { id: number }) => {
   })
 }
 
-export const removeUserLike = ({ id }: { id: number }) => {
+export const removePostLike = ({ id }: { id: number }) => {
   console.log(context.currentUser?.id)
   return db.post.update({
     where: {
@@ -53,6 +53,38 @@ export const removeUserLike = ({ id }: { id: number }) => {
     },
     data: {
       likedByUsers: {
+        disconnect: {
+          id: context.currentUser?.id,
+        },
+      },
+    },
+  })
+}
+
+export const savePost = ({ id }: { id: number }) => {
+  console.log(context.currentUser?.id)
+  return db.post.update({
+    where: {
+      id: id,
+    },
+    data: {
+      savedByUsers: {
+        connect: {
+          id: context.currentUser?.id,
+        },
+      },
+    },
+  })
+}
+
+export const unsavePost = ({ id }: { id: number }) => {
+  console.log(context.currentUser?.id)
+  return db.post.update({
+    where: {
+      id: id,
+    },
+    data: {
+      savedByUsers: {
         disconnect: {
           id: context.currentUser?.id,
         },
@@ -76,5 +108,8 @@ export const Post: PostRelationResolvers = {
   },
   likedByUsers: (_obj, { root }) => {
     return db.post.findUnique({ where: { id: root?.id } }).likedByUsers()
+  },
+  savedByUsers: (_obj, { root }) => {
+    return db.post.findUnique({ where: { id: root?.id } }).savedByUsers()
   },
 }

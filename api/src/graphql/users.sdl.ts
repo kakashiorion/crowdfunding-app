@@ -25,10 +25,13 @@ export const schema = gql`
     posts: [Post]!
     comments: [Comment]!
     likedPosts: [Post]!
+    savedPosts: [Post]!
     likedComments: [Comment]!
     connections: [Connection]!
     followedBy: [User]!
     following: [User]!
+    blockedBy: [User]!
+    blocking: [User]!
     messageVisibility: VisibilityLevel!
     activityVisbility: VisibilityLevel!
     profileVisbility: VisibilityLevel!
@@ -133,7 +136,5 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
-    # addPostLike(postId: Int!): User! @requireAuth
-    # removePostLike(postId: Int!): User! @requireAuth
   }
 `

@@ -1,61 +1,101 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import moment from 'moment'
 import CommentIcon from 'public/icons/comment.svg'
 import SaveIcon from 'public/icons/favorite.svg'
 import MoreIcon from 'public/icons/more.svg'
-// import SendIcon from 'public/icons/send.svg'
+import SendIcon from 'public/icons/send.svg'
 import ShareIcon from 'public/icons/share.svg'
 import LikeIcon from 'public/icons/thumbUp.svg'
 import type {
-  FindStartupHomePostQuery,
-  FindStartupHomePostQueryVariables,
+  FindStartupViewPostQuery,
+  FindStartupViewPostQueryVariables,
 } from 'types/graphql'
 
-import { navigate, routes } from '@redwoodjs/router'
+import { back, navigate, routes } from '@redwoodjs/router'
 import { CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-import { HoverTertiaryTextButton } from 'src/components/Button/Button'
 import {
-  TextLabel,
+  HoverTertiaryTextButton,
+  TertiaryFilledButton,
+} from 'src/components/Button/Button'
+import {
+  GreySubTitleLabel,
   SmallLabel,
   SubTextLabel,
   TertiaryMediumLabel,
+  TextLabel,
 } from 'src/components/Label/Label'
 import {
-  CountClassName,
+  PosterProfilePicClassName,
   HoverIconClassName,
+  PostInteractionClassName,
+  CountClassName,
   IconClassName,
   PostDivClassName,
-  PostInteractionClassName,
-  PosterProfilePicClassName,
 } from 'src/components/Startup/startupHomeConsts'
 
+/*
+Checks to be made before startup user views a post:
+  If the poster is a startup, it must be the current user
+  If the poster is an investor:
+  - if visibility is connection, the investor must be user's connection
+  - if visibility is follower, the investor must be followedBy the user
+*/
+
 export const QUERY = gql`
-  query FindStartupHomePostQuery($id: Int!) {
-    startupHomePost: post(id: $id) {
+  query FindStartupViewPostQuery($id: Int!) {
+    startupViewPost: post(id: $id) {
       id
       title
       writeup
       attachmentURL
       imageURL
       createdAt
-      posterID
-      poster {
-        type
-        investor {
-          name
-        }
-      }
+      visibility
       likedByUsers {
         id
       }
       savedByUsers {
         id
       }
+      posterID
+      poster {
+        type
+        profilePicURL
+        followedBy {
+          id
+        }
+        connections {
+          users {
+            id
+          }
+        }
+        investor {
+          name
+        }
+        startup {
+          name
+        }
+      }
       comments {
         id
+        content
+        createdAt
+        likedByUsers {
+          id
+        }
+        commenterID
+        commenter {
+          profilePicURL
+          investor {
+            name
+          }
+          startup {
+            name
+          }
+        }
       }
     }
   }
@@ -104,24 +144,46 @@ const UNSAVE_POST_MUTATION = gql`
   }
 `
 
-// const ADD_COMMENT_MUTATION = gql`
-//   mutation createComment($input: CreateCommentInput!) {
-//     createComment(input: $input) {
-//       id
-//       commenterID
-//       content
-//       createdAt
-//     }
-//   }
-// `
+export const isEmpty = (data: any, { isDataEmpty }: { isDataEmpty: any }) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { currentUser } = useAuth()
+  let showEmpty = false
+  if (data.startupViewPost.poster.type == 'STARTUP') {
+    //Check if Startup is the poster
+    if (data.startupViewPost.posterID != currentUser?.id) {
+      showEmpty = true
+    }
+  } else if (data.startupViewPost.poster.type == 'INVESTOR') {
+    if (data.startupViewPost.visibility == 'CONNECTIONS') {
+      //Check if Startup is a connection of poster
+      showEmpty = !data.startupViewPost.poster.connections.some((d: any) =>
+        d.users.includes(currentUser?.id)
+      )
+    } else if (data.startupViewPost.visibility == 'FOLLOWERS') {
+      //Check if Startup is a follower of poster
+      showEmpty = !data.startupViewPost.poster.followedBy.some((d: any) =>
+        d.includes(currentUser?.id)
+      )
+    }
+  }
+  return isDataEmpty(data) || showEmpty
+}
+
+export const Empty = () => (
+  <div className="flex h-full w-full flex-col items-center justify-center gap-3 lg:gap-4">
+    {/* TODO: Add illustration - phase 2 */}
+    <GreySubTitleLabel label="No such post exists or you may not have the access!" />
+    <TertiaryFilledButton label="GO BACK" action={() => back()} />
+  </div>
+)
 
 export const Success = ({
-  startupHomePost,
+  startupViewPost,
 }: CellSuccessProps<
-  FindStartupHomePostQuery,
-  FindStartupHomePostQueryVariables
+  FindStartupViewPostQuery,
+  FindStartupViewPostQueryVariables
 >) => {
-  // const [userComment, setUserComment] = useState('')
+  const [userComment, setUserComment] = useState('')
   const [liked, setLiked] = useState(false)
   const [saved, setSaved] = useState(false)
   const { currentUser } = useAuth()
@@ -136,14 +198,14 @@ export const Success = ({
       //Remove like from Post
       await removePostLike({
         variables: {
-          id: startupHomePost.id,
+          id: startupViewPost.id,
         },
       })
     } else {
       //Add like to Post
       await addPostLike({
         variables: {
-          id: startupHomePost.id,
+          id: startupViewPost.id,
         },
       })
     }
@@ -154,43 +216,42 @@ export const Success = ({
       //Unsave Post
       await unsavePost({
         variables: {
-          id: startupHomePost.id,
+          id: startupViewPost.id,
         },
       })
     } else {
       //Save Post
       await savePost({
         variables: {
-          id: startupHomePost.id,
+          id: startupViewPost.id,
         },
       })
     }
   }
 
-  //TODO: Startup cannot comment on Investor's post - phase 2
-  // const postComment = async () => {
-  //   await addComment({
-  //     variables: {
-  //       input: {
-  //         commenterID: currentUser?.id,
-  //         postID: startupHomePost.id,
-  //         content: userComment,
-  //       },
-  //     },
-  //   }).then(() => {
-  //     setUserComment('')
-  //   })
-  // }
+  //Startup can comment on self post
+  const postComment = async () => {
+    await addComment({
+      variables: {
+        input: {
+          commenterID: currentUser?.id,
+          postID: startupViewPost.id,
+          content: userComment,
+        },
+      },
+    }).then(() => {
+      setUserComment('')
+    })
+  }
 
   useEffect(() => {
-    setLiked(startupHomePost.likedByUsers.some((d) => d?.id == currentUser?.id))
-    setSaved(startupHomePost.savedByUsers.some((d) => d?.id == currentUser?.id))
+    setLiked(startupViewPost.likedByUsers.some((d) => d?.id == currentUser?.id))
+    setSaved(startupViewPost.savedByUsers.some((d) => d?.id == currentUser?.id))
   }, [
     currentUser?.id,
-    startupHomePost.likedByUsers,
-    startupHomePost.savedByUsers,
+    startupViewPost.likedByUsers,
+    startupViewPost.savedByUsers,
   ])
-
   return (
     <div className={PostDivClassName}>
       <div className="flex w-full items-center justify-between gap-3 ">
@@ -200,28 +261,28 @@ export const Success = ({
             onClick={() => {
               //Go to investor's profile
               navigate(
-                routes.startupInvestorProfile({ id: startupHomePost.posterID })
+                routes.startupInvestorProfile({ id: startupViewPost.posterID })
               )
             }}
           >
             {
               //TODO: Add Profile pic as BG - phase 2
-              startupHomePost.poster.investor?.name[0].toUpperCase()
+              startupViewPost.poster.investor?.name[0].toUpperCase()
             }
           </button>
           <div className="flex flex-col items-start justify-center">
             <HoverTertiaryTextButton
-              label={startupHomePost.poster.investor?.name ?? ''}
+              label={startupViewPost.poster.investor?.name ?? ''}
               action={() => {
                 //Go to investor's profile
                 navigate(
                   routes.startupInvestorProfile({
-                    id: startupHomePost.posterID,
+                    id: startupViewPost.posterID,
                   })
                 )
               }}
             />
-            <SmallLabel label={moment(startupHomePost.createdAt).fromNow()} />
+            <SmallLabel label={moment(startupViewPost.createdAt).fromNow()} />
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">
@@ -244,25 +305,25 @@ export const Success = ({
         </div>
       </div>
       <div className="flex w-full flex-col items-start justify-start gap-1 lg:gap-2">
-        <TertiaryMediumLabel label={startupHomePost.title} />
-        {startupHomePost.writeup && (
-          <TextLabel label={startupHomePost.writeup} />
+        <TertiaryMediumLabel label={startupViewPost.title} />
+        {startupViewPost.writeup && (
+          <TextLabel label={startupViewPost.writeup} />
         )}
-        {startupHomePost.attachmentURL && (
+        {startupViewPost.attachmentURL && (
           <HoverTertiaryTextButton
-            label={startupHomePost.attachmentURL}
+            label={startupViewPost.attachmentURL}
             action={() => {
-              startupHomePost.attachmentURL &&
-                window.open(startupHomePost.attachmentURL)?.focus()
+              startupViewPost.attachmentURL &&
+                window.open(startupViewPost.attachmentURL)?.focus()
             }}
           />
         )}
       </div>
-      {startupHomePost.imageURL && (
+      {startupViewPost.imageURL && (
         <div className="flex w-full justify-center bg-white dark:bg-black">
           <img
             className="object-fill"
-            src={startupHomePost.imageURL}
+            src={startupViewPost.imageURL}
             alt="Post attachment"
           />
         </div>
@@ -282,9 +343,9 @@ export const Success = ({
           <div className="hidden lg:block">
             <SubTextLabel label={'Likes'} />
           </div>
-          {startupHomePost.comments && (
+          {startupViewPost.comments && (
             <div className={CountClassName}>
-              {startupHomePost.likedByUsers.length.toString()}
+              {startupViewPost.likedByUsers.length.toString()}
             </div>
           )}
         </button>
@@ -292,16 +353,16 @@ export const Success = ({
           className={PostInteractionClassName}
           onClick={() => {
             //Go to post details page
-            navigate(routes.startupPost({ id: startupHomePost.id }))
+            navigate(routes.startupPost({ id: startupViewPost.id }))
           }}
         >
           <CommentIcon className={IconClassName} />
           <div className="hidden lg:block">
             <SubTextLabel label={'Comments'} />
           </div>
-          {startupHomePost.comments && (
+          {startupViewPost.comments && (
             <div className={CountClassName}>
-              {startupHomePost.comments.length.toString()}{' '}
+              {startupViewPost.comments.length.toString()}{' '}
             </div>
           )}
         </button>

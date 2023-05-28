@@ -18,7 +18,7 @@ const StartupNavigationItem = (props: StartupNavigationItemProps) => {
       <props.icon
         className={`h-6 w-6 ${
           props.selected
-            ? 'fill-tertiary-l1 dark:fill-tertiary-d1'
+            ? 'fill-tertiary-l2 dark:fill-tertiary-d1'
             : 'fill-black dark:fill-white'
         }`}
       />

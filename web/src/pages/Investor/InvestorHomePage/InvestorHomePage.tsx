@@ -4,7 +4,7 @@ import AddIcon from 'public/icons/add.svg'
 
 import { MetaTags } from '@redwoodjs/web'
 
-import { IconBlackFilledButton } from 'src/components/Button/Button'
+import { LeadingIconBlackFilledButton } from 'src/components/Button/Button'
 import InvestorHomeMetricsCell from 'src/components/Investor/Home/InvestorHomeMetricsCell'
 import { PrimaryTextLabel, DisabledTextLabel } from 'src/components/Label/Label'
 import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
@@ -68,7 +68,7 @@ const InvestorFeedBlock = () => {
             <option>Hot</option>
             <option>New</option>
           </select> */}
-          <IconBlackFilledButton
+          <LeadingIconBlackFilledButton
             label="NEW POST"
             action={() => {}}
             icon={<AddIcon className="h-4 w-4 fill-inherit lg:h-5 lg:w-5" />}

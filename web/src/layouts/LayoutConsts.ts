@@ -4,7 +4,7 @@ export const LayoutWrapperClassName =
 export const PageWrapperClassName =
   'flex h-full flex-col xl:mx-auto xl:max-w-screen-xl '
 export const HomeLayoutWrapperClassName =
-  'h-screen bg-white px-4 pb-4 dark:bg-black lg:px-6 lg:pb-6'
+  'h-screen bg-white px-4 pb-2 dark:bg-black lg:px-6 lg:pb-4'
 export const HomePageWrapperClassName =
   'relative flex h-full flex-col gap-4 xl:mx-auto xl:max-w-screen-xl'
 

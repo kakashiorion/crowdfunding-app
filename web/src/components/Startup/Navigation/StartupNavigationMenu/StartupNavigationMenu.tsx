@@ -2,10 +2,9 @@ import { useContext } from 'react'
 
 import ConnectionIcon from 'public/icons/connection.svg'
 import ConversationIcon from 'public/icons/conversation.svg'
+import OfferIcon from 'public/icons/diamond.svg'
 import ExploreIcon from 'public/icons/explore.svg'
-import HelpIcon from 'public/icons/help.svg'
 import HomeIcon from 'public/icons/home.svg'
-import OfferIcon from 'public/icons/offer.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 
@@ -64,14 +63,6 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
           navigate(routes.startupExplore())
         }}
         selected={'Explore' == pageSelected}
-      />
-      <StartupNavigationItem
-        icon={HelpIcon}
-        action={() => {
-          props.setMenuOpen('None')
-          navigate(routes.startupHelp())
-        }}
-        selected={'Help' == pageSelected}
       />
     </div>
   )

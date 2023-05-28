@@ -6,7 +6,12 @@ import type {
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
+import { HoverTertiaryTextButton } from 'src/components/Button/Button'
 import { TextLabel } from 'src/components/Label/Label'
+import {
+  ConnDivClassName,
+  PosterProfilePicClassName,
+} from 'src/components/Startup/startupHomeConsts'
 
 export const QUERY = gql`
   query FindStartupHomeConnectionQuery($id: Int!) {
@@ -42,42 +47,62 @@ export const Success = ({
   FindStartupHomeConnectionQueryVariables
 >) => {
   return (
-    <div className="flex w-full flex-wrap items-center justify-start gap-2 rounded border border-white-d3 bg-white-d1/50 p-3 dark:border-black-l3 dark:bg-black-l1/50 lg:p-4">
+    <div className={ConnDivClassName}>
       <button
-        className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-b2 text-white hover:bg-tertiary-d1 dark:bg-white dark:text-black dark:hover:bg-tertiary-l1 lg:h-7 lg:w-7 lg:text-b1"
+        className={PosterProfilePicClassName}
         onClick={() => {
-          //Go to investor's profile
+          //Navigate to investor's profile
           navigate(
             routes.startupInvestorProfile({
-              id: startupHomeConnection.users[0].id,
+              id: startupHomeConnection.users[0]?.id ?? 0,
             })
           )
         }}
       >
         {
           //TODO: Add Profile pic as BG
-          startupHomeConnection.users[0].investor?.name[0].toUpperCase()
+          startupHomeConnection.users[0]?.investor?.name[0].toUpperCase()
         }
       </button>
-      <TextLabel label={startupHomeConnection.users[0].investor?.name ?? ''} />
+      <HoverTertiaryTextButton
+        label={startupHomeConnection.users[0]?.investor?.name ?? ''}
+        action={() => {
+          //Navigate to investor's profile
+          navigate(
+            routes.startupInvestorProfile({
+              id: startupHomeConnection.users[0]?.id ?? 0,
+            })
+          )
+        }}
+      />
       <TextLabel label="is now connected with" />
       <button
-        className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-b2 text-white hover:bg-tertiary-d1 dark:bg-white dark:text-black dark:hover:bg-tertiary-l1 lg:h-7 lg:w-7 lg:text-b1"
+        className={PosterProfilePicClassName}
         onClick={() => {
-          //Go to investor's profile
+          //Navigate to investor's profile
           navigate(
             routes.startupInvestorProfile({
-              id: startupHomeConnection.users[1].id,
+              id: startupHomeConnection.users[1]?.id ?? 0,
             })
           )
         }}
       >
         {
           //TODO: Add Profile pic as BG
-          startupHomeConnection.users[1].investor?.name[0].toUpperCase()
+          startupHomeConnection.users[1]?.investor?.name[0].toUpperCase()
         }
       </button>
-      <TextLabel label={startupHomeConnection.users[1].investor?.name ?? ''} />
+      <HoverTertiaryTextButton
+        label={startupHomeConnection.users[1]?.investor?.name ?? ''}
+        action={() => {
+          //Navigate to investor's profile
+          navigate(
+            routes.startupInvestorProfile({
+              id: startupHomeConnection.users[1]?.id ?? 0,
+            })
+          )
+        }}
+      />
     </div>
   )
 }

@@ -12,14 +12,14 @@ type OnboardingFeedbackFormProps = {
 
 const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
   return (
-    <div className="flex flex-col items-center gap-1 rounded bg-warn-l3 p-3 dark:bg-warn-d3 lg:gap-2 lg:p-4">
+    <div className="flex flex-col items-center gap-2 rounded bg-white-d1 p-3 dark:bg-black-l1 lg:gap-3 lg:p-4">
       <WarnSubTextLabel label="Did you like the onboarding process? Please share your feedback" />
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <UpIcon
-          className={`flex h-5 w-5 ${
+          className={`flex h-5 w-5  ${
             props.up
-              ? 'fill-success-d1 dark:fill-success-l1'
-              : 'fill-black-l3 hover:animate-bounce hover:fill-success-d1 dark:fill-white-d3 dark:hover:fill-success-l1'
+              ? ' scale-125 fill-success-d1 transition dark:fill-success-l1 '
+              : ' origin-bottom-left fill-black-l3 duration-200 hover:-rotate-12 hover:fill-success-d1 dark:fill-white-d3 dark:hover:fill-success-l1 '
           } lg:h-6 lg:w-6`}
           onClick={() => {
             if (props.up) {
@@ -33,8 +33,8 @@ const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
         <DownIcon
           className={`flex h-5 w-5 ${
             props.down
-              ? 'fill-error-d1 dark:fill-error-l1'
-              : 'fill-black-l3 hover:animate-bounce hover:fill-error-d1 dark:fill-white-d3 dark:hover:fill-error-l1'
+              ? ' scale-125 fill-error-d1 transition dark:fill-error-l1'
+              : ' origin-top-right fill-black-l3 duration-200 hover:-rotate-12  hover:fill-error-d1 dark:fill-white-d3 dark:hover:fill-error-l1 '
           } lg:h-6 lg:w-6`}
           onClick={() => {
             if (props.down) {

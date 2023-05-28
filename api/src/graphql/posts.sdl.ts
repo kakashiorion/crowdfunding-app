@@ -5,9 +5,11 @@ export const schema = gql`
     posterID: Int!
     comments: [Comment]!
     likedByUsers: [User]!
+    savedByUsers: [User]!
     title: String!
     writeup: String
     attachmentURL: String
+    imageURL: String
     visibility: VisibilityLevel!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -30,6 +32,7 @@ export const schema = gql`
     title: String!
     writeup: String
     attachmentURL: String
+    imageURL: String
     visibility: VisibilityLevel!
   }
 
@@ -38,6 +41,7 @@ export const schema = gql`
     title: String
     writeup: String
     attachmentURL: String
+    imageURL: String
     visibility: VisibilityLevel
   }
 
@@ -45,7 +49,9 @@ export const schema = gql`
     createPost(input: CreatePostInput!): Post! @requireAuth
     updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
     deletePost(id: Int!): Post! @requireAuth
-    addUserLike(id: Int!): Post! @requireAuth
-    removeUserLike(id: Int!): Post! @requireAuth
+    addPostLike(id: Int!): Post! @requireAuth
+    removePostLike(id: Int!): Post! @requireAuth
+    savePost(id: Int!): Post! @requireAuth
+    unsavePost(id: Int!): Post! @requireAuth
   }
 `

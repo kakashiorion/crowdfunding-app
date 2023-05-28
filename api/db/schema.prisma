@@ -11,12 +11,12 @@ generator client {
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
 // to create migrations for them and apply to your dev DB.
 
-//TODO: Implement SupaBase Storage for profile pic
+//TODO: Implement upload profile pic - phase 2
 model User {
   id                  Int                  @id @default(autoincrement())
   email               String               @unique
-  hashedPassword      String               @default("")
-  salt                String               @default("")
+  hashedPassword      String
+  salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
   profilePicURL       String?
@@ -38,11 +38,13 @@ model User {
   posts               Post[]               @relation("Poster")
   comments            Comment[]            @relation("Commenter")
   likedPosts          Post[]               @relation("UserLikesPost")
-  //TODO: Save post
+  savedPosts          Post[]               @relation("UserSavedPost")
   likedComments       Comment[]            @relation("UserLikesComment")
   connections         Connection[]         @relation("Connection")
   followedBy          User[]               @relation("UserFollows")
   following           User[]               @relation("UserFollows")
+  blocking            User[]               @relation("UserBlocked")
+  blockedBy           User[]               @relation("UserBlocked")
   messageVisibility   VisibilityLevel      @default(PUBLIC)
   activityVisbility   VisibilityLevel      @default(PUBLIC)
   profileVisbility    VisibilityLevel      @default(FOLLOWERS)
@@ -129,7 +131,6 @@ model Investor {
   updatedAt             DateTime            @updatedAt
 }
 
-//TODO: Need to upload city data in Location table
 model Location {
   id        Int      @id @default(autoincrement())
   state     String
@@ -316,49 +317,22 @@ model SectorCategory {
   @@unique([sector, category])
 }
 
-//TODO: First level of sectors
 enum Sector {
   EDUCATION
   HEALTHCARE
-  PHARMACEUTICALS
   BANKING_AND_FINANCE
   ENERGY
-  CONSUMER_GOODS
-  RETAIL_ECOMMERCE
+  RETAIL
   REAL_ESTATE
-  FOOD_AND_BEVERAGE
-  IT
-  IOT
+  INFORMATION_TECHNOLOGY
+  SCIENCE_AND_TECHNOLOGY
   AGRICULTURE
   MANUFACTURING
-  FASHION
-  MEDIA
-  GAMING
-  ENTERTAINMENT
-  TELECOM
-  LOGISTICS
+  MEDIA_AND_ENTERTAINMENT
+  TELECOMMUNICATIONS
   TRANSPORTATION
-  AUTOMOTIVE
-  AVIATION
-  HEAVY_MACHINERY
-  CHEMICAL
-  CONSTRUCTION
-  DEFENCE
-  ELECTRONICS
-  FISHERIES
-  MINING
-  BIOTECHNOLOGY
-  LEGAL
-  SPORTS_AND_FITNESS
-  WASTE_MANAGEMENT
-  WATER_MANAGEMENT
-  TRAVEL_AND_HOSPITALITY
-  SECURITY
-  SOCIAL_SERVICE
-  MARKETING
-  HUMAN_RESOURCES
-  BUSINESS_MANAGEMENT
-  AUTOMATION
+  FOOD_AND_TOURISM
+  OTHER
 }
 
 model StartupBackground {
@@ -612,6 +586,7 @@ enum OfferStatus {
   CLOSED
 }
 
+//TODO: Implement other offer room features such as polling, bidding, etc. - phase 2
 model OfferRoom {
   id                Int                @id
   offer             Offer              @relation("OfferRoom", fields: [id], references: [id])
@@ -624,7 +599,6 @@ model OfferRoom {
   negotiationTable  NegotiationTable?  @relation("NegotiationTable")
   questions         OfferQuestion[]    @relation("Questions")
   resourceLinks     String[]
-  //TODO: Implement other offer room features such as polling, bidding, etc.
   joinLimit         Int                @default(50)
   timelineDays      Int                @default(15)
   createdAt         DateTime           @default(now())
@@ -699,10 +673,11 @@ model Post {
   posterID      Int
   comments      Comment[]
   likedByUsers  User[]          @relation("UserLikesPost")
+  savedByUsers  User[]          @relation("UserSavedPost")
   title         String
   writeup       String?
   attachmentURL String? //Attached link
-  imageURL      String?
+  imageURL      String? //Attached image
   visibility    VisibilityLevel @default(PUBLIC)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt

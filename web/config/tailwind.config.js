@@ -30,7 +30,7 @@ module.exports = {
     backgroundColor: ({ theme }) => theme('colors'),
     colors: {
       black: {
-        DEFAULT: '#000000',
+        DEFAULT: '#0f0f0f',
         l1: '#191919',
         l2: '#323232',
         l3: '#4b4b4b',
