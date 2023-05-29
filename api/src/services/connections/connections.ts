@@ -10,6 +10,72 @@ export const connections: QueryResolvers['connections'] = () => {
   return db.connection.findMany()
 }
 
+export const recentConnectionConnections = () => {
+  return db.connection.findMany({
+    where: {
+      createdAt: {
+        //Get last 7 days posts
+        gte: new Date(Date.now() - 604800000),
+      },
+      status: {
+        equals: 'ACCEPTED',
+      },
+      users: {
+        every: {
+          type: {
+            equals: 'INVESTOR',
+          },
+        },
+        some: {
+          activityVisbility: { in: ['CONNECTIONS', 'FOLLOWERS', 'PUBLIC'] },
+          connections: {
+            some: {
+              users: {
+                some: {
+                  id: {
+                    equals: context.currentUser?.id,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+}
+
+export const recentFollowingConnections = () => {
+  return db.connection.findMany({
+    where: {
+      createdAt: {
+        //Get last 7 days posts
+        gte: new Date(Date.now() - 604800000),
+      },
+      status: {
+        equals: 'ACCEPTED',
+      },
+      users: {
+        every: {
+          type: {
+            equals: 'INVESTOR',
+          },
+        },
+        some: {
+          activityVisbility: { in: ['FOLLOWERS', 'PUBLIC'] },
+          followedBy: {
+            some: {
+              id: {
+                equals: context.currentUser?.id,
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+}
+
 export const connectionsByUserId: QueryResolvers['connectionsByUserId'] =
   () => {
     return db.connection.findMany({

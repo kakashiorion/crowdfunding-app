@@ -32,7 +32,7 @@ export const schema = gql`
     createComment(input: CreateCommentInput!): Comment! @requireAuth
     updateComment(id: Int!, input: UpdateCommentInput!): Comment! @requireAuth
     deleteComment(id: Int!): Comment! @requireAuth
-    addCommentLike(id: Int!): Comment! @requireAuth
-    removeCommentLike(id: Int!): Comment! @requireAuth
+    likeComment(id: Int!): Comment! @requireAuth
+    unlikeComment(id: Int!): Comment! @requireAuth
   }
 `

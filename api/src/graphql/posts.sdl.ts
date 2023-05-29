@@ -24,6 +24,9 @@ export const schema = gql`
 
   type Query {
     posts: [Post!]! @requireAuth
+    recentConnectionPosts: [Post!]! @requireAuth
+    recentFollowingPosts: [Post!]! @requireAuth
+    recentPublicPosts: [Post!]! @requireAuth
     post(id: Int!): Post @requireAuth
   }
 

@@ -4,7 +4,6 @@ import moment from 'moment'
 import CommentIcon from 'public/icons/comment.svg'
 import SaveIcon from 'public/icons/favorite.svg'
 import MoreIcon from 'public/icons/more.svg'
-// import SendIcon from 'public/icons/send.svg'
 import ShareIcon from 'public/icons/share.svg'
 import LikeIcon from 'public/icons/thumbUp.svg'
 import type {
@@ -27,8 +26,17 @@ import {
   CountClassName,
   HoverIconClassName,
   IconClassName,
+  PostActionClassName,
+  PostContentClassName,
   PostDivClassName,
+  PostFooterClassName,
+  PostImageClassName,
+  PostImageDivClassName,
   PostInteractionClassName,
+  PostInteractionTextClassName,
+  PosterHeaderClassName,
+  PosterInfoClassName,
+  PosterNameClassName,
   PosterProfilePicClassName,
 } from 'src/components/Startup/startupHomeConsts'
 
@@ -104,16 +112,10 @@ const UNSAVE_POST_MUTATION = gql`
   }
 `
 
-// const ADD_COMMENT_MUTATION = gql`
-//   mutation createComment($input: CreateCommentInput!) {
-//     createComment(input: $input) {
-//       id
-//       commenterID
-//       content
-//       createdAt
-//     }
-//   }
-// `
+export const Empty = () => {
+  //TODO: Empty post handling - phase 2
+  return <></>
+}
 
 export const Success = ({
   startupHomePost,
@@ -121,7 +123,6 @@ export const Success = ({
   FindStartupHomePostQuery,
   FindStartupHomePostQueryVariables
 >) => {
-  // const [userComment, setUserComment] = useState('')
   const [liked, setLiked] = useState(false)
   const [saved, setSaved] = useState(false)
   const { currentUser } = useAuth()
@@ -129,7 +130,6 @@ export const Success = ({
   const [removePostLike] = useMutation(REMOVE_POST_LIKE_MUTATION)
   const [savePost] = useMutation(SAVE_POST_MUTATION)
   const [unsavePost] = useMutation(UNSAVE_POST_MUTATION)
-  // const [addComment] = useMutation(ADD_COMMENT_MUTATION)
 
   const handleLike = async () => {
     if (liked) {
@@ -167,21 +167,6 @@ export const Success = ({
     }
   }
 
-  //TODO: Startup cannot comment on Investor's post - phase 2
-  // const postComment = async () => {
-  //   await addComment({
-  //     variables: {
-  //       input: {
-  //         commenterID: currentUser?.id,
-  //         postID: startupHomePost.id,
-  //         content: userComment,
-  //       },
-  //     },
-  //   }).then(() => {
-  //     setUserComment('')
-  //   })
-  // }
-
   useEffect(() => {
     setLiked(startupHomePost.likedByUsers.some((d) => d?.id == currentUser?.id))
     setSaved(startupHomePost.savedByUsers.some((d) => d?.id == currentUser?.id))
@@ -193,8 +178,8 @@ export const Success = ({
 
   return (
     <div className={PostDivClassName}>
-      <div className="flex w-full items-center justify-between gap-3 ">
-        <div className="flex items-center gap-3 lg:gap-4">
+      <div className={PosterHeaderClassName}>
+        <div className={PosterInfoClassName}>
           <button
             className={PosterProfilePicClassName}
             onClick={() => {
@@ -209,7 +194,7 @@ export const Success = ({
               startupHomePost.poster.investor?.name[0].toUpperCase()
             }
           </button>
-          <div className="flex flex-col items-start justify-center">
+          <div className={PosterNameClassName}>
             <HoverTertiaryTextButton
               label={startupHomePost.poster.investor?.name ?? ''}
               action={() => {
@@ -224,7 +209,7 @@ export const Success = ({
             <SmallLabel label={moment(startupHomePost.createdAt).fromNow()} />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-2">
+        <div className={PostActionClassName}>
           <SaveIcon
             className={`h-6 w-6 ${
               saved
@@ -238,12 +223,12 @@ export const Success = ({
           <MoreIcon
             className={HoverIconClassName}
             onClick={() => {
-              //TODO: Open more info modal - phase 2
+              //TODO: Open more info modal
             }}
           />
         </div>
       </div>
-      <div className="flex w-full flex-col items-start justify-start gap-1 lg:gap-2">
+      <div className={PostContentClassName}>
         <TertiaryMediumLabel label={startupHomePost.title} />
         {startupHomePost.writeup && (
           <TextLabel label={startupHomePost.writeup} />
@@ -259,15 +244,15 @@ export const Success = ({
         )}
       </div>
       {startupHomePost.imageURL && (
-        <div className="flex w-full justify-center bg-white dark:bg-black">
+        <div className={PostImageDivClassName}>
           <img
-            className="object-fill"
+            className={PostImageClassName}
             src={startupHomePost.imageURL}
             alt="Post attachment"
           />
         </div>
       )}
-      <div className="flex w-full flex-wrap items-center justify-between gap-2 lg:gap-3">
+      <div className={PostFooterClassName}>
         <button
           className={PostInteractionClassName}
           onClick={() => handleLike()}
@@ -279,7 +264,7 @@ export const Success = ({
                 : 'fill-black group-hover:origin-bottom-left group-hover:-rotate-12 group-hover:fill-tertiary-d1 dark:fill-white group-hover:dark:fill-tertiary-l1'
             }`}
           />
-          <div className="hidden lg:block">
+          <div className={PostInteractionTextClassName}>
             <SubTextLabel label={'Likes'} />
           </div>
           {startupHomePost.comments && (
@@ -296,7 +281,7 @@ export const Success = ({
           }}
         >
           <CommentIcon className={IconClassName} />
-          <div className="hidden lg:block">
+          <div className={PostInteractionTextClassName}>
             <SubTextLabel label={'Comments'} />
           </div>
           {startupHomePost.comments && (
@@ -308,36 +293,15 @@ export const Success = ({
         <button
           className={PostInteractionClassName}
           onClick={() => {
-            //TODO: Open post share modal - phase 2
+            //TODO: Open post share modal
           }}
         >
           <ShareIcon className={IconClassName} />
-          <div className="hidden lg:block">
+          <div className={PostInteractionTextClassName}>
             <SubTextLabel label={'Share'} />
           </div>
         </button>
       </div>
-      {/* <div className="flex w-full items-center justify-center gap-1 rounded border-2 border-white-d2 bg-white-d2 px-2 py-1 text-left text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:bg-white focus:outline-none dark:border-black-l2 dark:bg-black-l2 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 dark:focus:bg-black lg:gap-2 lg:px-3 lg:py-1.5 lg:text-b1">
-        <input
-          value={userComment}
-          placeholder="What do you think?"
-          type="text"
-          onChange={(e) => {
-            setUserComment(e.target.value)
-          }}
-          className={`w-full bg-transparent text-left text-b2 text-black placeholder:text-black-l4 focus:outline-none  dark:text-white dark:placeholder:text-white-d4 lg:text-b1`}
-        ></input>
-        <SendIcon
-          className="h-7 w-7 fill-black hover:fill-tertiary-d1 dark:fill-white dark:hover:fill-tertiary-l1 lg:h-8 lg:w-8"
-          onClick={() => {
-            //Add comment in DB
-            if (userComment != '') {
-              postComment()
-            }
-            //TODO: Edit comment feature - phase 2
-          }}
-        />
-      </div> */}
     </div>
   )
 }

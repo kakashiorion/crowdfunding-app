@@ -10,6 +10,81 @@ export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
 }
 
+export const recentConnectionPosts = () => {
+  return db.post.findMany({
+    where: {
+      createdAt: {
+        //Get last 7 days posts
+        gte: new Date(Date.now() - 604800000),
+      },
+      visibility: {
+        equals: 'CONNECTIONS',
+      },
+      poster: {
+        type: {
+          equals: 'INVESTOR',
+        },
+        connections: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: context.currentUser?.id,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+}
+
+export const recentFollowingPosts = () => {
+  return db.post.findMany({
+    where: {
+      createdAt: {
+        //Get last 7 days posts
+        gte: new Date(Date.now() - 604800000),
+      },
+      visibility: {
+        equals: 'FOLLOWERS',
+      },
+      poster: {
+        type: {
+          equals: 'INVESTOR',
+        },
+        followedBy: {
+          some: {
+            id: {
+              equals: context.currentUser?.id,
+            },
+          },
+        },
+      },
+    },
+  })
+}
+
+export const recentPublicPosts = () => {
+  return db.post.findMany({
+    where: {
+      createdAt: {
+        //Get last 7 days posts
+        gte: new Date(Date.now() - 604800000),
+      },
+      visibility: {
+        equals: 'PUBLIC',
+      },
+      poster: {
+        type: {
+          equals: 'INVESTOR',
+        },
+      },
+    },
+  })
+}
+
 export const post: QueryResolvers['post'] = ({ id }) => {
   return db.post.findUnique({
     where: { id },

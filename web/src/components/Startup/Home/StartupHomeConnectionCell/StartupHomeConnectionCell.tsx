@@ -4,7 +4,7 @@ import type {
 } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { HoverTertiaryTextButton } from 'src/components/Button/Button'
 import { TextLabel } from 'src/components/Label/Label'
@@ -25,20 +25,13 @@ export const QUERY = gql`
           name
         }
       }
-      status
     }
   }
 `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({
-  error,
-}: CellFailureProps<FindStartupHomeConnectionQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error?.message}</div>
-)
+export const Empty = () => {
+  return <></>
+}
 
 export const Success = ({
   startupHomeConnection,
@@ -60,7 +53,7 @@ export const Success = ({
         }}
       >
         {
-          //TODO: Add Profile pic as BG
+          //TODO: Add Profile pic as BG - phase 2
           startupHomeConnection.users[0]?.investor?.name[0].toUpperCase()
         }
       </button>
@@ -88,7 +81,7 @@ export const Success = ({
         }}
       >
         {
-          //TODO: Add Profile pic as BG
+          //TODO: Add Profile pic as BG - phase 2
           startupHomeConnection.users[1]?.investor?.name[0].toUpperCase()
         }
       </button>

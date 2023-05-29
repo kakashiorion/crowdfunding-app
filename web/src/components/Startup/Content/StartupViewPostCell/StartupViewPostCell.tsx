@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import moment from 'moment'
 import CommentIcon from 'public/icons/comment.svg'
+import EmptyIcon from 'public/icons/dnd.svg'
 import SaveIcon from 'public/icons/favorite.svg'
 import MoreIcon from 'public/icons/more.svg'
 import SendIcon from 'public/icons/send.svg'
@@ -27,13 +28,27 @@ import {
   TertiaryMediumLabel,
   TextLabel,
 } from 'src/components/Label/Label'
+import StartupViewCommentCell from 'src/components/Startup/Content/StartupViewCommentCell'
 import {
   PosterProfilePicClassName,
   HoverIconClassName,
   PostInteractionClassName,
   CountClassName,
   IconClassName,
-  PostDivClassName,
+  ViewPostDivClassName,
+  PosterInfoClassName,
+  PosterHeaderClassName,
+  PosterNameClassName,
+  PostActionClassName,
+  PostContentClassName,
+  PostFooterClassName,
+  PostImageDivClassName,
+  PostInteractionTextClassName,
+  PostImageClassName,
+  AddCommentClassName,
+  CommentInputClassName,
+  CommentListClassName,
+  PostDividerClassName,
 } from 'src/components/Startup/startupHomeConsts'
 
 /*
@@ -81,21 +96,6 @@ export const QUERY = gql`
       }
       comments {
         id
-        content
-        createdAt
-        likedByUsers {
-          id
-        }
-        commenterID
-        commenter {
-          profilePicURL
-          investor {
-            name
-          }
-          startup {
-            name
-          }
-        }
       }
     }
   }
@@ -144,34 +144,58 @@ const UNSAVE_POST_MUTATION = gql`
   }
 `
 
+const ADD_COMMENT_MUTATION = gql`
+  mutation createComment($input: CreateCommentInput!) {
+    createComment(input: $input) {
+      id
+      content
+      createdAt
+    }
+  }
+`
+
+export const beforeQuery = ({ id }: { id: number }) => {
+  return {
+    variables: { id: id },
+    fetchPolicy: 'cache-first',
+    pollInterval: 30000,
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isEmpty = (data: any, { isDataEmpty }: { isDataEmpty: any }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { currentUser } = useAuth()
   let showEmpty = false
-  if (data.startupViewPost.poster.type == 'STARTUP') {
-    //Check if Startup is the poster
-    if (data.startupViewPost.posterID != currentUser?.id) {
-      showEmpty = true
-    }
-  } else if (data.startupViewPost.poster.type == 'INVESTOR') {
-    if (data.startupViewPost.visibility == 'CONNECTIONS') {
-      //Check if Startup is a connection of poster
-      showEmpty = !data.startupViewPost.poster.connections.some((d: any) =>
-        d.users.includes(currentUser?.id)
-      )
-    } else if (data.startupViewPost.visibility == 'FOLLOWERS') {
-      //Check if Startup is a follower of poster
-      showEmpty = !data.startupViewPost.poster.followedBy.some((d: any) =>
-        d.includes(currentUser?.id)
-      )
+  if (!data.startupViewPost) {
+    showEmpty = true
+  } else {
+    if (data.startupViewPost.poster.type == 'STARTUP') {
+      //Check if Startup is the poster
+      if (data.startupViewPost.posterID != currentUser?.id) {
+        showEmpty = true
+      }
+    } else if (data.startupViewPost.poster.type == 'INVESTOR') {
+      if (data.startupViewPost.visibility == 'CONNECTIONS') {
+        //Check if Startup is a connection of poster
+        showEmpty = !data.startupViewPost.poster.connections.some(
+          (d: { users: { id: number }[] }) =>
+            d.users[0].id == currentUser?.id || d.users[1].id == currentUser?.id
+        )
+      } else if (data.startupViewPost.visibility == 'FOLLOWERS') {
+        //Check if Startup is a follower of poster
+        showEmpty = !data.startupViewPost.poster.followedBy.some(
+          (d: { id: number }) => d.id == currentUser?.id
+        )
+      }
     }
   }
   return isDataEmpty(data) || showEmpty
 }
 
 export const Empty = () => (
-  <div className="flex h-full w-full flex-col items-center justify-center gap-3 lg:gap-4">
-    {/* TODO: Add illustration - phase 2 */}
+  <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center lg:gap-6">
+    <EmptyIcon className="h-13 w-13 fill-tertiary-d1 dark:fill-tertiary-l1 lg:h-15 lg:w-15" />
     <GreySubTitleLabel label="No such post exists or you may not have the access!" />
     <TertiaryFilledButton label="GO BACK" action={() => back()} />
   </div>
@@ -183,26 +207,27 @@ export const Success = ({
   FindStartupViewPostQuery,
   FindStartupViewPostQueryVariables
 >) => {
+  const { currentUser } = useAuth()
   const [userComment, setUserComment] = useState('')
   const [liked, setLiked] = useState(false)
   const [saved, setSaved] = useState(false)
-  const { currentUser } = useAuth()
+  const [commentsCount, setCommentsCount] = useState(0)
   const [addPostLike] = useMutation(ADD_POST_LIKE_MUTATION)
   const [removePostLike] = useMutation(REMOVE_POST_LIKE_MUTATION)
   const [savePost] = useMutation(SAVE_POST_MUTATION)
   const [unsavePost] = useMutation(UNSAVE_POST_MUTATION)
-  // const [addComment] = useMutation(ADD_COMMENT_MUTATION)
+  const [addComment] = useMutation(ADD_COMMENT_MUTATION, {
+    refetchQueries: [{ query: QUERY, variables: { id: startupViewPost.id } }],
+  })
 
-  const handleLike = async () => {
+  const handleLikePost = async () => {
     if (liked) {
-      //Remove like from Post
       await removePostLike({
         variables: {
           id: startupViewPost.id,
         },
       })
     } else {
-      //Add like to Post
       await addPostLike({
         variables: {
           id: startupViewPost.id,
@@ -213,14 +238,12 @@ export const Success = ({
 
   const handleSave = async () => {
     if (saved) {
-      //Unsave Post
       await unsavePost({
         variables: {
           id: startupViewPost.id,
         },
       })
     } else {
-      //Save Post
       await savePost({
         variables: {
           id: startupViewPost.id,
@@ -230,7 +253,7 @@ export const Success = ({
   }
 
   //Startup can comment on self post
-  const postComment = async () => {
+  const handleAddComment = async () => {
     await addComment({
       variables: {
         input: {
@@ -247,55 +270,75 @@ export const Success = ({
   useEffect(() => {
     setLiked(startupViewPost.likedByUsers.some((d) => d?.id == currentUser?.id))
     setSaved(startupViewPost.savedByUsers.some((d) => d?.id == currentUser?.id))
+    setCommentsCount(startupViewPost.comments.length)
   }, [
     currentUser?.id,
     startupViewPost.likedByUsers,
     startupViewPost.savedByUsers,
+    startupViewPost.comments.length,
   ])
   return (
-    <div className={PostDivClassName}>
-      <div className="flex w-full items-center justify-between gap-3 ">
-        <div className="flex items-center gap-3 lg:gap-4">
+    <div className={ViewPostDivClassName}>
+      <div className={PosterHeaderClassName}>
+        <div className={PosterInfoClassName}>
           <button
             className={PosterProfilePicClassName}
             onClick={() => {
-              //Go to investor's profile
-              navigate(
-                routes.startupInvestorProfile({ id: startupViewPost.posterID })
-              )
-            }}
-          >
-            {
-              //TODO: Add Profile pic as BG - phase 2
-              startupViewPost.poster.investor?.name[0].toUpperCase()
-            }
-          </button>
-          <div className="flex flex-col items-start justify-center">
-            <HoverTertiaryTextButton
-              label={startupViewPost.poster.investor?.name ?? ''}
-              action={() => {
-                //Go to investor's profile
+              //Go to poster's profile
+              if (startupViewPost.poster.type == 'INVESTOR') {
                 navigate(
                   routes.startupInvestorProfile({
                     id: startupViewPost.posterID,
                   })
                 )
+              } else {
+                navigate(routes.startupMyProfile())
+              }
+            }}
+          >
+            {
+              //TODO: Add Profile pic as BG - phase 2
+              startupViewPost.poster.type == 'INVESTOR'
+                ? startupViewPost.poster.investor?.name[0].toUpperCase()
+                : startupViewPost.poster.startup?.name[0].toUpperCase()
+            }
+          </button>
+          <div className={PosterNameClassName}>
+            <HoverTertiaryTextButton
+              label={
+                (startupViewPost.poster.type == 'INVESTOR'
+                  ? startupViewPost.poster.investor?.name
+                  : startupViewPost.poster.startup?.name) ?? ''
+              }
+              action={() => {
+                //Go to poster's profile
+                if (startupViewPost.poster.type == 'INVESTOR') {
+                  navigate(
+                    routes.startupInvestorProfile({
+                      id: startupViewPost.posterID,
+                    })
+                  )
+                } else {
+                  navigate(routes.startupMyProfile())
+                }
               }}
             />
             <SmallLabel label={moment(startupViewPost.createdAt).fromNow()} />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-2">
-          <SaveIcon
-            className={`h-6 w-6 ${
-              saved
-                ? 'scale-125 fill-tertiary-d1 transition dark:fill-tertiary-l1'
-                : 'fill-black duration-200 hover:origin-bottom-left hover:-rotate-12 hover:fill-tertiary-d1 dark:fill-white hover:dark:fill-tertiary-l1'
-            }`}
-            onClick={() => {
-              handleSave()
-            }}
-          />
+        <div className={PostActionClassName}>
+          {startupViewPost.poster.type == 'INVESTOR' && (
+            <SaveIcon
+              className={`h-6 w-6 ${
+                saved
+                  ? 'scale-125 fill-tertiary-d1 transition dark:fill-tertiary-l1'
+                  : 'fill-black duration-200 hover:origin-bottom-left hover:-rotate-12 hover:fill-tertiary-d1 dark:fill-white hover:dark:fill-tertiary-l1'
+              }`}
+              onClick={() => {
+                handleSave()
+              }}
+            />
+          )}
           <MoreIcon
             className={HoverIconClassName}
             onClick={() => {
@@ -304,7 +347,7 @@ export const Success = ({
           />
         </div>
       </div>
-      <div className="flex w-full flex-col items-start justify-start gap-1 lg:gap-2">
+      <div className={PostContentClassName}>
         <TertiaryMediumLabel label={startupViewPost.title} />
         {startupViewPost.writeup && (
           <TextLabel label={startupViewPost.writeup} />
@@ -320,18 +363,18 @@ export const Success = ({
         )}
       </div>
       {startupViewPost.imageURL && (
-        <div className="flex w-full justify-center bg-white dark:bg-black">
+        <div className={PostImageDivClassName}>
           <img
-            className="object-fill"
+            className={PostImageClassName}
             src={startupViewPost.imageURL}
             alt="Post attachment"
           />
         </div>
       )}
-      <div className="flex w-full flex-wrap items-center justify-between gap-2 lg:gap-3">
+      <div className={PostFooterClassName}>
         <button
           className={PostInteractionClassName}
-          onClick={() => handleLike()}
+          onClick={() => handleLikePost()}
         >
           <LikeIcon
             className={`h-6 w-6 ${
@@ -340,7 +383,7 @@ export const Success = ({
                 : 'fill-black group-hover:origin-bottom-left group-hover:-rotate-12 group-hover:fill-tertiary-d1 dark:fill-white group-hover:dark:fill-tertiary-l1'
             }`}
           />
-          <div className="hidden lg:block">
+          <div className={PostInteractionTextClassName}>
             <SubTextLabel label={'Likes'} />
           </div>
           {startupViewPost.comments && (
@@ -352,18 +395,16 @@ export const Success = ({
         <button
           className={PostInteractionClassName}
           onClick={() => {
-            //Go to post details page
+            //Navigate to post details page (same as this)
             navigate(routes.startupPost({ id: startupViewPost.id }))
           }}
         >
           <CommentIcon className={IconClassName} />
-          <div className="hidden lg:block">
+          <div className={PostInteractionTextClassName}>
             <SubTextLabel label={'Comments'} />
           </div>
           {startupViewPost.comments && (
-            <div className={CountClassName}>
-              {startupViewPost.comments.length.toString()}{' '}
-            </div>
+            <div className={CountClassName}>{commentsCount.toString()}</div>
           )}
         </button>
         <button
@@ -373,32 +414,39 @@ export const Success = ({
           }}
         >
           <ShareIcon className={IconClassName} />
-          <div className="hidden lg:block">
+          <div className={PostInteractionTextClassName}>
             <SubTextLabel label={'Share'} />
           </div>
         </button>
       </div>
-      {/* <div className="flex w-full items-center justify-center gap-1 rounded border-2 border-white-d2 bg-white-d2 px-2 py-1 text-left text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:bg-white focus:outline-none dark:border-black-l2 dark:bg-black-l2 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 dark:focus:bg-black lg:gap-2 lg:px-3 lg:py-1.5 lg:text-b1">
-        <input
-          value={userComment}
-          placeholder="What do you think?"
-          type="text"
-          onChange={(e) => {
-            setUserComment(e.target.value)
-          }}
-          className={`w-full bg-transparent text-left text-b2 text-black placeholder:text-black-l4 focus:outline-none  dark:text-white dark:placeholder:text-white-d4 lg:text-b1`}
-        ></input>
-        <SendIcon
-          className="h-7 w-7 fill-black hover:fill-tertiary-d1 dark:fill-white dark:hover:fill-tertiary-l1 lg:h-8 lg:w-8"
-          onClick={() => {
-            //Add comment in DB
-            if (userComment != '') {
-              postComment()
-            }
-            //TODO: Edit comment feature - phase 2
-          }}
-        />
-      </div> */}
+      {startupViewPost.poster.type == 'STARTUP' && (
+        <div className={AddCommentClassName}>
+          <input
+            value={userComment}
+            placeholder="Add comment..."
+            type="text"
+            onChange={(e) => {
+              setUserComment(e.target.value)
+            }}
+            className={CommentInputClassName}
+          ></input>
+          <SendIcon
+            className={HoverIconClassName}
+            onClick={() => {
+              if (userComment != '') {
+                handleAddComment()
+              }
+            }}
+          />
+        </div>
+      )}
+      <div className={PostDividerClassName} />
+      <div id="CommentList" className={CommentListClassName}>
+        {startupViewPost.comments &&
+          startupViewPost.comments.map((comment) => (
+            <StartupViewCommentCell key={comment?.id} id={comment?.id ?? 0} />
+          ))}
+      </div>
     </div>
   )
 }

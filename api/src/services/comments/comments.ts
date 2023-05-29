@@ -7,7 +7,7 @@ import type {
 import { db } from 'src/lib/db'
 
 export const comments: QueryResolvers['comments'] = () => {
-  return db.comment.findMany()
+  return db.comment.findMany({ orderBy: { createdAt: 'desc' } })
 }
 
 export const comment: QueryResolvers['comment'] = ({ id }) => {
@@ -34,7 +34,7 @@ export const updateComment: MutationResolvers['updateComment'] = ({
   })
 }
 
-export const addCommentLike = ({ id }: { id: number }) => {
+export const likeComment = ({ id }: { id: number }) => {
   console.log(context.currentUser?.id)
   return db.comment.update({
     where: {
@@ -50,7 +50,7 @@ export const addCommentLike = ({ id }: { id: number }) => {
   })
 }
 
-export const removeCommentLike = ({ id }: { id: number }) => {
+export const unlikeComment = ({ id }: { id: number }) => {
   console.log(context.currentUser?.id)
   return db.comment.update({
     where: {

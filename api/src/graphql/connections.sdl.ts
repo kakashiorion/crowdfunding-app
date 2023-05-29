@@ -15,6 +15,8 @@ export const schema = gql`
 
   type Query {
     connections: [Connection!]! @requireAuth
+    recentConnectionConnections: [Connection!]! @requireAuth
+    recentFollowingConnections: [Connection!]! @requireAuth
     connection(id: Int!): Connection @requireAuth
     connectionsByUserId: [Connection!]! @requireAuth
   }
