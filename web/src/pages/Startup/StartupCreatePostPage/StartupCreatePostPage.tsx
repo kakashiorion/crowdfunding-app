@@ -13,6 +13,12 @@ import {
   TertiaryTextLabel,
   TextLabel,
 } from 'src/components/Label/Label'
+import {
+  CreatePostActionClassName,
+  CreatePostDivClassName,
+  SelectInputClassName,
+  TextInputClassName,
+} from 'src/components/Startup/startupConsts'
 
 const StartupCreatePostPage = () => {
   return (
@@ -83,14 +89,15 @@ const StartupCreatePostMain = () => {
       })
     }
   }
+
   return (
     <div className="flex h-full w-full flex-col gap-3 lg:w-2/3 lg:gap-4">
       <TertiaryTextLabel label="CREATE POST" />
-      <div className="flex h-full w-full flex-col items-start justify-start gap-1 overflow-scroll rounded">
-        <TextLabel label="Title" />
+      <div className={CreatePostDivClassName}>
+        <TextLabel label="Title (required)" />
         <input
-          id="Title (required)"
-          className="w-full rounded border-2 border-black-l2 bg-white-d1 px-3 py-2 text-left text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black-l1 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-4 lg:py-2 lg:text-b1"
+          id="Title"
+          className={TextInputClassName}
           value={title}
           placeholder={'What are you thinking?'}
           onChange={(e) => {
@@ -103,7 +110,7 @@ const StartupCreatePostMain = () => {
         <TextLabel label="Description" />
         <textarea
           id="Writeup"
-          className="w-full rounded border-2 border-black-l2 bg-white-d1 px-3 py-2 text-left text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black-l1 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-4 lg:py-2 lg:text-b1"
+          className={TextInputClassName}
           value={writeUp}
           placeholder="Tell us in detail..."
           rows={3}
@@ -117,7 +124,7 @@ const StartupCreatePostMain = () => {
         <TextLabel label="Resource link" />
         <input
           id="ResourceLink"
-          className="w-full rounded border-2 border-black-l2 bg-white-d1 px-3 py-2 text-left text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black-l1 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-4 lg:py-2 lg:text-b1"
+          className={TextInputClassName}
           value={attachmentURL}
           placeholder="Share any resource link"
           onChange={(e) => {
@@ -130,7 +137,7 @@ const StartupCreatePostMain = () => {
         <TextLabel label="Image URL" />
         <input
           id="ImageURL"
-          className="w-full rounded border-2 border-black-l2 bg-white-d1 px-3 py-2 text-left text-b2 text-tertiary-d1 placeholder:text-black-l4 focus:border-tertiary-d1 focus:outline-none dark:border-white-d2 dark:bg-black-l1 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-4 lg:py-2 lg:text-b1"
+          className={TextInputClassName}
           value={imageURL}
           placeholder="Share an image"
           onChange={(e) => {
@@ -142,7 +149,7 @@ const StartupCreatePostMain = () => {
         <Divider />
         <TextLabel label="Select visibility level" />
         <select
-          className="w-full rounded border-2 border-black-l2 bg-white-d1 px-4 py-2 text-center text-b2 text-tertiary-d1 focus:border-tertiary-d1 dark:border-white-d2 dark:bg-black-l1 dark:text-tertiary-l1 dark:placeholder:text-white-d4 dark:focus:border-tertiary-l1 lg:px-5 lg:py-2.5 lg:text-b1"
+          className={SelectInputClassName}
           value={visibility}
           onChange={(e) => {
             setVisibility(e.target.value)
@@ -155,7 +162,7 @@ const StartupCreatePostMain = () => {
           ))}
         </select>
         <Divider />
-        <div className="flex w-full items-center justify-start gap-2 lg:gap-3">
+        <div className={CreatePostActionClassName}>
           <TertiaryFilledButton label="PUBLISH" action={() => submit()} />
           <HoverErrorTextButton label="CANCEL" action={() => back()} />
         </div>
@@ -165,14 +172,17 @@ const StartupCreatePostMain = () => {
 }
 
 const Divider = () => {
-  return <div className="h-2 lg:h-3"></div>
+  return <div className="h-1"></div>
 }
 
 const StartupCreatePostSide = () => {
   return (
-    <div className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50">
-      <div className="absolute bottom-[54px] right-[-138px] h-13 w-19 rounded-full bg-tertiary-d2/50 dark:bg-tertiary-l2/50"></div>
-      <div className="absolute bottom-[-138px] right-[54px] h-19 w-13 rounded-full bg-tertiary-d3/50 dark:bg-tertiary-l3/50"></div>
+    <div
+      aria-hidden
+      className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50"
+    >
+      <div className="absolute bottom-[54px] right-[-42px] h-12 w-17 rounded bg-tertiary-d2/50 dark:bg-tertiary-l2/50"></div>
+      <div className="absolute bottom-[-42px] right-[54px] h-17 w-12 rounded bg-tertiary-d3/50 dark:bg-tertiary-l3/50"></div>
     </div>
   )
 }

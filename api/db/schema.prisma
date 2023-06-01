@@ -4,8 +4,9 @@ datasource db {
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = "native"
+  provider        = "prisma-client-js"
+  binaryTargets   = "native"
+  previewFeatures = ["filteredRelationCount"]
 }
 
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
@@ -20,8 +21,8 @@ model User {
   resetToken          String?
   resetTokenExpiresAt DateTime?
   profilePicURL       String?
-  lastActive          DateTime             @default(now()) //When the user interacted with the platform last
-  mobile              String? //Not required during signup
+  lastActive          DateTime             @default(now()) //TODO: When the user interacted with the platform last
+  mobile              String?
   otp                 String?
   otpExpiresAt        DateTime?
   webAuthnChallenge   String?              @unique
@@ -112,13 +113,14 @@ model Investor {
   user                  User                @relation(fields: [id], references: [id])
   name                  String
   dateOfBirth           DateTime?
-  locationID            Int //from Location table
+  locationID            Int
+  location              Location            @relation("InvestorLocation", fields: [locationID], references: [id])
   linkedInURL           String?
   websiteURL            String?
   eduBG                 EducationBG
   yearsOfWorkEx         SizeRange
   numberOfCompanies     SizeRange
-  workedInSectors       Sector[] // from Sector table
+  workedInSectors       Sector[]
   investorExp           InvestorExperience?
   investorObjective     InvestorObjective?
   participatingInOffers OfferRoom[]         @relation("Participant")
@@ -132,13 +134,15 @@ model Investor {
 }
 
 model Location {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   state     String
   city      String?
   lat       Float?
   long      Float?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  startups  Startup[]  @relation("StartupLocation")
+  investors Investor[] @relation("InvestorLocation")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@unique([state, city])
 }
@@ -295,8 +299,10 @@ model Startup {
   dateIncorporated  DateTime
   linkedInURL       String?
   websiteURL        String?
-  locationID        Int //from Location table
-  sectorCategoryID  Int //from SectorCategory table
+  locationID        Int
+  location          Location           @relation("StartupLocation", fields: [locationID], references: [id])
+  sectorCategoryID  Int
+  sectorCategory    SectorCategory     @relation("StartupSectorCategory", fields: [sectorCategoryID], references: [id])
   startupBackground StartupBackground?
   startupBusiness   StartupBusiness?
   startupMarket     StartupMarket?
@@ -308,11 +314,12 @@ model Startup {
 }
 
 model SectorCategory {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   sector    Sector
   category  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  startup   Startup[] @relation("StartupSectorCategory")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@unique([sector, category])
 }
@@ -676,8 +683,8 @@ model Post {
   savedByUsers  User[]          @relation("UserSavedPost")
   title         String
   writeup       String?
-  attachmentURL String? //Attached link
-  imageURL      String? //Attached image
+  attachmentURL String?
+  imageURL      String?
   visibility    VisibilityLevel @default(PUBLIC)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -697,7 +704,7 @@ model Comment {
 
 model DirectConversation {
   id        Int             @id @default(autoincrement())
-  users     User[]          @relation("DM") //the 2 DMers
+  users     User[]          @relation("DM")
   messages  DirectMessage[]
   isActive  Boolean         @default(true)
   createdAt DateTime        @default(now())

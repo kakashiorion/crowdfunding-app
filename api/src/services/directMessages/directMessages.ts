@@ -10,6 +10,17 @@ export const directMessages: QueryResolvers['directMessages'] = () => {
   return db.directMessage.findMany()
 }
 
+export const directMessagesByConversationID = ({ id }: { id: number }) => {
+  return db.directMessage.findMany({
+    where: {
+      conversationID: id,
+    },
+    orderBy: {
+      createdAt: 'asc', // For sorting messages in order of creation
+    },
+  })
+}
+
 export const directMessage: QueryResolvers['directMessage'] = ({ id }) => {
   return db.directMessage.findUnique({
     where: { id },
@@ -31,6 +42,23 @@ export const updateDirectMessage: MutationResolvers['updateDirectMessage'] = ({
   return db.directMessage.update({
     data: input,
     where: { id },
+  })
+}
+
+export const updateReadMessages = ({ convoID }: { convoID: number }) => {
+  return db.directMessage.updateMany({
+    where: {
+      conversationID: {
+        equals: convoID,
+      },
+      senderID: {
+        not: context.currentUser?.id,
+      },
+      unread: true,
+    },
+    data: {
+      unread: false,
+    },
   })
 }
 

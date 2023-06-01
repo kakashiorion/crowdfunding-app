@@ -6,7 +6,7 @@ import { SubTextLabel, TitleLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query InvestorHomeMetricsQuery {
-    connections: connectionsByUserId {
+    connections: myConnections {
       id
       status
     }

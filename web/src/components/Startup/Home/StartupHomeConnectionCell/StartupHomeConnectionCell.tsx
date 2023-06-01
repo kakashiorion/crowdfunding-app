@@ -11,7 +11,7 @@ import { TextLabel } from 'src/components/Label/Label'
 import {
   ConnDivClassName,
   PosterProfilePicClassName,
-} from 'src/components/Startup/startupHomeConsts'
+} from 'src/components/Startup/startupConsts'
 
 export const QUERY = gql`
   query FindStartupHomeConnectionQuery($id: Int!) {

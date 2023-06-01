@@ -20,6 +20,7 @@ import { useAuth } from 'src/auth'
 import {
   HoverTertiaryTextButton,
   TertiaryFilledButton,
+  TertiaryIconButton,
 } from 'src/components/Button/Button'
 import {
   GreySubTitleLabel,
@@ -28,7 +29,7 @@ import {
   TertiaryMediumLabel,
   TextLabel,
 } from 'src/components/Label/Label'
-import StartupViewCommentCell from 'src/components/Startup/Content/StartupViewCommentCell'
+import StartupViewCommentCell from 'src/components/Startup/Post/StartupViewCommentCell'
 import {
   PosterProfilePicClassName,
   HoverIconClassName,
@@ -45,11 +46,14 @@ import {
   PostImageDivClassName,
   PostInteractionTextClassName,
   PostImageClassName,
-  AddCommentClassName,
-  CommentInputClassName,
   CommentListClassName,
   PostDividerClassName,
-} from 'src/components/Startup/startupHomeConsts'
+  TextInputClassName,
+  InputDivClassName,
+  LightIconClassName,
+  EmptyDivClassName,
+  EmptyIconClassName,
+} from 'src/components/Startup/startupConsts'
 
 /*
 Checks to be made before startup user views a post:
@@ -61,7 +65,7 @@ Checks to be made before startup user views a post:
 
 export const QUERY = gql`
   query FindStartupViewPostQuery($id: Int!) {
-    startupViewPost: post(id: $id) {
+    startupViewPost: startupViewPost(id: $id) {
       id
       title
       writeup
@@ -77,20 +81,24 @@ export const QUERY = gql`
       }
       posterID
       poster {
+        id
         type
         profilePicURL
         followedBy {
           id
         }
         connections {
+          id
           users {
             id
           }
         }
         investor {
+          id
           name
         }
         startup {
+          id
           name
         }
       }
@@ -162,40 +170,9 @@ export const beforeQuery = ({ id }: { id: number }) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isEmpty = (data: any, { isDataEmpty }: { isDataEmpty: any }) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { currentUser } = useAuth()
-  let showEmpty = false
-  if (!data.startupViewPost) {
-    showEmpty = true
-  } else {
-    if (data.startupViewPost.poster.type == 'STARTUP') {
-      //Check if Startup is the poster
-      if (data.startupViewPost.posterID != currentUser?.id) {
-        showEmpty = true
-      }
-    } else if (data.startupViewPost.poster.type == 'INVESTOR') {
-      if (data.startupViewPost.visibility == 'CONNECTIONS') {
-        //Check if Startup is a connection of poster
-        showEmpty = !data.startupViewPost.poster.connections.some(
-          (d: { users: { id: number }[] }) =>
-            d.users[0].id == currentUser?.id || d.users[1].id == currentUser?.id
-        )
-      } else if (data.startupViewPost.visibility == 'FOLLOWERS') {
-        //Check if Startup is a follower of poster
-        showEmpty = !data.startupViewPost.poster.followedBy.some(
-          (d: { id: number }) => d.id == currentUser?.id
-        )
-      }
-    }
-  }
-  return isDataEmpty(data) || showEmpty
-}
-
 export const Empty = () => (
-  <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center lg:gap-6">
-    <EmptyIcon className="h-13 w-13 fill-tertiary-d1 dark:fill-tertiary-l1 lg:h-15 lg:w-15" />
+  <div className={EmptyDivClassName}>
+    <EmptyIcon className={EmptyIconClassName} />
     <GreySubTitleLabel label="No such post exists or you may not have the access!" />
     <TertiaryFilledButton label="GO BACK" action={() => back()} />
   </div>
@@ -420,7 +397,7 @@ export const Success = ({
         </button>
       </div>
       {startupViewPost.poster.type == 'STARTUP' && (
-        <div className={AddCommentClassName}>
+        <div className={InputDivClassName}>
           <input
             value={userComment}
             placeholder="Add comment..."
@@ -428,11 +405,11 @@ export const Success = ({
             onChange={(e) => {
               setUserComment(e.target.value)
             }}
-            className={CommentInputClassName}
-          ></input>
-          <SendIcon
-            className={HoverIconClassName}
-            onClick={() => {
+            className={TextInputClassName}
+          />
+          <TertiaryIconButton
+            icon={<SendIcon className={LightIconClassName} />}
+            action={() => {
               if (userComment != '') {
                 handleAddComment()
               }

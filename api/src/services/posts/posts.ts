@@ -10,23 +10,50 @@ export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
 }
 
-export const recentConnectionPosts = () => {
+//Recent posts by investors - Feed for startup user
+export const recentInvestorsPosts = () => {
   return db.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
     where: {
       createdAt: {
-        //Get last 7 days posts
-        gte: new Date(Date.now() - 604800000),
-      },
-      visibility: {
-        equals: 'CONNECTIONS',
+        //Get last 14 days posts
+        gte: new Date(Date.now() - 1209600000),
       },
       poster: {
         type: {
           equals: 'INVESTOR',
         },
-        connections: {
-          some: {
-            users: {
+      },
+      OR: [
+        {
+          visibility: {
+            equals: 'CONNECTIONS',
+          },
+          poster: {
+            connections: {
+              some: {
+                status: {
+                  equals: 'ACCEPTED',
+                },
+                users: {
+                  some: {
+                    id: {
+                      equals: context.currentUser?.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'FOLLOWERS',
+          },
+          poster: {
+            followedBy: {
               some: {
                 id: {
                   equals: context.currentUser?.id,
@@ -35,50 +62,158 @@ export const recentConnectionPosts = () => {
             },
           },
         },
-      },
+        {
+          visibility: {
+            equals: 'PUBLIC',
+          },
+        },
+      ],
     },
   })
 }
 
-export const recentFollowingPosts = () => {
+//Recent posts by startups or investors - Feed for investor user
+export const recentStartupInvestorPosts = () => {
   return db.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
     where: {
       createdAt: {
-        //Get last 7 days posts
-        gte: new Date(Date.now() - 604800000),
-      },
-      visibility: {
-        equals: 'FOLLOWERS',
+        //Get last 14 days posts
+        gte: new Date(Date.now() - 1209600000),
       },
       poster: {
         type: {
-          equals: 'INVESTOR',
+          in: ['INVESTOR', 'STARTUP'],
         },
-        followedBy: {
+      },
+      OR: [
+        {
+          visibility: {
+            equals: 'CONNECTIONS',
+          },
+          poster: {
+            connections: {
+              some: {
+                status: {
+                  equals: 'ACCEPTED',
+                },
+                users: {
+                  some: {
+                    id: {
+                      equals: context.currentUser?.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'FOLLOWERS',
+          },
+          poster: {
+            followedBy: {
+              some: {
+                id: {
+                  equals: context.currentUser?.id,
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'PUBLIC',
+          },
+        },
+      ],
+    },
+  })
+}
+
+//Recent posts by the same poster
+export const recentPostsByPostId = ({ id }: { id: number }) => {
+  return db.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    where: {
+      createdAt: {
+        //Get last 14 days posts
+        gte: new Date(Date.now() - 1209600000),
+      },
+      poster: {
+        posts: {
           some: {
             id: {
-              equals: context.currentUser?.id,
+              equals: id,
             },
           },
         },
       },
+      OR: [
+        {
+          visibility: {
+            equals: 'CONNECTIONS',
+          },
+          poster: {
+            connections: {
+              some: {
+                status: {
+                  equals: 'ACCEPTED',
+                },
+                users: {
+                  some: {
+                    id: {
+                      equals: context.currentUser?.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'FOLLOWERS',
+          },
+          poster: {
+            followedBy: {
+              some: {
+                id: {
+                  equals: context.currentUser?.id,
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'PUBLIC',
+          },
+        },
+      ],
     },
   })
 }
 
-export const recentPublicPosts = () => {
+//Recent posts by current user
+export const myRecentPosts = () => {
   return db.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
     where: {
       createdAt: {
-        //Get last 7 days posts
-        gte: new Date(Date.now() - 604800000),
-      },
-      visibility: {
-        equals: 'PUBLIC',
+        //Get last 14 days posts
+        gte: new Date(Date.now() - 1209600000),
       },
       poster: {
-        type: {
-          equals: 'INVESTOR',
+        id: {
+          equals: context.currentUser?.id,
         },
       },
     },
@@ -88,6 +223,80 @@ export const recentPublicPosts = () => {
 export const post: QueryResolvers['post'] = ({ id }) => {
   return db.post.findUnique({
     where: { id },
+  })
+}
+
+//Startup is viewing the post
+export const startupViewPost = ({ id }: { id: number }) => {
+  return db.post.findFirst({
+    where: {
+      id: {
+        equals: id,
+      },
+      OR: [
+        {
+          poster: {
+            type: {
+              equals: 'STARTUP',
+            },
+            id: {
+              equals: context.currentUser?.id,
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'CONNECTIONS',
+          },
+          poster: {
+            type: {
+              equals: 'INVESTOR',
+            },
+            connections: {
+              some: {
+                status: {
+                  equals: 'ACCEPTED',
+                },
+                users: {
+                  some: {
+                    id: {
+                      equals: context.currentUser?.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'FOLLOWERS',
+          },
+          poster: {
+            type: {
+              equals: 'INVESTOR',
+            },
+            followedBy: {
+              some: {
+                id: {
+                  equals: context.currentUser?.id,
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'PUBLIC',
+          },
+          poster: {
+            type: {
+              equals: 'INVESTOR',
+            },
+          },
+        },
+      ],
+    },
   })
 }
 

@@ -27,19 +27,10 @@ Startup feed will consist of:
 
 export const QUERY = gql`
   query FindStartupHomeFeedQuery {
-    recentConnectionPosts: recentConnectionPosts {
+    recentInvestorsPosts: recentInvestorsPosts {
       id
     }
-    recentFollowingPosts: recentFollowingPosts {
-      id
-    }
-    recentPublicPosts: recentPublicPosts {
-      id
-    }
-    recentConnectionConnections: recentConnectionConnections {
-      id
-    }
-    recentFollowingConnections: recentFollowingConnections {
+    recentInvestorsConnections: recentInvestorsConnections {
       id
     }
   }
@@ -50,11 +41,8 @@ export const Empty = () => {
 }
 
 export const Success = ({
-  recentConnectionPosts,
-  recentFollowingPosts,
-  recentPublicPosts,
-  recentConnectionConnections,
-  recentFollowingConnections,
+  recentInvestorsPosts,
+  recentInvestorsConnections,
 }: CellSuccessProps<
   FindStartupHomeFeedQuery,
   FindStartupHomeFeedQueryVariables
@@ -73,36 +61,11 @@ export const Success = ({
       </div>
       {/* //TODO: Different tabs for various activities */}
       <div className="flex flex-col gap-2 overflow-y-scroll lg:gap-3">
-        {recentConnectionPosts.map((p: { id: number }) => (
-          <>
-            <StartupHomePostCell id={p.id} key={'conpost' + p.id.toString()} />
-          </>
+        {recentInvestorsPosts.map((p: { id: number }) => (
+          <StartupHomePostCell id={p.id} key={'post' + p.id.toString()} />
         ))}
-        {recentFollowingPosts.map((p: { id: number }) => (
-          <>
-            <StartupHomePostCell id={p.id} key={'folpost' + p.id.toString()} />
-          </>
-        ))}
-        {recentPublicPosts.map((p: { id: number }) => (
-          <>
-            <StartupHomePostCell id={p.id} key={'pubpost' + p.id.toString()} />
-          </>
-        ))}
-        {recentConnectionConnections.map((c: { id: number }) => (
-          <>
-            <StartupHomeConnectionCell
-              id={c.id}
-              key={'concon' + c.id.toString()}
-            />
-          </>
-        ))}
-        {recentFollowingConnections.map((c: { id: number }) => (
-          <>
-            <StartupHomeConnectionCell
-              id={c.id}
-              key={'folcon' + c.id.toString()}
-            />
-          </>
+        {recentInvestorsConnections.map((c: { id: number }) => (
+          <StartupHomeConnectionCell id={c.id} key={'conn' + c.id.toString()} />
         ))}
       </div>
     </div>

@@ -44,6 +44,12 @@ export const Startup: StartupRelationResolvers = {
   user: (_obj, { root }) => {
     return db.startup.findUnique({ where: { id: root?.id } }).user()
   },
+  location: (_obj, { root }) => {
+    return db.startup.findUnique({ where: { id: root?.id } }).location()
+  },
+  sectorCategory: (_obj, { root }) => {
+    return db.startup.findUnique({ where: { id: root?.id } }).sectorCategory()
+  },
   startupBackground: (_obj, { root }) => {
     return db.startup
       .findUnique({ where: { id: root?.id } })

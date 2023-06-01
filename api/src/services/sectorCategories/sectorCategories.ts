@@ -1,4 +1,9 @@
-import type { QueryResolvers, MutationResolvers, Sector } from 'types/graphql'
+import type {
+  QueryResolvers,
+  MutationResolvers,
+  SectorCategoryRelationResolvers,
+  Sector,
+} from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -50,3 +55,9 @@ export const deleteSectorCategory: MutationResolvers['deleteSectorCategory'] =
       where: { id },
     })
   }
+
+export const SectorCategory: SectorCategoryRelationResolvers = {
+  startup: (_obj, { root }) => {
+    return db.sectorCategory.findUnique({ where: { id: root?.id } }).startup()
+  },
+}

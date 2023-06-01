@@ -187,7 +187,7 @@ export const DisabledSubTitleLabel = (props: LabelProps) => {
 //Medium - h7/b1
 export const MediumLabel = (props: LabelProps) => {
   return (
-    <p className="text-b1 font-bold text-black dark:text-white lg:text-h7">
+    <p className="text-b1 text-black dark:text-white lg:text-h7">
       {props.label}
     </p>
   )

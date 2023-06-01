@@ -36,7 +36,7 @@ const InvestorProfileBar = (props: InvestorProfileBarProps) => {
         </>
       ) : (
         <button
-          className="flex h-7 w-7 items-center justify-center rounded-full bg-black-l1 text-b3 text-white hover:bg-primary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-primary-l1 lg:h-8 lg:w-8 lg:text-b2"
+          className="flex h-7 w-7 items-center justify-center rounded bg-black-l1 text-b3 text-white hover:bg-primary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-primary-l1 lg:h-8 lg:w-8 lg:text-b2"
           onClick={() => props.setMenuOpen('Profile')}
         >
           {/* //TODO: apply profile pic as BG */}

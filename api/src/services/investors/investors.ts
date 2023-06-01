@@ -10,6 +10,67 @@ export const investors: QueryResolvers['investors'] = () => {
   return db.investor.findMany()
 }
 
+//Find New Investors to chat
+export const findNewChatInvestors = ({ term }: { term: string }) => {
+  return db.investor.findMany({
+    where: {
+      name: {
+        contains: term,
+        mode: 'insensitive',
+      },
+      user: {
+        directConversations: {
+          none: {
+            users: {
+              some: {
+                id: { equals: context.currentUser?.id },
+              },
+            },
+          },
+        },
+        OR: [
+          {
+            messageVisibility: {
+              equals: 'PUBLIC',
+            },
+          },
+          {
+            messageVisibility: {
+              equals: 'CONNECTIONS',
+            },
+            connections: {
+              some: {
+                status: {
+                  equals: 'ACCEPTED',
+                },
+                users: {
+                  some: {
+                    id: {
+                      equals: context.currentUser?.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          {
+            messageVisibility: {
+              equals: 'FOLLOWERS',
+            },
+            followedBy: {
+              some: {
+                id: {
+                  equals: context.currentUser?.id,
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  })
+}
+
 export const investor: QueryResolvers['investor'] = ({ id }) => {
   return db.investor.findUnique({
     where: { id },
@@ -43,6 +104,9 @@ export const deleteInvestor: MutationResolvers['deleteInvestor'] = ({ id }) => {
 export const Investor: InvestorRelationResolvers = {
   user: (_obj, { root }) => {
     return db.investor.findUnique({ where: { id: root?.id } }).user()
+  },
+  location: (_obj, { root }) => {
+    return db.investor.findUnique({ where: { id: root?.id } }).location()
   },
   investorExp: (_obj, { root }) => {
     return db.investor.findUnique({ where: { id: root?.id } }).investorExp()

@@ -34,8 +34,16 @@ export const getCurrentUser = async (session: Decoded) => {
       email: true,
       type: true,
       lastActive: true,
-      investor: true,
-      startup: true,
+      investor: {
+        select: {
+          name: true,
+        },
+      },
+      startup: {
+        select: {
+          name: true,
+        },
+      },
       isOnboarded: true,
       prefersTheme: true,
     },

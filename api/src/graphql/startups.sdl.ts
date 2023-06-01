@@ -8,7 +8,9 @@ export const schema = gql`
     linkedInURL: String
     websiteURL: String
     locationID: Int!
+    location: Location!
     sectorCategoryID: Int!
+    sectorCategory: SectorCategory!
     startupBackground: StartupBackground
     startupBusiness: StartupBusiness
     startupMarket: StartupMarket

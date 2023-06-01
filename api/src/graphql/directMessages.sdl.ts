@@ -14,6 +14,8 @@ export const schema = gql`
 
   type Query {
     directMessages: [DirectMessage!]! @requireAuth
+    directMessagesByConversationID(convoID: Int!): [DirectMessage!]!
+      @requireAuth
     directMessage(id: Int!): DirectMessage @requireAuth
   }
 
@@ -33,6 +35,10 @@ export const schema = gql`
     unread: Boolean
   }
 
+  type BatchPayload {
+    count: Int
+  }
+
   type Mutation {
     createDirectMessage(input: CreateDirectMessageInput!): DirectMessage!
       @requireAuth
@@ -40,6 +46,7 @@ export const schema = gql`
       id: Int!
       input: UpdateDirectMessageInput!
     ): DirectMessage! @requireAuth
+    updateReadMessages(convoID: Int!): BatchPayload! @requireAuth
     deleteDirectMessage(id: Int!): DirectMessage! @requireAuth
   }
 `

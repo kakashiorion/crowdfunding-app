@@ -1,4 +1,8 @@
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+import type {
+  QueryResolvers,
+  MutationResolvers,
+  LocationRelationResolvers,
+} from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -51,4 +55,13 @@ export const deleteLocation: MutationResolvers['deleteLocation'] = ({ id }) => {
   return db.location.delete({
     where: { id },
   })
+}
+
+export const Location: LocationRelationResolvers = {
+  startups: (_obj, { root }) => {
+    return db.location.findUnique({ where: { id: root?.id } }).startups()
+  },
+  investors: (_obj, { root }) => {
+    return db.location.findUnique({ where: { id: root?.id } }).investors()
+  },
 }

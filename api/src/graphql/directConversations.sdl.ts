@@ -10,11 +10,14 @@ export const schema = gql`
 
   type Query {
     directConversations: [DirectConversation!]! @requireAuth
+    myDirectConversations: [DirectConversation!]! @requireAuth
     directConversation(id: Int!): DirectConversation @requireAuth
   }
 
   input CreateDirectConversationInput {
-    isActive: Boolean!
+    isActive: Boolean
+    userID1: Int!
+    userID2: Int!
   }
 
   input UpdateDirectConversationInput {

@@ -5,6 +5,8 @@ export const schema = gql`
     city: String
     lat: Float
     long: Float
+    startups: [Startup]!
+    investors: [Investor]!
     createdAt: DateTime!
     updatedAt: DateTime!
   }

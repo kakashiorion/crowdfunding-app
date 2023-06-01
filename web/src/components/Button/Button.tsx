@@ -15,7 +15,7 @@
 
 type ButtonProps = {
   action: () => void
-  label: string
+  label?: string
   icon?: JSX.Element
 }
 
@@ -33,11 +33,44 @@ export const PrimaryFilledButton = (props: ButtonProps) => {
 export const LeadingIconBlackFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="flex items-center justify-center gap-1 rounded border-2 border-black-l1 fill-black-l1 px-3 py-1.5 text-b3 text-black-l1 duration-200 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:fill-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:fill-black dark:hover:text-black lg:gap-2 lg:px-4 lg:py-2 lg:text-b2"
+      className="flex items-center justify-center gap-1 rounded border-2 border-black-l1 fill-black-l1 px-4 py-2 text-b2 text-black-l1 duration-200 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:fill-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:fill-black dark:hover:text-black lg:gap-2 lg:px-5 lg:py-2.5 lg:text-b1"
       onClick={props.action}
     >
       {props.icon}
-      <p className="align-text-bottom">{props.label}</p>
+      <p className="align-sub">{props.label}</p>
+    </button>
+  )
+}
+
+export const TertiaryIconButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="flex items-center justify-center rounded bg-tertiary-d1 p-2 duration-200 hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:hover:bg-tertiary-l2 lg:p-3"
+      onClick={props.action}
+    >
+      {props.icon}
+    </button>
+  )
+}
+
+export const BlackIconButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="flex items-center justify-center rounded bg-black-l1 p-2 duration-200 hover:bg-black-l2 dark:bg-white-d1 dark:hover:bg-white-d2 lg:p-3"
+      onClick={props.action}
+    >
+      {props.icon}
+    </button>
+  )
+}
+
+export const IconOutlineButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="flex items-center justify-center rounded border-2 border-black-l2 fill-black-l2 p-2 duration-200 hover:border-black hover:bg-black hover:fill-white dark:border-white-d2 dark:fill-white dark:hover:border-white dark:hover:bg-white hover:dark:fill-black lg:p-2.5"
+      onClick={props.action}
+    >
+      {props.icon}
     </button>
   )
 }

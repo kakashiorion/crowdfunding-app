@@ -38,7 +38,7 @@ import {
   PosterInfoClassName,
   PosterNameClassName,
   PosterProfilePicClassName,
-} from 'src/components/Startup/startupHomeConsts'
+} from 'src/components/Startup/startupConsts'
 
 export const QUERY = gql`
   query FindStartupHomePostQuery($id: Int!) {
@@ -51,8 +51,10 @@ export const QUERY = gql`
       createdAt
       posterID
       poster {
+        id
         type
         investor {
+          id
           name
         }
       }

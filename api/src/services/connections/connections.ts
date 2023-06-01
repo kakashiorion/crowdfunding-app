@@ -10,12 +10,13 @@ export const connections: QueryResolvers['connections'] = () => {
   return db.connection.findMany()
 }
 
-export const recentConnectionConnections = () => {
+//Recent Connections between Investors
+export const recentInvestorsConnections = () => {
   return db.connection.findMany({
     where: {
       createdAt: {
-        //Get last 7 days posts
-        gte: new Date(Date.now() - 604800000),
+        //Get last 14 days posts
+        gte: new Date(Date.now() - 1209600000),
       },
       status: {
         equals: 'ACCEPTED',
@@ -27,10 +28,10 @@ export const recentConnectionConnections = () => {
           },
         },
         some: {
-          activityVisbility: { in: ['CONNECTIONS', 'FOLLOWERS', 'PUBLIC'] },
-          connections: {
-            some: {
-              users: {
+          OR: [
+            {
+              activityVisbility: { in: ['FOLLOWERS', 'PUBLIC'] },
+              followedBy: {
                 some: {
                   id: {
                     equals: context.currentUser?.id,
@@ -38,50 +39,96 @@ export const recentConnectionConnections = () => {
                 },
               },
             },
-          },
+            {
+              activityVisbility: { in: ['CONNECTIONS', 'PUBLIC'] },
+              connections: {
+                some: {
+                  status: {
+                    equals: 'ACCEPTED',
+                  },
+                  users: {
+                    some: {
+                      id: {
+                        equals: context.currentUser?.id,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
         },
       },
     },
   })
 }
 
-export const recentFollowingConnections = () => {
+//Recent Connections between Startup and Investor
+export const recentStartupInvestorConnections = () => {
   return db.connection.findMany({
     where: {
       createdAt: {
-        //Get last 7 days posts
-        gte: new Date(Date.now() - 604800000),
+        //Get last 14 days posts
+        gte: new Date(Date.now() - 1209600000),
       },
       status: {
         equals: 'ACCEPTED',
       },
       users: {
-        every: {
-          type: {
-            equals: 'INVESTOR',
-          },
-        },
         some: {
-          activityVisbility: { in: ['FOLLOWERS', 'PUBLIC'] },
-          followedBy: {
-            some: {
-              id: {
-                equals: context.currentUser?.id,
+          AND: [
+            {
+              type: {
+                equals: 'INVESTOR',
               },
             },
-          },
+            {
+              type: {
+                equals: 'STARTUP',
+              },
+            },
+          ],
+          OR: [
+            {
+              activityVisbility: { in: ['FOLLOWERS', 'PUBLIC'] },
+              followedBy: {
+                some: {
+                  id: {
+                    equals: context.currentUser?.id,
+                  },
+                },
+              },
+            },
+            {
+              activityVisbility: { in: ['CONNECTIONS', 'PUBLIC'] },
+              connections: {
+                some: {
+                  status: {
+                    equals: 'ACCEPTED',
+                  },
+                  users: {
+                    some: {
+                      id: {
+                        equals: context.currentUser?.id,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
         },
       },
     },
   })
 }
 
-export const connectionsByUserId: QueryResolvers['connectionsByUserId'] =
-  () => {
-    return db.connection.findMany({
-      where: { users: { some: { email: context.currentUser?.email } } },
-    })
-  }
+//User's Connections
+export const myConnections = () => {
+  return db.connection.findMany({
+    where: { users: { some: { id: context.currentUser?.id } } },
+  })
+}
 
 export const connection: QueryResolvers['connection'] = ({ id }) => {
   return db.connection.findUnique({

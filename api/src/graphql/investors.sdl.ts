@@ -5,6 +5,7 @@ export const schema = gql`
     name: String!
     dateOfBirth: DateTime
     locationID: Int!
+    location: Location!
     linkedInURL: String
     websiteURL: String
     eduBG: EducationBG!
@@ -67,6 +68,7 @@ export const schema = gql`
 
   type Query {
     investors: [Investor!]! @requireAuth
+    findNewChatInvestors(term: String!): [Investor!]! @requireAuth
     investor(id: Int!): Investor @requireAuth
   }
 

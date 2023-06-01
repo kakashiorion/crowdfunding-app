@@ -25,7 +25,7 @@ export const InvestorStepHeader = (props: StepHeaderProps) => {
           <SubTextLabel
             label={`Step ${props.currentStepNumber} of ${props.currentStepInfo.length}`}
           />
-          <div className="h-0.5 w-0.5 rounded-full bg-black dark:bg-white lg:h-1 lg:w-1"></div>
+          <div className="h-0.5 w-0.5 rounded bg-black dark:bg-white lg:h-1 lg:w-1"></div>
           <SubTextLabel
             label={props.currentStepInfo[props.currentStepNumber - 1].display}
           />
@@ -50,7 +50,7 @@ export const StartupStepHeader = (props: StepHeaderProps) => {
           <SubTextLabel
             label={`Step ${props.currentStepNumber} of ${props.currentStepInfo.length}`}
           />
-          <div className="h-0.5 w-0.5 rounded-full bg-black dark:bg-white lg:h-1 lg:w-1"></div>
+          <div className="h-0.5 w-0.5 rounded bg-black dark:bg-white lg:h-1 lg:w-1"></div>
           <SubTextLabel
             label={props.currentStepInfo[props.currentStepNumber - 1].display}
           />

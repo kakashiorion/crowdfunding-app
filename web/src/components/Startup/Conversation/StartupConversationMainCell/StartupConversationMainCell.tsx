@@ -1,0 +1,279 @@
+import { useEffect, useRef, useState } from 'react'
+
+import moment from 'moment'
+import CloseIcon from 'public/icons/close.svg'
+import ChatIcon from 'public/icons/comment.svg'
+import BackIcon from 'public/icons/left.svg'
+import AttachIcon from 'public/icons/link.svg'
+import SendIcon from 'public/icons/send.svg'
+import type {
+  FindStartupConversationMainQuery,
+  FindStartupConversationMainQueryVariables,
+} from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
+import { CellSuccessProps, useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import {
+  BlackTextButton,
+  IconOutlineButton,
+  TertiaryIconButton,
+} from 'src/components/Button/Button'
+import {
+  GreySubTitleLabel,
+  SmallLabel,
+  TextLabel,
+  MediumLabel,
+  TertiarySubTitleLabel,
+  TertiaryTextLabel,
+} from 'src/components/Label/Label'
+
+import {
+  ChatContentClassName,
+  ConvoProfilePicClassName,
+  CreatePostActionClassName,
+  ButtonIconClassName,
+  IconClassName,
+  InputDivClassName,
+  LightIconClassName,
+  PostDividerClassName,
+  TextInputClassName,
+  EmptyIconClassName,
+  EmptyDivClassName,
+} from '../../startupConsts'
+
+export const QUERY = gql`
+  query FindStartupConversationMainQuery($id: Int!) {
+    startupConversationMain: directConversation(id: $id) {
+      id
+      users {
+        id
+        type
+        profilePicURL
+        investor {
+          id
+          name
+        }
+      }
+      messages {
+        id
+        senderID
+        unread
+        content
+        attachmentURL
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`
+
+const CREATE_MESSAGE_MUTATION = gql`
+  mutation CreateMessage($input: CreateDirectMessageInput!) {
+    createDirectMessage(input: $input) {
+      id
+      content
+      senderID
+      attachmentURL
+      createdAt
+      unread
+    }
+  }
+`
+const SET_READ_CONVERSATION_MUTATION = gql`
+  mutation updateReadMessages($convoID: Int!) {
+    updateReadMessages(convoID: $convoID) {
+      count
+    }
+  }
+`
+
+export const Empty = () => (
+  <div className={EmptyDivClassName}>
+    <ChatIcon className={EmptyIconClassName} />
+    <GreySubTitleLabel label="Select and continue a conversation thread" />
+  </div>
+)
+
+export const Success = ({
+  startupConversationMain,
+  currentConvo,
+  setCurrentConvo,
+}: CellSuccessProps<
+  FindStartupConversationMainQuery,
+  FindStartupConversationMainQueryVariables
+> & {
+  currentConvo: number
+  setCurrentConvo: React.Dispatch<React.SetStateAction<number>>
+}) => {
+  const { currentUser } = useAuth()
+  const [chatText, setChatText] = useState('')
+  const [attachURL, setAttachURL] = useState('')
+  const [attaching, setAttaching] = useState(false)
+  const [setReadConversation] = useMutation(SET_READ_CONVERSATION_MUTATION, {
+    variables: {
+      convoID: currentConvo,
+    },
+  })
+  const [createMessage] = useMutation(CREATE_MESSAGE_MUTATION, {
+    refetchQueries: [
+      {
+        query: QUERY,
+        variables: { id: currentConvo },
+        fetchPolicy: 'network-only',
+      },
+    ],
+  })
+  const investorIndex =
+    startupConversationMain.users[0]?.type == 'INVESTOR' ? 0 : 1
+
+  const investorName =
+    startupConversationMain.users[investorIndex]?.investor?.name
+
+  const sortedMessages = [...startupConversationMain.messages].sort((a, b) => {
+    if (a?.id && b?.id) {
+      return a?.id - b?.id
+    } else {
+      return 0
+    }
+  })
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const otherRef = useRef<HTMLDivElement>(null)
+
+  const handleSendMessage = async () => {
+    await createMessage({
+      variables: {
+        input: {
+          conversationID: currentConvo,
+          senderID: currentUser?.id,
+          content: chatText,
+          attachmentURL: attachURL,
+          unread: true,
+        },
+      },
+    }).then(() => {
+      setChatText('')
+      setAttachURL('')
+      setAttaching(false)
+      setReadConversation()
+    })
+  }
+
+  useEffect(() => {
+    setReadConversation()
+    bottomRef.current?.scrollIntoView()
+  }, [bottomRef, setReadConversation, startupConversationMain])
+
+  return (
+    <div id="ChatContainer" className="flex h-full w-full flex-col gap-4">
+      <div id="ChatHeader" className={CreatePostActionClassName}>
+        <BackIcon
+          className={IconClassName}
+          onClick={() => {
+            setCurrentConvo(0)
+          }}
+        />
+        <button
+          id="InvestorProfPic"
+          className={ConvoProfilePicClassName}
+          onClick={() => {
+            //Navigate to investor's profile
+            navigate(
+              routes.startupInvestorProfile({
+                id: startupConversationMain.users[investorIndex]?.id ?? 0,
+              })
+            )
+          }}
+        >
+          {
+            //TODO: Add Profile pic as BG - phase 2
+            (investorName ?? 'I')[0].toUpperCase()
+          }
+        </button>
+        <TertiaryTextLabel label={investorName ?? 'Investor'} />
+      </div>
+      <div id="Divider" className={PostDividerClassName} />
+      <div id="ChatContent" className={ChatContentClassName}>
+        <span className="mt-auto"></span>
+        <TertiarySubTitleLabel
+          label={`Started a new chat with ${investorName}`}
+        />
+        {sortedMessages.length > 0 ? (
+          sortedMessages.map((message, i) => (
+            <div
+              key={message?.id}
+              ref={i == sortedMessages.length - 1 ? bottomRef : otherRef}
+              className={`flex flex-col gap-1 p-3 lg:gap-2 lg:p-4 ${
+                message?.senderID == currentUser?.id
+                  ? ' items-end self-end rounded-t rounded-bl-2xl bg-tertiary-d1/70 dark:bg-tertiary-l1/70 '
+                  : ' items-start self-start rounded-t rounded-br-2xl bg-white-d3/70 dark:bg-black-l3/70 '
+              }`}
+            >
+              <SmallLabel label={moment(message?.createdAt).calendar()} />
+              <MediumLabel label={message?.content ?? ''} />
+              {message?.attachmentURL && (
+                <BlackTextButton
+                  label={message?.attachmentURL}
+                  action={() => {
+                    message.attachmentURL &&
+                      window.open(message.attachmentURL)?.focus()
+                  }}
+                />
+              )}
+            </div>
+          ))
+        ) : (
+          <TextLabel label={`Say Hello!`} />
+        )}
+      </div>
+      {attaching && (
+        <input
+          id="AttachInput"
+          value={attachURL}
+          placeholder={'Enter link to share...'}
+          type="text"
+          onChange={(e) => {
+            setAttachURL(e.target.value)
+          }}
+          className={TextInputClassName}
+        />
+      )}
+      <div id="ChatFooter" className={InputDivClassName}>
+        <IconOutlineButton
+          icon={
+            attaching ? (
+              <CloseIcon className={ButtonIconClassName} />
+            ) : (
+              <AttachIcon className={ButtonIconClassName} />
+            )
+          }
+          action={() => {
+            setAttaching(!attaching)
+            if (attaching) {
+              setAttachURL('')
+            }
+          }}
+        />
+        <input
+          id="ChatInput"
+          value={chatText}
+          placeholder={'Type here...'}
+          type="text"
+          onChange={(e) => {
+            setChatText(e.target.value)
+          }}
+          className={TextInputClassName}
+        />
+        <TertiaryIconButton
+          icon={<SendIcon className={LightIconClassName} />}
+          action={() => {
+            if (chatText != '') {
+              handleSendMessage()
+            }
+          }}
+        />
+      </div>
+    </div>
+  )
+}

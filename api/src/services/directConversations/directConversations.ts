@@ -11,6 +11,27 @@ export const directConversations: QueryResolvers['directConversations'] =
     return db.directConversation.findMany()
   }
 
+//Current user's direct conversations (isActive)
+export const myDirectConversations = () => {
+  return db.directConversation.findMany({
+    orderBy: {
+      updatedAt: 'desc',
+    },
+    where: {
+      users: { some: { id: context.currentUser?.id } },
+      isActive: { equals: true },
+    },
+    include: {
+      messages: {
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: 20,
+      },
+    },
+  })
+}
+
 export const directConversation: QueryResolvers['directConversation'] = ({
   id,
 }) => {
@@ -22,7 +43,11 @@ export const directConversation: QueryResolvers['directConversation'] = ({
 export const createDirectConversation: MutationResolvers['createDirectConversation'] =
   ({ input }) => {
     return db.directConversation.create({
-      data: input,
+      data: {
+        users: {
+          connect: [{ id: input.userID1 }, { id: input.userID2 }],
+        },
+      },
     })
   }
 

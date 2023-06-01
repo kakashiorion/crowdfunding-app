@@ -15,29 +15,31 @@ import { navigate, routes } from '@redwoodjs/router'
 import { CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-import { HoverTertiaryTextButton } from 'src/components/Button/Button'
+import {
+  HoverTertiaryTextButton,
+  TertiaryIconButton,
+} from 'src/components/Button/Button'
 import {
   SmallLabel,
   TertiaryTextLabel,
   ErrorSubTextLabel,
   SubTextLabel,
 } from 'src/components/Label/Label'
-
 import {
   PosterInfoClassName,
   PosterProfilePicClassName,
-  CommentInputClassName,
   PostFooterClassName,
   PostInteractionClassName,
   CountClassName,
   IconClassName,
   PostInteractionTextClassName,
   DeleteIconClassName,
-  AddCommentClassName,
-  HoverIconClassName,
   PosterNameClassName,
   CommentDivClassName,
-} from '../../startupHomeConsts'
+  InputDivClassName,
+  LightIconClassName,
+  TextInputClassName,
+} from 'src/components/Startup/startupConsts'
 
 export const QUERY = gql`
   query FindStartupViewCommentQuery($id: Int!) {
@@ -50,12 +52,15 @@ export const QUERY = gql`
       }
       commenterID
       commenter {
+        id
         type
         profilePicURL
         investor {
+          id
           name
         }
         startup {
+          id
           name
         }
       }
@@ -226,7 +231,7 @@ export const Success = ({
       </div>
       {editing ? (
         <>
-          <div className={AddCommentClassName}>
+          <div className={InputDivClassName}>
             <input
               value={editedComment}
               placeholder="Edit comment..."
@@ -234,11 +239,11 @@ export const Success = ({
               onChange={(e) => {
                 setEditedComment(e.target.value)
               }}
-              className={CommentInputClassName}
-            ></input>
-            <SendIcon
-              className={HoverIconClassName}
-              onClick={() => {
+              className={TextInputClassName}
+            />
+            <TertiaryIconButton
+              icon={<SendIcon className={LightIconClassName} />}
+              action={() => {
                 handleEditComment()
               }}
             />

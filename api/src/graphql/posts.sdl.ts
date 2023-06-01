@@ -24,10 +24,12 @@ export const schema = gql`
 
   type Query {
     posts: [Post!]! @requireAuth
-    recentConnectionPosts: [Post!]! @requireAuth
-    recentFollowingPosts: [Post!]! @requireAuth
-    recentPublicPosts: [Post!]! @requireAuth
+    recentInvestorsPosts: [Post!]! @requireAuth
+    recentStartupInvestorPosts: [Post!]! @requireAuth
+    myRecentPosts: [Post!]! @requireAuth
+    recentPostsByPostId(id: Int!): [Post!]! @requireAuth
     post(id: Int!): Post @requireAuth
+    startupViewPost(id: Int!): Post @requireAuth
   }
 
   input CreatePostInput {

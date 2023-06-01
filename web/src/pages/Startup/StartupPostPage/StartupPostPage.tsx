@@ -1,7 +1,8 @@
 import { MetaTags } from '@redwoodjs/web'
 
 import { TertiaryTextLabel } from 'src/components/Label/Label'
-import StartupViewPostCell from 'src/components/Startup/Content/StartupViewPostCell'
+// import StartupRecentPostsCell from 'src/components/Startup/Post/StartupRecentPostsCell'
+import StartupViewPostCell from 'src/components/Startup/Post/StartupViewPostCell'
 
 const StartupPostPage = ({ id }: { id: number }) => {
   return (
@@ -11,7 +12,7 @@ const StartupPostPage = ({ id }: { id: number }) => {
         description="Startup Post page for Dealbari platform"
       />
       <StartupViewPostMain id={id} />
-      <StartupViewPostSide />
+      <StartupViewPostSide id={id} />
     </>
   )
 }
@@ -27,8 +28,11 @@ const StartupViewPostMain = ({ id }: { id: number }) => {
   )
 }
 
-const StartupViewPostSide = () => {
+const StartupViewPostSide = ({ id }: { id: number }) => {
   return (
-    <div className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50"></div>
+    <div className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:flex-col lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50">
+      {/* <TertiaryTextLabel label="RECENT POSTS" />
+      <StartupRecentPostsCell id={id} /> */}
+    </div>
   )
 }
