@@ -5,7 +5,7 @@ import {
   menuExpandDivClassName,
   menuIconClassName,
   upIconClassName,
-} from 'src/components/Investor/Navigation/InvestorNavigationConsts'
+} from 'src/components/Investor/InvestorConsts'
 
 type InvestorSearchBarProps = {
   isMenuOpen: string

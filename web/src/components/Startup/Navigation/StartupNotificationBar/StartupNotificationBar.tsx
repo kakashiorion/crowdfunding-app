@@ -5,7 +5,7 @@ import {
   menuExpandDivClassName,
   menuIconClassName,
   upIconClassName,
-} from 'src/components/Startup/Navigation/StartupNavigationConsts'
+} from 'src/components/Startup/StartupConsts'
 
 type StartupNotificationBarProps = {
   isMenuOpen: string

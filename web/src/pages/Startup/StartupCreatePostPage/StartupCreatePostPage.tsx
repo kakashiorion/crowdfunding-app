@@ -18,7 +18,7 @@ import {
   CreatePostDivClassName,
   SelectInputClassName,
   TextInputClassName,
-} from 'src/components/Startup/startupConsts'
+} from 'src/components/Startup/StartupConsts'
 
 const StartupCreatePostPage = () => {
   return (

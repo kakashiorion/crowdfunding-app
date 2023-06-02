@@ -4,7 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 import StartupMenuBar from 'src/components/Startup/Navigation/StartupMenuBar/StartupMenuBar'
-import { startupPageClassName } from 'src/components/Startup/Navigation/StartupNavigationConsts'
+import { startupPageClassName } from 'src/components/Startup/StartupConsts'
 
 import {
   HomeLayoutWrapperClassName,

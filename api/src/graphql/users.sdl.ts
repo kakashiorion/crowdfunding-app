@@ -135,6 +135,7 @@ export const schema = gql`
   type Mutation {
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    mutualFollowUser(userID: Int!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
   }
 `

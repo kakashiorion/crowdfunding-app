@@ -39,7 +39,7 @@ import {
   InputDivClassName,
   LightIconClassName,
   TextInputClassName,
-} from 'src/components/Startup/startupConsts'
+} from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
   query FindStartupViewCommentQuery($id: Int!) {

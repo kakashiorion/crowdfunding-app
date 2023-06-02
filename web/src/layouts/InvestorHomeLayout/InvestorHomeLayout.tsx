@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from 'react'
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
-import { investorPageClassName } from 'src/components/Investor/Navigation/InvestorNavigationConsts'
+import { investorPageClassName } from 'src/components/Investor/InvestorConsts'
 import InvestorTopBar from 'src/components/Investor/Navigation/InvestorTopBar/InvestorTopBar'
 
 import {

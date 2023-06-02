@@ -39,7 +39,7 @@ import {
   SelectedConvoDivClassName,
   TextInputClassName,
   IconClassName,
-} from 'src/components/Startup/startupConsts'
+} from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
   query FindStartupConversationsListQuery {

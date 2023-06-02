@@ -62,6 +62,24 @@ export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
   })
 }
 
+export const mutualFollowUser = ({ userID }: { userID: number }) => {
+  return db.user.update({
+    where: { id: context.currentUser?.id },
+    data: {
+      following: {
+        connect: {
+          id: userID,
+        },
+      },
+      followedBy: {
+        connect: {
+          id: userID,
+        },
+      },
+    },
+  })
+}
+
 export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
   return db.user.delete({
     where: { id },

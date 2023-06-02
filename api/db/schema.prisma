@@ -48,7 +48,7 @@ model User {
   blockedBy           User[]               @relation("UserBlocked")
   messageVisibility   VisibilityLevel      @default(PUBLIC)
   activityVisbility   VisibilityLevel      @default(PUBLIC)
-  profileVisbility    VisibilityLevel      @default(FOLLOWERS)
+  profileVisbility    VisibilityLevel      @default(PUBLIC)
   notificationLevel   NotificationLevel    @default(HIGH)
   prefersTheme        UITheme              @default(SYSTEM)
   createdAt           DateTime             @default(now())
@@ -706,7 +706,6 @@ model DirectConversation {
   id        Int             @id @default(autoincrement())
   users     User[]          @relation("DM")
   messages  DirectMessage[]
-  isActive  Boolean         @default(true)
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
 }

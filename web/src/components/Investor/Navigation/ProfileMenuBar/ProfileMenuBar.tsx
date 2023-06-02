@@ -11,7 +11,7 @@ import { useAuth } from 'src/auth'
 import {
   profileMenuItemClassName,
   profileUpIconClassName,
-} from 'src/components/Investor/Navigation/InvestorNavigationConsts'
+} from 'src/components/Investor/InvestorConsts'
 import { SubTextLabel } from 'src/components/Label/Label'
 import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 

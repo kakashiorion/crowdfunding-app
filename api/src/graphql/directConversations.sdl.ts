@@ -3,7 +3,6 @@ export const schema = gql`
     id: Int!
     users: [User]!
     messages: [DirectMessage]!
-    isActive: Boolean!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -15,13 +14,13 @@ export const schema = gql`
   }
 
   input CreateDirectConversationInput {
-    isActive: Boolean
     userID1: Int!
     userID2: Int!
   }
 
   input UpdateDirectConversationInput {
-    isActive: Boolean
+    userID1: Int!
+    userID2: Int!
   }
 
   type Mutation {

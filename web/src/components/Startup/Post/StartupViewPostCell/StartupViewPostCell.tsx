@@ -53,7 +53,7 @@ import {
   LightIconClassName,
   EmptyDivClassName,
   EmptyIconClassName,
-} from 'src/components/Startup/startupConsts'
+} from 'src/components/Startup/StartupConsts'
 
 /*
 Checks to be made before startup user views a post:

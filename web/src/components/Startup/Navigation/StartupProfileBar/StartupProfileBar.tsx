@@ -11,8 +11,9 @@ import { useAuth } from 'src/auth'
 import { SubTextLabel } from 'src/components/Label/Label'
 import {
   profileMenuItemClassName,
+  profileMenuSelectedItemClassName,
   profileUpIconClassName,
-} from 'src/components/Startup/Navigation/StartupNavigationConsts'
+} from 'src/components/Startup/StartupConsts'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
 type StartupProfileBarProps = {
@@ -39,7 +40,7 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
           className="flex h-7 w-7 items-center justify-center rounded bg-black-l1 text-b3 text-white hover:bg-tertiary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-tertiary-l1 lg:h-8 lg:w-8 lg:text-b2"
           onClick={() => props.setMenuOpen('Profile')}
         >
-          {/* //TODO: apply profile pic as BG */}
+          {/* //TODO: apply profile pic as BG - phase 2 */}
           {currentUser?.email[0].toUpperCase()}
         </button>
       )}
@@ -50,7 +51,7 @@ export default StartupProfileBar
 
 const StartupProfileMenu = (props: StartupProfileBarProps) => {
   const { logOut } = useAuth()
-  const { setPageSelected } = useContext(StartupPageContext)
+  const { pageSelected, setPageSelected } = useContext(StartupPageContext)
   return (
     <div className="absolute right-0 top-10 z-10 flex flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l2/95">
       <button
@@ -59,7 +60,11 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
           props.setMenuOpen('None')
           setPageSelected('Profile')
         }}
-        className={profileMenuItemClassName}
+        className={
+          pageSelected == 'Profile'
+            ? profileMenuSelectedItemClassName
+            : profileMenuItemClassName
+        }
       >
         <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Profile" />
@@ -70,7 +75,11 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
           props.setMenuOpen('None')
           setPageSelected('Help')
         }}
-        className={profileMenuItemClassName}
+        className={
+          pageSelected == 'Help'
+            ? profileMenuSelectedItemClassName
+            : profileMenuItemClassName
+        }
       >
         <HelpIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Help" />

@@ -11,15 +11,23 @@ export const directConversations: QueryResolvers['directConversations'] =
     return db.directConversation.findMany()
   }
 
-//Current user's direct conversations (isActive)
+//Current user's direct conversations (if not blocked)
 export const myDirectConversations = () => {
   return db.directConversation.findMany({
     orderBy: {
       updatedAt: 'desc',
     },
     where: {
-      users: { some: { id: context.currentUser?.id } },
-      isActive: { equals: true },
+      users: {
+        some: { id: context.currentUser?.id },
+        every: {
+          blocking: {
+            none: {
+              id: context.currentUser?.id,
+            },
+          },
+        },
+      },
     },
     include: {
       messages: {
@@ -32,11 +40,23 @@ export const myDirectConversations = () => {
   })
 }
 
+//Get a direct conversation (if not blocked)
 export const directConversation: QueryResolvers['directConversation'] = ({
   id,
 }) => {
-  return db.directConversation.findUnique({
-    where: { id },
+  return db.directConversation.findFirst({
+    where: {
+      id: id,
+      users: {
+        every: {
+          blocking: {
+            none: {
+              id: context.currentUser?.id,
+            },
+          },
+        },
+      },
+    },
   })
 }
 

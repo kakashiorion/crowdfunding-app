@@ -41,7 +41,7 @@ import {
   TextInputClassName,
   EmptyIconClassName,
   EmptyDivClassName,
-} from '../../startupConsts'
+} from '../../StartupConsts'
 
 export const QUERY = gql`
   query FindStartupConversationMainQuery($id: Int!) {

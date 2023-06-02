@@ -21,7 +21,7 @@ export const PostImageDivClassName =
 export const PostImageClassName = 'object-fill'
 
 export const InputDivClassName =
-  'flex w-full shrink-0 items-center justify-between gap-1 lg:gap-2'
+  'flex w-full items-center justify-between gap-1 lg:gap-2'
 
 export const PostFooterClassName =
   'flex w-full flex-wrap items-center justify-between gap-2 lg:gap-3'
@@ -62,7 +62,8 @@ export const ConnDivClassName =
 export const CommentListClassName =
   'flex w-full flex-col divide-y divide-white-d2 px-2 dark:divide-black-l2 lg:px-3'
 
-export const PostDividerClassName = 'h-0.5 w-full bg-white-d2 dark:bg-black-l2'
+export const PostDividerClassName =
+  'h-0.5 w-full shrink-0 bg-white-d2 dark:bg-black-l2'
 
 export const CommentDivClassName =
   'flex w-full flex-col items-start justify-start gap-2 py-3 lg:gap-3 lg:py-4'
@@ -105,4 +106,48 @@ export const EmptyIconClassName =
 export const SelectedConvoDivClassName =
   'flex items-center gap-2 lg:gap-3 w-full rounded border border-tertiary-d1 dark:border-tertiary-l1 bg-tertiary-d3/10 p-3 dark:bg-tertiary-l3/10 shadow-md lg:p-4'
 export const ConvoDivClassName =
-  'flex items-center gap-2 duration-200 hover:bg-white-d2 dark:hover:bg-black-l2 lg:gap-3 w-full border border-white-d1 dark:border-black-l1 rounded bg-white-d1 p-3 dark:bg-black-l1 lg:p-4'
+  'flex w-full items-center gap-2 duration-200 hover:bg-white-d2 dark:hover:bg-black-l2 lg:gap-3 border border-white-d1 dark:border-black-l1 rounded bg-white-d1 p-3 dark:bg-black-l1 lg:p-4'
+
+//Navigation
+export const upIconClassName =
+  'flex h-6 lg:h-7 w-6 lg:w-7 fill-tertiary-d1 dark:fill-tertiary-l1 cursor-pointer'
+
+export const profileUpIconClassName =
+  'flex h-7 lg:h-8 w-7 lg:w-8 fill-tertiary-d1 dark:fill-tertiary-l1 cursor-pointer'
+
+export const menuIconClassName =
+  'flex h-6 w-6 lg:h-7 lg:w-7 fill-black hover:fill-tertiary-d1 dark:fill-white dark:hover:fill-tertiary-l1 cursor-pointer'
+
+export const menuExpandDivClassName =
+  'absolute right-0 top-10 z-10 flex w-full flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l2/95 lg:w-1/2 '
+
+export const profileMenuItemClassName =
+  'flex w-full items-center justify-start gap-2 rounded bg-white-d1 p-2 hover:bg-white dark:bg-black-l1 dark:hover:bg-black lg:p-3 lg:gap-3'
+
+export const profileMenuSelectedItemClassName =
+  'flex w-full items-center justify-start gap-2 rounded bg-tertiary-d1 p-2 dark:bg-tertiary-l1 lg:p-3 lg:gap-3'
+
+export const startupPageClassName =
+  'flex h-full overflow-hidden flex-row gap-4 lg:gap-6'
+
+//Connection
+export const ConnectionHeaderClassName =
+  'flex w-full flex-col items-start justify-start gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8'
+
+export const ConnectionTabClasName =
+  'flex items-center justify-start gap-2 lg:gap-3'
+
+export const ConnectionDivClassName =
+  'flex flex-col w-full items-start justify-start gap-4 duration-200 hover:bg-white-d2/70 dark:hover:bg-black-l2/70 lg:gap-6 border border-white-d1 dark:border-black-l1 rounded bg-white-d1 px-3 py-4 lg:py-5 dark:bg-black-l1 lg:p-4'
+
+export const SelectedConnectionDivClassName =
+  'flex flex-col items-start justify-center gap-4 lg:gap-6 w-full rounded border border-tertiary-d1 dark:border-tertiary-l1 bg-tertiary-d3/10 px-3 dark:bg-tertiary-l3/10 shadow-md lg:px-4 py-4 lg:py-5 '
+
+export const ConnectionAcceptClassName =
+  'flex items-center group justify-between gap-2 bg-success-d1 dark:bg-success-l1 rounded px-2 py-1 duration-200 lg:px-3 lg:py-2 hover:bg-success-d2 dark:hover:bg-success-l2'
+
+export const ConnectionRejectClassName =
+  'flex items-center group justify-between gap-2 bg-white-d3 rounded px-2 py-1 duration-200 lg:px-3 lg:py-2 hover:bg-error-d1 dark:bg-black-l3 dark:hover:bg-error-l1'
+
+export const ConnectionActionClassName =
+  'flex items-center group justify-between gap-2 bg-white-d3 rounded px-2 py-1 duration-200 lg:px-3 lg:py-2 hover:bg-tertiary-d1 dark:bg-black-l3 dark:hover:bg-tertiary-l1'

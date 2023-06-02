@@ -127,6 +127,9 @@ export const recentStartupInvestorConnections = () => {
 export const myConnections = () => {
   return db.connection.findMany({
     where: { users: { some: { id: context.currentUser?.id } } },
+    orderBy: {
+      updatedAt: 'desc',
+    },
   })
 }
 
