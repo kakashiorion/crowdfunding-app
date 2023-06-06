@@ -15,10 +15,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import { CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
-import {
-  HoverTertiaryTextButton,
-  TertiaryIconButton,
-} from 'src/components/Button/Button'
+import { TertiaryIconButton } from 'src/components/Button/Button'
 import {
   SmallLabel,
   TertiaryTextLabel,
@@ -27,12 +24,12 @@ import {
 } from 'src/components/Label/Label'
 import {
   PosterInfoClassName,
-  PosterProfilePicClassName,
+  ProfilePicClassName,
   PostFooterClassName,
   PostInteractionClassName,
   CountClassName,
   IconClassName,
-  PostInteractionTextClassName,
+  HideShowClassName,
   DeleteIconClassName,
   PosterNameClassName,
   CommentDivClassName,
@@ -185,7 +182,7 @@ export const Success = ({
     <div key={comment?.id} className={CommentDivClassName}>
       <div className={PosterInfoClassName}>
         <button
-          className={PosterProfilePicClassName}
+          className={ProfilePicClassName}
           onClick={() => {
             //Go to commenter's profile
             if (comment?.commenter?.type == 'INVESTOR') {
@@ -207,24 +204,12 @@ export const Success = ({
           }
         </button>
         <div className={PosterNameClassName}>
-          <HoverTertiaryTextButton
+          <TertiaryTextLabel
             label={
               (comment?.commenter?.type == 'INVESTOR'
                 ? comment?.commenter?.investor?.name
                 : comment?.commenter?.startup?.name) ?? ''
             }
-            action={() => {
-              //Go to commenter's profile
-              if (comment?.commenter?.type == 'INVESTOR') {
-                navigate(
-                  routes.startupInvestorProfile({
-                    id: comment?.commenterID,
-                  })
-                )
-              } else {
-                navigate(routes.startupMyProfile())
-              }
-            }}
           />
           <SmallLabel label={moment(comment?.createdAt).fromNow()} />
         </div>
@@ -285,7 +270,7 @@ export const Success = ({
               ) : (
                 <EditIcon className={IconClassName} />
               )}
-              <div className={PostInteractionTextClassName}>
+              <div className={HideShowClassName}>
                 <SubTextLabel label={editing ? 'Cancel' : 'Edit'} />
               </div>
             </button>
@@ -296,7 +281,7 @@ export const Success = ({
               }}
             >
               <DeleteIcon className={DeleteIconClassName} />
-              <div className={PostInteractionTextClassName}>
+              <div className={HideShowClassName}>
                 <SubTextLabel label={'Delete'} />
               </div>
             </button>

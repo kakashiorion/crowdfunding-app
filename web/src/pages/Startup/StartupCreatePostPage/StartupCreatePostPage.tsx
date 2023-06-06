@@ -10,12 +10,12 @@ import {
 } from 'src/components/Button/Button'
 import {
   ErrorSubTextLabel,
-  TertiaryTextLabel,
+  TertiaryTitleLabel,
   TextLabel,
 } from 'src/components/Label/Label'
 import {
-  CreatePostActionClassName,
-  CreatePostDivClassName,
+  ActionGroupClassName,
+  PageDivClassName,
   SelectInputClassName,
   TextInputClassName,
 } from 'src/components/Startup/StartupConsts'
@@ -85,15 +85,15 @@ const StartupCreatePostMain = () => {
           },
         },
       }).then((d) => {
-        navigate(routes.startupPost({ id: d.data.createPost.id }))
+        navigate(routes.startupViewPost({ id: d.data.createPost.id }))
       })
     }
   }
 
   return (
     <div className="flex h-full w-full flex-col gap-3 lg:w-2/3 lg:gap-4">
-      <TertiaryTextLabel label="CREATE POST" />
-      <div className={CreatePostDivClassName}>
+      <TertiaryTitleLabel label="Create Post" />
+      <div className={PageDivClassName}>
         <TextLabel label="Title (required)" />
         <input
           id="Title"
@@ -162,7 +162,7 @@ const StartupCreatePostMain = () => {
           ))}
         </select>
         <Divider />
-        <div className={CreatePostActionClassName}>
+        <div className={ActionGroupClassName}>
           <TertiaryFilledButton label="PUBLISH" action={() => submit()} />
           <HoverErrorTextButton label="CANCEL" action={() => back()} />
         </div>

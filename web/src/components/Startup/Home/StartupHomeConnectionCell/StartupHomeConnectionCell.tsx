@@ -6,11 +6,10 @@ import type {
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import { HoverTertiaryTextButton } from 'src/components/Button/Button'
-import { TextLabel } from 'src/components/Label/Label'
+import { TertiaryTextLabel, TextLabel } from 'src/components/Label/Label'
 import {
-  ConnDivClassName,
-  PosterProfilePicClassName,
+  HomeConnDivClassName,
+  ProfilePicClassName,
 } from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
@@ -40,9 +39,9 @@ export const Success = ({
   FindStartupHomeConnectionQueryVariables
 >) => {
   return (
-    <div className={ConnDivClassName}>
+    <div className={HomeConnDivClassName}>
       <button
-        className={PosterProfilePicClassName}
+        className={ProfilePicClassName}
         onClick={() => {
           //Navigate to investor's profile
           navigate(
@@ -57,20 +56,12 @@ export const Success = ({
           startupHomeConnection.users[0]?.investor?.name[0].toUpperCase()
         }
       </button>
-      <HoverTertiaryTextButton
+      <TertiaryTextLabel
         label={startupHomeConnection.users[0]?.investor?.name ?? ''}
-        action={() => {
-          //Navigate to investor's profile
-          navigate(
-            routes.startupInvestorProfile({
-              id: startupHomeConnection.users[0]?.id ?? 0,
-            })
-          )
-        }}
       />
       <TextLabel label="is now connected with" />
       <button
-        className={PosterProfilePicClassName}
+        className={ProfilePicClassName}
         onClick={() => {
           //Navigate to investor's profile
           navigate(
@@ -85,16 +76,8 @@ export const Success = ({
           startupHomeConnection.users[1]?.investor?.name[0].toUpperCase()
         }
       </button>
-      <HoverTertiaryTextButton
+      <TertiaryTextLabel
         label={startupHomeConnection.users[1]?.investor?.name ?? ''}
-        action={() => {
-          //Navigate to investor's profile
-          navigate(
-            routes.startupInvestorProfile({
-              id: startupHomeConnection.users[1]?.id ?? 0,
-            })
-          )
-        }}
       />
     </div>
   )

@@ -26,21 +26,21 @@ import {
   TextLabel,
   MediumLabel,
   TertiarySubTitleLabel,
-  TertiaryTextLabel,
+  TertiaryMediumLabel,
 } from 'src/components/Label/Label'
 
 import {
   ChatContentClassName,
-  ConvoProfilePicClassName,
-  CreatePostActionClassName,
+  ProfilePicClassName,
+  ActionGroupClassName,
   ButtonIconClassName,
-  IconClassName,
   InputDivClassName,
   LightIconClassName,
-  PostDividerClassName,
+  DividerClassName,
   TextInputClassName,
   EmptyIconClassName,
   EmptyDivClassName,
+  LargeIconClassName,
 } from '../../StartupConsts'
 
 export const QUERY = gql`
@@ -167,16 +167,16 @@ export const Success = ({
 
   return (
     <div id="ChatContainer" className="flex h-full w-full flex-col gap-4">
-      <div id="ChatHeader" className={CreatePostActionClassName}>
+      <div id="ChatHeader" className={ActionGroupClassName}>
         <BackIcon
-          className={IconClassName}
+          className={LargeIconClassName}
           onClick={() => {
             setCurrentConvo(0)
           }}
         />
         <button
           id="InvestorProfPic"
-          className={ConvoProfilePicClassName}
+          className={ProfilePicClassName}
           onClick={() => {
             //Navigate to investor's profile
             navigate(
@@ -188,12 +188,12 @@ export const Success = ({
         >
           {
             //TODO: Add Profile pic as BG - phase 2
-            (investorName ?? 'I')[0].toUpperCase()
+            (investorName ?? 'Investor')[0].toUpperCase()
           }
         </button>
-        <TertiaryTextLabel label={investorName ?? 'Investor'} />
+        <TertiaryMediumLabel label={investorName ?? 'Investor'} />
       </div>
-      <div id="Divider" className={PostDividerClassName} />
+      <div id="Divider" className={DividerClassName} />
       <div id="ChatContent" className={ChatContentClassName}>
         <span className="mt-auto"></span>
         <TertiarySubTitleLabel
@@ -206,8 +206,8 @@ export const Success = ({
               ref={i == sortedMessages.length - 1 ? bottomRef : otherRef}
               className={`flex flex-col gap-1 p-3 lg:gap-2 lg:p-4 ${
                 message?.senderID == currentUser?.id
-                  ? ' items-end self-end rounded-t rounded-bl-2xl bg-tertiary-d1/70 dark:bg-tertiary-l1/70 '
-                  : ' items-start self-start rounded-t rounded-br-2xl bg-white-d3/70 dark:bg-black-l3/70 '
+                  ? ' items-end self-end rounded-b-2xl rounded-tl-2xl bg-white-d3/70 dark:bg-black-l3/70 '
+                  : ' items-start self-start rounded-b-2xl rounded-tr-2xl bg-tertiary-d1/70 dark:bg-tertiary-l1/70 '
               }`}
             >
               <SmallLabel label={moment(message?.createdAt).calendar()} />

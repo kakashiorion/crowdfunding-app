@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import moment from 'moment'
+import SaveIcon from 'public/icons/bookmark.svg'
 import CommentIcon from 'public/icons/comment.svg'
 import EmptyIcon from 'public/icons/dnd.svg'
-import SaveIcon from 'public/icons/favorite.svg'
 import MoreIcon from 'public/icons/more.svg'
 import SendIcon from 'public/icons/send.svg'
 import ShareIcon from 'public/icons/share.svg'
@@ -27,11 +27,12 @@ import {
   SmallLabel,
   SubTextLabel,
   TertiaryMediumLabel,
+  TertiaryTextLabel,
   TextLabel,
 } from 'src/components/Label/Label'
 import StartupViewCommentCell from 'src/components/Startup/Post/StartupViewCommentCell'
 import {
-  PosterProfilePicClassName,
+  ProfilePicClassName,
   HoverIconClassName,
   PostInteractionClassName,
   CountClassName,
@@ -44,10 +45,10 @@ import {
   PostContentClassName,
   PostFooterClassName,
   PostImageDivClassName,
-  PostInteractionTextClassName,
+  HideShowClassName,
   PostImageClassName,
   CommentListClassName,
-  PostDividerClassName,
+  DividerClassName,
   TextInputClassName,
   InputDivClassName,
   LightIconClassName,
@@ -259,7 +260,7 @@ export const Success = ({
       <div className={PosterHeaderClassName}>
         <div className={PosterInfoClassName}>
           <button
-            className={PosterProfilePicClassName}
+            className={ProfilePicClassName}
             onClick={() => {
               //Go to poster's profile
               if (startupViewPost.poster.type == 'INVESTOR') {
@@ -281,24 +282,12 @@ export const Success = ({
             }
           </button>
           <div className={PosterNameClassName}>
-            <HoverTertiaryTextButton
+            <TertiaryTextLabel
               label={
                 (startupViewPost.poster.type == 'INVESTOR'
                   ? startupViewPost.poster.investor?.name
                   : startupViewPost.poster.startup?.name) ?? ''
               }
-              action={() => {
-                //Go to poster's profile
-                if (startupViewPost.poster.type == 'INVESTOR') {
-                  navigate(
-                    routes.startupInvestorProfile({
-                      id: startupViewPost.posterID,
-                    })
-                  )
-                } else {
-                  navigate(routes.startupMyProfile())
-                }
-              }}
             />
             <SmallLabel label={moment(startupViewPost.createdAt).fromNow()} />
           </div>
@@ -360,7 +349,7 @@ export const Success = ({
                 : 'fill-black group-hover:origin-bottom-left group-hover:-rotate-12 group-hover:fill-tertiary-d1 dark:fill-white group-hover:dark:fill-tertiary-l1'
             }`}
           />
-          <div className={PostInteractionTextClassName}>
+          <div className={HideShowClassName}>
             <SubTextLabel label={'Likes'} />
           </div>
           {startupViewPost.comments && (
@@ -373,11 +362,11 @@ export const Success = ({
           className={PostInteractionClassName}
           onClick={() => {
             //Navigate to post details page (same as this)
-            navigate(routes.startupPost({ id: startupViewPost.id }))
+            navigate(routes.startupViewPost({ id: startupViewPost.id }))
           }}
         >
           <CommentIcon className={IconClassName} />
-          <div className={PostInteractionTextClassName}>
+          <div className={HideShowClassName}>
             <SubTextLabel label={'Comments'} />
           </div>
           {startupViewPost.comments && (
@@ -391,7 +380,7 @@ export const Success = ({
           }}
         >
           <ShareIcon className={IconClassName} />
-          <div className={PostInteractionTextClassName}>
+          <div className={HideShowClassName}>
             <SubTextLabel label={'Share'} />
           </div>
         </button>
@@ -417,7 +406,7 @@ export const Success = ({
           />
         </div>
       )}
-      <div className={PostDividerClassName} />
+      <div className={DividerClassName} />
       <div id="CommentList" className={CommentListClassName}>
         {startupViewPost.comments &&
           startupViewPost.comments.map((comment) => (

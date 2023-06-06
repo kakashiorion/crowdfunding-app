@@ -79,6 +79,14 @@ export const TitleLabel = (props: LabelProps) => {
   )
 }
 
+export const BoldTitleLabel = (props: LabelProps) => {
+  return (
+    <p className="text-h6 font-bold text-black dark:text-white lg:text-h5">
+      {props.label}
+    </p>
+  )
+}
+
 export const GreyTitleLabel = (props: LabelProps) => {
   return (
     <p className="text-h6 text-black-l3 dark:text-white-d3 lg:text-h5">
@@ -131,6 +139,14 @@ export const DisabledTitleLabel = (props: LabelProps) => {
 export const SubTitleLabel = (props: LabelProps) => {
   return (
     <p className="text-h7 text-black dark:text-white lg:text-h6">
+      {props.label}
+    </p>
+  )
+}
+
+export const BoldSubTitleLabel = (props: LabelProps) => {
+  return (
+    <p className="text-h7 font-bold text-black dark:text-white lg:text-h6">
       {props.label}
     </p>
   )
@@ -193,6 +209,14 @@ export const MediumLabel = (props: LabelProps) => {
   )
 }
 
+export const BoldMediumLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b1 font-bold text-black dark:text-white lg:text-h7">
+      {props.label}
+    </p>
+  )
+}
+
 export const TertiaryMediumLabel = (props: LabelProps) => {
   return (
     <p className="text-b1 text-tertiary-d1 dark:text-tertiary-l1 lg:text-h7">
@@ -205,6 +229,14 @@ export const TertiaryMediumLabel = (props: LabelProps) => {
 export const TextLabel = (props: LabelProps) => {
   return (
     <p className="text-b2 text-black dark:text-white lg:text-b1">
+      {props.label}
+    </p>
+  )
+}
+
+export const BoldTextLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b2 font-bold text-black dark:text-white lg:text-b1">
       {props.label}
     </p>
   )

@@ -28,6 +28,7 @@ export const schema = gql`
     savedPosts: [Post]!
     likedComments: [Comment]!
     connections: [Connection]!
+    requestedConnections: [Connection]!
     followedBy: [User]!
     following: [User]!
     blockedBy: [User]!
@@ -136,6 +137,8 @@ export const schema = gql`
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     mutualFollowUser(userID: Int!): User! @requireAuth
+    followUser(userID: Int!): User! @requireAuth
+    unfollowUser(userID: Int!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
   }
 `

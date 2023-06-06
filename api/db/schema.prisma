@@ -14,45 +14,46 @@ generator client {
 
 //TODO: Implement upload profile pic - phase 2
 model User {
-  id                  Int                  @id @default(autoincrement())
-  email               String               @unique
-  hashedPassword      String
-  salt                String
-  resetToken          String?
-  resetTokenExpiresAt DateTime?
-  profilePicURL       String?
-  lastActive          DateTime             @default(now()) //TODO: When the user interacted with the platform last
-  mobile              String?
-  otp                 String?
-  otpExpiresAt        DateTime?
-  webAuthnChallenge   String?              @unique
-  credentials         UserCredential[]
-  type                UserType             @default(GUEST)
-  investor            Investor?
-  startup             Startup?
-  isOnboarded         Boolean              @default(false)
-  likedOnboarding     Boolean?
-  offerRoomMessages   RoomGroupMessage[]   @relation("RoomGroupMessageSender")
-  negotitionMessages  NegotiationMessage[] @relation("NegotiationMessageSender")
-  directMessages      DirectMessage[]      @relation("DMSender")
-  directConversations DirectConversation[] @relation("DM")
-  posts               Post[]               @relation("Poster")
-  comments            Comment[]            @relation("Commenter")
-  likedPosts          Post[]               @relation("UserLikesPost")
-  savedPosts          Post[]               @relation("UserSavedPost")
-  likedComments       Comment[]            @relation("UserLikesComment")
-  connections         Connection[]         @relation("Connection")
-  followedBy          User[]               @relation("UserFollows")
-  following           User[]               @relation("UserFollows")
-  blocking            User[]               @relation("UserBlocked")
-  blockedBy           User[]               @relation("UserBlocked")
-  messageVisibility   VisibilityLevel      @default(PUBLIC)
-  activityVisbility   VisibilityLevel      @default(PUBLIC)
-  profileVisbility    VisibilityLevel      @default(PUBLIC)
-  notificationLevel   NotificationLevel    @default(HIGH)
-  prefersTheme        UITheme              @default(SYSTEM)
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  id                   Int                  @id @default(autoincrement())
+  email                String               @unique
+  hashedPassword       String
+  salt                 String
+  resetToken           String?
+  resetTokenExpiresAt  DateTime?
+  profilePicURL        String?
+  lastActive           DateTime             @default(now()) //TODO: When the user interacted with the platform last
+  mobile               String? //For future use
+  otp                  String? //For future use
+  otpExpiresAt         DateTime? //For future use
+  webAuthnChallenge    String?              @unique //For future use
+  credentials          UserCredential[] //For future use
+  type                 UserType             @default(GUEST)
+  investor             Investor?
+  startup              Startup?
+  isOnboarded          Boolean              @default(false)
+  likedOnboarding      Boolean?
+  offerRoomMessages    RoomGroupMessage[]   @relation("RoomGroupMessageSender")
+  negotitionMessages   NegotiationMessage[] @relation("NegotiationMessageSender")
+  directMessages       DirectMessage[]      @relation("DMSender")
+  directConversations  DirectConversation[] @relation("DM")
+  posts                Post[]               @relation("Poster")
+  comments             Comment[]            @relation("Commenter")
+  likedPosts           Post[]               @relation("UserLikesPost")
+  savedPosts           Post[]               @relation("UserSavedPost")
+  likedComments        Comment[]            @relation("UserLikesComment")
+  connections          Connection[]         @relation("Connection")
+  requestedConnections Connection[]         @relation("ConnectionRequester")
+  followedBy           User[]               @relation("UserFollows")
+  following            User[]               @relation("UserFollows")
+  blocking             User[]               @relation("UserBlocked")
+  blockedBy            User[]               @relation("UserBlocked")
+  messageVisibility    VisibilityLevel      @default(PUBLIC)
+  activityVisbility    VisibilityLevel      @default(PUBLIC)
+  profileVisbility     VisibilityLevel      @default(PUBLIC)
+  notificationLevel    NotificationLevel    @default(HIGH)
+  prefersTheme         UITheme              @default(SYSTEM)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
 }
 
 enum UITheme {
@@ -95,11 +96,13 @@ model LandingContact {
 }
 
 model Connection {
-  id        Int              @id @default(autoincrement())
-  users     User[]           @relation("Connection")
-  status    ConnectionStatus @default(PENDING)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id          Int              @id @default(autoincrement())
+  users       User[]           @relation("Connection")
+  status      ConnectionStatus @default(PENDING)
+  requester   User             @relation("ConnectionRequester", fields: [requesterID], references: [id])
+  requesterID Int
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 enum ConnectionStatus {

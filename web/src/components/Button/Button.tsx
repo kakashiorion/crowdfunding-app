@@ -1,17 +1,7 @@
-// type size = 'small' | 'medium' | 'large'
-// type color =
-//   | 'primary'
-//   | 'secondary'
-//   | 'success'
-//   | 'accent'
-//   | 'warn'
-//   | 'error'
-//   | 'black'
-//   | 'white'
-//   | 'grayscale' //for disabled
-// type variant = 'filled' | 'outlined' | 'text'
-// type shape = 'round' | 'square'
-// type iconPosition = 'before' | 'after'
+import { useState } from 'react'
+
+import DownIcon from 'public/icons/down.svg'
+import UpIcon from 'public/icons/up.svg'
 
 type ButtonProps = {
   action: () => void
@@ -33,7 +23,7 @@ export const PrimaryFilledButton = (props: ButtonProps) => {
 export const LeadingIconBlackFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="flex items-center justify-center gap-1 rounded border-2 border-black-l1 fill-black-l1 px-4 py-2 text-b2 text-black-l1 duration-200 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:fill-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:fill-black dark:hover:text-black lg:gap-2 lg:px-5 lg:py-2.5 lg:text-b1"
+      className="flex items-center justify-center gap-2 rounded border-2 border-black-l1 fill-black-l1 px-4 py-2 text-b2 text-black-l1 duration-200 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:fill-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:fill-black dark:hover:text-black lg:gap-3 lg:px-5 lg:py-2.5 lg:text-b1"
       onClick={props.action}
     >
       {props.icon}
@@ -358,5 +348,42 @@ export const SmallHoverErrorTextButton = (props: ButtonProps) => {
     >
       {props.label}
     </button>
+  )
+}
+
+type DropDownButtonProps = {
+  leadingIcon?: JSX.Element
+  label: string
+  dropIcon?: JSX.Element
+  dropLabel: string
+  dropAction: () => void
+}
+
+export const DropDownButton = (props: DropDownButtonProps) => {
+  const [expanded, setExpanded] = useState(false)
+  return (
+    <div className="relative flex items-center justify-center gap-2 rounded border border-white-d4 px-3 py-1.5 text-b2 text-black dark:border-black-l4 dark:text-white lg:gap-3 lg:px-4 lg:py-2 lg:text-b1">
+      {props.leadingIcon}
+      {props.label}
+      <button
+        className="flex h-full items-center justify-center rounded hover:bg-white-d2 dark:hover:bg-black-l2"
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? (
+          <UpIcon className="h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
+        ) : (
+          <DownIcon className="h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
+        )}
+      </button>
+      {expanded && (
+        <button
+          className="absolute -bottom-full left-0 z-10 flex w-full items-center justify-center gap-2 rounded border border-white-d4 bg-white-d1 px-3 py-2 text-b3 text-black shadow hover:bg-white-d2 dark:border-black-l4 dark:bg-black-l1 dark:text-white dark:hover:bg-black-l2 lg:gap-3 lg:px-4 lg:py-2.5 lg:text-b2"
+          onClick={props.dropAction}
+        >
+          {props.dropIcon}
+          {props.dropLabel}
+        </button>
+      )}
+    </div>
   )
 }

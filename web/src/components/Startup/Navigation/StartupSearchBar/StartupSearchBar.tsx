@@ -2,9 +2,9 @@ import SearchIcon from 'public/icons/search.svg'
 import UpIcon from 'public/icons/up.svg'
 
 import {
-  menuExpandDivClassName,
-  menuIconClassName,
-  upIconClassName,
+  MenuExpandDivClassName,
+  MenuIconClassName,
+  UpIconClassName,
 } from 'src/components/Startup/StartupConsts'
 
 type StartupSearchBarProps = {
@@ -17,14 +17,14 @@ const StartupSearchBar = (props: StartupSearchBarProps) => {
       {props.isMenuOpen == 'Search' ? (
         <>
           <UpIcon
-            className={upIconClassName}
+            className={UpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <StartupSearchMenu />
         </>
       ) : (
         <SearchIcon
-          className={menuIconClassName}
+          className={MenuIconClassName}
           onClick={() => props.setMenuOpen('Search')}
         />
       )}
@@ -35,7 +35,7 @@ export default StartupSearchBar
 
 const StartupSearchMenu = () => {
   return (
-    <div className={menuExpandDivClassName}>
+    <div className={MenuExpandDivClassName}>
       <SearchInput />
       <SearchResults />
     </div>

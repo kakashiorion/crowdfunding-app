@@ -10,9 +10,9 @@ import { navigate, routes } from '@redwoodjs/router'
 import { useAuth } from 'src/auth'
 import { SubTextLabel } from 'src/components/Label/Label'
 import {
-  profileMenuItemClassName,
-  profileMenuSelectedItemClassName,
-  profileUpIconClassName,
+  ProfileMenuItemClassName,
+  ProfileMenuSelectedItemClassName,
+  ProfileUpIconClassName,
 } from 'src/components/Startup/StartupConsts'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
@@ -27,7 +27,7 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
       {props.isMenuOpen == 'Profile' ? (
         <>
           <UpIcon
-            className={profileUpIconClassName}
+            className={ProfileUpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <StartupProfileMenu
@@ -62,8 +62,8 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
         }}
         className={
           pageSelected == 'Profile'
-            ? profileMenuSelectedItemClassName
-            : profileMenuItemClassName
+            ? ProfileMenuSelectedItemClassName
+            : ProfileMenuItemClassName
         }
       >
         <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
@@ -77,14 +77,14 @@ const StartupProfileMenu = (props: StartupProfileBarProps) => {
         }}
         className={
           pageSelected == 'Help'
-            ? profileMenuSelectedItemClassName
-            : profileMenuItemClassName
+            ? ProfileMenuSelectedItemClassName
+            : ProfileMenuItemClassName
         }
       >
         <HelpIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Help" />
       </button>
-      <button onClick={() => logOut()} className={profileMenuItemClassName}>
+      <button onClick={() => logOut()} className={ProfileMenuItemClassName}>
         <LogoutIcon className="flex h-5 w-5 fill-error-d1 dark:fill-error-l1 lg:h-6 lg:w-6" />
         <SubTextLabel label="Logout" />
       </button>

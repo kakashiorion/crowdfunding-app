@@ -80,6 +80,32 @@ export const mutualFollowUser = ({ userID }: { userID: number }) => {
   })
 }
 
+export const followUser = ({ userID }: { userID: number }) => {
+  return db.user.update({
+    where: { id: context.currentUser?.id },
+    data: {
+      following: {
+        connect: {
+          id: userID,
+        },
+      },
+    },
+  })
+}
+
+export const unfollowUser = ({ userID }: { userID: number }) => {
+  return db.user.update({
+    where: { id: context.currentUser?.id },
+    data: {
+      following: {
+        disconnect: {
+          id: userID,
+        },
+      },
+    },
+  })
+}
+
 export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
   return db.user.delete({
     where: { id },
@@ -125,6 +151,11 @@ export const User: UserRelationResolvers = {
   },
   connections: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).connections()
+  },
+  requestedConnections: (_obj, { root }) => {
+    return db.user
+      .findUnique({ where: { id: root?.id } })
+      .requestedConnections()
   },
   followedBy: (_obj, { root }) => {
     return db.user.findUnique({ where: { id: root?.id } }).followedBy()

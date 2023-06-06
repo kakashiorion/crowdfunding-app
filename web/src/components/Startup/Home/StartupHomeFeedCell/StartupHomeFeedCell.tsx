@@ -8,7 +8,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { LeadingIconBlackFilledButton } from 'src/components/Button/Button'
-import { TertiaryTextLabel } from 'src/components/Label/Label'
+import { TertiaryTitleLabel } from 'src/components/Label/Label'
 import StartupHomeConnectionCell from 'src/components/Startup/Home/StartupHomeConnectionCell'
 import StartupHomePostCell from 'src/components/Startup/Home/StartupHomePostCell'
 
@@ -49,8 +49,8 @@ export const Success = ({
 >) => {
   return (
     <div className="flex h-full flex-col gap-2 lg:gap-3">
-      <div className="flex items-center justify-between">
-        <TertiaryTextLabel label="YOUR FEED" />
+      <div className="flex items-start justify-between">
+        <TertiaryTitleLabel label="Home Feed" />
         <LeadingIconBlackFilledButton
           label="CREATE POST"
           icon={<AddIcon className="h-5 w-5 lg:h-6 lg:w-6" />}

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
 import moment from 'moment'
+import SaveIcon from 'public/icons/bookmark.svg'
 import CommentIcon from 'public/icons/comment.svg'
-import SaveIcon from 'public/icons/favorite.svg'
 import MoreIcon from 'public/icons/more.svg'
 import ShareIcon from 'public/icons/share.svg'
 import LikeIcon from 'public/icons/thumbUp.svg'
@@ -21,6 +21,7 @@ import {
   SmallLabel,
   SubTextLabel,
   TertiaryMediumLabel,
+  TertiaryTextLabel,
 } from 'src/components/Label/Label'
 import {
   CountClassName,
@@ -33,11 +34,11 @@ import {
   PostImageClassName,
   PostImageDivClassName,
   PostInteractionClassName,
-  PostInteractionTextClassName,
+  HideShowClassName,
   PosterHeaderClassName,
   PosterInfoClassName,
   PosterNameClassName,
-  PosterProfilePicClassName,
+  ProfilePicClassName,
 } from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
@@ -183,7 +184,7 @@ export const Success = ({
       <div className={PosterHeaderClassName}>
         <div className={PosterInfoClassName}>
           <button
-            className={PosterProfilePicClassName}
+            className={ProfilePicClassName}
             onClick={() => {
               //Go to investor's profile
               navigate(
@@ -197,16 +198,8 @@ export const Success = ({
             }
           </button>
           <div className={PosterNameClassName}>
-            <HoverTertiaryTextButton
+            <TertiaryTextLabel
               label={startupHomePost.poster.investor?.name ?? ''}
-              action={() => {
-                //Go to investor's profile
-                navigate(
-                  routes.startupInvestorProfile({
-                    id: startupHomePost.posterID,
-                  })
-                )
-              }}
             />
             <SmallLabel label={moment(startupHomePost.createdAt).fromNow()} />
           </div>
@@ -266,7 +259,7 @@ export const Success = ({
                 : 'fill-black group-hover:origin-bottom-left group-hover:-rotate-12 group-hover:fill-tertiary-d1 dark:fill-white group-hover:dark:fill-tertiary-l1'
             }`}
           />
-          <div className={PostInteractionTextClassName}>
+          <div className={HideShowClassName}>
             <SubTextLabel label={'Likes'} />
           </div>
           {startupHomePost.comments && (
@@ -279,11 +272,11 @@ export const Success = ({
           className={PostInteractionClassName}
           onClick={() => {
             //Go to post details page
-            navigate(routes.startupPost({ id: startupHomePost.id }))
+            navigate(routes.startupViewPost({ id: startupHomePost.id }))
           }}
         >
           <CommentIcon className={IconClassName} />
-          <div className={PostInteractionTextClassName}>
+          <div className={HideShowClassName}>
             <SubTextLabel label={'Comments'} />
           </div>
           {startupHomePost.comments && (
@@ -299,7 +292,7 @@ export const Success = ({
           }}
         >
           <ShareIcon className={IconClassName} />
-          <div className={PostInteractionTextClassName}>
+          <div className={HideShowClassName}>
             <SubTextLabel label={'Share'} />
           </div>
         </button>

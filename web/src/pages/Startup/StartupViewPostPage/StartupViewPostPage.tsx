@@ -1,10 +1,18 @@
+import { useContext, useEffect } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
 
-import { TertiaryTextLabel } from 'src/components/Label/Label'
+import { TertiaryTitleLabel } from 'src/components/Label/Label'
 // import StartupRecentPostsCell from 'src/components/Startup/Post/StartupRecentPostsCell'
 import StartupViewPostCell from 'src/components/Startup/Post/StartupViewPostCell'
+import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
-const StartupPostPage = ({ id }: { id: number }) => {
+const StartupViewPostPage = ({ id }: { id: number }) => {
+  const { setPageSelected } = useContext(StartupPageContext)
+
+  useEffect(() => {
+    setPageSelected('Post')
+  }, [setPageSelected])
   return (
     <>
       <MetaTags
@@ -17,12 +25,12 @@ const StartupPostPage = ({ id }: { id: number }) => {
   )
 }
 
-export default StartupPostPage
+export default StartupViewPostPage
 
 const StartupViewPostMain = ({ id }: { id: number }) => {
   return (
     <div className="flex h-full w-full flex-col gap-3 lg:w-2/3 lg:gap-4">
-      <TertiaryTextLabel label="VIEW POST" />
+      <TertiaryTitleLabel label="View Post" />
       <StartupViewPostCell id={id} />
     </div>
   )

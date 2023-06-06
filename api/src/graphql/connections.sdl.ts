@@ -3,6 +3,8 @@ export const schema = gql`
     id: Int!
     users: [User]!
     status: ConnectionStatus!
+    requester: User!
+    requesterID: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -22,11 +24,13 @@ export const schema = gql`
   }
 
   input CreateConnectionInput {
-    status: ConnectionStatus!
+    requesterID: Int!
+    accepterID: Int!
   }
 
   input UpdateConnectionInput {
     status: ConnectionStatus
+    requesterID: Int
   }
 
   type Mutation {

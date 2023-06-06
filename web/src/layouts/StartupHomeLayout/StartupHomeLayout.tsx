@@ -4,7 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 import StartupMenuBar from 'src/components/Startup/Navigation/StartupMenuBar/StartupMenuBar'
-import { startupPageClassName } from 'src/components/Startup/StartupConsts'
+import { StartupPageClassName } from 'src/components/Startup/StartupConsts'
 
 import {
   HomeLayoutWrapperClassName,
@@ -66,7 +66,7 @@ const StartupHomeLayout = ({ children }: StartupHomeLayoutProps) => {
         <div id="layoutWrapper" className={HomeLayoutWrapperClassName}>
           <div id="pageWrapper" className={HomePageWrapperClassName}>
             <StartupMenuBar />
-            <div className={startupPageClassName}>{children}</div>
+            <div className={StartupPageClassName}>{children}</div>
           </div>
         </div>
       </div>

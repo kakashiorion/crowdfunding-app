@@ -2,9 +2,9 @@ import NotificationIcon from 'public/icons/notification.svg'
 import UpIcon from 'public/icons/up.svg'
 
 import {
-  menuExpandDivClassName,
-  menuIconClassName,
-  upIconClassName,
+  MenuExpandDivClassName,
+  MenuIconClassName,
+  UpIconClassName,
 } from 'src/components/Startup/StartupConsts'
 
 type StartupNotificationBarProps = {
@@ -17,14 +17,14 @@ const StartupNotificationBar = (props: StartupNotificationBarProps) => {
       {props.isMenuOpen == 'Notification' ? (
         <>
           <UpIcon
-            className={upIconClassName}
+            className={UpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <StartupNotificationMenu />
         </>
       ) : (
         <NotificationIcon
-          className={menuIconClassName}
+          className={MenuIconClassName}
           onClick={() => props.setMenuOpen('Notification')}
         />
       )}
@@ -35,7 +35,7 @@ export default StartupNotificationBar
 
 const StartupNotificationMenu = () => {
   return (
-    <div className={menuExpandDivClassName}>
+    <div className={MenuExpandDivClassName}>
       <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l1 lg:h-9"></div>
     </div>
   )

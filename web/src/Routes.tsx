@@ -42,7 +42,7 @@ const Routes = () => {
         <Route path="/startup/myProfile" page={StartupStartupMyProfilePage} name="startupMyProfile" />
         <Route path="/startup/help" page={StartupStartupHelpPage} name="startupHelp" />
         <Route path="/startup/investorProfile/{id:Int}" page={StartupStartupInvestorProfilePage} name="startupInvestorProfile" />
-        <Route path="/startup/viewPost/{id:Int}" page={StartupStartupPostPage} name="startupPost" />
+        <Route path="/startup/viewPost/{id:Int}" page={StartupStartupViewPostPage} name="startupViewPost" />
         <Route path="/startup/createPost" page={StartupStartupCreatePostPage} name="startupCreatePost" />
         <Route path="/startup/createOffer" page={StartupStartupCreateOfferPage} name="startupCreateOffer" />
         <Route path="/startup/offerRoom/{id:Int}" page={StartupStartupOfferRoomPage} name="startupOfferRoom" />
@@ -56,11 +56,11 @@ const Routes = () => {
         <Route path="/investor/connections" page={InvestorInvestorMyConnectionsPage} name="investorMyConnections" />
         <Route path="/investor/conversations" page={InvestorInvestorMyConversationsPage} name="investorMyConversations" />
         <Route path="/investor/explore" page={InvestorInvestorExplorePage} name="investorExplore" />
-        <Route path="/investor/myProfile" page={InvestorMyInvestorProfilePage} name="myInvestorProfile" />
+        <Route path="/investor/myProfile" page={InvestorInvestorMyProfilePage} name="investorMyProfile" />
         <Route path="/investor/help" page={InvestorInvestorHelpPage} name="investorHelp" />
-        <Route path="/investor/investorProfile/{id:Int}" page={InvestorOtherInvestorProfilePage} name="otherInvestorProfile" />
-        <Route path="/investor/startupProfile/{id:Int}" page={InvestorStartupProfilePage} name="investorStartupProfile" />
-        <Route path="/investor/viewPost/{id:Int}" page={InvestorInvestorPostPage} name="investorPost" />
+        <Route path="/investor/investorProfile/{id:Int}" page={InvestorInvestorOtherProfilePage} name="investorOtherProfile" />
+        <Route path="/investor/startupProfile/{id:Int}" page={InvestorInvestorStartupProfilePage} name="investorStartupProfile" />
+        <Route path="/investor/viewPost/{id:Int}" page={InvestorInvestorViewPostPage} name="investorViewPost" />
         <Route path="/investor/createPost" page={InvestorInvestorCreatePostPage} name="investorCreatePost" />
         <Route path="/investor/offerRoom/{id:Int}" page={InvestorInvestorOfferRoomPage} name="investorOfferRoom" />
       </Set>

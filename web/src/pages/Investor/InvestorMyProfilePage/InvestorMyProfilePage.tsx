@@ -4,7 +4,7 @@ import { MetaTags } from '@redwoodjs/web'
 
 import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
-const MyInvestorProfilePage = () => {
+const InvestorMyProfilePage = () => {
   const { setPageSelected } = useContext(InvestorPageContext)
 
   useEffect(() => {
@@ -20,4 +20,4 @@ const MyInvestorProfilePage = () => {
   )
 }
 
-export default MyInvestorProfilePage
+export default InvestorMyProfilePage

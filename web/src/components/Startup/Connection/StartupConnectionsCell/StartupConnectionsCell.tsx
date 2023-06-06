@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 import moment from 'moment'
 import CloseIcon from 'public/icons/close.svg'
 import ChatIcon from 'public/icons/comment.svg'
+import DeleteIcon from 'public/icons/delete.svg'
 import AcceptIcon from 'public/icons/done.svg'
 import DownIcon from 'public/icons/down.svg'
+import InfoIcon from 'public/icons/info.svg'
 import ProfileIcon from 'public/icons/profile.svg'
 import SearchIcon from 'public/icons/search.svg'
 import UpIcon from 'public/icons/up.svg'
@@ -21,36 +23,43 @@ import {
 import {
   SmallLabel,
   SubTextLabel,
-  TertiarySubTitleLabel,
+  TertiaryMediumLabel,
   TertiaryTextLabel,
+  TertiaryTitleLabel,
   TextLabel,
+  WarnSubTextLabel,
 } from 'src/components/Label/Label'
-
 import {
   ButtonIconClassName,
   ConnectionAcceptClassName,
   ConnectionActionClassName,
   ConnectionDivClassName,
   ConnectionHeaderClassName,
+  ConnectionMainClassName,
   ConnectionRejectClassName,
   ConnectionTabClasName,
-  ConvoNameClassName,
-  CreatePostDivClassName,
+  NameClassName,
+  PageDivClassName,
   IconClassName,
   InputDivClassName,
   LightIconClassName,
-  PostDividerClassName,
-  PostInteractionTextClassName,
-  PosterProfilePicClassName,
+  DividerClassName,
+  HideShowClassName,
+  ProfilePicClassName,
   SelectedConnectionDivClassName,
   TextInputClassName,
-} from '../../StartupConsts'
+  ConnectionMetaClassName,
+  ConnectionDivHeaderClassName,
+  ConnectionInfoClassName,
+  ConnectionInfoIconClassName,
+} from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
   query StartupConnectionsQuery {
     startupConnections: myConnections {
       id
       status
+      requesterID
       createdAt
       updatedAt
       users {
@@ -101,6 +110,14 @@ const UPDATE_CONNECTION_STATUS_MUTATION = gql`
   }
 `
 
+const DELETE_CONNECTION_MUTATION = gql`
+  mutation DeleteConnection($id: Int!) {
+    deleteConnection(id: $id) {
+      id
+    }
+  }
+`
+
 const MUTUAL_FOLLOW_MUTATION = gql`
   mutation MutualFollow($userID: Int!) {
     mutualFollowUser(userID: $userID) {
@@ -116,13 +133,11 @@ export const beforeQuery = ({ id }: { id: number }) => {
     pollInterval: 30000,
   }
 }
-
-export const Empty = () => <div>Empty</div>
+const statusList = ['ACCEPTED', 'PENDING', 'REJECTED', 'REQUESTED']
 
 export const Success = ({
   startupConnections,
 }: CellSuccessProps<StartupConnectionsQuery>) => {
-  const statusList = ['ACCEPTED', 'PENDING', 'REJECTED']
   const { currentUser } = useAuth()
   const [selectedTab, setSelectedTab] = useState(statusList[0])
   const [selectedConnID, setSelectedConnID] = useState(0)
@@ -132,6 +147,14 @@ export const Success = ({
   const [searchText, setSearchText] = useState('')
   const [createChat] = useMutation(CREATE_NEW_CHAT_MUTATION)
   const [mutualFollow] = useMutation(MUTUAL_FOLLOW_MUTATION)
+  const [deleteConnection] = useMutation(DELETE_CONNECTION_MUTATION, {
+    refetchQueries: [
+      {
+        query: QUERY,
+        fetchPolicy: 'network-only',
+      },
+    ],
+  })
   const [updateStatus] = useMutation(UPDATE_CONNECTION_STATUS_MUTATION, {
     refetchQueries: [
       {
@@ -143,16 +166,15 @@ export const Success = ({
 
   const handleSearch = () => {
     setConnList(
-      startupConnections.filter(
+      filterConnections(selectedTab).filter(
         (c) =>
-          c.status == selectedTab &&
-          ((c.users[0]?.type == 'INVESTOR' &&
+          (c.users[0]?.type == 'INVESTOR' &&
             c.users[0]?.investor?.name
               .toLowerCase()
               .includes(searchText.toLowerCase())) ||
-            c.users[1]?.investor?.name
-              .toLowerCase()
-              .includes(searchText.toLowerCase()))
+          c.users[1]?.investor?.name
+            .toLowerCase()
+            .includes(searchText.toLowerCase())
       )
     )
   }
@@ -201,8 +223,16 @@ export const Success = ({
       variables: {
         id: connID,
         input: {
-          status: statusList[2],
+          status: 'REJECTED',
         },
+      },
+    })
+  }
+
+  const handleDeleteConnection = async (connID: number) => {
+    await deleteConnection({
+      variables: {
+        id: connID,
       },
     })
   }
@@ -215,31 +245,58 @@ export const Success = ({
       variables: {
         id: connID,
         input: {
-          status: statusList[0],
+          status: 'ACCEPTED',
         },
       },
+    }).then(async () => {
+      await mutualFollow({
+        variables: {
+          userID: investorID,
+        },
+      })
     })
-      .then(async () => {
-        await mutualFollow({
-          variables: {
-            userID: investorID,
-          },
-        })
-      })
-      .then(() => {
-        setSelectedTab(statusList[0])
-      })
   }
 
+  const showInfo = (): string => {
+    if (selectedTab == statusList[0]) {
+      return 'These are your accepted connections'
+    } else if (selectedTab == statusList[1]) {
+      return 'These investors want to connect with you'
+    } else if (selectedTab == statusList[2]) {
+      return 'You had rejected these connection requests... You may still accept them!'
+    } else {
+      return 'These are the connection requests you have sent... We will let you know when they are accepted.'
+    }
+  }
+
+  const filterConnections = useCallback(
+    (s: string): typeof startupConnections => {
+      if (s == statusList[0]) {
+        return startupConnections.filter((c) => c.status == 'ACCEPTED')
+      } else if (s == statusList[1]) {
+        return startupConnections.filter(
+          (c) => c.status == 'PENDING' && c.requesterID != currentUser?.id
+        )
+      } else if (s == statusList[2]) {
+        return startupConnections.filter(
+          (c) => c.status == 'REJECTED' && c.requesterID != currentUser?.id
+        )
+      } else {
+        return startupConnections.filter(
+          (c) => c.status != 'ACCEPTED' && c.requesterID == currentUser?.id
+        )
+      }
+    },
+    [currentUser?.id, startupConnections]
+  )
+
   useEffect(() => {
-    setConnList(startupConnections.filter((c) => c.status == selectedTab))
-  }, [selectedTab, startupConnections])
+    setConnList(filterConnections(selectedTab))
+  }, [filterConnections, selectedTab, startupConnections])
 
   return (
-    <div
-      id="ConnectionMainPage"
-      className="flex w-full flex-col items-center justify-start gap-3 lg:gap-4"
-    >
+    <div id="ConnectionMainPage" className={ConnectionMainClassName}>
+      <TertiaryTitleLabel label="Connections" />
       <div id="ConnHeader" className={ConnectionHeaderClassName}>
         <div id="ConnTab" className={ConnectionTabClasName}>
           {statusList.map((s) => {
@@ -252,8 +309,8 @@ export const Success = ({
                     : ' border-transparent '
                 }`}
                 onClick={() => {
-                  setSelectedTab(s)
-                  setConnList(startupConnections.filter((c) => c.status == s))
+                  setSelectedTab(s) //Change the tab
+                  setConnList(filterConnections(s)) //Show connection list based on the selected tab
                 }}
               >
                 {selectedTab == s ? (
@@ -270,10 +327,8 @@ export const Success = ({
             <IconOutlineButton
               icon={<CloseIcon className={ButtonIconClassName} />}
               action={() => {
-                setSearchText('')
-                setConnList(
-                  startupConnections.filter((c) => c.status == selectedTab)
-                )
+                setSearchText('') //Clear search text
+                setConnList(filterConnections(selectedTab)) //Show conn list based on tab selected (remove search filter)
               }}
             />
           )}
@@ -290,13 +345,17 @@ export const Success = ({
           <TertiaryIconButton
             icon={<SearchIcon className={LightIconClassName} />}
             action={() => {
-              handleSearch()
+              handleSearch() //Show conn list based on search text
             }}
           />
         </div>
       </div>
-      <div className={PostDividerClassName} />
-      <div id="ConnContent" className={CreatePostDivClassName}>
+      <div className={DividerClassName} />
+      <div className={ConnectionInfoClassName}>
+        <InfoIcon className={ConnectionInfoIconClassName} />
+        <WarnSubTextLabel label={showInfo()} />
+      </div>
+      <div id="ConnContent" className={PageDivClassName}>
         {connList.map((c) => {
           const invIndex = c.users[0]?.type == 'INVESTOR' ? 0 : 1
           return (
@@ -317,12 +376,9 @@ export const Success = ({
                   : ConnectionDivClassName
               }
             >
-              <div
-                id="ConnDivHeader"
-                className="flex w-full items-center gap-2 lg:gap-3"
-              >
+              <div id="ConnDivHeader" className={ConnectionDivHeaderClassName}>
                 <button
-                  className={PosterProfilePicClassName}
+                  className={ProfilePicClassName}
                   id="ProfilePic"
                   onClick={() => {
                     //Navigate to investor profile
@@ -338,22 +394,38 @@ export const Success = ({
                     c.users[invIndex]?.investor?.name[0].toUpperCase()
                   }
                 </button>
-                <div id="ConnName" className={ConvoNameClassName}>
-                  <TertiarySubTitleLabel
+                <div id="ConnName" className={NameClassName}>
+                  <TertiaryMediumLabel
                     label={c.users[invIndex]?.investor?.name ?? ''}
                   />
                 </div>
                 {selectedTab == statusList[1] && (
-                  <button
-                    className={ConnectionAcceptClassName}
-                    id="AcceptButton"
-                    onClick={() => {
-                      handleAcceptConnection(c.id, c.users[invIndex]?.id)
-                    }}
-                  >
-                    <AcceptIcon className={IconClassName} />
-                    <SubTextLabel label={'Accept'} />
-                  </button>
+                  <>
+                    <button
+                      className={ConnectionAcceptClassName}
+                      id="AcceptButton"
+                      onClick={() => {
+                        handleAcceptConnection(c.id, c.users[invIndex]?.id)
+                      }}
+                    >
+                      <AcceptIcon className={IconClassName} />
+                      <div className={HideShowClassName}>
+                        <SubTextLabel label={'Accept'} />
+                      </div>
+                    </button>
+                    <button
+                      className={ConnectionRejectClassName}
+                      id="RejectButton"
+                      onClick={() => {
+                        handleRejectConnection(c.id)
+                      }}
+                    >
+                      <CloseIcon className={IconClassName} />
+                      <div className={HideShowClassName}>
+                        <SubTextLabel label={'Reject'} />
+                      </div>
+                    </button>
+                  </>
                 )}
                 {selectedConnID == c.id ? (
                   <UpIcon className={IconClassName} />
@@ -362,10 +434,7 @@ export const Success = ({
                 )}
               </div>
               {selectedConnID == c.id && (
-                <div
-                  id="ConnMeta"
-                  className="flex w-full items-center justify-between gap-2 lg:gap-3"
-                >
+                <div id="ConnMeta" className={ConnectionMetaClassName}>
                   <SubTextLabel
                     label={`${c.users[invIndex]?.investor?.location.city}, ${c.users[invIndex]?.investor?.location.state}`}
                   />
@@ -373,10 +442,7 @@ export const Success = ({
                 </div>
               )}
               {selectedConnID == c.id && (
-                <div
-                  id="ConnActions"
-                  className="flex w-full items-center justify-between gap-2 lg:gap-3"
-                >
+                <div id="ConnActions" className={ConnectionMetaClassName}>
                   <button
                     id="ProfileButton"
                     className={ConnectionActionClassName}
@@ -390,7 +456,7 @@ export const Success = ({
                     }}
                   >
                     <ProfileIcon className={IconClassName} />
-                    <div className={PostInteractionTextClassName}>
+                    <div className={HideShowClassName}>
                       <SubTextLabel label={'Profile'} />
                     </div>
                   </button>
@@ -405,9 +471,8 @@ export const Success = ({
                         ]?.directConversations.find((d) => {
                           return d?.users.some((u) => u?.id == currentUser?.id)
                         })?.id
-                        //Does chat already exist?
                         if (convoID) {
-                          //If yes, navigate to the chat
+                          //If chat already exists, navigate to that chat
                           navigate(
                             routes.startupMyConversations({
                               id: convoID,
@@ -420,42 +485,37 @@ export const Success = ({
                       }}
                     >
                       <ChatIcon className={IconClassName} />
-                      <div className={PostInteractionTextClassName}>
+                      <div className={HideShowClassName}>
                         <SubTextLabel label={'Chat'} />
                       </div>
                     </button>
                   )}
-                  {selectedTab != statusList[2] ? (
+                  {selectedTab == statusList[2] && (
                     <button
-                      id="RejectButton"
-                      className={ConnectionRejectClassName}
-                      onClick={() => {
-                        handleRejectConnection(c.id)
-                      }}
-                    >
-                      <CloseIcon className={IconClassName} />
-                      <div className={PostInteractionTextClassName}>
-                        <SubTextLabel
-                          label={
-                            selectedTab == statusList[0] ? 'Remove' : 'Reject'
-                          }
-                        />
-                      </div>
-                    </button>
-                  ) : (
-                    <button
-                      className={ConnectionAcceptClassName}
+                      className={ConnectionActionClassName}
                       id="AcceptButton"
                       onClick={() => {
                         handleAcceptConnection(c.id, c.users[invIndex]?.id)
                       }}
                     >
                       <AcceptIcon className={IconClassName} />
-                      <div className={PostInteractionTextClassName}>
+                      <div className={HideShowClassName}>
                         <SubTextLabel label={'Accept'} />
                       </div>
                     </button>
                   )}
+                  <button
+                    id="DeleteButton"
+                    className={ConnectionRejectClassName}
+                    onClick={() => {
+                      handleDeleteConnection(c.id)
+                    }}
+                  >
+                    <DeleteIcon className={IconClassName} />
+                    <div className={HideShowClassName}>
+                      <SubTextLabel label={'Delete'} />
+                    </div>
+                  </button>
                 </div>
               )}
             </div>
@@ -468,21 +528,23 @@ export const Success = ({
 
 /*
 Common:
-  - Visit profile
-  - Location
-  - Timestamp
+  - Location  (in mid)
+  - Timestamp (in mid)
+  - Visit profile (in bottom)
+  - Delete conn (in bottom)
 
-Accepted Conn:
-  - Chat (if messageVisibility is not 'private')
-  - Remove
+Accepted tab:
+  - Chat (in bottom - if messageVisibility is not 'private')
 
-Pending Conn:
-  - Chat (if messageVisibility is 'followers' and user is a follower, or if messageVisibility is 'public')
-  - Accept
-  - Reject
+Pending tab:
+  - Accept (at the top)
+  - Reject (at the top)
+  - Chat (in bottom - if messageVisibility is 'followers' and user is a follower, or if messageVisibility is 'public')
 
-Rejected Conn:
-  - Chat (if messageVisibility is 'followers' and user is a follower, or if messageVisibility is 'public')
-  - Accept
+Rejected tab:
+  - Chat (in bottom - if messageVisibility is 'followers' and user is a follower, or if messageVisibility is 'public')
+  - Accept (in bottom)
 
+Requested tab:
+  - Chat (in bottom - if messageVisibility is 'followers' and user is a follower, or if messageVisibility is 'public')
 */

@@ -7,11 +7,17 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Hind', 'Inter', 'Poppins', ...defaultTheme.fontFamily.sans],
+        sans: [
+          'Poppins',
+          'Inter',
+          'Lato',
+          'Hind',
+          ...defaultTheme.fontFamily.sans,
+        ],
       },
     },
     screens: {
-      lg: '768px',
+      lg: '720px',
       xl: '1280px',
     },
     fontSize: {
@@ -65,7 +71,7 @@ module.exports = {
         l3: '#c3e3f4',
         l2: '#7dc5e3',
         l1: '#1a8cbc',
-        d1: '#1c7297',
+        d1: '#11729B',
         d2: '#095677',
         d3: '#00364d',
       },

@@ -143,7 +143,13 @@ export const createConnection: MutationResolvers['createConnection'] = ({
   input,
 }) => {
   return db.connection.create({
-    data: input,
+    data: {
+      status: 'PENDING',
+      requester: {
+        connect: { id: input.requesterID },
+      },
+      users: { connect: [{ id: input.requesterID }, { id: input.accepterID }] },
+    },
   })
 }
 
@@ -168,5 +174,8 @@ export const deleteConnection: MutationResolvers['deleteConnection'] = ({
 export const Connection: ConnectionRelationResolvers = {
   users: (_obj, { root }) => {
     return db.connection.findUnique({ where: { id: root?.id } }).users()
+  },
+  requester: (_obj, { root }) => {
+    return db.connection.findUnique({ where: { id: root?.id } }).requester()
   },
 }

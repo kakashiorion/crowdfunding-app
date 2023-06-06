@@ -11,6 +11,7 @@ import type {
   FindStartupConversationsListQueryVariables,
 } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import { CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
@@ -24,21 +25,22 @@ import {
   SmallLabel,
   SubTextLabel,
   TertiaryTextLabel,
+  TertiaryTitleLabel,
 } from 'src/components/Label/Label'
 import {
   ButtonIconClassName,
   ConvoDivClassName,
   ConvoInfoClassName,
   CountClassName,
-  CreatePostDivClassName,
+  PageDivClassName,
   InputDivClassName,
   LightIconClassName,
-  PostDividerClassName,
-  ConvoNameClassName,
-  ConvoProfilePicClassName,
+  DividerClassName,
+  NameClassName,
   SelectedConvoDivClassName,
   TextInputClassName,
-  IconClassName,
+  ProfilePicClassName,
+  LargeIconClassName,
 } from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
@@ -211,6 +213,7 @@ export const Success = ({
 
   return (
     <div id="ConversationSide" className="flex w-full flex-col gap-4">
+      <TertiaryTitleLabel label="Conversations" />
       <LeadingIconBlackFilledButton
         label={newChat ? 'CANCEL' : 'START NEW CHAT'}
         action={() => {
@@ -262,100 +265,117 @@ export const Success = ({
           }}
         />
       </div>
-      <div id="SearchResultList" className={PostDividerClassName} />
+      <div id="SearchResultList" className={DividerClassName} />
       {newChat ? (
-        <div className={CreatePostDivClassName}>
+        <div className={PageDivClassName}>
           {findList.length > 0 ? (
             findList.map((item) => (
-              <button
+              <div
                 className={ConvoDivClassName}
                 onClick={() => createNewConversation(item.id)}
                 key={item.id}
+                aria-hidden
               >
-                <div className={ConvoProfilePicClassName}>
+                <button
+                  className={ProfilePicClassName}
+                  onClick={() => {
+                    navigate(
+                      routes.startupInvestorProfile({
+                        id: item.id,
+                      })
+                    )
+                  }}
+                >
                   {
                     //TODO: Add Profile pic as BG - phase 2
                     item.name[0].toUpperCase()
                   }
-                </div>
-                <div className={ConvoNameClassName}>
+                </button>
+                <div className={NameClassName}>
                   <TertiaryTextLabel label={item.name} />
                   <SubTextLabel
                     label={`${item.location.city}, ${item.location.state}`}
                   />
                 </div>
-                <ChatIcon className={IconClassName} />
-              </button>
+                <ChatIcon className={LargeIconClassName} />
+              </div>
             ))
           ) : (
             <ErrorSubTextLabel label={errorMsg} />
           )}
         </div>
       ) : (
-        <div id="ConversationsList" className={CreatePostDivClassName}>
+        <div id="ConversationsList" className={PageDivClassName}>
           {convoList ? (
-            convoList.map((item) => (
-              <button
-                className={
-                  currentConvo == item.id
-                    ? SelectedConvoDivClassName
-                    : ConvoDivClassName
-                }
-                onClick={() => setCurrentConvo(item.id)}
-                key={item.id}
-              >
-                <div className={ConvoProfilePicClassName}>
-                  {
-                    //TODO: Add Profile pic as BG - phase 2
-                    item.users[0]?.type == 'INVESTOR'
-                      ? item.users[0].investor?.name[0].toUpperCase()
-                      : item.users[1]?.investor?.name[0].toUpperCase()
+            convoList.map((item) => {
+              const invIndex = item.users[0]?.type == 'INVESTOR' ? 0 : 1
+              return (
+                <div
+                  className={
+                    currentConvo == item.id
+                      ? SelectedConvoDivClassName
+                      : ConvoDivClassName
                   }
-                </div>
-                <div className={ConvoNameClassName}>
-                  <TertiaryTextLabel
-                    label={
-                      (item.users[0]?.type == 'INVESTOR'
-                        ? item.users[0].investor?.name
-                        : item.users[1]?.investor?.name) ?? ''
+                  onClick={() => setCurrentConvo(item.id)}
+                  key={item.id}
+                  aria-hidden
+                >
+                  <button
+                    className={ProfilePicClassName}
+                    onClick={() => {
+                      navigate(
+                        routes.startupInvestorProfile({
+                          id: item.users[invIndex]?.investor?.id ?? 0,
+                        })
+                      )
+                    }}
+                  >
+                    {
+                      //TODO: Add Profile pic as BG - phase 2
+                      item.users[invIndex]?.investor?.name[0].toUpperCase()
                     }
-                  />
-                  <SubTextLabel
-                    label={
-                      item.messages[item.messages.length - 1]?.content ??
-                      '(New Conversation)'
-                    }
-                  />
+                  </button>
+                  <div className={NameClassName}>
+                    <TertiaryTextLabel
+                      label={item.users[invIndex]?.investor?.name ?? 'Investor'}
+                    />
+                    <SubTextLabel
+                      label={
+                        item.messages[item.messages.length - 1]?.content ??
+                        '(New Conversation)'
+                      }
+                    />
+                  </div>
+                  <div className={ConvoInfoClassName}>
+                    <SmallLabel
+                      label={moment(
+                        item.messages.length > 0
+                          ? item.messages[item.messages.length - 1]?.createdAt
+                          : item.createdAt
+                      ).fromNow()}
+                    />
+                    {item.messages.filter(
+                      (m) => m?.unread == true && m?.senderID != currentUser?.id
+                    ).length > 0 && (
+                      <div className={CountClassName}>
+                        {item.messages.filter(
+                          (m) =>
+                            m?.unread == true && m?.senderID != currentUser?.id
+                        ).length < 10
+                          ? item.messages
+                              .filter(
+                                (m) =>
+                                  m?.unread == true &&
+                                  m?.senderID != currentUser?.id
+                              )
+                              .length.toString()
+                          : '9+'}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className={ConvoInfoClassName}>
-                  <SmallLabel
-                    label={moment(
-                      item.messages.length > 0
-                        ? item.messages[item.messages.length - 1]?.createdAt
-                        : item.createdAt
-                    ).fromNow()}
-                  />
-                  {item.messages.filter(
-                    (m) => m?.unread == true && m?.senderID != currentUser?.id
-                  ).length > 0 && (
-                    <div className={CountClassName}>
-                      {item.messages.filter(
-                        (m) =>
-                          m?.unread == true && m?.senderID != currentUser?.id
-                      ).length < 10
-                        ? item.messages
-                            .filter(
-                              (m) =>
-                                m?.unread == true &&
-                                m?.senderID != currentUser?.id
-                            )
-                            .length.toString()
-                        : '9+'}
-                    </div>
-                  )}
-                </div>
-              </button>
-            ))
+              )
+            })
           ) : (
             <ErrorSubTextLabel label="No conversations yet!" />
           )}
