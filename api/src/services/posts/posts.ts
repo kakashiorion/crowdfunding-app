@@ -220,6 +220,20 @@ export const myRecentPosts = () => {
   })
 }
 
+//Posts by a posterID
+export const postsByPosterID = ({ id }: { id: number }) => {
+  return db.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    where: {
+      poster: {
+        id: id,
+      },
+    },
+  })
+}
+
 export const post: QueryResolvers['post'] = ({ id }) => {
   return db.post.findUnique({
     where: { id },
