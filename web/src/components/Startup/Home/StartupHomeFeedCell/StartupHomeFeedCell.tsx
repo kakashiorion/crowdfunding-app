@@ -15,11 +15,11 @@ import StartupHomePostCell from 'src/components/Startup/Home/StartupHomePostCell
 /*
 Startup feed will consist of:
 
-1. Posts from investors in last 7 days:
+1. Recent posts from investors:
     - if post visibility is Connections && startup is a Connection
     - if post visibility is Followers && startup is a Follower
     - if post visibility is Public
-2. Connection events from investors in last 7 days:
+2. Recent connection events from investors:
     - if investor's activity visibility is Connections && startup is a Connection
     - if investor's activity visibility is Followers && startup is a Follower
 
@@ -35,10 +35,6 @@ export const QUERY = gql`
     }
   }
 `
-
-export const Empty = () => {
-  return <></>
-}
 
 export const Success = ({
   recentInvestorsPosts,

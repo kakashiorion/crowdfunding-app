@@ -1,27 +1,188 @@
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { useState } from 'react'
+
+import { back, navigate, routes } from '@redwoodjs/router'
+import { MetaTags, useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import {
+  PrimaryFilledButton,
+  HoverErrorTextButton,
+} from 'src/components/Button/Button'
+import {
+  ActionGroupClassName,
+  PageDivClassName,
+  SelectInputClassName,
+  TextInputClassName,
+} from 'src/components/Investor/InvestorConsts'
+import {
+  PrimaryTitleLabel,
+  TextLabel,
+  ErrorSubTextLabel,
+} from 'src/components/Label/Label'
 
 const InvestorCreatePostPage = () => {
   return (
     <>
       <MetaTags
-        title="InvestorCreatePost"
-        description="InvestorCreatePost page"
+        title="Create Post"
+        description="Investor Create Post page for Dealbari platform"
       />
-
-      <h1>InvestorCreatePostPage</h1>
-      <p>
-        Find me in{' '}
-        <code>
-          ./web/src/pages/InvestorCreatePostPage/InvestorCreatePostPage.tsx
-        </code>
-      </p>
-      <p>
-        My default route is named <code>investorCreatePost</code>, link to me
-        with `<Link to={routes.investorCreatePost()}>InvestorCreatePost</Link>`
-      </p>
+      <InvestorCreatePostMain />
+      <InvestorCreatePostSide />
     </>
   )
 }
 
 export default InvestorCreatePostPage
+
+const CREATE_POST_MUTATION = gql`
+  mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      id
+    }
+  }
+`
+
+const VisibilityLevels = ['CONNECTIONS', 'FOLLOWERS', 'PUBLIC']
+
+const InvestorCreatePostMain = () => {
+  const [title, setTitle] = useState('')
+  const [error1, setError1] = useState('')
+  const [writeUp, setWriteUp] = useState('')
+  const [error2, setError2] = useState('')
+  const [attachmentURL, setAttachmentURL] = useState('')
+  const [error3, setError3] = useState('')
+  const [imageURL, setImageURL] = useState('')
+  const [error4, setError4] = useState('')
+  const [visibility, setVisibility] = useState('PUBLIC')
+
+  const { currentUser } = useAuth()
+  const [createPost] = useMutation(CREATE_POST_MUTATION)
+
+  const submit = async () => {
+    if (title.length < 2) {
+      setError1('Provide a title to your post')
+    } else if (
+      attachmentURL &&
+      (attachmentURL.length < 10 || !attachmentURL.includes('http'))
+    ) {
+      setError3('Provide a proper resource link')
+    } else if (
+      imageURL &&
+      (imageURL.length < 10 || !imageURL.includes('http'))
+    ) {
+      setError4('Provide a proper image URL')
+    } else {
+      await createPost({
+        variables: {
+          input: {
+            posterID: currentUser?.id,
+            title: title,
+            writeup: writeUp,
+            attachmentURL: attachmentURL,
+            imageURL: imageURL,
+            visibility: visibility,
+          },
+        },
+      }).then((d) => {
+        navigate(routes.investorViewPost({ id: d.data.createPost.id }))
+      })
+    }
+  }
+
+  return (
+    <div className="flex h-full w-full flex-col gap-3 lg:w-2/3 lg:gap-4">
+      <PrimaryTitleLabel label="Create Post" />
+      <div className={PageDivClassName}>
+        <TextLabel label="Title (required)" />
+        <input
+          id="Title"
+          className={TextInputClassName}
+          value={title}
+          placeholder={'What are you thinking?'}
+          onChange={(e) => {
+            setTitle(e.target.value)
+            error1 != '' && setError1('')
+          }}
+        />
+        <ErrorSubTextLabel label={error1} />
+        <Divider />
+        <TextLabel label="Description" />
+        <textarea
+          id="Writeup"
+          className={TextInputClassName}
+          value={writeUp}
+          placeholder="Tell us in detail..."
+          rows={3}
+          onChange={(e) => {
+            setWriteUp(e.target.value)
+            error2 != '' && setError2('')
+          }}
+        />
+        <ErrorSubTextLabel label={error2} />
+        <Divider />
+        <TextLabel label="Resource link" />
+        <input
+          id="ResourceLink"
+          className={TextInputClassName}
+          value={attachmentURL}
+          placeholder="Share any resource link"
+          onChange={(e) => {
+            setAttachmentURL(e.target.value)
+            error3 != '' && setError3('')
+          }}
+        />
+        <ErrorSubTextLabel label={error3} />
+        <Divider />
+        <TextLabel label="Image URL" />
+        <input
+          id="ImageURL"
+          className={TextInputClassName}
+          value={imageURL}
+          placeholder="Share an image"
+          onChange={(e) => {
+            setImageURL(e.target.value)
+            error4 != '' && setError4('')
+          }}
+        />
+        <ErrorSubTextLabel label={error4} />
+        <Divider />
+        <TextLabel label="Select visibility level" />
+        <select
+          className={SelectInputClassName}
+          value={visibility}
+          onChange={(e) => {
+            setVisibility(e.target.value)
+          }}
+        >
+          {VisibilityLevels.map((v: string) => (
+            <option value={v} key={v}>
+              {v}
+            </option>
+          ))}
+        </select>
+        <Divider />
+        <div className={ActionGroupClassName}>
+          <PrimaryFilledButton label="PUBLISH" action={() => submit()} />
+          <HoverErrorTextButton label="CANCEL" action={() => back()} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const Divider = () => {
+  return <div className="h-1"></div>
+}
+
+const InvestorCreatePostSide = () => {
+  return (
+    <div
+      aria-hidden
+      className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-primary-d1/50 lg:dark:bg-primary-l1/50"
+    >
+      <div className="absolute -right-8 bottom-6 h-11 w-16 rounded bg-primary-d2/50 dark:bg-primary-l2/50"></div>
+      <div className="absolute -bottom-8 right-6 h-16 w-11 rounded bg-primary-d3/50 dark:bg-primary-l3/50"></div>
+    </div>
+  )
+}

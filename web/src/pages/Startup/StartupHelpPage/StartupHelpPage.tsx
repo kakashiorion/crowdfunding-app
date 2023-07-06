@@ -36,7 +36,7 @@ const StartupHelpPage = () => {
 
   return (
     <>
-      <MetaTags title="StartupHelp" description="StartupHelp page" />
+      <MetaTags title="Help" description="Help page for Dealbari platform" />
       <div
         id="HelpPage"
         className="flex h-full w-full flex-col gap-6 overflow-y-scroll rounded lg:gap-7"
@@ -47,7 +47,7 @@ const StartupHelpPage = () => {
           className="flex w-full flex-col items-center gap-2 lg:gap-3"
         >
           <TextLabel label="Got a question? We are here to help." />
-          <div className="flex items-center gap-1 lg:gap-2">
+          <div className="flex w-full items-center gap-1 lg:w-1/2 lg:gap-2">
             <input
               id="SearchBar"
               value={searchText}

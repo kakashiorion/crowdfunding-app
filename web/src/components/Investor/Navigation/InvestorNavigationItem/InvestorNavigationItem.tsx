@@ -11,7 +11,7 @@ const InvestorNavigationItem = (props: InvestorNavigationItemProps) => {
       ${
         props.selected
           ? ' bg-black-l1 shadow-sm dark:bg-white-d1 '
-          : 'hover:bg-white-d3 dark:hover:bg-black-l3  '
+          : ' hover:bg-white-d3 dark:hover:bg-black-l3 '
       }
       `}
       onClick={props.action}
@@ -19,8 +19,8 @@ const InvestorNavigationItem = (props: InvestorNavigationItemProps) => {
       <props.icon
         className={`h-6 w-6 ${
           props.selected
-            ? 'fill-primary-l1 dark:fill-primary-d1'
-            : 'fill-black dark:fill-white'
+            ? ' fill-primary-l1 dark:fill-primary-d1 '
+            : ' fill-black dark:fill-white '
         }`}
       />
     </button>

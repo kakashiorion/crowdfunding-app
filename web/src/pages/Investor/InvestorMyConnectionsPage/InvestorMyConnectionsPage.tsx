@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { MetaTags } from '@redwoodjs/web'
 
+import InvestorConnectionsCell from 'src/components/Investor/Connection/InvestorConnectionsCell'
 import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
 const InvestorMyConnectionsPage = () => {
@@ -26,14 +27,12 @@ export default InvestorMyConnectionsPage
 
 const InvestorConnectionsMain = () => {
   return (
-    <div className="flex h-full w-full min-w-[360px] flex-grow overflow-scroll rounded  ">
-      <div className="h-[1200px] w-full"></div>
+    <div className="h-full w-full rounded lg:w-2/3">
+      <InvestorConnectionsCell />
     </div>
   )
 }
 
 const InvestorConnectionsSidebar = () => {
-  return (
-    <div className="hidden rounded border-l-2 border-l-white-d4 dark:border-l-black-l4 lg:flex lg:h-full lg:min-w-[240px] "></div>
-  )
+  return <div className="hidden lg:flex lg:h-full lg:w-1/3 lg:rounded"></div>
 }

@@ -28,10 +28,6 @@ export const QUERY = gql`
   }
 `
 
-export const Empty = () => {
-  return <></>
-}
-
 export const Success = ({
   startupHomeConnection,
 }: CellSuccessProps<

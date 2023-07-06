@@ -37,7 +37,7 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
         </>
       ) : (
         <button
-          className="flex h-7 w-7 items-center justify-center rounded bg-black-l1 text-b3 text-white hover:bg-tertiary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-tertiary-l1 lg:h-8 lg:w-8 lg:text-b2"
+          className="flex h-8 w-8 items-center justify-center rounded bg-black-l1 text-b3 text-white hover:bg-tertiary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-tertiary-l1 lg:text-b2"
           onClick={() => props.setMenuOpen('Profile')}
         >
           {/* //TODO: apply profile pic as BG - phase 2 */}

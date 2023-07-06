@@ -1,86 +1,26 @@
+import moment from 'moment'
 import type { StartupRecentPostsQuery } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
+
+import {
+  GreySubTextLabel,
+  SubTextLabel,
+  TertiaryTextLabel,
+} from 'src/components/Label/Label'
+
+import { ProfilePageClassName } from '../../StartupConsts'
 
 export const QUERY = gql`
   query StartupRecentPostsQuery($id: Int!) {
-    myRecentPosts: myRecentPosts {
+    recentPosts: recentPostsByPostId(id: $id) {
       id
       title
-      writeup
-      attachmentURL
-      imageURL
       createdAt
-      visibility
+      imageURL
       likedByUsers {
         id
-      }
-      savedByUsers {
-        id
-      }
-      posterID
-      poster {
-        id
-        type
-        profilePicURL
-        followedBy {
-          id
-        }
-        connections {
-          id
-          users {
-            id
-          }
-        }
-        investor {
-          id
-          name
-        }
-        startup {
-          id
-          name
-        }
-      }
-      comments {
-        id
-      }
-    }
-    recentInvestorPosts: recentPostsByPostId(id: $id) {
-      id
-      title
-      writeup
-      attachmentURL
-      imageURL
-      createdAt
-      visibility
-      likedByUsers {
-        id
-      }
-      savedByUsers {
-        id
-      }
-      posterID
-      poster {
-        id
-        type
-        profilePicURL
-        followedBy {
-          id
-        }
-        connections {
-          id
-          users {
-            id
-          }
-        }
-        investor {
-          id
-          name
-        }
-        startup {
-          id
-          name
-        }
       }
       comments {
         id
@@ -89,33 +29,47 @@ export const QUERY = gql`
   }
 `
 
-export const Empty = () => <div></div>
-
-// export const afterQuery = (data: any) => {
-//   console.log(data)
-//   if (data.recentInvestorPosts) {
-//     return data.recentInvestorPosts
-//   } else {
-//     return data.myRecentPosts
-//   }
-// }
+//Handle no posts by poster
+export const Empty = () => (
+  <div>
+    <GreySubTextLabel label="No other related posts" />
+  </div>
+)
 
 export const Success = ({
-  recentInvestorPosts,
-  myRecentPosts,
+  recentPosts,
 }: CellSuccessProps<StartupRecentPostsQuery>) => {
-  console.log({ recentInvestorPosts }, { myRecentPosts })
-  //Show current user's (startup) recent posts
-  let recentPosts = myRecentPosts
-  //Show investor's recent posts
-  if (recentInvestorPosts.length > 0) {
-    recentPosts = recentInvestorPosts
-  }
   return (
-    <ul>
-      {recentPosts.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
+    <div id="PostsTab" className={ProfilePageClassName}>
+      {recentPosts.map((post) => {
+        return (
+          <button
+            key={post.id}
+            onClick={() => {
+              navigate(routes.startupViewPost({ id: post.id }))
+            }}
+            className="grid w-full grid-cols-3 justify-items-start gap-2 rounded bg-tertiary-d1/5 p-3 hover:bg-tertiary-d1/20 dark:bg-tertiary-l1/5 hover:dark:bg-tertiary-l1/20 lg:gap-3 lg:p-4"
+          >
+            <div className={`${post.imageURL ? 'col-span-2' : 'col-span-3'}`}>
+              <TertiaryTextLabel label={post.title} />
+            </div>
+            {post.imageURL && (
+              <div className="col-span-1">
+                <img src={post.imageURL} alt="Post" />
+              </div>
+            )}
+            <div className="col-span-1">
+              <SubTextLabel label={`${post.likedByUsers.length} likes`} />
+            </div>
+            <div className="col-span-1">
+              <SubTextLabel label={`${post.comments.length} comments`} />
+            </div>
+            <div className="col-span-1">
+              <SubTextLabel label={moment(post.createdAt).fromNow()} />
+            </div>
+          </button>
+        )
       })}
-    </ul>
+    </div>
   )
 }

@@ -1,5 +1,5 @@
 type LabelProps = {
-  label: string
+  label: string | undefined
 }
 
 //Headings - h1/h2
@@ -212,6 +212,14 @@ export const MediumLabel = (props: LabelProps) => {
 export const BoldMediumLabel = (props: LabelProps) => {
   return (
     <p className="text-b1 font-bold text-black dark:text-white lg:text-h7">
+      {props.label}
+    </p>
+  )
+}
+
+export const PrimaryMediumLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b1 text-primary-d1 dark:text-primary-l1 lg:text-h7">
       {props.label}
     </p>
   )

@@ -85,6 +85,7 @@ export const schema = gql`
 
   type Query {
     users: [User!]! @requireAuth
+    findNewChatUsers(term: String!): [User!]! @requireAuth
     user(id: Int!): User @requireAuth
     userByEmail(email: String!): User @requireAuth
   }

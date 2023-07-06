@@ -27,14 +27,14 @@ export default InvestorOffersPage
 
 const InvestorOffersMain = () => {
   return (
-    <div className="flex h-full w-full min-w-[360px] flex-grow overflow-scroll rounded  ">
-      <div className="h-[1200px] w-full"></div>
+    <div className="flex h-full w-full flex-grow overflow-scroll rounded lg:w-2/3  ">
+      <div className=""></div>
     </div>
   )
 }
 
 const InvestorOffersSidebar = () => {
   return (
-    <div className="hidden rounded border-l-2 border-l-white-d4 dark:border-l-black-l4 lg:flex lg:h-full lg:min-w-[240px] "></div>
+    <div className="hidden rounded border-l-2 border-l-white-d4 dark:border-l-black-l4 lg:flex lg:h-full lg:w-1/3"></div>
   )
 }

@@ -28,7 +28,6 @@ import {
   TertiarySubTitleLabel,
   TertiaryMediumLabel,
 } from 'src/components/Label/Label'
-
 import {
   ChatContentClassName,
   ProfilePicClassName,
@@ -41,7 +40,7 @@ import {
   EmptyIconClassName,
   EmptyDivClassName,
   LargeIconClassName,
-} from '../../StartupConsts'
+} from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
   query FindStartupConversationMainQuery($id: Int!) {

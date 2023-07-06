@@ -43,7 +43,7 @@ export const PrimaryCirle = () => {
 
 export const PrimaryOutlineCirle = () => {
   return (
-    <div className="h-2 w-2 rounded border-[2px] border-primary-d1 bg-black-l4 dark:border-primary-l1 dark:bg-white-d4 lg:h-3 lg:w-3"></div>
+    <div className="h-2 w-2 rounded border-2 border-primary-d1 bg-black-l4 dark:border-primary-l1 dark:bg-white-d4 lg:h-3 lg:w-3"></div>
   )
 }
 

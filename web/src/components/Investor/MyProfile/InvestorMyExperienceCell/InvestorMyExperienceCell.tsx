@@ -1,19 +1,19 @@
 import type {
-  FindStartupViewInvestorExperienceQuery,
-  FindStartupViewInvestorExperienceQueryVariables,
+  FindInvestorMyExperienceQuery,
+  FindInvestorMyExperienceQueryVariables,
 } from 'types/graphql'
 
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
 import {
-  SingleSpanItemClassName,
   DoubleSpanItemClassName,
-} from 'src/components/Startup/StartupConsts'
+  SingleSpanItemClassName,
+} from 'src/components/Investor/InvestorConsts'
+import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
-  query FindStartupViewInvestorExperienceQuery($id: Int!) {
-    startupViewInvestorExperience: investorExperience(id: $id) {
+  query FindInvestorMyExperienceQuery($id: Int!) {
+    investorMyExperience: investorExperience(id: $id) {
       id
       workedInStartups
       foundedStartups
@@ -29,10 +29,10 @@ export const QUERY = gql`
 `
 
 export const Success = ({
-  startupViewInvestorExperience,
+  investorMyExperience,
 }: CellSuccessProps<
-  FindStartupViewInvestorExperienceQuery,
-  FindStartupViewInvestorExperienceQueryVariables
+  FindInvestorMyExperienceQuery,
+  FindInvestorMyExperienceQueryVariables
 >) => {
   return (
     <div
@@ -41,7 +41,7 @@ export const Success = ({
     >
       <div id="WorkedStartups" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorExperience.workedInStartups
+          label={investorMyExperience.workedInStartups
             .toString()
             .replaceAll('_', ' ')}
         />
@@ -49,7 +49,7 @@ export const Success = ({
       </div>
       <div id="FoundStartups" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorExperience.foundedStartups
+          label={investorMyExperience.foundedStartups
             .toString()
             .replaceAll('_', ' ')}
         />
@@ -57,7 +57,7 @@ export const Success = ({
       </div>
       <div id="InvestedStartups" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorExperience.investedStartups
+          label={investorMyExperience.investedStartups
             .toString()
             .replaceAll('_', ' ')}
         />
@@ -65,7 +65,7 @@ export const Success = ({
       </div>
       <div id="InvestedAmount" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorExperience.investedAmountLacs
+          label={investorMyExperience.investedAmountLacs
             .toString()
             .replaceAll('_', ' ')}
         />
@@ -74,33 +74,35 @@ export const Success = ({
       <div id="FundingStages" className={DoubleSpanItemClassName}>
         <MediumLabel
           label={
-            startupViewInvestorExperience.investedStages
-              .join(', ')
-              .replaceAll('_', ' ') ?? 'N/A'
+            investorMyExperience.investedStages.length > 0
+              ? investorMyExperience.investedStages
+                  .join(', ')
+                  .replaceAll('_', ' ')
+              : '-'
           }
         />
         <SubTextLabel label="Funding Stages" />
       </div>
       <div id="SuccessfulExits" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorExperience.successfulExits
+          label={investorMyExperience.successfulExits
             .toString()
             .replaceAll('_', ' ')}
         />
         <SubTextLabel label="Successful Exits" />
       </div>
       <div id="Level" className={SingleSpanItemClassName}>
-        <MediumLabel
-          label={startupViewInvestorExperience.investorLevel.toString()}
-        />
+        <MediumLabel label={investorMyExperience.investorLevel.toString()} />
         <SubTextLabel label="Investor Level" />
       </div>
       <div id="InvestedSectors" className={DoubleSpanItemClassName}>
         <MediumLabel
           label={
-            startupViewInvestorExperience.investedSectors
-              .join(', ')
-              .replaceAll('_', ' ') ?? 'N/A'
+            investorMyExperience.investedSectors.length > 0
+              ? investorMyExperience.investedSectors
+                  .join(', ')
+                  .replaceAll('_', ' ')
+              : '-'
           }
         />
         <SubTextLabel label="Invested in Sectors" />

@@ -11,56 +11,55 @@ import DoneIcon from 'public/icons/done.svg'
 import InfoIcon from 'public/icons/info.svg'
 import LocationIcon from 'public/icons/location.svg'
 import type {
-  FindStartupViewInvestorProfileQuery,
-  FindStartupViewInvestorProfileQueryVariables,
+  FindInvestorViewOtherProfileQuery,
+  FindInvestorViewOtherProfileQueryVariables,
 } from 'types/graphql'
 
 import { back, navigate, routes } from '@redwoodjs/router'
-import { CellSuccessProps, useMutation } from '@redwoodjs/web'
+import { type CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import {
+  PrimaryFilledButton,
   DropDownButton,
   LeadingIconBlackFilledButton,
-  TertiaryFilledButton,
 } from 'src/components/Button/Button'
+import {
+  ActionGroupClassName,
+  ButtonIconClassName,
+  DividerClassName,
+  DoubleSpanItemClassName,
+  EmptyDivClassName,
+  EmptyIconClassName,
+  ErrorIconClassName,
+  InfoIconClassName,
+  InvestorProfilePicClassName,
+  ProfileActionsClassName,
+  ProfileHeaderClassName,
+  ProfileMetaClassName,
+  ProfilePageClassName,
+  ProfileStatsClassName,
+  ProfileTabsClassName,
+  SingleSpanItemClassName,
+  SmallIconClassName,
+  StatItemClassName,
+  SuccessIconClassName,
+} from 'src/components/Investor/InvestorConsts'
+import InvestorViewOtherExperienceCell from 'src/components/Investor/OtherInvestorProfile/InvestorViewOtherExperienceCell'
+import InvestorViewOtherObjectiveCell from 'src/components/Investor/OtherInvestorProfile/InvestorViewOtherObjectiveCell'
 import {
   GreySubTitleLabel,
   MediumLabel,
+  PrimaryTextLabel,
   SmallLabel,
   SubDisplayLabel,
   SubTextLabel,
-  TertiaryTextLabel,
   TextLabel,
 } from 'src/components/Label/Label'
-import StartupViewInvestorExperienceCell from 'src/components/Startup/Profile/StartupViewInvestorExperienceCell'
-import StartupViewInvestorPostsCell from 'src/components/Startup/Profile/StartupViewInvestorPostsCell'
-import StartupViewInvestorPreferencesCell from 'src/components/Startup/Profile/StartupViewInvestorPreferencesCell'
-import {
-  ButtonIconClassName,
-  ErrorIconClassName,
-  InfoIconClassName,
-  ProfilePageClassName,
-  InvestorProfilePicClassName,
-  SuccessIconClassName,
-  ProfileActionsClassName,
-  ProfileHeaderClassName,
-  ProfileStatsClassName,
-  StatItemClassName,
-  ProfileMetaClassName,
-  DividerClassName,
-  DoubleSpanItemClassName,
-  SingleSpanItemClassName,
-  ProfileTabsClassName,
-  EmptyIconClassName,
-  EmptyDivClassName,
-  ActionGroupClassName,
-  SmallIconClassName,
-} from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
-  query FindStartupViewInvestorProfileQuery($id: Int!) {
-    startupViewInvestorProfile: investor(id: $id) {
+  query FindInvestorViewOtherProfileQuery($id: Int!) {
+    investorViewOtherProfile: investor(id: $id) {
       id
       name
       createdAt
@@ -185,17 +184,17 @@ export const Empty = () => (
   <div className={EmptyDivClassName}>
     <EmptyIcon className={EmptyIconClassName} />
     <GreySubTitleLabel label="No such investor exists!" />
-    <TertiaryFilledButton label="GO BACK" action={() => back()} />
+    <PrimaryFilledButton label="GO BACK" action={() => back()} />
   </div>
 )
 
-const tabs = ['Details', 'Experience', 'Preferences', 'Posts']
+const tabs = ['Details', 'Experience', 'Objective']
 
 export const Success = ({
-  startupViewInvestorProfile,
+  investorViewOtherProfile,
 }: CellSuccessProps<
-  FindStartupViewInvestorProfileQuery,
-  FindStartupViewInvestorProfileQueryVariables
+  FindInvestorViewOtherProfileQuery,
+  FindInvestorViewOtherProfileQueryVariables
 >) => {
   const { currentUser } = useAuth()
   const [selectedTab, setSelectedTab] = useState(tabs[0])
@@ -205,7 +204,7 @@ export const Success = ({
       {
         query: QUERY,
         variables: {
-          id: startupViewInvestorProfile.id,
+          id: investorViewOtherProfile.id,
         },
         fetchPolicy: 'network-only',
       },
@@ -216,7 +215,7 @@ export const Success = ({
       {
         query: QUERY,
         variables: {
-          id: startupViewInvestorProfile.id,
+          id: investorViewOtherProfile.id,
         },
         fetchPolicy: 'network-only',
       },
@@ -227,7 +226,7 @@ export const Success = ({
       {
         query: QUERY,
         variables: {
-          id: startupViewInvestorProfile.id,
+          id: investorViewOtherProfile.id,
         },
         fetchPolicy: 'network-only',
       },
@@ -238,7 +237,7 @@ export const Success = ({
       {
         query: QUERY,
         variables: {
-          id: startupViewInvestorProfile.id,
+          id: investorViewOtherProfile.id,
         },
         fetchPolicy: 'network-only',
       },
@@ -249,7 +248,7 @@ export const Success = ({
       {
         query: QUERY,
         variables: {
-          id: startupViewInvestorProfile.id,
+          id: investorViewOtherProfile.id,
         },
         fetchPolicy: 'network-only',
       },
@@ -262,7 +261,7 @@ export const Success = ({
         {
           query: QUERY,
           variables: {
-            id: startupViewInvestorProfile.id,
+            id: investorViewOtherProfile.id,
           },
           fetchPolicy: 'network-only',
         },
@@ -270,55 +269,55 @@ export const Success = ({
     }
   )
 
-  const followersCount = startupViewInvestorProfile.user.followedBy.length
-  const followingsCount = startupViewInvestorProfile.user.following.length
-  const postsCount = startupViewInvestorProfile.user.posts.length
-  const commentsCount = startupViewInvestorProfile.user.comments.length
-  const connectionCount = startupViewInvestorProfile.user.connections.filter(
+  const followersCount = investorViewOtherProfile.user.followedBy.length
+  const followingsCount = investorViewOtherProfile.user.following.length
+  const postsCount = investorViewOtherProfile.user.posts.length
+  const commentsCount = investorViewOtherProfile.user.comments.length
+  const connectionCount = investorViewOtherProfile.user.connections.filter(
     (c) => c?.status == 'ACCEPTED'
   ).length
 
-  const isBlocking = startupViewInvestorProfile.user.blocking.some(
+  const isBlocking = investorViewOtherProfile.user.blocking.some(
     (u) => u?.id == currentUser?.id
   )
 
-  const isFollowed = startupViewInvestorProfile.user.followedBy.some(
+  const isFollowed = investorViewOtherProfile.user.followedBy.some(
     (u) => u?.id == currentUser?.id
   )
 
-  const isConnected = startupViewInvestorProfile.user.connections.find(
+  const isConnected = investorViewOtherProfile.user.connections.find(
     (c) =>
       c?.users.some((u) => u?.id == currentUser?.id) && c.status == 'ACCEPTED'
   )
 
-  const isRequestedByMe = startupViewInvestorProfile.user.connections.find(
+  const isRequestedByMe = investorViewOtherProfile.user.connections.find(
     (c) => c?.requesterID == currentUser?.id && c?.status != 'ACCEPTED'
   )
 
-  const isPendingOnMe = startupViewInvestorProfile.user.connections.find(
+  const isPendingOnMe = investorViewOtherProfile.user.connections.find(
     (c) =>
       c?.users.some((u) => u?.id == currentUser?.id) &&
       c.status != 'ACCEPTED' &&
       c.requesterID != currentUser?.id
   )
 
-  const isConversing = startupViewInvestorProfile.user.directConversations.find(
+  const isConversing = investorViewOtherProfile.user.directConversations.find(
     (d) => d?.users.some((u) => u?.id == currentUser?.id)
   )
 
   const canMessage = (): boolean => {
-    if (startupViewInvestorProfile.user.messageVisibility == 'PRIVATE') {
+    if (investorViewOtherProfile.user.messageVisibility == 'PRIVATE') {
       return false
     } else if (
-      startupViewInvestorProfile.user.messageVisibility == 'CONNECTIONS' &&
-      !startupViewInvestorProfile.user.connections.some((c) =>
+      investorViewOtherProfile.user.messageVisibility == 'CONNECTIONS' &&
+      !investorViewOtherProfile.user.connections.some((c) =>
         c?.users.some((u) => u?.id == currentUser?.id)
       )
     ) {
       return false
     } else if (
-      startupViewInvestorProfile.user.messageVisibility == 'FOLLOWERS' &&
-      !startupViewInvestorProfile.user.followedBy.some(
+      investorViewOtherProfile.user.messageVisibility == 'FOLLOWERS' &&
+      !investorViewOtherProfile.user.followedBy.some(
         (u) => u?.id == currentUser?.id
       )
     ) {
@@ -328,11 +327,11 @@ export const Success = ({
   }
 
   const isProfileVisible = (): boolean => {
-    if (startupViewInvestorProfile.user.profileVisbility == 'PRIVATE') {
+    if (investorViewOtherProfile.user.profileVisbility == 'PRIVATE') {
       return false
     } else if (
-      startupViewInvestorProfile.user.profileVisbility == 'CONNECTIONS' &&
-      !startupViewInvestorProfile.user.connections.some(
+      investorViewOtherProfile.user.profileVisbility == 'CONNECTIONS' &&
+      !investorViewOtherProfile.user.connections.some(
         (c) =>
           c?.users.some((u) => u?.id == currentUser?.id) &&
           c.status == 'ACCEPTED'
@@ -340,8 +339,8 @@ export const Success = ({
     ) {
       return false
     } else if (
-      startupViewInvestorProfile.user.profileVisbility == 'FOLLOWERS' &&
-      !startupViewInvestorProfile.user.followedBy.some(
+      investorViewOtherProfile.user.profileVisbility == 'FOLLOWERS' &&
+      !investorViewOtherProfile.user.followedBy.some(
         (u) => u?.id == currentUser?.id
       )
     ) {
@@ -424,7 +423,7 @@ export const Success = ({
               variables: {
                 input: {
                   requesterID: currentUser?.id,
-                  accepterID: startupViewInvestorProfile.user.id,
+                  accepterID: investorViewOtherProfile.user.id,
                 },
               },
             })
@@ -445,7 +444,7 @@ export const Success = ({
           action={async () => {
             if (isConversing) {
               navigate(
-                routes.startupMyConversations({
+                routes.investorMyConversations({
                   id: isConversing.id,
                 })
               )
@@ -454,13 +453,13 @@ export const Success = ({
                 variables: {
                   input: {
                     userID1: currentUser?.id,
-                    userID2: startupViewInvestorProfile.user.id,
+                    userID2: investorViewOtherProfile.user.id,
                   },
                 },
               }).then((d) => {
                 const convoID = d.data.createDirectConversation.id
                 navigate(
-                  routes.startupMyConversations({
+                  routes.investorMyConversations({
                     id: convoID,
                   })
                 )
@@ -487,7 +486,7 @@ export const Success = ({
           dropAction={async () => {
             await unFollowUser({
               variables: {
-                userID: startupViewInvestorProfile.user.id,
+                userID: investorViewOtherProfile.user.id,
               },
             })
           }}
@@ -501,7 +500,7 @@ export const Success = ({
           action={async () => {
             await followUser({
               variables: {
-                userID: startupViewInvestorProfile.user.id,
+                userID: investorViewOtherProfile.user.id,
               },
             })
           }}
@@ -514,25 +513,24 @@ export const Success = ({
     <div id="InvestorProfilePage" className={ProfilePageClassName}>
       <div id="ProfileHeader" className={ProfileHeaderClassName}>
         <div id="ProfilePic" className={InvestorProfilePicClassName}>
-          {startupViewInvestorProfile.name[0].toUpperCase()}
+          {investorViewOtherProfile.name[0].toUpperCase()}
         </div>
-        <SubDisplayLabel label={startupViewInvestorProfile.name} />
+        <SubDisplayLabel label={investorViewOtherProfile.name} />
       </div>
       {!isBlocking && (
-        //TODO: Add icons
         <>
           <div id="ProfileMeta" className={ProfileMetaClassName}>
             <div className={ActionGroupClassName}>
               <LocationIcon className={SmallIconClassName} />
               <SubTextLabel
-                label={`${startupViewInvestorProfile.location.city}, ${startupViewInvestorProfile.location.state}`}
+                label={`${investorViewOtherProfile.location.city}, ${investorViewOtherProfile.location.state}`}
               />
             </div>
             <div className={ActionGroupClassName}>
               <CalendarIcon className={SmallIconClassName} />
               <SmallLabel
                 label={`Joined ${moment(
-                  startupViewInvestorProfile.createdAt
+                  investorViewOtherProfile.createdAt
                 ).fromNow()}`}
               />
             </div>
@@ -579,7 +577,7 @@ export const Success = ({
                     key={s}
                     className={`flex items-center justify-center border-2 p-1 lg:p-2 ${
                       selectedTab == s
-                        ? ' border-x-transparent border-b-tertiary-d1 border-t-transparent dark:border-b-tertiary-l1'
+                        ? ' border-x-transparent border-b-primary-d1 border-t-transparent dark:border-b-primary-l1'
                         : ' border-transparent '
                     }`}
                     onClick={() => {
@@ -587,7 +585,7 @@ export const Success = ({
                     }}
                   >
                     {selectedTab == s ? (
-                      <TertiaryTextLabel label={s} />
+                      <PrimaryTextLabel label={s} />
                     ) : (
                       <TextLabel label={s} />
                     )}
@@ -598,26 +596,21 @@ export const Success = ({
             <div className={DividerClassName} />
             <div
               id="ContentDiv"
-              className="flex w-full rounded border border-white-d4 p-2 dark:border-black-l4"
+              className="flex w-full rounded border border-white-d4 p-3 dark:border-black-l4 lg:p-4"
             >
               {selectedTab == tabs[0] && (
-                <StartupViewInvestorDetails
-                  startupViewInvestorProfile={startupViewInvestorProfile}
+                <InvestorViewOtherDetails
+                  investorViewOtherProfile={investorViewOtherProfile}
                 />
               )}
               {selectedTab == tabs[1] && (
-                <StartupViewInvestorExperienceCell
-                  id={startupViewInvestorProfile.id}
+                <InvestorViewOtherExperienceCell
+                  id={investorViewOtherProfile.id}
                 />
               )}
               {selectedTab == tabs[2] && (
-                <StartupViewInvestorPreferencesCell
-                  id={startupViewInvestorProfile.id}
-                />
-              )}
-              {selectedTab == tabs[3] && (
-                <StartupViewInvestorPostsCell
-                  id={startupViewInvestorProfile.id}
+                <InvestorViewOtherObjectiveCell
+                  id={investorViewOtherProfile.id}
                 />
               )}
             </div>
@@ -634,11 +627,11 @@ export const Success = ({
   )
 }
 
-const StartupViewInvestorDetails = ({
-  startupViewInvestorProfile,
+const InvestorViewOtherDetails = ({
+  investorViewOtherProfile,
 }: CellSuccessProps<
-  FindStartupViewInvestorProfileQuery,
-  FindStartupViewInvestorProfileQueryVariables
+  FindInvestorViewOtherProfileQuery,
+  FindInvestorViewOtherProfileQueryVariables
 >) => {
   return (
     <div
@@ -646,24 +639,22 @@ const StartupViewInvestorDetails = ({
       className="grid w-full grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4"
     >
       <div id="LinkedIn" className={DoubleSpanItemClassName}>
-        <MediumLabel label={startupViewInvestorProfile.linkedInURL ?? 'N/A'} />
+        <MediumLabel label={investorViewOtherProfile.linkedInURL ?? 'N/A'} />
         <SubTextLabel label="LinkedIn" />
       </div>
       <div id="Website" className={DoubleSpanItemClassName}>
-        <MediumLabel label={startupViewInvestorProfile.websiteURL ?? 'N/A'} />
+        <MediumLabel label={investorViewOtherProfile.websiteURL ?? 'N/A'} />
         <SubTextLabel label="Website" />
       </div>
       <div id="Education" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.eduBG
-            .toString()
-            .replaceAll('_', ' ')}
+          label={investorViewOtherProfile.eduBG.toString().replaceAll('_', ' ')}
         />
         <SubTextLabel label="Education" />
       </div>
       <div id="WorkEx" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.yearsOfWorkEx
+          label={investorViewOtherProfile.yearsOfWorkEx
             .toString()
             .replaceAll('_', ' ')}
         />
@@ -671,7 +662,7 @@ const StartupViewInvestorDetails = ({
       </div>
       <div id="Companies" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.numberOfCompanies
+          label={investorViewOtherProfile.numberOfCompanies
             .toString()
             .replaceAll('_', ' ')}
         />
@@ -679,27 +670,31 @@ const StartupViewInvestorDetails = ({
       </div>
       <div id="PartOffers" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.participatingInOffers.length.toString()}
+          label={investorViewOtherProfile.participatingInOffers.length.toString()}
         />
         <SubTextLabel label="Participating in Offers" />
       </div>
       <div id="NegoOffers" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.negotiatingOffers.length.toString()}
+          label={investorViewOtherProfile.negotiatingOffers.length.toString()}
         />
         <SubTextLabel label="Negotiating Offers" />
       </div>
       <div id="Deals" className={SingleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.dealsJoined.length.toString()}
+          label={investorViewOtherProfile.dealsJoined.length.toString()}
         />
         <SubTextLabel label="Deals Joined" />
       </div>
       <div id="Sectors" className={DoubleSpanItemClassName}>
         <MediumLabel
-          label={startupViewInvestorProfile.workedInSectors
-            .join(', ')
-            .replaceAll('_', ' ')}
+          label={
+            investorViewOtherProfile.workedInSectors.length > 0
+              ? investorViewOtherProfile.workedInSectors
+                  .join(', ')
+                  .replaceAll('_', ' ')
+              : '-'
+          }
         />
         <SubTextLabel label="Worked in Sectors" />
       </div>

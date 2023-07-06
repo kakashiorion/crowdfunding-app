@@ -5,7 +5,7 @@ import LogoOrig from 'public/logo/LogoOrig.svg'
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
-import { HoverSecondaryTextButton } from 'src/components/Button/Button'
+import { HoverPrimaryTextButton } from 'src/components/Button/Button'
 import { DisabledSubTextLabel } from 'src/components/Label/Label'
 
 import {
@@ -56,7 +56,7 @@ const LoginHeader = () => {
       />
       <div className={ActionClassName}>
         <DisabledSubTextLabel label={`Don't have an account yet?`} />
-        <HoverSecondaryTextButton
+        <HoverPrimaryTextButton
           action={() => navigate(routes.signup())}
           label="SIGNUP"
         />

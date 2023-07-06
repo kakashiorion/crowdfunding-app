@@ -28,9 +28,11 @@ export const schema = gql`
     recentStartupInvestorPosts: [Post!]! @requireAuth
     recentPostsByPostId(id: Int!): [Post!]! @requireAuth
     myRecentPosts: [Post!]! @requireAuth
+    myPosts: [Post!]! @requireAuth
     postsByPosterID(id: Int!): [Post!]! @requireAuth
     post(id: Int!): Post @requireAuth
     startupViewPost(id: Int!): Post @requireAuth
+    investorViewPost(id: Int!): Post @requireAuth
   }
 
   input CreatePostInput {

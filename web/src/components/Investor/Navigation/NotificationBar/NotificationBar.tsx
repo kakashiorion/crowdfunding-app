@@ -2,9 +2,9 @@ import NotificationIcon from 'public/icons/notification.svg'
 import UpIcon from 'public/icons/up.svg'
 
 import {
-  menuExpandDivClassName,
-  menuIconClassName,
-  upIconClassName,
+  MenuExpandDivClassName,
+  MenuIconClassName,
+  UpIconClassName,
 } from 'src/components/Investor/InvestorConsts'
 
 type InvestorNotificationBarProps = {
@@ -17,14 +17,14 @@ const InvestorNotificationBar = (props: InvestorNotificationBarProps) => {
       {props.isMenuOpen == 'Notification' ? (
         <>
           <UpIcon
-            className={upIconClassName}
+            className={UpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <InvestorNotificationMenu />
         </>
       ) : (
         <NotificationIcon
-          className={menuIconClassName}
+          className={MenuIconClassName}
           onClick={() => props.setMenuOpen('Notification')}
         />
       )}
@@ -35,7 +35,7 @@ export default InvestorNotificationBar
 
 const InvestorNotificationMenu = () => {
   return (
-    <div className={menuExpandDivClassName}>
+    <div className={MenuExpandDivClassName}>
       <div className="h-8 w-full rounded bg-white-d1 dark:bg-black-l1 lg:h-9"></div>
     </div>
   )

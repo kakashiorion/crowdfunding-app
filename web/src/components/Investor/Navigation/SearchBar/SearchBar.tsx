@@ -2,9 +2,9 @@ import SearchIcon from 'public/icons/search.svg'
 import UpIcon from 'public/icons/up.svg'
 
 import {
-  menuExpandDivClassName,
-  menuIconClassName,
-  upIconClassName,
+  MenuExpandDivClassName,
+  MenuIconClassName,
+  UpIconClassName,
 } from 'src/components/Investor/InvestorConsts'
 
 type InvestorSearchBarProps = {
@@ -17,14 +17,14 @@ const InvestorSearchBar = (props: InvestorSearchBarProps) => {
       {props.isMenuOpen == 'Search' ? (
         <>
           <UpIcon
-            className={upIconClassName}
+            className={UpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <InvestorSearchMenu />
         </>
       ) : (
         <SearchIcon
-          className={menuIconClassName}
+          className={MenuIconClassName}
           onClick={() => props.setMenuOpen('Search')}
         />
       )}
@@ -35,7 +35,7 @@ export default InvestorSearchBar
 
 const InvestorSearchMenu = () => {
   return (
-    <div className={menuExpandDivClassName}>
+    <div className={MenuExpandDivClassName}>
       <SearchInput />
       <SearchResults />
     </div>

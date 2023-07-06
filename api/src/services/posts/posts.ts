@@ -10,17 +10,16 @@ export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
 }
 
+const RecentPagination = 20
+
 //Recent posts by investors - Feed for startup user
 export const recentInvestorsPosts = () => {
   return db.post.findMany({
     orderBy: {
       createdAt: 'desc',
     },
+    take: RecentPagination,
     where: {
-      createdAt: {
-        //Get last 14 days posts
-        gte: new Date(Date.now() - 1209600000),
-      },
       poster: {
         type: {
           equals: 'INVESTOR',
@@ -78,12 +77,12 @@ export const recentStartupInvestorPosts = () => {
     orderBy: {
       createdAt: 'desc',
     },
+    take: RecentPagination,
     where: {
-      createdAt: {
-        //Get last 14 days posts
-        gte: new Date(Date.now() - 1209600000),
-      },
       poster: {
+        id: {
+          not: context.currentUser?.id,
+        },
         type: {
           in: ['INVESTOR', 'STARTUP'],
         },
@@ -140,11 +139,8 @@ export const recentPostsByPostId = ({ id }: { id: number }) => {
     orderBy: {
       createdAt: 'desc',
     },
+    take: RecentPagination,
     where: {
-      createdAt: {
-        //Get last 14 days posts
-        gte: new Date(Date.now() - 1209600000),
-      },
       poster: {
         posts: {
           some: {
@@ -154,7 +150,15 @@ export const recentPostsByPostId = ({ id }: { id: number }) => {
           },
         },
       },
+      id: {
+        not: id,
+      },
       OR: [
+        {
+          posterID: {
+            equals: context.currentUser?.id,
+          },
+        },
         {
           visibility: {
             equals: 'CONNECTIONS',
@@ -206,11 +210,24 @@ export const myRecentPosts = () => {
     orderBy: {
       createdAt: 'desc',
     },
+    take: RecentPagination,
     where: {
-      createdAt: {
-        //Get last 14 days posts
-        gte: new Date(Date.now() - 1209600000),
+      poster: {
+        id: {
+          equals: context.currentUser?.id,
+        },
       },
+    },
+  })
+}
+
+//My posts (no pagination)
+export const myPosts = () => {
+  return db.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    where: {
       poster: {
         id: {
           equals: context.currentUser?.id,
@@ -226,6 +243,7 @@ export const postsByPosterID = ({ id }: { id: number }) => {
     orderBy: {
       createdAt: 'desc',
     },
+    take: RecentPagination,
     where: {
       poster: {
         id: id,
@@ -307,6 +325,66 @@ export const startupViewPost = ({ id }: { id: number }) => {
             type: {
               equals: 'INVESTOR',
             },
+          },
+        },
+      ],
+    },
+  })
+}
+
+//Investor is viewing the post
+export const investorViewPost = ({ id }: { id: number }) => {
+  return db.post.findFirst({
+    where: {
+      id: {
+        equals: id,
+      },
+      OR: [
+        {
+          poster: {
+            id: {
+              equals: context.currentUser?.id,
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'CONNECTIONS',
+          },
+          poster: {
+            connections: {
+              some: {
+                status: {
+                  equals: 'ACCEPTED',
+                },
+                users: {
+                  some: {
+                    id: {
+                      equals: context.currentUser?.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'FOLLOWERS',
+          },
+          poster: {
+            followedBy: {
+              some: {
+                id: {
+                  equals: context.currentUser?.id,
+                },
+              },
+            },
+          },
+        },
+        {
+          visibility: {
+            equals: 'PUBLIC',
           },
         },
       ],

@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 
-import OfferIcon from 'public/icons/bid.svg'
 import ConnectionIcon from 'public/icons/connection.svg'
 import ConversationIcon from 'public/icons/conversation.svg'
+import OfferIcon from 'public/icons/diamond.svg'
 import ExploreIcon from 'public/icons/explore.svg'
 import HomeIcon from 'public/icons/home.svg'
 

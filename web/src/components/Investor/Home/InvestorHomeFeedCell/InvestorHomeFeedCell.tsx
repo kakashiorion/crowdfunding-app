@@ -1,79 +1,38 @@
+import AddIcon from 'public/icons/add.svg'
 import type {
   FindInvestorHomeFeedQuery,
   FindInvestorHomeFeedQueryVariables,
 } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import { navigate, routes } from '@redwoodjs/router'
+import type { CellSuccessProps } from '@redwoodjs/web'
+
+import { LeadingIconBlackFilledButton } from 'src/components/Button/Button'
+import InvestorHomeConnectionCell from 'src/components/Investor/Home/InvestorHomeConnectionCell'
+import InvestorHomePostCell from 'src/components/Investor/Home/InvestorHomePostCell'
+import { PrimaryTitleLabel } from 'src/components/Label/Label'
 
 /*
-Feed consists of:
-  Posts by connections/followings/public
-  Comments by connections/followings
-  Connection updates from connections/followings
+1. Recent posts from investors or Investors :
+    - if post visibility is Connections && user is a Connection
+    - if post visibility is Followers && user is a Follower
+    - if post visibility is Public
+2. Recent connection events from investors or Investors:
+    - if connection's activity visibility is Connections && user is a Connection
+    - if connection's activity visibility is Followers && user is a Follower
+
 */
 
 export const QUERY = gql`
   query FindInvestorHomeFeedQuery {
-    feedPosts: posts {
+    feedPosts: recentStartupInvestorPosts {
       id
-      posterID
-      poster {
-        profilePicURL
-        type
-        investor {
-          name
-        }
-        startup {
-          name
-        }
-      }
-      visibility
-      title
-      writeup
-      attachmentURL
-      createdAt
-      likedByUsers {
-        id
-      }
-      comments {
-        commenterID
-        content
-        createdAt
-        likedByUsers {
-          id
-        }
-        commenter {
-          profilePicURL
-          type
-          investor {
-            name
-          }
-          startup {
-            name
-          }
-        }
-      }
     }
-    feedConnections: connections {
+    feedConnections: recentStartupInvestorConnections {
       id
-      users {
-        id
-      }
-      status
-      createdAt
     }
   }
 `
-
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({
-  error,
-}: CellFailureProps<FindInvestorHomeFeedQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error?.message}</div>
-)
 
 export const Success = ({
   feedPosts,
@@ -82,5 +41,30 @@ export const Success = ({
   FindInvestorHomeFeedQuery,
   FindInvestorHomeFeedQueryVariables
 >) => {
-  return <div>{JSON.stringify(investorHomeFeed)}</div>
+  return (
+    <div className="flex h-full flex-col gap-2 lg:gap-3">
+      <div className="flex items-start justify-between">
+        <PrimaryTitleLabel label="Home Feed" />
+        <LeadingIconBlackFilledButton
+          label="CREATE POST"
+          icon={<AddIcon className="h-5 w-5 lg:h-6 lg:w-6" />}
+          action={() => {
+            navigate(routes.investorCreatePost())
+          }}
+        />
+      </div>
+      {/* //TODO: Different tabs for various activities */}
+      <div className="flex flex-col gap-2 overflow-y-scroll lg:gap-3">
+        {feedPosts.map((p: { id: number }) => (
+          <InvestorHomePostCell id={p.id} key={'post' + p.id.toString()} />
+        ))}
+        {feedConnections.map((c: { id: number }) => (
+          <InvestorHomeConnectionCell
+            id={c.id}
+            key={'conn' + c.id.toString()}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }

@@ -23,11 +23,22 @@ export const PrimaryFilledButton = (props: ButtonProps) => {
 export const LeadingIconBlackFilledButton = (props: ButtonProps) => {
   return (
     <button
-      className="flex items-center justify-center gap-2 rounded border-2 border-black-l1 fill-black-l1 px-4 py-2 text-b2 text-black-l1 duration-200 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:fill-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:fill-black dark:hover:text-black lg:gap-3 lg:px-5 lg:py-2.5 lg:text-b1"
+      className="flex items-center justify-center gap-2 rounded border border-black-l1 fill-black-l1 px-4 py-2 text-b2 text-black-l1 duration-200 hover:border-black hover:bg-black hover:fill-white hover:text-white dark:border-white-d1 dark:fill-white-d1 dark:text-white-d1 dark:hover:border-white dark:hover:bg-white dark:hover:fill-black dark:hover:text-black lg:gap-3 lg:px-5 lg:py-2.5 lg:text-b1"
       onClick={props.action}
     >
       {props.icon}
       <p className="align-sub">{props.label}</p>
+    </button>
+  )
+}
+
+export const PrimaryIconButton = (props: ButtonProps) => {
+  return (
+    <button
+      className="flex items-center justify-center rounded bg-primary-d1 p-2 duration-200 hover:bg-primary-d2 dark:bg-primary-l1 dark:hover:bg-primary-l2 lg:p-3"
+      onClick={props.action}
+    >
+      {props.icon}
     </button>
   )
 }

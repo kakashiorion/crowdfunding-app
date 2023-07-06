@@ -1,14 +1,19 @@
 import moment from 'moment'
-import type { StartupViewInvestorPostsQuery } from 'types/graphql'
+import type { InvestorViewStartupPostsQuery } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import { SubTextLabel, TertiaryTextLabel } from 'src/components/Label/Label'
+import { ProfilePageClassName } from 'src/components/Investor/InvestorConsts'
+import {
+  GreySubTextLabel,
+  PrimaryTextLabel,
+  SubTextLabel,
+} from 'src/components/Label/Label'
 
 export const QUERY = gql`
-  query StartupViewInvestorPostsQuery($id: Int!) {
-    startupViewInvestorPosts: postsByPosterID(id: $id) {
+  query InvestorViewStartupPostsQuery {
+    investorViewStartupPosts: myPosts {
       id
       title
       createdAt
@@ -23,25 +28,29 @@ export const QUERY = gql`
   }
 `
 
-//TODO: Handle no posts by poster
-export const Empty = () => <div>Empty</div>
+//Handle no posts by poster
+export const Empty = () => (
+  <div>
+    <GreySubTextLabel label="No posts by the startup!" />
+  </div>
+)
 
 export const Success = ({
-  startupViewInvestorPosts,
-}: CellSuccessProps<StartupViewInvestorPostsQuery>) => {
+  investorViewStartupPosts,
+}: CellSuccessProps<InvestorViewStartupPostsQuery>) => {
   return (
-    <div id="PostsTab" className="grid w-full grid-cols-1 gap-3 lg:gap-4">
-      {startupViewInvestorPosts.map((post) => {
+    <div id="PostsTab" className={ProfilePageClassName}>
+      {investorViewStartupPosts.map((post) => {
         return (
           <button
             key={post.id}
             onClick={() => {
-              navigate(routes.startupViewPost({ id: post.id }))
+              navigate(routes.investorViewPost({ id: post.id }))
             }}
-            className="grid w-full grid-cols-3 justify-items-start gap-2 rounded bg-tertiary-d1/5 p-2 dark:bg-tertiary-l1/5 lg:gap-3 lg:p-3"
+            className="grid w-full grid-cols-3 justify-items-start gap-2 rounded bg-primary-d1/5 p-3 text-left hover:bg-primary-d1/20 dark:bg-primary-l1/5 hover:dark:bg-primary-l1/20 lg:gap-3 lg:p-4"
           >
             <div className={`${post.imageURL ? 'col-span-2' : 'col-span-3'}`}>
-              <TertiaryTextLabel label={post.title} />
+              <PrimaryTextLabel label={post.title} />
             </div>
             {post.imageURL && (
               <div className="col-span-1">

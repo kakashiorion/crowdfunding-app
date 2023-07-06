@@ -16,6 +16,83 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
+//Find New Users to chat
+export const findNewChatUsers = ({ term }: { term: string }) => {
+  return db.user.findMany({
+    where: {
+      directConversations: {
+        none: {
+          users: {
+            some: {
+              id: { equals: context.currentUser?.id },
+            },
+          },
+        },
+      },
+      AND: [
+        {
+          OR: [
+            {
+              investor: {
+                name: {
+                  contains: term,
+                  mode: 'insensitive',
+                },
+              },
+              startup: {
+                name: {
+                  contains: term,
+                  mode: 'insensitive',
+                },
+              },
+            },
+          ],
+        },
+        {
+          OR: [
+            {
+              messageVisibility: {
+                equals: 'PUBLIC',
+              },
+            },
+            {
+              messageVisibility: {
+                equals: 'CONNECTIONS',
+              },
+              connections: {
+                some: {
+                  status: {
+                    equals: 'ACCEPTED',
+                  },
+                  users: {
+                    some: {
+                      id: {
+                        equals: context.currentUser?.id,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            {
+              messageVisibility: {
+                equals: 'FOLLOWERS',
+              },
+              followedBy: {
+                some: {
+                  id: {
+                    equals: context.currentUser?.id,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+  })
+}
+
 export const userByEmail: QueryResolvers['userByEmail'] = ({
   email,
 }: {

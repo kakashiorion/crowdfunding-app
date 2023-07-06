@@ -255,6 +255,7 @@ export const Success = ({
     startupViewPost.savedByUsers,
     startupViewPost.comments.length,
   ])
+
   return (
     <div className={ViewPostDivClassName}>
       <div className={PosterHeaderClassName}>

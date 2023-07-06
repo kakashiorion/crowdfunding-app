@@ -317,7 +317,7 @@ const StartupBusiness = (props: OnboardingMainProps) => {
           couldImprove: skipData[7]
             ? []
             : [couldImprove1, couldImprove2, couldImprove3],
-          currentActivities: skipData[9]
+          currentActivities: skipData[8]
             ? []
             : [currentActivities1, currentActivities2, currentActivities3],
           hasOnlineBusiness: skippedLast ? null : hasOnlineBusiness,

@@ -10,14 +10,16 @@ export const connections: QueryResolvers['connections'] = () => {
   return db.connection.findMany()
 }
 
-//Recent Connections between Investors
+const RecentPagination = 20
+
+//Recent Connections between Investors - feed for startup user
 export const recentInvestorsConnections = () => {
   return db.connection.findMany({
+    orderBy: {
+      updatedAt: 'desc',
+    },
+    take: RecentPagination,
     where: {
-      createdAt: {
-        //Get last 14 days posts
-        gte: new Date(Date.now() - 1209600000),
-      },
       status: {
         equals: 'ACCEPTED',
       },
@@ -26,6 +28,9 @@ export const recentInvestorsConnections = () => {
           type: {
             equals: 'INVESTOR',
           },
+        },
+        none: {
+          id: context.currentUser?.id,
         },
         some: {
           OR: [
@@ -63,31 +68,22 @@ export const recentInvestorsConnections = () => {
   })
 }
 
-//Recent Connections between Startup and Investor
+//Recent Connections - feed for investor user
 export const recentStartupInvestorConnections = () => {
   return db.connection.findMany({
+    orderBy: {
+      updatedAt: 'desc',
+    },
+    take: RecentPagination,
     where: {
-      createdAt: {
-        //Get last 14 days posts
-        gte: new Date(Date.now() - 1209600000),
-      },
       status: {
         equals: 'ACCEPTED',
       },
       users: {
+        none: {
+          id: context.currentUser?.id,
+        },
         some: {
-          AND: [
-            {
-              type: {
-                equals: 'INVESTOR',
-              },
-            },
-            {
-              type: {
-                equals: 'STARTUP',
-              },
-            },
-          ],
           OR: [
             {
               activityVisbility: { in: ['FOLLOWERS', 'PUBLIC'] },

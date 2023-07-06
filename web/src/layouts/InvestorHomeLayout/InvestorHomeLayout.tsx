@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from 'react'
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
-import { investorPageClassName } from 'src/components/Investor/InvestorConsts'
+import { InvestorPageClassName } from 'src/components/Investor/InvestorConsts'
 import InvestorTopBar from 'src/components/Investor/Navigation/InvestorTopBar/InvestorTopBar'
 
 import {
@@ -68,7 +68,7 @@ const InvestorHomeLayout = ({ children }: InvestorHomeLayoutProps) => {
         <div id="layoutWrapper" className={HomeLayoutWrapperClassName}>
           <div id="pageWrapper" className={HomePageWrapperClassName}>
             <InvestorTopBar />
-            <div className={investorPageClassName}>{children}</div>
+            <div className={InvestorPageClassName}>{children}</div>
           </div>
         </div>
       </div>

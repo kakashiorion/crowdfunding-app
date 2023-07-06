@@ -7,17 +7,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          'Poppins',
-          'Inter',
-          'Lato',
-          'Hind',
-          ...defaultTheme.fontFamily.sans,
-        ],
+        sans: ['Rajdhani', 'Inter', ...defaultTheme.fontFamily.sans],
       },
     },
     screens: {
-      lg: '720px',
+      lg: '768px',
       xl: '1280px',
     },
     fontSize: {

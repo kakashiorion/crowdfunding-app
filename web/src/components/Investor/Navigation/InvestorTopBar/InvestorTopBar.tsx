@@ -15,33 +15,31 @@ import InvestorSearchBar from 'src/components/Investor/Navigation/SearchBar/Sear
 const InvestorTopBar = () => {
   const [isMenuOpen, setMenuOpen] = useState('None')
   return (
-    <div className="sticky left-0 top-0 z-10 flex w-full items-center justify-between gap-4 py-2 lg:py-3">
+    <div className="sticky left-0 top-0 z-10 flex w-full items-center justify-between gap-4 py-3">
       <div className="flex items-center justify-start gap-3">
         {isMenuOpen == 'Main' ? (
-          <>
-            <UpIcon
-              className={
-                'flex h-6 w-6 cursor-pointer fill-primary-d1 dark:fill-primary-l1 lg:hidden lg:h-7 lg:w-7'
-              }
-              onClick={() => setMenuOpen('None')}
-            />
-          </>
+          <button
+            onClick={() => setMenuOpen('None')}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border border-white-d2 bg-white-d2 fill-primary-d1 dark:border-black-l2 dark:bg-black-l2 dark:fill-primary-l1 lg:hidden"
+          >
+            <UpIcon className={'flex h-6 w-6 lg:hidden'} />
+          </button>
         ) : (
-          <MenuIcon
-            className={
-              'flex h-6 w-6 cursor-pointer fill-black hover:fill-primary-d1 dark:fill-white dark:hover:fill-primary-l1 lg:hidden lg:h-7 lg:w-7'
-            }
+          <button
             onClick={() => setMenuOpen('Main')}
-          />
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded border border-white-d2 fill-black hover:fill-primary-d1 dark:border-black-l2 dark:fill-white dark:hover:fill-primary-l1 lg:hidden"
+          >
+            <MenuIcon className={'flex h-6 w-6 lg:hidden'} />
+          </button>
         )}
         <LogoBlack
-          className="flex h-6 w-11 cursor-pointer content-start dark:hidden lg:h-7 lg:w-12"
+          className="flex h-7 w-12 cursor-pointer content-start dark:hidden lg:h-8 lg:w-13"
           onClick={() => {
             navigate(routes.investorHome())
           }}
         />
         <LogoWhite
-          className="hidden h-6 w-11 cursor-pointer content-start dark:flex lg:h-7 lg:w-12"
+          className="hidden h-7 w-12 cursor-pointer content-start dark:flex lg:h-8 lg:w-13"
           onClick={() => navigate(routes.investorHome())}
         />
       </div>

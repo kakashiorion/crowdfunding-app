@@ -111,13 +111,13 @@ export const ConvoDivClassName =
 
 //Navigation
 export const UpIconClassName =
-  'flex h-6 lg:h-7 w-6 lg:w-7 fill-tertiary-d1 dark:fill-tertiary-l1 cursor-pointer'
+  'flex h-7 w-7 fill-tertiary-d1 dark:fill-tertiary-l1 cursor-pointer'
 
 export const ProfileUpIconClassName =
-  'flex h-7 lg:h-8 w-7 lg:w-8 fill-tertiary-d1 dark:fill-tertiary-l1 cursor-pointer'
+  'flex h-8 w-8 fill-tertiary-d1 dark:fill-tertiary-l1 cursor-pointer'
 
 export const MenuIconClassName =
-  'flex h-6 w-6 lg:h-7 lg:w-7 fill-black hover:fill-tertiary-d1 dark:fill-white dark:hover:fill-tertiary-l1 cursor-pointer'
+  'flex h-7 w-7 fill-black hover:fill-tertiary-d1 dark:fill-white dark:hover:fill-tertiary-l1 cursor-pointer'
 
 export const MenuExpandDivClassName =
   'absolute right-0 top-10 z-10 flex w-full flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l2/95 lg:w-1/2 '
@@ -187,7 +187,8 @@ export const ProfileActionsClassName =
 export const ProfileStatsClassName =
   'grid grid-cols-3 lg:grid-cols-5 w-full gap-3 lg:gap-4'
 
-export const StatItemClassName = 'flex flex-col items-start gap-1 lg:gap-2'
+export const StatItemClassName =
+  'flex flex-col items-start gap-1 lg:gap-2 p-2 lg:p-3 rounded bg-white-d1 dark:bg-black-l1'
 
 export const SuccessIconClassName =
   'h-5 w-5 lg:h-6 lg:w-6 fill-success-d1 dark:fill-success-l1'
@@ -199,7 +200,7 @@ export const InfoIconClassName =
   'h-5 w-5 lg:h-6 lg:w-6 fill-warn-d1 dark:fill-warn-l1'
 
 export const SingleSpanItemClassName =
-  'flex flex-col col-span-1 gap-1 lg:gap-2 p-2 items-start'
+  'flex flex-col col-span-1 gap-1 lg:gap-2 p-2 items-start lg:p-3 rounded bg-tertiary-d1/10 dark:bg-tertiary-l1/10'
 
 export const DoubleSpanItemClassName =
-  'flex flex-col col-span-1 lg:col-span-2 gap-1 lg:gap-2 p-2 items-start'
+  'flex flex-col col-span-1 lg:col-span-2 gap-1 lg:gap-2 p-2 items-start lg:p-3 rounded bg-tertiary-d1/10 dark:bg-tertiary-l1/10'

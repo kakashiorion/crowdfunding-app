@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react'
 import { MetaTags } from '@redwoodjs/web'
 
 import { TertiaryTitleLabel } from 'src/components/Label/Label'
-// import StartupRecentPostsCell from 'src/components/Startup/Post/StartupRecentPostsCell'
+import StartupRecentPostsCell from 'src/components/Startup/Post/StartupRecentPostsCell'
 import StartupViewPostCell from 'src/components/Startup/Post/StartupViewPostCell'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
@@ -38,9 +38,9 @@ const StartupViewPostMain = ({ id }: { id: number }) => {
 
 const StartupViewPostSide = ({ id }: { id: number }) => {
   return (
-    <div className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:flex-col lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50">
-      {/* <TertiaryTextLabel label="RECENT POSTS" />
-      <StartupRecentPostsCell id={id} /> */}
+    <div className="hidden lg:flex lg:h-full lg:w-1/3 lg:flex-col lg:gap-6 lg:rounded">
+      <TertiaryTitleLabel label="Related Posts" />
+      <StartupRecentPostsCell id={id} />
     </div>
   )
 }

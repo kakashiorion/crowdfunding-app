@@ -82,6 +82,7 @@ const ADD_POST_LIKE_MUTATION = gql`
     }
   }
 `
+
 const REMOVE_POST_LIKE_MUTATION = gql`
   mutation removePostLike($id: Int!) {
     removePostLike(id: $id) {
@@ -114,11 +115,6 @@ const UNSAVE_POST_MUTATION = gql`
     }
   }
 `
-
-export const Empty = () => {
-  //TODO: Empty post handling - phase 2
-  return <></>
-}
 
 export const Success = ({
   startupHomePost,

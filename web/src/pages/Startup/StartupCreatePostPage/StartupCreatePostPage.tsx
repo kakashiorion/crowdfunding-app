@@ -181,8 +181,8 @@ const StartupCreatePostSide = () => {
       aria-hidden
       className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50"
     >
-      <div className="absolute bottom-[54px] right-[-42px] h-12 w-17 rounded bg-tertiary-d2/50 dark:bg-tertiary-l2/50"></div>
-      <div className="absolute bottom-[-42px] right-[54px] h-17 w-12 rounded bg-tertiary-d3/50 dark:bg-tertiary-l3/50"></div>
+      <div className="absolute -right-8 bottom-6 h-11 w-16 rounded bg-tertiary-d2/50 dark:bg-tertiary-l2/50"></div>
+      <div className="absolute -bottom-8 right-6 h-16 w-11 rounded bg-tertiary-d3/50 dark:bg-tertiary-l3/50"></div>
     </div>
   )
 }

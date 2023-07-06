@@ -10,7 +10,7 @@ const StartupNavigationItem = (props: StartupNavigationItemProps) => {
       ${
         props.selected
           ? ' bg-black-l1 shadow-sm dark:bg-white-d1 '
-          : 'hover:bg-white-d3 dark:hover:bg-black-l3 '
+          : ' hover:bg-white-d3 dark:hover:bg-black-l3 '
       }
       `}
       onClick={props.action}
@@ -18,8 +18,8 @@ const StartupNavigationItem = (props: StartupNavigationItemProps) => {
       <props.icon
         className={`h-6 w-6 ${
           props.selected
-            ? 'fill-tertiary-l2 dark:fill-tertiary-d1'
-            : 'fill-black dark:fill-white'
+            ? ' fill-tertiary-l2 dark:fill-tertiary-d1 '
+            : ' fill-black dark:fill-white '
         }`}
       />
     </button>

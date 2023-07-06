@@ -4,9 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = "native"
-  previewFeatures = ["filteredRelationCount"]
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
 }
 
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
@@ -21,7 +20,7 @@ model User {
   resetToken           String?
   resetTokenExpiresAt  DateTime?
   profilePicURL        String?
-  lastActive           DateTime             @default(now()) //TODO: When the user interacted with the platform last
+  lastActive           DateTime             @default(now()) //TODO: When the user interacted with the platform last - phase 2
   mobile               String? //For future use
   otp                  String? //For future use
   otpExpiresAt         DateTime? //For future use

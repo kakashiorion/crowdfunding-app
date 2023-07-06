@@ -9,8 +9,9 @@ import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 import {
-  profileMenuItemClassName,
-  profileUpIconClassName,
+  ProfileMenuItemClassName,
+  ProfileMenuSelectedItemClassName,
+  ProfileUpIconClassName,
 } from 'src/components/Investor/InvestorConsts'
 import { SubTextLabel } from 'src/components/Label/Label'
 import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
@@ -26,7 +27,7 @@ const InvestorProfileBar = (props: InvestorProfileBarProps) => {
       {props.isMenuOpen == 'Profile' ? (
         <>
           <UpIcon
-            className={profileUpIconClassName}
+            className={ProfileUpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <InvestorProfileMenu
@@ -36,7 +37,7 @@ const InvestorProfileBar = (props: InvestorProfileBarProps) => {
         </>
       ) : (
         <button
-          className="flex h-7 w-7 items-center justify-center rounded bg-black-l1 text-b3 text-white hover:bg-primary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-primary-l1 lg:h-8 lg:w-8 lg:text-b2"
+          className="flex h-8 w-8 items-center justify-center rounded bg-black-l1 text-b3 text-white hover:bg-primary-d1 dark:bg-white-d1 dark:text-black dark:hover:bg-primary-l1 lg:text-b2"
           onClick={() => props.setMenuOpen('Profile')}
         >
           {/* //TODO: apply profile pic as BG */}
@@ -50,16 +51,20 @@ export default InvestorProfileBar
 
 const InvestorProfileMenu = (props: InvestorProfileBarProps) => {
   const { logOut } = useAuth()
-  const { setPageSelected } = useContext(InvestorPageContext)
+  const { pageSelected, setPageSelected } = useContext(InvestorPageContext)
   return (
     <div className="absolute right-0 top-10 z-10 flex flex-col items-center gap-2 rounded bg-white-d2/95 p-2 dark:bg-black-l2/95">
       <button
         onClick={() => {
-          navigate(routes.myInvestorProfile())
+          navigate(routes.investorMyProfile())
           props.setMenuOpen('None')
           setPageSelected('Profile')
         }}
-        className={profileMenuItemClassName}
+        className={
+          pageSelected == 'Profile'
+            ? ProfileMenuSelectedItemClassName
+            : ProfileMenuItemClassName
+        }
       >
         <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Profile" />
@@ -70,12 +75,16 @@ const InvestorProfileMenu = (props: InvestorProfileBarProps) => {
           props.setMenuOpen('None')
           setPageSelected('Help')
         }}
-        className={profileMenuItemClassName}
+        className={
+          pageSelected == 'Help'
+            ? ProfileMenuSelectedItemClassName
+            : ProfileMenuItemClassName
+        }
       >
         <HelpIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Help" />
       </button>
-      <button onClick={() => logOut()} className={profileMenuItemClassName}>
+      <button onClick={() => logOut()} className={ProfileMenuItemClassName}>
         <LogoutIcon className="flex h-5 w-5 fill-error-d1 dark:fill-error-l1 lg:h-6 lg:w-6" />
         <SubTextLabel label="Logout" />
       </button>
