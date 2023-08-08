@@ -34,8 +34,7 @@ const InvestorHomeMain = () => {
   )
 }
 
+//TODO: Show recommendations
 const InvestorHomeSidebar = () => {
-  return (
-    <div className="hidden lg:flex lg:h-full lg:w-1/3 lg:rounded lg:bg-white-d1 dark:lg:bg-black-l2 "></div>
-  )
+  return <div className="hidden lg:flex lg:h-full lg:w-1/3"></div>
 }

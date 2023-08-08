@@ -33,6 +33,7 @@ const InvestorConnectionsMain = () => {
   )
 }
 
+//TODO: Sidebar - Popular users suggestions
 const InvestorConnectionsSidebar = () => {
-  return <div className="hidden lg:flex lg:h-full lg:w-1/3 lg:rounded"></div>
+  return <div className="hidden lg:flex lg:h-full lg:w-1/3"></div>
 }

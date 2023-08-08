@@ -35,5 +35,5 @@ const StartupConnectionsMain = () => {
 
 //TODO: Sidebar - Popular investors suggestions
 const StartupConnectionsSide = () => {
-  return <div className="hidden lg:flex lg:h-full lg:w-1/3 lg:rounded"></div>
+  return <div className="hidden lg:flex lg:h-full lg:w-1/3"></div>
 }

@@ -34,6 +34,7 @@ const StartupHomeMain = () => {
   )
 }
 
+//TODO: Show recommendations
 const StartupHomeSide = () => {
   return <div className="hidden lg:flex lg:h-full lg:w-1/3"></div>
 }
