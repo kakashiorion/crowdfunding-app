@@ -1,15 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import moment from 'moment'
-import CloseIcon from 'public/icons/close.svg'
-import ChatIcon from 'public/icons/comment.svg'
-import DeleteIcon from 'public/icons/delete.svg'
-import AcceptIcon from 'public/icons/done.svg'
-import DownIcon from 'public/icons/down.svg'
-import InfoIcon from 'public/icons/info.svg'
-import ProfileIcon from 'public/icons/profile.svg'
-import SearchIcon from 'public/icons/search.svg'
-import UpIcon from 'public/icons/up.svg'
 import type { InvestorConnectionsQuery } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -20,6 +11,15 @@ import {
   IconOutlineButton,
   PrimaryIconButton,
 } from 'src/components/Button/Button'
+import SvgClose from 'src/components/Icon/Close'
+import SvgComment from 'src/components/Icon/Comment'
+import SvgDelete from 'src/components/Icon/Delete'
+import SvgDone from 'src/components/Icon/Done'
+import SvgDown from 'src/components/Icon/Down'
+import SvgInfo from 'src/components/Icon/Info'
+import SvgProfile from 'src/components/Icon/Profile'
+import SvgSearch from 'src/components/Icon/Search'
+import SvgUp from 'src/components/Icon/Up'
 import {
   ButtonIconClassName,
   ConnectionAcceptClassName,
@@ -340,7 +340,7 @@ export const Success = ({
         <div id="ConnSearch" className={InputDivClassName}>
           {searchText != '' && (
             <IconOutlineButton
-              icon={<CloseIcon className={ButtonIconClassName} />}
+              icon={<SvgClose className={ButtonIconClassName} />}
               action={() => {
                 setSearchText('') //Clear search text
                 setConnList(filterConnections(selectedTab)) //Show conn list based on tab selected (remove search filter)
@@ -358,7 +358,7 @@ export const Success = ({
             className={TextInputClassName}
           />
           <PrimaryIconButton
-            icon={<SearchIcon className={LightIconClassName} />}
+            icon={<SvgSearch className={LightIconClassName} />}
             action={() => {
               handleSearch() //Show conn list based on search text
             }}
@@ -367,7 +367,7 @@ export const Success = ({
       </div>
       <div className={DividerClassName} />
       <div className={ConnectionInfoClassName}>
-        <InfoIcon className={ConnectionInfoIconClassName} />
+        <SvgInfo className={ConnectionInfoIconClassName} />
         <WarnSubTextLabel label={showInfo()} />
       </div>
       <div id="ConnContent" className={PageDivClassName}>
@@ -438,7 +438,7 @@ export const Success = ({
                         handleAcceptConnection(c.id, c.users[otherIndex]?.id)
                       }}
                     >
-                      <AcceptIcon className={IconClassName} />
+                      <SvgDone className={IconClassName} />
                       <div className={HideShowClassName}>
                         <SubTextLabel label={'Accept'} />
                       </div>
@@ -450,7 +450,7 @@ export const Success = ({
                         handleRejectConnection(c.id)
                       }}
                     >
-                      <CloseIcon className={IconClassName} />
+                      <SvgClose className={IconClassName} />
                       <div className={HideShowClassName}>
                         <SubTextLabel label={'Reject'} />
                       </div>
@@ -458,9 +458,9 @@ export const Success = ({
                   </>
                 )}
                 {selectedConnID == c.id ? (
-                  <UpIcon className={IconClassName} />
+                  <SvgUp className={IconClassName} />
                 ) : (
-                  <DownIcon className={IconClassName} />
+                  <SvgDown className={IconClassName} />
                 )}
               </div>
               {selectedConnID == c.id && (
@@ -498,7 +498,7 @@ export const Success = ({
                       }
                     }}
                   >
-                    <ProfileIcon className={IconClassName} />
+                    <SvgProfile className={IconClassName} />
                     <div className={HideShowClassName}>
                       <SubTextLabel label={'Profile'} />
                     </div>
@@ -527,7 +527,7 @@ export const Success = ({
                         }
                       }}
                     >
-                      <ChatIcon className={IconClassName} />
+                      <SvgComment className={IconClassName} />
                       <div className={HideShowClassName}>
                         <SubTextLabel label={'Chat'} />
                       </div>
@@ -541,7 +541,7 @@ export const Success = ({
                         handleAcceptConnection(c.id, c.users[otherIndex]?.id)
                       }}
                     >
-                      <AcceptIcon className={IconClassName} />
+                      <SvgDone className={IconClassName} />
                       <div className={HideShowClassName}>
                         <SubTextLabel label={'Accept'} />
                       </div>
@@ -554,7 +554,7 @@ export const Success = ({
                       handleDeleteConnection(c.id)
                     }}
                   >
-                    <DeleteIcon className={IconClassName} />
+                    <SvgDelete className={IconClassName} />
                     <div className={HideShowClassName}>
                       <SubTextLabel label={'Delete'} />
                     </div>

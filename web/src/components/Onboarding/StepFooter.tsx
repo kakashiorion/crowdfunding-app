@@ -1,5 +1,3 @@
-import InfoIcon from 'public/icons/info.svg'
-
 import { OnboardingStepsInfoType } from 'src/lib/onboardingConsts'
 
 import {
@@ -8,6 +6,7 @@ import {
   PrimaryFilledButton,
   TertiaryFilledButton,
 } from '../Button/Button'
+import SvgInfo from '../Icon/Info'
 import { WarnSubTextLabel } from '../Label/Label'
 
 type StepFooterProps = {
@@ -24,7 +23,7 @@ export const InvestorStepFooter = (props: StepFooterProps) => {
     <div className="flex w-full shrink-0 flex-col gap-1 lg:gap-2">
       {props.currentStepInfo[props.step - 1].help && (
         <div className="flex w-full items-center justify-start gap-2 rounded bg-warn-l3 p-1 dark:bg-warn-d3 lg:p-2 ">
-          <InfoIcon className="flex h-4 w-4 shrink-0 fill-warn-d1 dark:fill-warn-l1 lg:h-5 lg:w-5" />
+          <SvgInfo className="flex h-4 w-4 shrink-0 fill-warn-d1 dark:fill-warn-l1 lg:h-5 lg:w-5" />
           <WarnSubTextLabel
             label={props.currentStepInfo[props.step - 1].help ?? ''}
           />
@@ -65,7 +64,7 @@ export const StartupStepFooter = (props: StepFooterProps) => {
     <div className="flex w-full shrink-0 flex-col gap-1 lg:gap-2">
       {props.currentStepInfo[props.step - 1].help && (
         <div className="flex w-full items-center justify-start gap-2 rounded bg-warn-l3 p-1 dark:bg-warn-d3 lg:p-2 ">
-          <InfoIcon className="flex h-4 w-4 shrink-0 fill-warn-d1 dark:fill-warn-l1 lg:h-5 lg:w-5" />
+          <SvgInfo className="flex h-4 w-4 shrink-0 fill-warn-d1 dark:fill-warn-l1 lg:h-5 lg:w-5" />
           <WarnSubTextLabel
             label={props.currentStepInfo[props.step - 1].help ?? ''}
           />

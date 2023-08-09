@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import moment from 'moment'
-import SaveIcon from 'public/icons/bookmark.svg'
-import CommentIcon from 'public/icons/comment.svg'
-import EmptyIcon from 'public/icons/dnd.svg'
-import MoreIcon from 'public/icons/more.svg'
-import SendIcon from 'public/icons/send.svg'
-import ShareIcon from 'public/icons/share.svg'
-import LikeIcon from 'public/icons/thumbUp.svg'
 import type {
   FindInvestorViewPostQuery,
   FindInvestorViewPostQueryVariables,
@@ -22,6 +15,13 @@ import {
   HoverPrimaryTextButton,
   PrimaryIconButton,
 } from 'src/components/Button/Button'
+import SvgBookmark from 'src/components/Icon/Bookmark'
+import SvgComment from 'src/components/Icon/Comment'
+import SvgDnd from 'src/components/Icon/Dnd'
+import SvgMore from 'src/components/Icon/More'
+import SvgSend from 'src/components/Icon/Send'
+import SvgShare from 'src/components/Icon/Share'
+import SvgThumbUp from 'src/components/Icon/ThumbUp'
 import InvestorViewCommentCell from 'src/components/Investor/Post/InvestorViewCommentCell'
 import {
   GreySubTitleLabel,
@@ -166,7 +166,7 @@ export const beforeQuery = ({ id }: { id: number }) => {
 
 export const Empty = () => (
   <div className={EmptyDivClassName}>
-    <EmptyIcon className={EmptyIconClassName} />
+    <SvgDnd className={EmptyIconClassName} />
     <GreySubTitleLabel label="No such post exists or you may not have the access!" />
     <PrimaryFilledButton label="GO BACK" action={() => back()} />
   </div>
@@ -292,7 +292,7 @@ export const Success = ({
         </div>
         <div className={PostActionClassName}>
           {investorViewPost.poster.type == 'INVESTOR' && (
-            <SaveIcon
+            <SvgBookmark
               className={`h-6 w-6 ${
                 saved
                   ? 'scale-125 fill-primary-d1 transition dark:fill-primary-l1'
@@ -303,7 +303,7 @@ export const Success = ({
               }}
             />
           )}
-          <MoreIcon
+          <SvgMore
             className={HoverIconClassName}
             onClick={() => {
               //TODO: Open more info modal - phase 2
@@ -340,7 +340,7 @@ export const Success = ({
           className={PostInteractionClassName}
           onClick={() => handleLikePost()}
         >
-          <LikeIcon
+          <SvgThumbUp
             className={`h-6 w-6 ${
               liked
                 ? 'fill-primary-d1 dark:fill-primary-l1'
@@ -363,7 +363,7 @@ export const Success = ({
             navigate(routes.investorViewPost({ id: investorViewPost.id }))
           }}
         >
-          <CommentIcon className={IconClassName} />
+          <SvgComment className={IconClassName} />
           <div className={HideShowClassName}>
             <SubTextLabel label={'Comments'} />
           </div>
@@ -377,7 +377,7 @@ export const Success = ({
             //TODO: Open post share modal - phase 2
           }}
         >
-          <ShareIcon className={IconClassName} />
+          <SvgShare className={IconClassName} />
           <div className={HideShowClassName}>
             <SubTextLabel label={'Share'} />
           </div>
@@ -394,7 +394,7 @@ export const Success = ({
           className={TextInputClassName}
         />
         <PrimaryIconButton
-          icon={<SendIcon className={LightIconClassName} />}
+          icon={<SvgSend className={LightIconClassName} />}
           action={() => {
             if (userComment != '') {
               handleAddComment()

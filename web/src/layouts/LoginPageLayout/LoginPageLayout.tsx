@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import LogoOrig from 'public/logo/LogoOrig.svg'
-
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
 import { HoverPrimaryTextButton } from 'src/components/Button/Button'
 import { DisabledSubTextLabel } from 'src/components/Label/Label'
+import SvgLogoOrig from 'src/components/Logo/LogoOrig'
 
 import {
   ActionClassName,
@@ -50,7 +49,7 @@ export default LoginPageLayout
 const LoginHeader = () => {
   return (
     <div className={HeaderClassName}>
-      <LogoOrig
+      <SvgLogoOrig
         className={LogoClassName}
         onClick={() => navigate(routes.landing())}
       />

@@ -5,11 +5,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { ProfilePageClassName } from 'src/components/Investor/InvestorConsts'
-import {
-  GreySubTextLabel,
-  PrimaryTextLabel,
-  SubTextLabel,
-} from 'src/components/Label/Label'
+import { PrimaryTextLabel, GreySubTextLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query InvestorMyPostsQuery {
@@ -58,13 +54,13 @@ export const Success = ({
               </div>
             )}
             <div className="col-span-1">
-              <SubTextLabel label={`${post.likedByUsers.length} likes`} />
+              <GreySubTextLabel label={`${post.likedByUsers.length} likes`} />
             </div>
             <div className="col-span-1">
-              <SubTextLabel label={`${post.comments.length} comments`} />
+              <GreySubTextLabel label={`${post.comments.length} comments`} />
             </div>
             <div className="col-span-1">
-              <SubTextLabel label={moment(post.createdAt).fromNow()} />
+              <GreySubTextLabel label={moment(post.createdAt).fromNow()} />
             </div>
           </button>
         )

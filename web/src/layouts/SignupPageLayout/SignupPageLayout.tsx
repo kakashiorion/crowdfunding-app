@@ -5,15 +5,14 @@ import { navigate, routes } from '@redwoodjs/router'
 import { useAuth } from 'src/auth'
 import { HoverPrimaryTextButton } from 'src/components/Button/Button'
 import { DisabledSubTextLabel } from 'src/components/Label/Label'
-
-import LogoOrig from '../../../public/logo/LogoOrig.svg'
+import SvgLogoOrig from 'src/components/Logo/LogoOrig'
 import {
   ActionClassName,
   HeaderClassName,
   LayoutWrapperClassName,
   LogoClassName,
   PageWrapperClassName,
-} from '../LayoutConsts'
+} from 'src/layouts/LayoutConsts'
 
 type SignupPageLayoutProps = {
   children?: React.ReactNode
@@ -49,7 +48,7 @@ export default SignupPageLayout
 const SignupHeader = () => {
   return (
     <div className={HeaderClassName}>
-      <LogoOrig
+      <SvgLogoOrig
         className={LogoClassName}
         onClick={() => navigate(routes.landing())}
       />

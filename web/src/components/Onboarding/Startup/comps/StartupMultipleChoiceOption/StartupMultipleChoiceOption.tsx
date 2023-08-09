@@ -1,5 +1,4 @@
-import DoneIcon from 'public/icons/done.svg'
-
+import SvgDone from 'src/components/Icon/Done'
 import { ErrorSubTextLabel } from 'src/components/Label/Label'
 
 type StartupMultipleChoiceOptionProps = {
@@ -49,7 +48,7 @@ export default StartupMultipleChoiceOption
 const SelectedBox = () => {
   return (
     <div className="flex h-5 w-5 shrink-0 rounded bg-white dark:bg-black lg:h-6 lg:w-6">
-      <DoneIcon className="m-auto h-5 w-5 fill-tertiary-d1 dark:fill-tertiary-l1 lg:h-6 lg:w-6" />
+      <SvgDone className="m-auto h-5 w-5 fill-tertiary-d1 dark:fill-tertiary-l1 lg:h-6 lg:w-6" />
     </div>
   )
 }

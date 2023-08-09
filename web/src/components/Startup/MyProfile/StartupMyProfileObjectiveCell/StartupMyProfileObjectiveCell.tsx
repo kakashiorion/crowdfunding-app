@@ -8,7 +8,7 @@ import type {
 
 import { type CellSuccessProps } from '@redwoodjs/web'
 
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 import {
   DoubleSpanItemClassName,
   SingleSpanItemClassName,
@@ -78,7 +78,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Preferred Investor Levels" />
+        <GreySubTextLabel label="Preferred Investor Levels" />
       </div>
       <div id="preferredLocations" className={DoubleSpanItemClassName}>
         {startupMyProfileObjective.preferredLocations.length > 0 ? (
@@ -88,7 +88,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Preferred Locations" />
+        <GreySubTextLabel label="Preferred Locations" />
       </div>
       <div id="expectedTimeline" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -96,7 +96,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Expected Timeline" />
+        <GreySubTextLabel label="Expected Timeline" />
       </div>
       <div id="promisingReturns" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -104,7 +104,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Promised Returns" />
+        <GreySubTextLabel label="Promised Returns" />
       </div>
       <div id="platformGoal" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -116,7 +116,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Platform Goal" />
+        <GreySubTextLabel label="Platform Goal" />
       </div>
       <div id="referSource" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -128,11 +128,11 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Refer Source" />
+        <GreySubTextLabel label="Refer Source" />
       </div>
       <div id="pitchDeckURL" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupMyProfileObjective.pitchDeckURL ?? '-'} />
-        <SubTextLabel label="Pitch Deck URL" />
+        <GreySubTextLabel label="Pitch Deck URL" />
       </div>
       <div id="demoURL" className={DoubleSpanItemClassName}>
         {startupMyProfileObjective.demoURL.length > 0 ? (
@@ -142,7 +142,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Demo/Resources URL" />
+        <GreySubTextLabel label="Demo/Resources URL" />
       </div>
     </div>
   )

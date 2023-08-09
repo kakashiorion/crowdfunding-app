@@ -1,10 +1,9 @@
-import BlackLogo from 'public/logo/LogoBlack.svg'
-import WhiteLogo from 'public/logo/LogoWhite.svg'
-
 import { routes, navigate } from '@redwoodjs/router'
 
 import { BlackTextButton } from 'src/components/Button/Button'
 import { PrimarySubTextLabel, TextLabel } from 'src/components/Label/Label'
+import SvgLogoBlack from 'src/components/Logo/LogoBlack'
+import SvgLogoWhite from 'src/components/Logo/LogoWhite'
 
 const LandingFooter = () => {
   return (
@@ -20,13 +19,13 @@ const LandingFooter = () => {
 const BrandBlock = () => {
   return (
     <div className="order-last flex flex-col items-start gap-2 lg:order-first lg:gap-3">
-      <BlackLogo
+      <SvgLogoBlack
         className="flex h-6 w-11 dark:hidden lg:h-7 lg:w-12"
         onClick={() => {
           navigate(routes.landing())
         }}
       />
-      <WhiteLogo
+      <SvgLogoWhite
         className="hidden h-6 w-11 dark:flex lg:h-7 lg:w-12"
         onClick={() => {
           navigate(routes.landing())

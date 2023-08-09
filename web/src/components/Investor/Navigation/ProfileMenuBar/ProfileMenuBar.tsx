@@ -1,13 +1,12 @@
 import { useContext } from 'react'
 
-import HelpIcon from 'public/icons/help.svg'
-import LogoutIcon from 'public/icons/logout.svg'
-import ProfileIcon from 'public/icons/profile.svg'
-import UpIcon from 'public/icons/up.svg'
-
 import { navigate, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
+import SvgHelp from 'src/components/Icon/Help'
+import SvgLogout from 'src/components/Icon/Logout'
+import SvgProfile from 'src/components/Icon/Profile'
+import SvgUp from 'src/components/Icon/Up'
 import {
   ProfileMenuItemClassName,
   ProfileMenuSelectedItemClassName,
@@ -26,7 +25,7 @@ const InvestorProfileBar = (props: InvestorProfileBarProps) => {
     <>
       {props.isMenuOpen == 'Profile' ? (
         <>
-          <UpIcon
+          <SvgUp
             className={ProfileUpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
@@ -66,7 +65,7 @@ const InvestorProfileMenu = (props: InvestorProfileBarProps) => {
             : ProfileMenuItemClassName
         }
       >
-        <ProfileIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
+        <SvgProfile className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Profile" />
       </button>
       <button
@@ -81,11 +80,11 @@ const InvestorProfileMenu = (props: InvestorProfileBarProps) => {
             : ProfileMenuItemClassName
         }
       >
-        <HelpIcon className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
+        <SvgHelp className="flex h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
         <SubTextLabel label="Help" />
       </button>
       <button onClick={() => logOut()} className={ProfileMenuItemClassName}>
-        <LogoutIcon className="flex h-5 w-5 fill-error-d1 dark:fill-error-l1 lg:h-6 lg:w-6" />
+        <SvgLogout className="flex h-5 w-5 fill-error-d1 dark:fill-error-l1 lg:h-6 lg:w-6" />
         <SubTextLabel label="Logout" />
       </button>
     </div>

@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import moment from 'moment'
-import CloseIcon from 'public/icons/close.svg'
-import ChatIcon from 'public/icons/comment.svg'
-import BackIcon from 'public/icons/left.svg'
-import AttachIcon from 'public/icons/link.svg'
-import SendIcon from 'public/icons/send.svg'
 import type {
   FindStartupConversationMainQuery,
   FindStartupConversationMainQueryVariables,
@@ -20,6 +15,11 @@ import {
   IconOutlineButton,
   TertiaryIconButton,
 } from 'src/components/Button/Button'
+import SvgClose from 'src/components/Icon/Close'
+import SvgComment from 'src/components/Icon/Comment'
+import SvgLeft from 'src/components/Icon/Left'
+import SvgLink from 'src/components/Icon/Link'
+import SvgSend from 'src/components/Icon/Send'
 import {
   GreySubTitleLabel,
   SmallLabel,
@@ -90,7 +90,7 @@ const SET_READ_CONVERSATION_MUTATION = gql`
 
 export const Empty = () => (
   <div className={EmptyDivClassName}>
-    <ChatIcon className={EmptyIconClassName} />
+    <SvgComment className={EmptyIconClassName} />
     <GreySubTitleLabel label="Select and continue a conversation thread" />
   </div>
 )
@@ -161,13 +161,13 @@ export const Success = ({
 
   useEffect(() => {
     setReadConversation()
-    bottomRef.current?.scrollIntoView()
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [bottomRef, setReadConversation, startupConversationMain])
 
   return (
     <div id="ChatContainer" className="flex h-full w-full flex-col gap-4">
       <div id="ChatHeader" className={ActionGroupClassName}>
-        <BackIcon
+        <SvgLeft
           className={LargeIconClassName}
           onClick={() => {
             setCurrentConvo(0)
@@ -242,9 +242,9 @@ export const Success = ({
         <IconOutlineButton
           icon={
             attaching ? (
-              <CloseIcon className={ButtonIconClassName} />
+              <SvgClose className={ButtonIconClassName} />
             ) : (
-              <AttachIcon className={ButtonIconClassName} />
+              <SvgLink className={ButtonIconClassName} />
             )
           }
           action={() => {
@@ -265,7 +265,7 @@ export const Success = ({
           className={TextInputClassName}
         />
         <TertiaryIconButton
-          icon={<SendIcon className={LightIconClassName} />}
+          icon={<SvgSend className={LightIconClassName} />}
           action={() => {
             if (chatText != '') {
               handleSendMessage()

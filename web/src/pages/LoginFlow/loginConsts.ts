@@ -4,7 +4,7 @@ export const PageWrapperClassName =
 export const ImageWrapperClassName = 'hidden lg:flex lg:flex-1'
 
 export const FormWrapperClassName =
-  'flex h-full flex-1 flex-col items-center text-center justify-center gap-2 overflow-y-scroll rounded p-4 opacity-90 lg:flex-[2] lg:p-6'
+  'flex h-full flex-1 flex-col items-center text-center justify-center gap-2 rounded p-4 opacity-90 lg:flex-[2] lg:p-6'
 
 export const LoginFormClassName =
   'flex flex-col items-center justify-center gap-2 lg:gap-4'

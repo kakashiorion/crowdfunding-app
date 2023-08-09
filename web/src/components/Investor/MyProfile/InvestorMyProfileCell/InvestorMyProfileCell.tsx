@@ -1,8 +1,6 @@
 import { useState } from 'react'
 
 import moment from 'moment'
-import CalendarIcon from 'public/icons/calendar.svg'
-import LocationIcon from 'public/icons/location.svg'
 import type {
   FindInvestorMyProfileQuery,
   FindInvestorMyProfileQueryVariables,
@@ -11,6 +9,8 @@ import type {
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+import SvgLocation from 'src/components/Icon/Location'
+import SvgWorld from 'src/components/Icon/World'
 import {
   ActionGroupClassName,
   DividerClassName,
@@ -33,7 +33,7 @@ import {
   PrimaryTextLabel,
   SmallLabel,
   SubDisplayLabel,
-  SubTextLabel,
+  GreySubTextLabel,
   TextLabel,
 } from 'src/components/Label/Label'
 
@@ -139,13 +139,13 @@ export const Success = ({
       </div>
       <div id="ProfileMeta" className={ProfileMetaClassName}>
         <div className={ActionGroupClassName}>
-          <LocationIcon className={SmallIconClassName} />
-          <SubTextLabel
+          <SvgLocation className={SmallIconClassName} />
+          <GreySubTextLabel
             label={`${investorMyProfile.location.city}, ${investorMyProfile.location.state}`}
           />
         </div>
         <div className={ActionGroupClassName}>
-          <CalendarIcon className={SmallIconClassName} />
+          <SvgWorld className={SmallIconClassName} />
           <SmallLabel
             label={`Joined ${moment(investorMyProfile.createdAt).fromNow()}`}
           />
@@ -154,23 +154,23 @@ export const Success = ({
       <div id="ProfileStats" className={ProfileStatsClassName}>
         <div className={StatItemClassName}>
           <SubDisplayLabel label={connectionCount.toString()} />
-          <SubTextLabel label="Connections" />
+          <GreySubTextLabel label="Connections" />
         </div>
         <div className={StatItemClassName}>
           <SubDisplayLabel label={followersCount.toString()} />
-          <SubTextLabel label="Followers" />
+          <GreySubTextLabel label="Followers" />
         </div>
         <div className={StatItemClassName}>
           <SubDisplayLabel label={followingsCount.toString()} />
-          <SubTextLabel label="Following" />
+          <GreySubTextLabel label="Following" />
         </div>
         <div className={StatItemClassName}>
           <SubDisplayLabel label={postsCount.toString()} />
-          <SubTextLabel label="Posts" />
+          <GreySubTextLabel label="Posts" />
         </div>
         <div className={StatItemClassName}>
           <SubDisplayLabel label={commentsCount.toString()} />
-          <SubTextLabel label="Comments" />
+          <GreySubTextLabel label="Comments" />
         </div>
       </div>
       <div
@@ -236,17 +236,17 @@ const InvestorMyDetails = ({
     >
       <div id="LinkedIn" className={DoubleSpanItemClassName}>
         <MediumLabel label={investorMyProfile.linkedInURL ?? 'N/A'} />
-        <SubTextLabel label="LinkedIn" />
+        <GreySubTextLabel label="LinkedIn" />
       </div>
       <div id="Website" className={DoubleSpanItemClassName}>
         <MediumLabel label={investorMyProfile.websiteURL ?? 'N/A'} />
-        <SubTextLabel label="Website" />
+        <GreySubTextLabel label="Website" />
       </div>
       <div id="Education" className={SingleSpanItemClassName}>
         <MediumLabel
           label={investorMyProfile.eduBG.toString().replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Education" />
+        <GreySubTextLabel label="Education" />
       </div>
       <div id="WorkEx" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -254,7 +254,7 @@ const InvestorMyDetails = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Work Experience (yrs)" />
+        <GreySubTextLabel label="Work Experience (yrs)" />
       </div>
       <div id="Companies" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -262,23 +262,23 @@ const InvestorMyDetails = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Worked in Companies" />
+        <GreySubTextLabel label="Worked in Companies" />
       </div>
       <div id="PartOffers" className={SingleSpanItemClassName}>
         <MediumLabel
           label={investorMyProfile.participatingInOffers.length.toString()}
         />
-        <SubTextLabel label="Participating in Offers" />
+        <GreySubTextLabel label="Participating in Offers" />
       </div>
       <div id="NegoOffers" className={SingleSpanItemClassName}>
         <MediumLabel
           label={investorMyProfile.negotiatingOffers.length.toString()}
         />
-        <SubTextLabel label="Negotiating Offers" />
+        <GreySubTextLabel label="Negotiating Offers" />
       </div>
       <div id="Deals" className={SingleSpanItemClassName}>
         <MediumLabel label={investorMyProfile.dealsJoined.length.toString()} />
-        <SubTextLabel label="Deals Joined" />
+        <GreySubTextLabel label="Deals Joined" />
       </div>
       <div id="Sectors" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -290,7 +290,7 @@ const InvestorMyDetails = ({
               : '-'
           }
         />
-        <SubTextLabel label="Worked in Sectors" />
+        <GreySubTextLabel label="Worked in Sectors" />
       </div>
     </div>
   )

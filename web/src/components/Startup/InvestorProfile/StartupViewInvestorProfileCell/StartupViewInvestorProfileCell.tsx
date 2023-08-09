@@ -1,15 +1,6 @@
 import { useState } from 'react'
 
 import moment from 'moment'
-import AddIcon from 'public/icons/add.svg'
-import CalendarIcon from 'public/icons/calendar.svg'
-import CloseIcon from 'public/icons/close.svg'
-import ChatIcon from 'public/icons/comment.svg'
-import DeleteIcon from 'public/icons/delete.svg'
-import EmptyIcon from 'public/icons/dnd.svg'
-import DoneIcon from 'public/icons/done.svg'
-import InfoIcon from 'public/icons/info.svg'
-import LocationIcon from 'public/icons/location.svg'
 import type {
   FindStartupViewInvestorProfileQuery,
   FindStartupViewInvestorProfileQueryVariables,
@@ -24,12 +15,21 @@ import {
   LeadingIconBlackFilledButton,
   TertiaryFilledButton,
 } from 'src/components/Button/Button'
+import SvgAdd from 'src/components/Icon/Add'
+import SvgCalendar from 'src/components/Icon/Calendar'
+import SvgClose from 'src/components/Icon/Close'
+import SvgComment from 'src/components/Icon/Comment'
+import SvgDelete from 'src/components/Icon/Delete'
+import SvgDnd from 'src/components/Icon/Dnd'
+import SvgDone from 'src/components/Icon/Done'
+import SvgInfo from 'src/components/Icon/Info'
+import SvgLocation from 'src/components/Icon/Location'
 import {
   GreySubTitleLabel,
   MediumLabel,
   SmallLabel,
   SubDisplayLabel,
-  SubTextLabel,
+  GreySubTextLabel,
   TertiaryTextLabel,
   TextLabel,
 } from 'src/components/Label/Label'
@@ -182,7 +182,7 @@ const CREATE_DIRECT_CONVERSATION_MUTATION = gql`
 //Handle no investor found
 export const Empty = () => (
   <div className={EmptyDivClassName}>
-    <EmptyIcon className={EmptyIconClassName} />
+    <SvgDnd className={EmptyIconClassName} />
     <GreySubTitleLabel label="No such investor exists!" />
     <TertiaryFilledButton label="GO BACK" action={() => back()} />
   </div>
@@ -356,9 +356,9 @@ export const Success = ({
       return (
         <DropDownButton
           key="Connected"
-          leadingIcon={<DoneIcon className={SuccessIconClassName} />}
+          leadingIcon={<SvgDone className={SuccessIconClassName} />}
           label={'Connected'}
-          dropIcon={<DeleteIcon className={ErrorIconClassName} />}
+          dropIcon={<SvgDelete className={ErrorIconClassName} />}
           dropLabel={'Remove'}
           dropAction={async () => {
             await deleteConnection({
@@ -373,9 +373,9 @@ export const Success = ({
       return (
         <DropDownButton
           key="Request"
-          leadingIcon={<InfoIcon className={InfoIconClassName} />}
+          leadingIcon={<SvgInfo className={InfoIconClassName} />}
           label={'Sent request'}
-          dropIcon={<DeleteIcon className={ErrorIconClassName} />}
+          dropIcon={<SvgDelete className={ErrorIconClassName} />}
           dropLabel={'Remove'}
           dropAction={async () => {
             await deleteConnection({
@@ -390,9 +390,9 @@ export const Success = ({
       return (
         <DropDownButton
           key="Accept"
-          leadingIcon={<InfoIcon className={InfoIconClassName} />}
+          leadingIcon={<SvgInfo className={InfoIconClassName} />}
           label={'Pending'}
-          dropIcon={<DoneIcon className={SuccessIconClassName} />}
+          dropIcon={<SvgDone className={SuccessIconClassName} />}
           dropLabel={'Accept'}
           dropAction={async () => {
             await acceptConnection({
@@ -417,7 +417,7 @@ export const Success = ({
         <LeadingIconBlackFilledButton
           key="Connect"
           label="CONNECT"
-          icon={<AddIcon className={ButtonIconClassName} />}
+          icon={<SvgAdd className={ButtonIconClassName} />}
           action={async () => {
             await createConnection({
               variables: {
@@ -440,7 +440,7 @@ export const Success = ({
       return (
         <LeadingIconBlackFilledButton
           label="MESSAGE"
-          icon={<ChatIcon className={ButtonIconClassName} />}
+          icon={<SvgComment className={ButtonIconClassName} />}
           action={async () => {
             if (isConversing) {
               navigate(
@@ -479,9 +479,9 @@ export const Success = ({
     } else if (isFollowed) {
       return (
         <DropDownButton
-          leadingIcon={<DoneIcon className={SuccessIconClassName} />}
+          leadingIcon={<SvgDone className={SuccessIconClassName} />}
           label={'Following'}
-          dropIcon={<CloseIcon className={ErrorIconClassName} />}
+          dropIcon={<SvgClose className={ErrorIconClassName} />}
           dropLabel={'Unfollow'}
           dropAction={async () => {
             await unFollowUser({
@@ -496,7 +496,7 @@ export const Success = ({
       return (
         <LeadingIconBlackFilledButton
           label="FOLLOW"
-          icon={<AddIcon className={ButtonIconClassName} />}
+          icon={<SvgAdd className={ButtonIconClassName} />}
           action={async () => {
             await followUser({
               variables: {
@@ -522,13 +522,13 @@ export const Success = ({
         <>
           <div id="ProfileMeta" className={ProfileMetaClassName}>
             <div className={ActionGroupClassName}>
-              <LocationIcon className={SmallIconClassName} />
-              <SubTextLabel
+              <SvgLocation className={SmallIconClassName} />
+              <GreySubTextLabel
                 label={`${startupViewInvestorProfile.location.city}, ${startupViewInvestorProfile.location.state}`}
               />
             </div>
             <div className={ActionGroupClassName}>
-              <CalendarIcon className={SmallIconClassName} />
+              <SvgCalendar className={SmallIconClassName} />
               <SmallLabel
                 label={`Joined ${moment(
                   startupViewInvestorProfile.createdAt
@@ -548,23 +548,23 @@ export const Success = ({
           <div id="ProfileStats" className={ProfileStatsClassName}>
             <div className={StatItemClassName}>
               <SubDisplayLabel label={connectionCount.toString()} />
-              <SubTextLabel label="Connections" />
+              <GreySubTextLabel label="Connections" />
             </div>
             <div className={StatItemClassName}>
               <SubDisplayLabel label={followersCount.toString()} />
-              <SubTextLabel label="Followers" />
+              <GreySubTextLabel label="Followers" />
             </div>
             <div className={StatItemClassName}>
               <SubDisplayLabel label={followingsCount.toString()} />
-              <SubTextLabel label="Following" />
+              <GreySubTextLabel label="Following" />
             </div>
             <div className={StatItemClassName}>
               <SubDisplayLabel label={postsCount.toString()} />
-              <SubTextLabel label="Posts" />
+              <GreySubTextLabel label="Posts" />
             </div>
             <div className={StatItemClassName}>
               <SubDisplayLabel label={commentsCount.toString()} />
-              <SubTextLabel label="Comments" />
+              <GreySubTextLabel label="Comments" />
             </div>
           </div>
           <div
@@ -620,7 +620,7 @@ export const Success = ({
       ) : (
         //Handle profile not visible
         <div className={EmptyDivClassName}>
-          <EmptyIcon className={EmptyIconClassName} />
+          <SvgDnd className={EmptyIconClassName} />
           <GreySubTitleLabel label="You don't have permission to view the investor's profile!" />
         </div>
       )}
@@ -641,11 +641,11 @@ const StartupViewInvestorDetails = ({
     >
       <div id="LinkedIn" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupViewInvestorProfile.linkedInURL ?? 'N/A'} />
-        <SubTextLabel label="LinkedIn" />
+        <GreySubTextLabel label="LinkedIn" />
       </div>
       <div id="Website" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupViewInvestorProfile.websiteURL ?? 'N/A'} />
-        <SubTextLabel label="Website" />
+        <GreySubTextLabel label="Website" />
       </div>
       <div id="Education" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -653,7 +653,7 @@ const StartupViewInvestorDetails = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Education" />
+        <GreySubTextLabel label="Education" />
       </div>
       <div id="WorkEx" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -661,7 +661,7 @@ const StartupViewInvestorDetails = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Work Experience (yrs)" />
+        <GreySubTextLabel label="Work Experience (yrs)" />
       </div>
       <div id="Companies" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -669,25 +669,25 @@ const StartupViewInvestorDetails = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Worked in Companies" />
+        <GreySubTextLabel label="Worked in Companies" />
       </div>
       <div id="PartOffers" className={SingleSpanItemClassName}>
         <MediumLabel
           label={startupViewInvestorProfile.participatingInOffers.length.toString()}
         />
-        <SubTextLabel label="Participating in Offers" />
+        <GreySubTextLabel label="Participating in Offers" />
       </div>
       <div id="NegoOffers" className={SingleSpanItemClassName}>
         <MediumLabel
           label={startupViewInvestorProfile.negotiatingOffers.length.toString()}
         />
-        <SubTextLabel label="Negotiating Offers" />
+        <GreySubTextLabel label="Negotiating Offers" />
       </div>
       <div id="Deals" className={SingleSpanItemClassName}>
         <MediumLabel
           label={startupViewInvestorProfile.dealsJoined.length.toString()}
         />
-        <SubTextLabel label="Deals Joined" />
+        <GreySubTextLabel label="Deals Joined" />
       </div>
       <div id="Sectors" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -699,7 +699,7 @@ const StartupViewInvestorDetails = ({
               : '-'
           }
         />
-        <SubTextLabel label="Worked in Sectors" />
+        <GreySubTextLabel label="Worked in Sectors" />
       </div>
     </div>
   )

@@ -3,7 +3,7 @@ import type { InvestorMyPreferencesQuery } from 'types/graphql'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { SingleSpanItemClassName } from 'src/components/Investor/InvestorConsts'
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query InvestorMyPreferencesQuery($id: Int!) {
@@ -32,7 +32,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Message Visibility" />
+        <GreySubTextLabel label="Message Visibility" />
       </div>
       <div id="activityVisbility" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -40,7 +40,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Activity Visbility" />
+        <GreySubTextLabel label="Activity Visbility" />
       </div>
       <div id="profileVisbility" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -48,7 +48,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Profile Visbility" />
+        <GreySubTextLabel label="Profile Visbility" />
       </div>
       <div id="notificationLevel" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -56,7 +56,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Notification Level" />
+        <GreySubTextLabel label="Notification Level" />
       </div>
       <div id="prefersTheme" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -64,7 +64,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Preferred UI Theme" />
+        <GreySubTextLabel label="Preferred UI Theme" />
       </div>
     </div>
   )

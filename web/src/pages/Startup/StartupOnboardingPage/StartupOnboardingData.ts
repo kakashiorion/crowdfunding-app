@@ -1,11 +1,10 @@
-import AboutIcon from 'public/icons/about.svg'
-import BackgroundIcon from 'public/icons/background.svg'
-import BusinessIcon from 'public/icons/business.svg'
-import FinancialsIcon from 'public/icons/finance.svg'
-import MarketIcon from 'public/icons/market.svg'
-import ObjectiveIcon from 'public/icons/objective.svg'
-import PreferencesIcon from 'public/icons/preferences.svg'
-
+import SvgAbout from 'src/components/Icon/About'
+import SvgBackground from 'src/components/Icon/Background'
+import SvgBusiness from 'src/components/Icon/Business'
+import SvgFinance from 'src/components/Icon/Finance'
+import SvgMarket from 'src/components/Icon/Market'
+import SvgObjective from 'src/components/Icon/Objective'
+import SvgPreferences from 'src/components/Icon/Preferences'
 import StartupAbout from 'src/components/Onboarding/Startup/StartupAbout/StartupAbout'
 import StartupBackground from 'src/components/Onboarding/Startup/StartupBackground/StartupBackground'
 import StartupBusiness from 'src/components/Onboarding/Startup/StartupBusiness/StartupBusiness'
@@ -23,43 +22,43 @@ export const StartupOnboardingSections: OnboardingSectionInfoType[] = [
     index: 1,
     title: 'About You',
     subTitle: 'Capturing basic details to create your startup profile',
-    icon: AboutIcon,
+    icon: SvgAbout,
   },
   {
     index: 2,
     title: 'Background',
     subTitle: 'Learning about your origin story and history',
-    icon: BackgroundIcon,
+    icon: SvgBackground,
   },
   {
     index: 3,
     title: 'Business',
     subTitle: 'Getting to know more about your business model',
-    icon: BusinessIcon,
+    icon: SvgBusiness,
   },
   {
     index: 4,
     title: 'Market',
     subTitle: 'Analyzing your target market condition',
-    icon: MarketIcon,
+    icon: SvgMarket,
   },
   {
     index: 5,
     title: 'Financials',
     subTitle: 'Looking at your numbers and metrics',
-    icon: FinancialsIcon,
+    icon: SvgFinance,
   },
   {
     index: 6,
     title: 'Objective',
     subTitle: 'Understanding your goals to get better matches',
-    icon: ObjectiveIcon,
+    icon: SvgObjective,
   },
   {
     index: 7,
     title: 'Preferences',
     subTitle: 'Personalizing the platform as per your needs',
-    icon: PreferencesIcon,
+    icon: SvgPreferences,
   },
 ]
 

@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
-    "@redwoodjs/auth-dbauth-web": "5.4.2",
-    "@redwoodjs/forms": "5.4.2",
-    "@redwoodjs/router": "5.4.2",
-    "@redwoodjs/web": "5.4.2",
+    "@redwoodjs/auth-dbauth-web": "6.0.3",
+    "@redwoodjs/forms": "6.0.3",
+    "@redwoodjs/router": "6.0.3",
+    "@redwoodjs/web": "6.0.3",
     "@simplewebauthn/browser": "^7",
     "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
@@ -25,6 +25,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@redwoodjs/vite": "6.0.3",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.2.4",

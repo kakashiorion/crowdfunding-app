@@ -9,7 +9,7 @@ import {
   DoubleSpanItemClassName,
   SingleSpanItemClassName,
 } from 'src/components/Investor/InvestorConsts'
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query FindInvestorViewStartupMarketQuery($id: Int!) {
@@ -50,7 +50,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Revenue Streams" />
+        <GreySubTextLabel label="Revenue Streams" />
       </div>
       <div id="costHeads" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -62,7 +62,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Cost Heads" />
+        <GreySubTextLabel label="Cost Heads" />
       </div>
       <div id="shortTermPlan" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -70,7 +70,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Short Term Plan" />
+        <GreySubTextLabel label="Short Term Plan" />
       </div>
       <div id="marketSizeInCr" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -78,7 +78,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Market Size (in Cr)" />
+        <GreySubTextLabel label="Market Size (in Cr)" />
       </div>
       <div id="marketGrowthRate" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -86,7 +86,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Market Growth Rate" />
+        <GreySubTextLabel label="Market Growth Rate" />
       </div>
       <div id="trends" className={DoubleSpanItemClassName}>
         {investorViewStartupMarket.trends.length > 0 ? (
@@ -96,7 +96,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Market Trends" />
+        <GreySubTextLabel label="Market Trends" />
       </div>
       <div id="opporunities" className={DoubleSpanItemClassName}>
         {investorViewStartupMarket.opporunities.length > 0 ? (
@@ -106,7 +106,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Opporunities" />
+        <GreySubTextLabel label="Opporunities" />
       </div>
       <div id="threats" className={DoubleSpanItemClassName}>
         {investorViewStartupMarket.threats.length > 0 ? (
@@ -116,7 +116,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Threats" />
+        <GreySubTextLabel label="Threats" />
       </div>
       <div id="competitors" className={DoubleSpanItemClassName}>
         {investorViewStartupMarket.competitors.length > 0 ? (
@@ -126,11 +126,11 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Competitors" />
+        <GreySubTextLabel label="Competitors" />
       </div>
       <div id="xFactor" className={DoubleSpanItemClassName}>
         <MediumLabel label={investorViewStartupMarket.xFactor ?? '-'} />
-        <SubTextLabel label="X-Factor" />
+        <GreySubTextLabel label="X-Factor" />
       </div>
     </div>
   )

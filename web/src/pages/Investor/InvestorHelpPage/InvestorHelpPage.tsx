@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 
-import DownIcon from 'public/icons/down.svg'
-import ProfileIcon from 'public/icons/profile.svg'
-import SearchIcon from 'public/icons/search.svg'
-import UpIcon from 'public/icons/up.svg'
-
 import { MetaTags } from '@redwoodjs/web'
 
 import { PrimaryIconButton } from 'src/components/Button/Button'
+import SvgDown from 'src/components/Icon/Down'
+import SvgProfile from 'src/components/Icon/Profile'
+import SvgSearch from 'src/components/Icon/Search'
+import SvgUp from 'src/components/Icon/Up'
 import {
   TextInputClassName,
   LightIconClassName,
@@ -59,7 +58,7 @@ const InvestorHelpPage = () => {
               className={TextInputClassName}
             />
             <PrimaryIconButton
-              icon={<SearchIcon className={LightIconClassName} />}
+              icon={<SvgSearch className={LightIconClassName} />}
               action={() => {
                 handleSearch()
               }}
@@ -149,9 +148,9 @@ const InvestorHelpPage = () => {
                   >
                     <TextLabel label={faq.question} />
                     {selectedFaq == i ? (
-                      <UpIcon className="h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
+                      <SvgUp className="h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
                     ) : (
-                      <DownIcon className="h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
+                      <SvgDown className="h-5 w-5 fill-black dark:fill-white lg:h-6 lg:w-6" />
                     )}
                   </button>
                   {selectedFaq == i && (
@@ -175,19 +174,19 @@ const Topics = [
   {
     title: 'Managing your account',
     body: 'Setting up your account and getting verified',
-    icon: ProfileIcon,
+    icon: SvgProfile,
     link: '',
   },
   {
     title: 'Managing your account',
     body: 'Setting up your account and getting verified',
-    icon: ProfileIcon,
+    icon: SvgProfile,
     link: '',
   },
   {
     title: 'Managing your account',
     body: 'Setting up your account and getting verified',
-    icon: ProfileIcon,
+    icon: SvgProfile,
     link: '',
   },
 ]

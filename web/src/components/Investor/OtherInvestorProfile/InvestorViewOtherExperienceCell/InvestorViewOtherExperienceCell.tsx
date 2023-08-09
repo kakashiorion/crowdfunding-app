@@ -9,7 +9,7 @@ import {
   DoubleSpanItemClassName,
   SingleSpanItemClassName,
 } from 'src/components/Investor/InvestorConsts'
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query FindInvestorViewOtherExperienceQuery($id: Int!) {
@@ -45,7 +45,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Worked in Startups" />
+        <GreySubTextLabel label="Worked in Startups" />
       </div>
       <div id="FoundStartups" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -53,7 +53,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Founded Startups" />
+        <GreySubTextLabel label="Founded Startups" />
       </div>
       <div id="InvestedStartups" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -61,7 +61,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Invested in Startups" />
+        <GreySubTextLabel label="Invested in Startups" />
       </div>
       <div id="InvestedAmount" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -69,7 +69,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Avg Investment Amount" />
+        <GreySubTextLabel label="Avg Investment Amount" />
       </div>
       <div id="FundingStages" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -81,7 +81,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Funding Stages" />
+        <GreySubTextLabel label="Funding Stages" />
       </div>
       <div id="SuccessfulExits" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -89,13 +89,13 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Successful Exits" />
+        <GreySubTextLabel label="Successful Exits" />
       </div>
       <div id="Level" className={SingleSpanItemClassName}>
         <MediumLabel
           label={investorViewOtherExperience.investorLevel.toString()}
         />
-        <SubTextLabel label="Investor Level" />
+        <GreySubTextLabel label="Investor Level" />
       </div>
       <div id="InvestedSectors" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -107,7 +107,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Invested in Sectors" />
+        <GreySubTextLabel label="Invested in Sectors" />
       </div>
     </div>
   )

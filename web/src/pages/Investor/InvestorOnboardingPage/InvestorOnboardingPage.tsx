@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import BookIcon from 'public/icons/book.svg'
-import LogoutIcon from 'public/icons/logout.svg'
-import UpIcon from 'public/icons/up.svg'
-import LogoBlack from 'public/logo/LogoBlack.svg'
-import LogoWhite from 'public/logo/LogoWhite.svg'
 
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import { SmallBlackOutlineButton } from 'src/components/Button/Button'
+import SvgBook from 'src/components/Icon/Book'
+import SvgLogout from 'src/components/Icon/Logout'
+import SvgUp from 'src/components/Icon/Up'
+import SvgLogoBlack from 'src/components/Logo/LogoBlack'
+import SvgLogoWhite from 'src/components/Logo/LogoWhite'
 import InvestorOnboardingMain from 'src/components/Onboarding/Investor/InvestorOnboardingMain/InvestorOnboardingMain'
 import InvestorOnboardingTimeline from 'src/components/Onboarding/Investor/InvestorOnboardingTimeline/InvestorOnboardingTimeline'
 
@@ -72,17 +72,17 @@ const InvestorOnboardingPage = () => {
         title="Investor Onboarding"
         description="Investor Onboarding page for Dealbari platform"
       />
-      <div className="relative flex items-center justify-between py-2 lg:py-3">
-        <LogoBlack className="flex h-7 w-12 dark:hidden lg:h-8 lg:w-13" />
-        <LogoWhite className="hidden h-7 w-12 dark:flex lg:h-8 lg:w-13" />
+      <div className="relative flex items-center justify-between py-3 lg:py-4">
+        <SvgLogoBlack className="flex h-7 w-12 dark:hidden lg:h-8 lg:w-13" />
+        <SvgLogoWhite className="hidden h-7 w-12 dark:flex lg:h-8 lg:w-13" />
         <div className="flex items-center justify-end gap-4 lg:gap-6">
           {isMenuOpen ? (
-            <UpIcon
+            <SvgUp
               className="flex h-7 w-7 cursor-pointer fill-primary-d1 dark:fill-primary-l1 lg:hidden"
               onClick={() => setMenuOpen(false)}
             />
           ) : (
-            <BookIcon
+            <SvgBook
               className="flex h-7 w-7 cursor-pointer fill-black hover:fill-primary-d1 dark:fill-white hover:dark:fill-primary-l1 lg:hidden"
               onClick={() => setMenuOpen(true)}
             />
@@ -93,7 +93,7 @@ const InvestorOnboardingPage = () => {
               action={async () => await logOut()}
             />
           </div>
-          <LogoutIcon
+          <SvgLogout
             className="flex h-7 w-7 cursor-pointer fill-black hover:fill-error-d1 dark:fill-white hover:dark:fill-error-l1 lg:hidden"
             onClick={async () => await logOut()}
           />

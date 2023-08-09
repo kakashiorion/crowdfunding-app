@@ -5,7 +5,7 @@ import type {
 
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 import {
   DoubleSpanItemClassName,
   SingleSpanItemClassName,
@@ -47,15 +47,15 @@ export const Success = ({
     >
       <div id="ValueProp" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupMyProfileBackground.valueProp ?? '-'} />
-        <SubTextLabel label="Value Prop" />
+        <GreySubTextLabel label="Value Prop" />
       </div>
       <div id="idea" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupMyProfileBackground.idea ?? '-'} />
-        <SubTextLabel label="Idea" />
+        <GreySubTextLabel label="Idea" />
       </div>
       <div id="whyThis" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupMyProfileBackground.whyThis ?? '-'} />
-        <SubTextLabel label="Why This Business" />
+        <GreySubTextLabel label="Why This Business" />
       </div>
       <div id="foundedBefore" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -63,7 +63,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Companies Founded Before" />
+        <GreySubTextLabel label="Companies Founded Before" />
       </div>
       <div id="teamSize" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -71,15 +71,15 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Team Size" />
+        <GreySubTextLabel label="Team Size" />
       </div>
       <div id="mission" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupMyProfileBackground.mission ?? '-'} />
-        <SubTextLabel label="Mission" />
+        <GreySubTextLabel label="Mission" />
       </div>
       <div id="vision" className={DoubleSpanItemClassName}>
         <MediumLabel label={startupMyProfileBackground.vision ?? '-'} />
-        <SubTextLabel label="Vision" />
+        <GreySubTextLabel label="Vision" />
       </div>
       <div id="coreValues" className={DoubleSpanItemClassName}>
         {startupMyProfileBackground.coreValues.length > 0 ? (
@@ -89,7 +89,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Core Values" />
+        <GreySubTextLabel label="Core Values" />
       </div>
       <div id="keyPeople" className={DoubleSpanItemClassName}>
         {startupMyProfileBackground.keyPeople.length > 0 ? (
@@ -106,7 +106,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Key People" />
+        <GreySubTextLabel label="Key People" />
       </div>
     </div>
   )

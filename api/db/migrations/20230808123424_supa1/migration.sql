@@ -35,7 +35,7 @@ CREATE TYPE "RiskApetite" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
 CREATE TYPE "StartupTeamSize" AS ENUM ('ONE', 'BETWEEN_1_AND_10', 'BETWEEN_10_AND_50', 'BETWEEN_50_AND_200', 'BETWEEN_200_AND_1000', 'OVER_1000');
 
 -- CreateEnum
-CREATE TYPE "InvestorPlatformGoal" AS ENUM ('INVESTING', 'CONNECTING', 'LEARNING', 'EXPLORING', 'CONSULTING', 'RESEARCHING');
+CREATE TYPE "InvestorPlatformGoal" AS ENUM ('INVESTING', 'CONNECTING', 'LEARNING', 'EXPLORING', 'CONSULTING', 'RESEARCHING', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "ReferSource" AS ENUM ('WORD_OF_MOUTH', 'SOCIAL_MEDIA', 'BROWSING', 'REFERRAL', 'ADVERTISEMENT', 'OTHER');
@@ -47,7 +47,7 @@ CREATE TYPE "VisibilityLevel" AS ENUM ('PRIVATE', 'CONNECTIONS', 'FOLLOWERS', 'P
 CREATE TYPE "NotificationLevel" AS ENUM ('NONE', 'ONLY_CRITICAL', 'MEDIUM', 'HIGH');
 
 -- CreateEnum
-CREATE TYPE "Sector" AS ENUM ('EDUCATION', 'HEALTHCARE', 'PHARMACEUTICALS', 'BANKING_AND_FINANCE', 'ENERGY', 'CONSUMER_GOODS', 'RETAIL_ECOMMERCE', 'REAL_ESTATE', 'FOOD_AND_BEVERAGE', 'IT', 'IOT', 'AGRICULTURE', 'MANUFACTURING', 'FASHION', 'MEDIA', 'GAMING', 'ENTERTAINMENT', 'TELECOM', 'LOGISTICS', 'TRANSPORTATION', 'AUTOMOTIVE', 'AVIATION', 'HEAVY_MACHINERY', 'CHEMICAL', 'CONSTRUCTION', 'DEFENCE', 'ELECTRONICS', 'FISHERIES', 'MINING', 'BIOTECHNOLOGY', 'LEGAL', 'SPORTS_AND_FITNESS', 'WASTE_MANAGEMENT', 'WATER_MANAGEMENT', 'TRAVEL_AND_HOSPITALITY', 'SECURITY', 'SOCIAL_SERVICE', 'MARKETING', 'HUMAN_RESOURCES', 'BUSINESS_MANAGEMENT', 'AUTOMATION');
+CREATE TYPE "Sector" AS ENUM ('EDUCATION', 'HEALTHCARE', 'BANKING_AND_FINANCE', 'ENERGY', 'RETAIL', 'REAL_ESTATE', 'INFORMATION_TECHNOLOGY', 'SCIENCE_AND_TECHNOLOGY', 'AGRICULTURE', 'MANUFACTURING', 'MEDIA_AND_ENTERTAINMENT', 'TELECOMMUNICATIONS', 'TRANSPORTATION', 'FOOD_AND_TOURISM', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "OnlineBusiness" AS ENUM ('YES', 'SETTING_UP', 'PLANNED', 'NO');
@@ -83,7 +83,7 @@ CREATE TYPE "RevenueRange" AS ENUM ('LESS_THAN_10_LACS', 'BETWEEN_10_TO_20_LACS'
 CREATE TYPE "Margin" AS ENUM ('LOSS_OVER_50', 'LOSS_BETWEEN_20_AND_50', 'LOSS_LESS_THAN_20', 'PROFIT_LESS_THAN_20', 'PROFIT_BETWEEN_20_AND_50', 'PROFIT_OVER_50');
 
 -- CreateEnum
-CREATE TYPE "StartupPlatformGoal" AS ENUM ('RAISING_FUNDS', 'EXPLORING', 'CONNECTING', 'GETTING_ADVICE');
+CREATE TYPE "StartupPlatformGoal" AS ENUM ('RAISING_FUNDS', 'EXPLORING', 'CONNECTING', 'GETTING_ADVICE', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "OfferStatus" AS ENUM ('CREATED', 'EXCEEDED', 'DISCARDED', 'CLOSED');
@@ -92,8 +92,8 @@ CREATE TYPE "OfferStatus" AS ENUM ('CREATED', 'EXCEEDED', 'DISCARDED', 'CLOSED')
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
-    "hashedPassword" TEXT NOT NULL DEFAULT '',
-    "salt" TEXT NOT NULL DEFAULT '',
+    "hashedPassword" TEXT NOT NULL,
+    "salt" TEXT NOT NULL,
     "resetToken" TEXT,
     "resetTokenExpiresAt" TIMESTAMP(3),
     "profilePicURL" TEXT,
@@ -107,7 +107,7 @@ CREATE TABLE "User" (
     "likedOnboarding" BOOLEAN,
     "messageVisibility" "VisibilityLevel" NOT NULL DEFAULT 'PUBLIC',
     "activityVisbility" "VisibilityLevel" NOT NULL DEFAULT 'PUBLIC',
-    "profileVisbility" "VisibilityLevel" NOT NULL DEFAULT 'FOLLOWERS',
+    "profileVisbility" "VisibilityLevel" NOT NULL DEFAULT 'PUBLIC',
     "notificationLevel" "NotificationLevel" NOT NULL DEFAULT 'HIGH',
     "prefersTheme" "UITheme" NOT NULL DEFAULT 'SYSTEM',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -154,6 +154,7 @@ CREATE TABLE "LandingContact" (
 CREATE TABLE "Connection" (
     "id" SERIAL NOT NULL,
     "status" "ConnectionStatus" NOT NULL DEFAULT 'PENDING',
+    "requesterID" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -461,6 +462,7 @@ CREATE TABLE "Post" (
     "title" TEXT NOT NULL,
     "writeup" TEXT,
     "attachmentURL" TEXT,
+    "imageURL" TEXT,
     "visibility" "VisibilityLevel" NOT NULL DEFAULT 'PUBLIC',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -474,7 +476,6 @@ CREATE TABLE "Comment" (
     "commenterID" INTEGER NOT NULL,
     "postID" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
-    "attachmentURL" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -484,7 +485,6 @@ CREATE TABLE "Comment" (
 -- CreateTable
 CREATE TABLE "DirectConversation" (
     "id" SERIAL NOT NULL,
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -538,6 +538,12 @@ CREATE TABLE "_UserFollows" (
 );
 
 -- CreateTable
+CREATE TABLE "_UserBlocked" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_Connection" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -574,6 +580,12 @@ CREATE TABLE "_UserLikesPost" (
 );
 
 -- CreateTable
+CREATE TABLE "_UserSavedPost" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_UserLikesComment" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -602,6 +614,12 @@ CREATE UNIQUE INDEX "_UserFollows_AB_unique" ON "_UserFollows"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_UserFollows_B_index" ON "_UserFollows"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_UserBlocked_AB_unique" ON "_UserBlocked"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_UserBlocked_B_index" ON "_UserBlocked"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_Connection_AB_unique" ON "_Connection"("A", "B");
@@ -640,6 +658,12 @@ CREATE UNIQUE INDEX "_UserLikesPost_AB_unique" ON "_UserLikesPost"("A", "B");
 CREATE INDEX "_UserLikesPost_B_index" ON "_UserLikesPost"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_UserSavedPost_AB_unique" ON "_UserSavedPost"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_UserSavedPost_B_index" ON "_UserSavedPost"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_UserLikesComment_AB_unique" ON "_UserLikesComment"("A", "B");
 
 -- CreateIndex
@@ -655,7 +679,13 @@ CREATE INDEX "_DM_B_index" ON "_DM"("B");
 ALTER TABLE "UserCredential" ADD CONSTRAINT "UserCredential_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Connection" ADD CONSTRAINT "Connection_requesterID_fkey" FOREIGN KEY ("requesterID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Investor" ADD CONSTRAINT "Investor_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Investor" ADD CONSTRAINT "Investor_locationID_fkey" FOREIGN KEY ("locationID") REFERENCES "Location"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InvestorExperience" ADD CONSTRAINT "InvestorExperience_id_fkey" FOREIGN KEY ("id") REFERENCES "Investor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -665,6 +695,12 @@ ALTER TABLE "InvestorObjective" ADD CONSTRAINT "InvestorObjective_id_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "Startup" ADD CONSTRAINT "Startup_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Startup" ADD CONSTRAINT "Startup_locationID_fkey" FOREIGN KEY ("locationID") REFERENCES "Location"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Startup" ADD CONSTRAINT "Startup_sectorCategoryID_fkey" FOREIGN KEY ("sectorCategoryID") REFERENCES "SectorCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StartupBackground" ADD CONSTRAINT "StartupBackground_id_fkey" FOREIGN KEY ("id") REFERENCES "Startup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -745,6 +781,12 @@ ALTER TABLE "_UserFollows" ADD CONSTRAINT "_UserFollows_A_fkey" FOREIGN KEY ("A"
 ALTER TABLE "_UserFollows" ADD CONSTRAINT "_UserFollows_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "_UserBlocked" ADD CONSTRAINT "_UserBlocked_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserBlocked" ADD CONSTRAINT "_UserBlocked_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "_Connection" ADD CONSTRAINT "_Connection_A_fkey" FOREIGN KEY ("A") REFERENCES "Connection"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -779,6 +821,12 @@ ALTER TABLE "_UserLikesPost" ADD CONSTRAINT "_UserLikesPost_A_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "_UserLikesPost" ADD CONSTRAINT "_UserLikesPost_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserSavedPost" ADD CONSTRAINT "_UserSavedPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserSavedPost" ADD CONSTRAINT "_UserSavedPost_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserLikesComment" ADD CONSTRAINT "_UserLikesComment_A_fkey" FOREIGN KEY ("A") REFERENCES "Comment"("id") ON DELETE CASCADE ON UPDATE CASCADE;

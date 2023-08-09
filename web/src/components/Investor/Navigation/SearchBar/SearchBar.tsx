@@ -1,6 +1,5 @@
-import SearchIcon from 'public/icons/search.svg'
-import UpIcon from 'public/icons/up.svg'
-
+import SvgSearch from 'src/components/Icon/Search'
+import SvgUp from 'src/components/Icon/Up'
 import {
   MenuExpandDivClassName,
   MenuIconClassName,
@@ -16,14 +15,14 @@ const InvestorSearchBar = (props: InvestorSearchBarProps) => {
     <>
       {props.isMenuOpen == 'Search' ? (
         <>
-          <UpIcon
+          <SvgUp
             className={UpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <InvestorSearchMenu />
         </>
       ) : (
-        <SearchIcon
+        <SvgSearch
           className={MenuIconClassName}
           onClick={() => props.setMenuOpen('Search')}
         />

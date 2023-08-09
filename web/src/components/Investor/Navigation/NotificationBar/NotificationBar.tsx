@@ -1,6 +1,5 @@
-import NotificationIcon from 'public/icons/notification.svg'
-import UpIcon from 'public/icons/up.svg'
-
+import SvgNotification from 'src/components/Icon/Notification'
+import SvgUp from 'src/components/Icon/Up'
 import {
   MenuExpandDivClassName,
   MenuIconClassName,
@@ -16,14 +15,14 @@ const InvestorNotificationBar = (props: InvestorNotificationBarProps) => {
     <>
       {props.isMenuOpen == 'Notification' ? (
         <>
-          <UpIcon
+          <SvgUp
             className={UpIconClassName}
             onClick={() => props.setMenuOpen('None')}
           />
           <InvestorNotificationMenu />
         </>
       ) : (
-        <NotificationIcon
+        <SvgNotification
           className={MenuIconClassName}
           onClick={() => props.setMenuOpen('Notification')}
         />

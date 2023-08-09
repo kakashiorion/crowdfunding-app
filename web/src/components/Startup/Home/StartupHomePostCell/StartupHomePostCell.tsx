@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react'
 
 import moment from 'moment'
-import SaveIcon from 'public/icons/bookmark.svg'
-import CommentIcon from 'public/icons/comment.svg'
-import MoreIcon from 'public/icons/more.svg'
-import ShareIcon from 'public/icons/share.svg'
-import LikeIcon from 'public/icons/thumbUp.svg'
 import type {
   FindStartupHomePostQuery,
   FindStartupHomePostQueryVariables,
@@ -16,6 +11,11 @@ import { CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import { HoverTertiaryTextButton } from 'src/components/Button/Button'
+import SvgBookmark from 'src/components/Icon/Bookmark'
+import SvgComment from 'src/components/Icon/Comment'
+import SvgMore from 'src/components/Icon/More'
+import SvgShare from 'src/components/Icon/Share'
+import SvgThumbUp from 'src/components/Icon/ThumbUp'
 import {
   TextLabel,
   SmallLabel,
@@ -201,7 +201,7 @@ export const Success = ({
           </div>
         </div>
         <div className={PostActionClassName}>
-          <SaveIcon
+          <SvgBookmark
             className={`h-6 w-6 ${
               saved
                 ? 'scale-125 fill-tertiary-d1 transition dark:fill-tertiary-l1'
@@ -211,7 +211,7 @@ export const Success = ({
               handleSave()
             }}
           />
-          <MoreIcon
+          <SvgMore
             className={HoverIconClassName}
             onClick={() => {
               //TODO: Open more info modal
@@ -248,7 +248,7 @@ export const Success = ({
           className={PostInteractionClassName}
           onClick={() => handleLike()}
         >
-          <LikeIcon
+          <SvgThumbUp
             className={`h-6 w-6 ${
               liked
                 ? 'fill-tertiary-d1 dark:fill-tertiary-l1'
@@ -271,7 +271,7 @@ export const Success = ({
             navigate(routes.startupViewPost({ id: startupHomePost.id }))
           }}
         >
-          <CommentIcon className={IconClassName} />
+          <SvgComment className={IconClassName} />
           <div className={HideShowClassName}>
             <SubTextLabel label={'Comments'} />
           </div>
@@ -287,7 +287,7 @@ export const Success = ({
             //TODO: Open post share modal
           }}
         >
-          <ShareIcon className={IconClassName} />
+          <SvgShare className={IconClassName} />
           <div className={HideShowClassName}>
             <SubTextLabel label={'Share'} />
           </div>

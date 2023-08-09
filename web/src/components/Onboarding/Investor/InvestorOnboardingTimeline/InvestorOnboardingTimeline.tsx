@@ -17,7 +17,7 @@ const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
     <div
       className={`absolute ${
         props.isMenuOpen ? 'flex' : 'hidden'
-      } right-0 top-0 flex-col gap-2 overflow-scroll rounded bg-white-d1 p-3 shadow-md dark:bg-black-l1 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:rounded-none lg:border-l-2 lg:border-l-white-d2 lg:bg-transparent lg:py-1 lg:pl-3 lg:pr-0 lg:shadow-none dark:lg:border-l-black-l2 lg:dark:bg-transparent`}
+      } right-0 top-0 flex-col gap-2 rounded bg-white-d1 p-3 shadow-md dark:bg-black-l1 lg:static lg:flex lg:h-full lg:w-1/3 lg:gap-3 lg:rounded-none lg:border-l-2 lg:border-l-white-d2 lg:bg-transparent lg:py-1 lg:pl-3 lg:pr-0 lg:shadow-none dark:lg:border-l-black-l2 lg:dark:bg-transparent`}
     >
       <PrimaryTextLabel
         label={`ONBOARDING SECTIONS (${
@@ -26,16 +26,20 @@ const InvestorOnboardingTimeline = (props: OnboardingTimelineProps) => {
             : InvestorOnboardingSections.length
         }/${InvestorOnboardingSections.length})`}
       />
-      {InvestorOnboardingSections.map((section: OnboardingSectionInfoType) => (
-        <InvestorTimelineSteps
-          key={section.index}
-          currentNumber={props.currentSection}
-          sectionNumber={section.index}
-          subTitle={section.subTitle}
-          title={section.title}
-          icon={section.icon}
-        />
-      ))}
+      <div className="flex flex-col gap-2 overflow-y-auto lg:gap-0">
+        {InvestorOnboardingSections.map(
+          (section: OnboardingSectionInfoType) => (
+            <InvestorTimelineSteps
+              key={section.index}
+              currentNumber={props.currentSection}
+              sectionNumber={section.index}
+              subTitle={section.subTitle}
+              title={section.title}
+              icon={section.icon}
+            />
+          )
+        )}
+      </div>
     </div>
   )
 }

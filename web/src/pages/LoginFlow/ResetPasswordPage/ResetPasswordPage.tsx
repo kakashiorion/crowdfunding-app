@@ -6,6 +6,7 @@ import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from 'src/auth'
 import { PrimaryFilledButton } from 'src/components/Button/Button'
 import {} from 'src/components/Input/Input'
+import SvgCheckCircle from 'src/components/Icon/CheckCircle'
 import {
   ErrorSubTextLabel,
   SubTextLabel,
@@ -13,7 +14,6 @@ import {
   TitleLabel,
 } from 'src/components/Label/Label'
 
-import CheckIcon from '../../../../public/icons/checkCircle.svg'
 import {
   FormWrapperClassName,
   ImageWrapperClassName,
@@ -113,7 +113,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
           )}
           {step == 'success' && (
             <div id="successForm" className={SuccessFormClassName}>
-              <CheckIcon className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
+              <SvgCheckCircle className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
               <TitleLabel label="Great!" />
               <SubTextLabel
                 label={'Your password has been reset.. Use it to login now.'}

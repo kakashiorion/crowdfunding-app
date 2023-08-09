@@ -15,14 +15,13 @@ import {
   TextLabel,
   TitleLabel,
 } from 'src/components/Label/Label'
-
 import {
   FormWrapperClassName,
   ImageWrapperClassName,
   PageWrapperClassName,
   TextInputClassName,
   LoginFormClassName,
-} from '../loginConsts'
+} from 'src/pages/LoginFlow/loginConsts'
 
 import loginImg from './login.jpg'
 

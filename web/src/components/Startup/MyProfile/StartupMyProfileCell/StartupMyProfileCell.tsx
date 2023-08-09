@@ -1,14 +1,6 @@
 import { useState } from 'react'
 
 import moment from 'moment'
-import AboutIcon from 'public/icons/book.svg'
-import CalendarIcon from 'public/icons/calendar.svg'
-import SectorIcon from 'public/icons/category.svg'
-import LIIcon from 'public/icons/connect.svg'
-import DownIcon from 'public/icons/down.svg'
-import LocationIcon from 'public/icons/location.svg'
-import UpIcon from 'public/icons/up.svg'
-import WorldIcon from 'public/icons/world.svg'
 import type {
   FindStartupMyProfileQuery,
   FindStartupMyProfileQueryVariables,
@@ -18,10 +10,18 @@ import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+import SvgBook from 'src/components/Icon/Book'
+import SvgCalendar from 'src/components/Icon/Calendar'
+import SvgCategory from 'src/components/Icon/Category'
+import SvgConnect from 'src/components/Icon/Connect'
+import SvgDown from 'src/components/Icon/Down'
+import SvgLocation from 'src/components/Icon/Location'
+import SvgUp from 'src/components/Icon/Up'
+import SvgWorld from 'src/components/Icon/World'
 import {
   SmallLabel,
   SubDisplayLabel,
-  SubTextLabel,
+  GreySubTextLabel,
   TertiaryTextLabel,
 } from 'src/components/Label/Label'
 import StartupMyProfileBackgroundCell from 'src/components/Startup/MyProfile/StartupMyProfileBackgroundCell'
@@ -123,23 +123,23 @@ export const Success = ({
       </div>
       <div id="MyProfileInfo" className={ProfileMetaClassName}>
         <div id="MyWriteup" className={ActionGroupClassName}>
-          <AboutIcon className={SmallIconClassName} />
-          <SubTextLabel label={startupMyProfile.writeUp} />
+          <SvgBook className={SmallIconClassName} />
+          <GreySubTextLabel label={startupMyProfile.writeUp} />
         </div>
         <div id="MyLocation" className={ActionGroupClassName}>
-          <LocationIcon className={SmallIconClassName} />
-          <SubTextLabel
+          <SvgLocation className={SmallIconClassName} />
+          <GreySubTextLabel
             label={`${startupMyProfile.location.city}, ${startupMyProfile.location.state}`}
           />
         </div>
         <div id="MySector" className={ActionGroupClassName}>
-          <SectorIcon className={SmallIconClassName} />
-          <SubTextLabel
+          <SvgCategory className={SmallIconClassName} />
+          <GreySubTextLabel
             label={`${startupMyProfile.sectorCategory.category} (${startupMyProfile.sectorCategory.sector})`}
           />
         </div>
         <div id="MyIncorpDate" className={ActionGroupClassName}>
-          <CalendarIcon className={SmallIconClassName} />
+          <SvgCalendar className={SmallIconClassName} />
           <SmallLabel
             label={`Estd. ${moment(startupMyProfile.dateIncorporated).format(
               'DD MMM YYYY'
@@ -147,11 +147,11 @@ export const Success = ({
           />
         </div>
         <div id="MyLI" className={ActionGroupClassName}>
-          <LIIcon className={SmallIconClassName} />
+          <SvgConnect className={SmallIconClassName} />
           <SmallLabel label={startupMyProfile.linkedInURL ?? '-'} />
         </div>
         <div id="MyWebsite" className={ActionGroupClassName}>
-          <WorldIcon className={SmallIconClassName} />
+          <SvgWorld className={SmallIconClassName} />
           <SmallLabel label={startupMyProfile.websiteURL ?? '-'} />
         </div>
         <div id="ProfileStats" className={ProfileStatsClassName}>
@@ -165,31 +165,31 @@ export const Success = ({
                 .filter((c) => c?.status == 'ACCEPTED')
                 .length.toString()}
             />
-            <SubTextLabel label="Connections" />
+            <GreySubTextLabel label="Connections" />
           </button>
           <div id="MyFollowerStats" className={StatItemClassName}>
             <SubDisplayLabel
               label={startupMyProfile.user.followedBy.length.toString()}
             />
-            <SubTextLabel label="Followers" />
+            <GreySubTextLabel label="Followers" />
           </div>
           <div id="MyFollowingStats" className={StatItemClassName}>
             <SubDisplayLabel
               label={startupMyProfile.user.following.length.toString()}
             />
-            <SubTextLabel label="Following" />
+            <GreySubTextLabel label="Following" />
           </div>
           <div id="MyPostsStats" className={StatItemClassName}>
             <SubDisplayLabel
               label={startupMyProfile.user.posts.length.toString()}
             />
-            <SubTextLabel label="Posts" />
+            <GreySubTextLabel label="Posts" />
           </div>
           <div id="MyCommentsStats" className={StatItemClassName}>
             <SubDisplayLabel
               label={startupMyProfile.user.comments.length.toString()}
             />
-            <SubTextLabel label="Comments" />
+            <GreySubTextLabel label="Comments" />
           </div>
         </div>
         <div
@@ -213,9 +213,9 @@ export const Success = ({
                 <div className="flex w-full items-center justify-between">
                   <TertiaryTextLabel label={tab.title} />
                   {selectedTab == i ? (
-                    <UpIcon className={LargeIconClassName} />
+                    <SvgUp className={LargeIconClassName} />
                   ) : (
-                    <DownIcon className={LargeIconClassName} />
+                    <SvgDown className={LargeIconClassName} />
                   )}
                 </div>
                 {selectedTab == i && <tab.comp id={startupMyProfile.id} />}

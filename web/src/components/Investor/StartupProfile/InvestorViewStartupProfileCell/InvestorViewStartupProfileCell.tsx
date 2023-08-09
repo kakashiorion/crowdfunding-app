@@ -1,21 +1,6 @@
 import { useState } from 'react'
 
 import moment from 'moment'
-import AddIcon from 'public/icons/add.svg'
-import AboutIcon from 'public/icons/book.svg'
-import CalendarIcon from 'public/icons/calendar.svg'
-import SectorIcon from 'public/icons/category.svg'
-import CloseIcon from 'public/icons/close.svg'
-import ChatIcon from 'public/icons/comment.svg'
-import LIIcon from 'public/icons/connect.svg'
-import DeleteIcon from 'public/icons/delete.svg'
-import EmptyIcon from 'public/icons/dnd.svg'
-import DoneIcon from 'public/icons/done.svg'
-import DownIcon from 'public/icons/down.svg'
-import InfoIcon from 'public/icons/info.svg'
-import LocationIcon from 'public/icons/location.svg'
-import UpIcon from 'public/icons/up.svg'
-import WorldIcon from 'public/icons/world.svg'
 import type {
   FindInvestorViewStartupProfileQuery,
   FindInvestorViewStartupProfileQueryVariables,
@@ -30,6 +15,21 @@ import {
   LeadingIconBlackFilledButton,
   PrimaryFilledButton,
 } from 'src/components/Button/Button'
+import SvgAdd from 'src/components/Icon/Add'
+import SvgBook from 'src/components/Icon/Book'
+import SvgCalendar from 'src/components/Icon/Calendar'
+import SvgCategory from 'src/components/Icon/Category'
+import SvgClose from 'src/components/Icon/Close'
+import SvgComment from 'src/components/Icon/Comment'
+import SvgConnect from 'src/components/Icon/Connect'
+import SvgDelete from 'src/components/Icon/Delete'
+import SvgDnd from 'src/components/Icon/Dnd'
+import SvgDone from 'src/components/Icon/Done'
+import SvgDown from 'src/components/Icon/Down'
+import SvgInfo from 'src/components/Icon/Info'
+import SvgLocation from 'src/components/Icon/Location'
+import SvgUp from 'src/components/Icon/Up'
+import SvgWorld from 'src/components/Icon/World'
 import {
   ActionGroupClassName,
   ButtonIconClassName,
@@ -56,7 +56,7 @@ import InvestorViewStartupObjectiveCell from 'src/components/Investor/StartupPro
 import {
   SmallLabel,
   SubDisplayLabel,
-  SubTextLabel,
+  GreySubTextLabel,
   PrimaryTextLabel,
   GreySubTitleLabel,
 } from 'src/components/Label/Label'
@@ -73,6 +73,8 @@ export const QUERY = gql`
       createdAt
       user {
         id
+        messageVisibility
+        profileVisbility
         posts {
           id
         }
@@ -178,7 +180,7 @@ const CREATE_DIRECT_CONVERSATION_MUTATION = gql`
 //Handle no investor found
 export const Empty = () => (
   <div className={EmptyDivClassName}>
-    <EmptyIcon className={EmptyIconClassName} />
+    <SvgDnd className={EmptyIconClassName} />
     <GreySubTitleLabel label="No such investor exists!" />
     <PrimaryFilledButton label="GO BACK" action={() => back()} />
   </div>
@@ -357,9 +359,9 @@ export const Success = ({
       return (
         <DropDownButton
           key="Connected"
-          leadingIcon={<DoneIcon className={SuccessIconClassName} />}
+          leadingIcon={<SvgDone className={SuccessIconClassName} />}
           label={'Connected'}
-          dropIcon={<DeleteIcon className={ErrorIconClassName} />}
+          dropIcon={<SvgDelete className={ErrorIconClassName} />}
           dropLabel={'Remove'}
           dropAction={async () => {
             await deleteConnection({
@@ -374,9 +376,9 @@ export const Success = ({
       return (
         <DropDownButton
           key="Request"
-          leadingIcon={<InfoIcon className={InfoIconClassName} />}
+          leadingIcon={<SvgInfo className={InfoIconClassName} />}
           label={'Sent request'}
-          dropIcon={<DeleteIcon className={ErrorIconClassName} />}
+          dropIcon={<SvgDelete className={ErrorIconClassName} />}
           dropLabel={'Remove'}
           dropAction={async () => {
             await deleteConnection({
@@ -391,9 +393,9 @@ export const Success = ({
       return (
         <DropDownButton
           key="Accept"
-          leadingIcon={<InfoIcon className={InfoIconClassName} />}
+          leadingIcon={<SvgInfo className={InfoIconClassName} />}
           label={'Pending'}
-          dropIcon={<DoneIcon className={SuccessIconClassName} />}
+          dropIcon={<SvgDone className={SuccessIconClassName} />}
           dropLabel={'Accept'}
           dropAction={async () => {
             await acceptConnection({
@@ -418,7 +420,7 @@ export const Success = ({
         <LeadingIconBlackFilledButton
           key="Connect"
           label="CONNECT"
-          icon={<AddIcon className={ButtonIconClassName} />}
+          icon={<SvgAdd className={ButtonIconClassName} />}
           action={async () => {
             await createConnection({
               variables: {
@@ -441,7 +443,7 @@ export const Success = ({
       return (
         <LeadingIconBlackFilledButton
           label="MESSAGE"
-          icon={<ChatIcon className={ButtonIconClassName} />}
+          icon={<SvgComment className={ButtonIconClassName} />}
           action={async () => {
             if (isConversing) {
               navigate(
@@ -480,9 +482,9 @@ export const Success = ({
     } else if (isFollowed) {
       return (
         <DropDownButton
-          leadingIcon={<DoneIcon className={SuccessIconClassName} />}
+          leadingIcon={<SvgDone className={SuccessIconClassName} />}
           label={'Following'}
-          dropIcon={<CloseIcon className={ErrorIconClassName} />}
+          dropIcon={<SvgClose className={ErrorIconClassName} />}
           dropLabel={'Unfollow'}
           dropAction={async () => {
             await unFollowUser({
@@ -497,7 +499,7 @@ export const Success = ({
       return (
         <LeadingIconBlackFilledButton
           label="FOLLOW"
-          icon={<AddIcon className={ButtonIconClassName} />}
+          icon={<SvgAdd className={ButtonIconClassName} />}
           action={async () => {
             await followUser({
               variables: {
@@ -523,23 +525,23 @@ export const Success = ({
         {!isBlocking && (
           <>
             <div id="StartupWriteup" className={ActionGroupClassName}>
-              <AboutIcon className={SmallIconClassName} />
-              <SubTextLabel label={investorViewStartupProfile.writeUp} />
+              <SvgBook className={SmallIconClassName} />
+              <GreySubTextLabel label={investorViewStartupProfile.writeUp} />
             </div>
             <div id="StartupLocation" className={ActionGroupClassName}>
-              <LocationIcon className={SmallIconClassName} />
-              <SubTextLabel
+              <SvgLocation className={SmallIconClassName} />
+              <GreySubTextLabel
                 label={`${investorViewStartupProfile.location.city}, ${investorViewStartupProfile.location.state}`}
               />
             </div>
             <div id="StartupSector" className={ActionGroupClassName}>
-              <SectorIcon className={SmallIconClassName} />
-              <SubTextLabel
+              <SvgCategory className={SmallIconClassName} />
+              <GreySubTextLabel
                 label={`${investorViewStartupProfile.sectorCategory.category} (${investorViewStartupProfile.sectorCategory.sector})`}
               />
             </div>
             <div id="StartupIncorpDate" className={ActionGroupClassName}>
-              <CalendarIcon className={SmallIconClassName} />
+              <SvgCalendar className={SmallIconClassName} />
               <SmallLabel
                 label={`Estd. ${moment(
                   investorViewStartupProfile.dateIncorporated
@@ -547,13 +549,13 @@ export const Success = ({
               />
             </div>
             <div id="StartupLI" className={ActionGroupClassName}>
-              <LIIcon className={SmallIconClassName} />
+              <SvgConnect className={SmallIconClassName} />
               <SmallLabel
                 label={investorViewStartupProfile.linkedInURL ?? '-'}
               />
             </div>
             <div id="StartupWebsite" className={ActionGroupClassName}>
-              <WorldIcon className={SmallIconClassName} />
+              <SvgWorld className={SmallIconClassName} />
               <SmallLabel
                 label={investorViewStartupProfile.websiteURL ?? '-'}
               />
@@ -574,23 +576,23 @@ export const Success = ({
                 onClick={() => navigate(routes.investorMyConnections())}
               >
                 <SubDisplayLabel label={connectionCount.toString()} />
-                <SubTextLabel label="Connections" />
+                <GreySubTextLabel label="Connections" />
               </button>
               <div id="StartupFollowerStats" className={StatItemClassName}>
                 <SubDisplayLabel label={followersCount.toString()} />
-                <SubTextLabel label="Followers" />
+                <GreySubTextLabel label="Followers" />
               </div>
               <div id="StartupFollowingStats" className={StatItemClassName}>
                 <SubDisplayLabel label={followingsCount.toString()} />
-                <SubTextLabel label="Following" />
+                <GreySubTextLabel label="Following" />
               </div>
               <div id="StartupPostsStats" className={StatItemClassName}>
                 <SubDisplayLabel label={postsCount.toString()} />
-                <SubTextLabel label="Posts" />
+                <GreySubTextLabel label="Posts" />
               </div>
               <div id="StartupCommentsStats" className={StatItemClassName}>
                 <SubDisplayLabel label={commentsCount.toString()} />
-                <SubTextLabel label="Comments" />
+                <GreySubTextLabel label="Comments" />
               </div>
             </div>
             <div
@@ -614,9 +616,9 @@ export const Success = ({
                     <div className="flex w-full items-center justify-between">
                       <PrimaryTextLabel label={tab.title} />
                       {selectedTab == i ? (
-                        <UpIcon className={LargeIconClassName} />
+                        <SvgUp className={LargeIconClassName} />
                       ) : (
-                        <DownIcon className={LargeIconClassName} />
+                        <SvgDown className={LargeIconClassName} />
                       )}
                     </div>
                     {selectedTab == i && (
@@ -630,7 +632,7 @@ export const Success = ({
         ) : (
           //Handle profile not visible
           <div className={EmptyDivClassName}>
-            <EmptyIcon className={EmptyIconClassName} />
+            <SvgDnd className={EmptyIconClassName} />
             <GreySubTitleLabel label="You don't have permission to view the startup's profile!" />
           </div>
         )}

@@ -46,7 +46,7 @@ export const getEnumValues = (enumArray: { name: string }[]) => {
 export const onboardingFrameClassName =
   'flex w-full flex-grow flex-col gap-1 overflow-hidden lg:gap-2'
 export const onboardingSubFrameClassName =
-  'shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-scroll rounded  bg-white-d2/20 p-2  dark:bg-black-l2/20'
+  'shrink-3 flex w-full flex-grow flex-col items-center justify-center overflow-y-auto rounded  bg-white-d2/20 p-2  dark:bg-black-l2/20'
 
 type skipProps = {
   setSkipData: (value: React.SetStateAction<boolean[]>) => void

@@ -2,10 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
 import moment from 'moment'
-import AddIcon from 'public/icons/add.svg'
-import CloseIcon from 'public/icons/close.svg'
-import ChatIcon from 'public/icons/right.svg'
-import SearchIcon from 'public/icons/search.svg'
 import type {
   FindInvestorConversationsListQuery,
   FindInvestorConversationsListQueryVariables,
@@ -20,6 +16,10 @@ import {
   IconOutlineButton,
   PrimaryIconButton,
 } from 'src/components/Button/Button'
+import SvgAdd from 'src/components/Icon/Add'
+import SvgClose from 'src/components/Icon/Close'
+import SvgRight from 'src/components/Icon/Right'
+import SvgSearch from 'src/components/Icon/Search'
 import {
   ButtonIconClassName,
   ConvoDivClassName,
@@ -258,16 +258,16 @@ export const Success = ({
         }}
         icon={
           newChat ? (
-            <CloseIcon className={ButtonIconClassName} />
+            <SvgClose className={ButtonIconClassName} />
           ) : (
-            <AddIcon className={ButtonIconClassName} />
+            <SvgAdd className={ButtonIconClassName} />
           )
         }
       />
       <div id="SearchDiv" className={InputDivClassName}>
         {searchText != '' && (
           <IconOutlineButton
-            icon={<CloseIcon className={ButtonIconClassName} />}
+            icon={<SvgClose className={ButtonIconClassName} />}
             action={() => {
               setSearchText('')
               setConvoList([...investorConversationsList].sort(sortFn))
@@ -286,7 +286,7 @@ export const Success = ({
         />
 
         <PrimaryIconButton
-          icon={<SearchIcon className={LightIconClassName} />}
+          icon={<SvgSearch className={LightIconClassName} />}
           action={() => {
             if (newChat) {
               findUsers()
@@ -348,7 +348,7 @@ export const Success = ({
                     }
                   />
                 </div>
-                <ChatIcon className={LargeIconClassName} />
+                <SvgRight className={LargeIconClassName} />
               </div>
             ))
           ) : (

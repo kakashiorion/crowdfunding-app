@@ -1,4 +1,3 @@
-import AddIcon from 'public/icons/add.svg'
 import type {
   FindInvestorHomeFeedQuery,
   FindInvestorHomeFeedQueryVariables,
@@ -8,6 +7,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
 import { LeadingIconBlackFilledButton } from 'src/components/Button/Button'
+import SvgAdd from 'src/components/Icon/Add'
 import InvestorHomeConnectionCell from 'src/components/Investor/Home/InvestorHomeConnectionCell'
 import InvestorHomePostCell from 'src/components/Investor/Home/InvestorHomePostCell'
 import { PrimaryTitleLabel } from 'src/components/Label/Label'
@@ -47,7 +47,7 @@ export const Success = ({
         <PrimaryTitleLabel label="Home Feed" />
         <LeadingIconBlackFilledButton
           label="CREATE POST"
-          icon={<AddIcon className="h-5 w-5 lg:h-6 lg:w-6" />}
+          icon={<SvgAdd className="h-5 w-5 lg:h-6 lg:w-6" />}
           action={() => {
             navigate(routes.investorCreatePost())
           }}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import DownIcon from 'public/icons/down.svg'
-import UpIcon from 'public/icons/up.svg'
+import SvgDown from '../Icon/Down'
+import SvgUp from '../Icon/Up'
 
 type ButtonProps = {
   action: () => void
@@ -381,9 +381,9 @@ export const DropDownButton = (props: DropDownButtonProps) => {
         onClick={() => setExpanded(!expanded)}
       >
         {expanded ? (
-          <UpIcon className="h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
+          <SvgUp className="h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
         ) : (
-          <DownIcon className="h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
+          <SvgDown className="h-6 w-6 fill-black dark:fill-white lg:h-7 lg:w-7" />
         )}
       </button>
       {expanded && (

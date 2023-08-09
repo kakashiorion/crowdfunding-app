@@ -4,11 +4,7 @@ import type { StartupMyProfilePostsQuery } from 'types/graphql'
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import {
-  GreySubTextLabel,
-  SubTextLabel,
-  TertiaryTextLabel,
-} from 'src/components/Label/Label'
+import { GreySubTextLabel, TertiaryTextLabel } from 'src/components/Label/Label'
 import { ProfilePageClassName } from 'src/components/Startup/StartupConsts'
 
 export const QUERY = gql`
@@ -58,13 +54,13 @@ export const Success = ({
               </div>
             )}
             <div className="col-span-1">
-              <SubTextLabel label={`${post.likedByUsers.length} likes`} />
+              <GreySubTextLabel label={`${post.likedByUsers.length} likes`} />
             </div>
             <div className="col-span-1">
-              <SubTextLabel label={`${post.comments.length} comments`} />
+              <GreySubTextLabel label={`${post.comments.length} comments`} />
             </div>
             <div className="col-span-1">
-              <SubTextLabel label={moment(post.createdAt).fromNow()} />
+              <GreySubTextLabel label={moment(post.createdAt).fromNow()} />
             </div>
           </button>
         )

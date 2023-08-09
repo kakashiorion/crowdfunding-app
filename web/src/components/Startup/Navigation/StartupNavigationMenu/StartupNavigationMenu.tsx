@@ -1,13 +1,12 @@
 import { useContext } from 'react'
 
-import ConnectionIcon from 'public/icons/connection.svg'
-import ConversationIcon from 'public/icons/conversation.svg'
-import OfferIcon from 'public/icons/diamond.svg'
-import ExploreIcon from 'public/icons/explore.svg'
-import HomeIcon from 'public/icons/home.svg'
-
 import { navigate, routes } from '@redwoodjs/router'
 
+import SvgConnection from 'src/components/Icon/Connection'
+import SvgConversation from 'src/components/Icon/Conversation'
+import SvgDiamond from 'src/components/Icon/Diamond'
+import SvgExplore from 'src/components/Icon/Explore'
+import SvgHome from 'src/components/Icon/Home'
 import StartupNavigationItem from 'src/components/Startup/Navigation/StartupNavigationItem/StartupNavigationItem'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
@@ -25,7 +24,7 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
       } z-10 shrink-0 flex-col items-center justify-start gap-4 rounded bg-white-d2/95 p-2 shadow-sm dark:bg-black-l2/95 lg:static lg:flex lg:flex-row lg:justify-between lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent`}
     >
       <StartupNavigationItem
-        icon={HomeIcon}
+        icon={SvgHome}
         action={() => {
           props.setMenuOpen('None')
           navigate(routes.startupHome())
@@ -33,7 +32,7 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
         selected={'Home' == pageSelected}
       />
       <StartupNavigationItem
-        icon={OfferIcon}
+        icon={SvgDiamond}
         action={() => {
           props.setMenuOpen('None')
           navigate(routes.startupMyOffer())
@@ -41,7 +40,7 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
         selected={'Offer' == pageSelected}
       />
       <StartupNavigationItem
-        icon={ConnectionIcon}
+        icon={SvgConnection}
         action={() => {
           props.setMenuOpen('None')
           navigate(routes.startupMyConnections())
@@ -49,7 +48,7 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
         selected={'Connections' == pageSelected}
       />
       <StartupNavigationItem
-        icon={ConversationIcon}
+        icon={SvgConversation}
         action={() => {
           props.setMenuOpen('None')
           navigate(routes.startupMyConversations())
@@ -57,7 +56,7 @@ const StartupNavigationMenu = (props: StartupNavigationMenuProps) => {
         selected={'Conversations' == pageSelected}
       />
       <StartupNavigationItem
-        icon={ExploreIcon}
+        icon={SvgExplore}
         action={() => {
           props.setMenuOpen('None')
           navigate(routes.startupExplore())

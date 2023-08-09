@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
-import MenuIcon from 'public/icons/menu.svg'
-import UpIcon from 'public/icons/up.svg'
-import Logo from 'public/logo/LogoOrig.svg'
-
 import { navigate, routes } from '@redwoodjs/router'
 
 import { HoverPrimaryTextButton } from 'src/components/Button/Button'
+import SvgMenu from 'src/components/Icon/Menu'
+import SvgUp from 'src/components/Icon/Up'
+import SvgLogoOrig from 'src/components/Logo/LogoOrig'
 import { LogoClassName } from 'src/layouts/LayoutConsts'
 
 const LandingHeader = (props: {
@@ -14,24 +13,21 @@ const LandingHeader = (props: {
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
   return (
-    <div className="sticky top-0 z-10 flex w-full items-center justify-between rounded py-2 backdrop-blur-sm lg:py-3">
-      <Logo
-        className={LogoClassName}
-        onClick={() => navigate(routes.landing())}
-      />
+    <div className="sticky top-0 z-10 flex w-full items-center justify-between rounded py-3 backdrop-blur-sm lg:py-4">
+      <SvgLogoOrig className={LogoClassName} />
       <HeaderMenu size="large" scrollRefsList={props.scrollRefsList} />
       {isMenuOpen && (
         <HeaderMenu size="small" scrollRefsList={props.scrollRefsList} />
       )}
       {isMenuOpen ? (
-        <UpIcon
+        <SvgUp
           className={
             'flex h-7 w-7 fill-primary-l1 dark:fill-primary-l1 lg:hidden'
           }
           onClick={() => setMenuOpen(false)}
         />
       ) : (
-        <MenuIcon
+        <SvgMenu
           className={
             'flex h-7 w-7 fill-black hover:fill-primary-d1 dark:fill-white dark:hover:fill-primary-l1 lg:hidden'
           }
@@ -58,19 +54,35 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   return (
     <div className={className}>
       <HoverPrimaryTextButton
-        action={() => props.scrollRefsList[0].current?.scrollIntoView()}
+        action={() =>
+          props.scrollRefsList[0].current?.scrollIntoView({
+            behavior: 'smooth',
+          })
+        }
         label="INVESTORS"
       />
       <HoverPrimaryTextButton
-        action={() => props.scrollRefsList[1].current?.scrollIntoView()}
+        action={() =>
+          props.scrollRefsList[1].current?.scrollIntoView({
+            behavior: 'smooth',
+          })
+        }
         label="STARTUPS"
       />
       <HoverPrimaryTextButton
-        action={() => props.scrollRefsList[2].current?.scrollIntoView()}
+        action={() =>
+          props.scrollRefsList[2].current?.scrollIntoView({
+            behavior: 'smooth',
+          })
+        }
         label="ABOUT"
       />
       <HoverPrimaryTextButton
-        action={() => props.scrollRefsList[3].current?.scrollIntoView()}
+        action={() =>
+          props.scrollRefsList[3].current?.scrollIntoView({
+            behavior: 'smooth',
+          })
+        }
         label="CONTACT"
       />
       <HoverPrimaryTextButton

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import CloseIcon from 'public/icons/close.svg'
 
 import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+import SvgClose from 'src/components/Icon/Close'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 import StartupSingleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
 import StartupSingleTextArea from 'src/components/Onboarding/Startup/comps/StartupSingleTextArea/StartupSingleTextArea'
@@ -537,13 +537,13 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
             className={`flex max-h-min w-full items-center justify-between rounded bg-white px-6 py-3 text-black shadow-md dark:bg-black dark:text-white lg:px-7 lg:py-4`}
           >
             <TextLabel label={`${e.name}, ${e.role}`} />
-            <CloseIcon
+            <SvgClose
               className="flex h-4 w-4 fill-error-d1 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setKeyPeople(props.keyPeople.filter((s) => s != e))
                 props.error9 != '' && props.setError9('')
               }}
-            ></CloseIcon>
+            />
           </div>
         ))}
       </div>

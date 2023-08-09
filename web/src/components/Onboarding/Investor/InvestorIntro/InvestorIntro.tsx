@@ -1,6 +1,5 @@
-import CheckIcon from 'public/icons/checkCircle.svg'
-
 import { LargePrimaryFilledButton } from 'src/components/Button/Button'
+import SvgCheckCircle from 'src/components/Icon/CheckCircle'
 import { TitleLabel, PrimarySubTitleLabel } from 'src/components/Label/Label'
 import { OnboardingIntroSectionProps } from 'src/lib/onboardingConsts'
 
@@ -8,7 +7,7 @@ const InvestorIntro = (props: OnboardingIntroSectionProps) => {
   // const [infoShown, setInfoShown] = useState(false)
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 rounded px-6 py-5 text-center  lg:px-8 lg:py-6">
-      <CheckIcon className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
+      <SvgCheckCircle className="flex h-10 w-10 fill-success-d1 dark:fill-success-l1 lg:h-11 lg:w-11" />
       <TitleLabel label="Congrats! You have successfully signed up." />
       <PrimarySubTitleLabel label="Now, let's get you onboard with our platform." />
       <LargePrimaryFilledButton

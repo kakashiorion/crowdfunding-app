@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import AddIcon from 'public/icons/add.svg'
-import CloseIcon from 'public/icons/close.svg'
-import SearchIcon from 'public/icons/search.svg'
 
 import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+import SvgAdd from 'src/components/Icon/Add'
+import SvgClose from 'src/components/Icon/Close'
+import SvgSearch from 'src/components/Icon/Search'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 import StartupMultipleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupMultipleChoiceOption/StartupMultipleChoiceOption'
 import StartupSingleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
 import StartupSingleTextInput from 'src/components/Onboarding/Startup/comps/StartupSingleTextInput/StartupSingleTextInput'
-import StartupTripleTextInput from 'src/components/Onboarding/Startup/comps/StartupTripleTextInput/StartupTripleTextInput'
 import { StartupStepFooter } from 'src/components/Onboarding/StepFooter'
 import { StartupStepHeader } from 'src/components/Onboarding/StepHeader'
 import {
@@ -26,6 +25,8 @@ import {
   Location,
 } from 'src/lib/onboardingConsts'
 import { StartupStepsInfoList } from 'src/pages/Startup/StartupOnboardingPage/StartupOnboardingData'
+
+import StartupTripleTextArea from '../comps/StartupTripleTextArea/StartupTripleTextArea'
 
 /*Info to be created and saved in StartupObjective table:
   preferredInvestorLevels    InvestorLevel[]
@@ -353,7 +354,7 @@ const StartupObjective = (props: OnboardingMainProps) => {
           />
         )}
         {step == 8 && (
-          <StartupTripleTextInput
+          <StartupTripleTextArea
             input1={demoURL1}
             setInput1={setDemoURL1}
             placeholder1="Resource URL 1"
@@ -445,7 +446,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
             type={'text'}
           />
           <div className="rounded bg-tertiary-d1 p-2 shadow-md hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:hover:bg-tertiary-l2 lg:p-2.5">
-            <SearchIcon
+            <SvgSearch
               className="flex h-5 w-5 fill-white dark:fill-black lg:h-6 lg:w-6"
               onClick={() => {
                 setSearchResult(
@@ -486,7 +487,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
             ))}
           </select>
           <div className="rounded bg-tertiary-d1 p-2 shadow-md hover:bg-tertiary-d2 dark:bg-tertiary-l1 dark:hover:bg-tertiary-l2 lg:p-2.5">
-            <AddIcon
+            <SvgAdd
               className="flex h-5 w-5 fill-white dark:fill-black lg:h-6 lg:w-6"
               onClick={() => {
                 if (selectedLoc?.id) {
@@ -511,13 +512,13 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
             <TextLabel
               label={getLocName(props.locationList.find((l) => l.id == e))}
             />
-            <CloseIcon
+            <SvgClose
               className="flex h-4 w-4 fill-error-d1 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setInput(props.input.filter((s) => s != e))
                 props.error != '' && props.setError('')
               }}
-            ></CloseIcon>
+            />
           </div>
         ))}
       </div>

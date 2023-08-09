@@ -2,8 +2,8 @@
 import { db } from 'api/src/lib/db'
 // import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 
-// const locations = require('./locationFinal.json')
-const sectors = require('./sector.json')
+const locations = require('./locationFinal.json')
+// const sectors = require('./sector.json')
 
 export default async () => {
   try {
@@ -36,17 +36,17 @@ export default async () => {
     //     console.log(record)
     //   })
     // )
-    // const createMany = await db.location.createMany({
-    //   data: locations,
-    //   skipDuplicates: true,
-    // })
-    // console.log(createMany.count)
-
-    const createMany = await db.sectorCategory.createMany({
-      data: sectors,
+    const createMany = await db.location.createMany({
+      data: locations,
       skipDuplicates: true,
     })
     console.log(createMany.count)
+
+    // const createMany = await db.sectorCategory.createMany({
+    //   data: sectors,
+    //   skipDuplicates: true,
+    // })
+    // console.log(createMany.count)
     // If using dbAuth and seeding users, you'll need to add a `hashedPassword`
     // and associated `salt` to their record. Here's how to create them using
     // the same algorithm that dbAuth uses internally:

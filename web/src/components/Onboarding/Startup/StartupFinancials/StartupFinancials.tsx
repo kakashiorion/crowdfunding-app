@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
-import CloseIcon from 'public/icons/close.svg'
 
 import { useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+import SvgClose from 'src/components/Icon/Close'
 import { ErrorSubTextLabel, TextLabel } from 'src/components/Label/Label'
 import StartupSingleChoiceOption from 'src/components/Onboarding/Startup/comps/StartupSingleChoiceOption/StartupSingleChoiceOption'
 import StartupSingleTextInput from 'src/components/Onboarding/Startup/comps/StartupSingleTextInput/StartupSingleTextInput'
@@ -601,7 +601,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
             className={`flex max-h-min w-full items-center justify-between rounded bg-white px-5 py-3 text-black shadow-md dark:bg-black-l1 dark:text-white lg:px-6 lg:py-4`}
           >
             <TextLabel label={`${e.shareholderName}, ${e.equityShare}%`} />
-            <CloseIcon
+            <SvgClose
               className="fill-error flex h-4 w-4 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setLatestCapTable(
@@ -610,7 +610,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
                 setTotalEquity(totalEquity - Number(e.equityShare))
                 props.error3 != '' && props.setError3('')
               }}
-            ></CloseIcon>
+            />
           </div>
         ))}
       </div>
@@ -739,7 +739,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
             <TextLabel
               label={`${e.fundingStage}: Raised ${e.capitalRaisedInCr} Cr`}
             />
-            <CloseIcon
+            <SvgClose
               className="fill-error flex h-4 w-4 dark:fill-error-l1 lg:h-5 lg:w-5"
               onClick={() => {
                 props.setFundraisingRounds(
@@ -747,7 +747,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
                 )
                 props.error4 != '' && props.setError4('')
               }}
-            ></CloseIcon>
+            />
           </div>
         ))}
       </div>

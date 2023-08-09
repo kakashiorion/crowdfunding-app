@@ -1,6 +1,5 @@
-import DownIcon from 'public/icons/thumbDown.svg'
-import UpIcon from 'public/icons/thumbUp.svg'
-
+import SvgThumbDown from 'src/components/Icon/ThumbDown'
+import SvgThumbUp from 'src/components/Icon/ThumbUp'
 import { WarnSubTextLabel } from 'src/components/Label/Label'
 
 type OnboardingFeedbackFormProps = {
@@ -15,7 +14,7 @@ const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
     <div className="flex flex-col items-center gap-2 rounded bg-white-d1 p-3 dark:bg-black-l1 lg:gap-3 lg:p-4">
       <WarnSubTextLabel label="Did you like the onboarding process? Please share your feedback" />
       <div className="flex gap-3">
-        <UpIcon
+        <SvgThumbUp
           className={`flex h-5 w-5  ${
             props.up
               ? ' scale-125 fill-success-d1 transition dark:fill-success-l1 '
@@ -30,7 +29,7 @@ const OnboardingFeedbackForm = (props: OnboardingFeedbackFormProps) => {
             }
           }}
         />
-        <DownIcon
+        <SvgThumbDown
           className={`flex h-5 w-5 ${
             props.down
               ? ' scale-125 fill-error-d1 transition dark:fill-error-l1'

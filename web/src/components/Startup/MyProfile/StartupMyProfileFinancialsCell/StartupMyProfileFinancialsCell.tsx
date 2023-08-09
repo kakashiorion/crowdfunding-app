@@ -2,7 +2,7 @@ import type { StartupMyProfileFinancialsQuery } from 'types/graphql'
 
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 import {
   DoubleSpanItemClassName,
   SingleSpanItemClassName,
@@ -51,7 +51,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Latest Funding Stage" />
+        <GreySubTextLabel label="Latest Funding Stage" />
       </div>
       <div id="latestValuationInCr" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -59,7 +59,7 @@ export const Success = ({
             startupMyProfileFinancials.latestValuationInCr?.toString() ?? '-'
           }
         />
-        <SubTextLabel label="Latest Valuation (in Cr)" />
+        <GreySubTextLabel label="Latest Valuation (in Cr)" />
       </div>
       <div id="currentRatio" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -67,7 +67,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Current Ratio" />
+        <GreySubTextLabel label="Current Ratio" />
       </div>
       <div id="debtEquityRatio" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -75,7 +75,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Debt/Equity Ratio" />
+        <GreySubTextLabel label="Debt/Equity Ratio" />
       </div>
       <div id="revenueLastFY" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -83,7 +83,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Revenue (Prev FY)" />
+        <GreySubTextLabel label="Revenue (Prev FY)" />
       </div>
       <div id="revenueGrowthRate" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -91,7 +91,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Revenue Growth Rate" />
+        <GreySubTextLabel label="Revenue Growth Rate" />
       </div>
       <div id="margin" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -99,7 +99,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Margin" />
+        <GreySubTextLabel label="Margin" />
       </div>
       <div id="cashRunway" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -107,7 +107,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Cash Runway" />
+        <GreySubTextLabel label="Cash Runway" />
       </div>
       <div id="plansForUsingCash" className={DoubleSpanItemClassName}>
         {startupMyProfileFinancials.plansForUsingCash.length > 0 ? (
@@ -117,7 +117,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Plans For Using Cash" />
+        <GreySubTextLabel label="Plans For Using Cash" />
       </div>
       <div id="latestCapTable" className={DoubleSpanItemClassName}>
         {startupMyProfileFinancials.latestCapTable.length > 0 ? (
@@ -132,7 +132,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Latest Cap Table" />
+        <GreySubTextLabel label="Latest Cap Table" />
       </div>
       <div id="fundraisingRounds" className={DoubleSpanItemClassName}>
         {startupMyProfileFinancials.fundraisingRounds.length > 0 ? (
@@ -147,7 +147,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Fundraising Rounds" />
+        <GreySubTextLabel label="Fundraising Rounds" />
       </div>
     </div>
   )

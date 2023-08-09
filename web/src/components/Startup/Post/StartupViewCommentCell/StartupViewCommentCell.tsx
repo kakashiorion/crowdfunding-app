@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react'
 
 import moment from 'moment'
-import CancelIcon from 'public/icons/close.svg'
-import DeleteIcon from 'public/icons/delete.svg'
-import EditIcon from 'public/icons/edit.svg'
-import SendIcon from 'public/icons/send.svg'
-import LikeIcon from 'public/icons/thumbUp.svg'
 import type {
   FindStartupViewCommentQuery,
   FindStartupViewCommentQueryVariables,
@@ -16,6 +11,11 @@ import { CellSuccessProps, useMutation } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
 import { TertiaryIconButton } from 'src/components/Button/Button'
+import SvgClose from 'src/components/Icon/Close'
+import SvgDelete from 'src/components/Icon/Delete'
+import SvgEdit from 'src/components/Icon/Edit'
+import SvgSend from 'src/components/Icon/Send'
+import SvgThumbUp from 'src/components/Icon/ThumbUp'
 import {
   SmallLabel,
   TertiaryTextLabel,
@@ -227,7 +227,7 @@ export const Success = ({
               className={TextInputClassName}
             />
             <TertiaryIconButton
-              icon={<SendIcon className={LightIconClassName} />}
+              icon={<SvgSend className={LightIconClassName} />}
               action={() => {
                 handleEditComment()
               }}
@@ -243,7 +243,7 @@ export const Success = ({
           className={PostInteractionClassName}
           onClick={() => handleLikeComment()}
         >
-          <LikeIcon
+          <SvgThumbUp
             className={`h-6 w-6 ${
               liked
                 ? 'fill-tertiary-d1 dark:fill-tertiary-l1'
@@ -266,9 +266,9 @@ export const Success = ({
               }}
             >
               {editing ? (
-                <CancelIcon className={IconClassName} />
+                <SvgClose className={IconClassName} />
               ) : (
-                <EditIcon className={IconClassName} />
+                <SvgEdit className={IconClassName} />
               )}
               <div className={HideShowClassName}>
                 <SubTextLabel label={editing ? 'Cancel' : 'Edit'} />
@@ -280,7 +280,7 @@ export const Success = ({
                 handleDeleteComment()
               }}
             >
-              <DeleteIcon className={DeleteIconClassName} />
+              <SvgDelete className={DeleteIconClassName} />
               <div className={HideShowClassName}>
                 <SubTextLabel label={'Delete'} />
               </div>

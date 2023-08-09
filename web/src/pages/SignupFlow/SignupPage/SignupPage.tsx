@@ -44,7 +44,7 @@ const SignupPage = (props: SignupPageProps) => {
         title="Signup"
         description="Signup page for Dealbari platform"
       />
-      <div className="my-4 flex h-full flex-col gap-2 overflow-hidden rounded bg-white-d1/50 p-2 dark:bg-black-l1/50 lg:my-6 lg:flex-row lg:gap-3 lg:p-3">
+      <div className="my-4 flex h-full flex-col gap-3 overflow-hidden rounded bg-white-d1/50 p-3 dark:bg-black-l1/50 lg:my-6 lg:flex-row lg:gap-5 lg:p-5">
         <UserSignupCard
           pref={'INVESTOR'}
           selectedType={selectedType}
@@ -196,7 +196,6 @@ const SignupForm = (props: SignupFormProps) => {
           />
         </>
       )}
-
       {stage == 'confirm' && (
         //STEP 2: Confirm email with code
         <>
@@ -240,7 +239,6 @@ const SignupForm = (props: SignupFormProps) => {
           />
         </>
       )}
-
       {stage == 'password' && (
         //Step 3: Choose password
         <>

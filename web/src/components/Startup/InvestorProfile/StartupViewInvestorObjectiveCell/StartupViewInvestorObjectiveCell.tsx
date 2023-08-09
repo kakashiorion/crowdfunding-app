@@ -5,7 +5,7 @@ import type { StartupViewInvestorObjectiveQuery } from 'types/graphql'
 
 import type { CellSuccessProps } from '@redwoodjs/web'
 
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 import {
   SingleSpanItemClassName,
   DoubleSpanItemClassName,
@@ -69,7 +69,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Investment Amount" />
+        <GreySubTextLabel label="Investment Amount" />
       </div>
       <div id="RiskApetite" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -77,7 +77,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Risk Apetite" />
+        <GreySubTextLabel label="Risk Apetite" />
       </div>
       <div id="FundingStages" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -89,7 +89,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Funding Stages" />
+        <GreySubTextLabel label="Funding Stages" />
       </div>
       <div id="TeamSize" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -101,7 +101,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Team Sizes" />
+        <GreySubTextLabel label="Team Sizes" />
       </div>
       <div id="Timeline" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -113,7 +113,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Investment Timeline" />
+        <GreySubTextLabel label="Investment Timeline" />
       </div>
       <div id="Sectors" className={DoubleSpanItemClassName}>
         <MediumLabel
@@ -125,7 +125,7 @@ export const Success = ({
               : '-'
           }
         />
-        <SubTextLabel label="Sectors" />
+        <GreySubTextLabel label="Sectors" />
       </div>
       <div id="Locations" className={DoubleSpanItemClassName}>
         {locations.length > 0 ? (
@@ -135,7 +135,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Locations" />
+        <GreySubTextLabel label="Locations" />
       </div>
     </div>
   )

@@ -9,7 +9,7 @@ import {
   DoubleSpanItemClassName,
   SingleSpanItemClassName,
 } from 'src/components/Investor/InvestorConsts'
-import { MediumLabel, SubTextLabel } from 'src/components/Label/Label'
+import { MediumLabel, GreySubTextLabel } from 'src/components/Label/Label'
 
 export const QUERY = gql`
   query FindInvestorViewStartupBusinessQuery($id: Int!) {
@@ -46,7 +46,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Number of Users" />
+        <GreySubTextLabel label="Number of Users" />
       </div>
       <div id="numberCities" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -54,7 +54,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Number of Cities" />
+        <GreySubTextLabel label="Number of Cities" />
       </div>
       <div id="distributionType" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -62,7 +62,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Distribution Type" />
+        <GreySubTextLabel label="Distribution Type" />
       </div>
       <div id="hasOnlineBusiness" className={SingleSpanItemClassName}>
         <MediumLabel
@@ -70,7 +70,7 @@ export const Success = ({
             .toString()
             .replaceAll('_', ' ')}
         />
-        <SubTextLabel label="Online Business" />
+        <GreySubTextLabel label="Online Business" />
       </div>
       <div id="partners" className={DoubleSpanItemClassName}>
         {investorViewStartupBusiness.partners.length > 0 ? (
@@ -80,7 +80,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Partners" />
+        <GreySubTextLabel label="Partners" />
       </div>
       <div id="customers" className={DoubleSpanItemClassName}>
         {investorViewStartupBusiness.customers.length > 0 ? (
@@ -90,7 +90,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Customers" />
+        <GreySubTextLabel label="Customers" />
       </div>
       <div id="workedWell" className={DoubleSpanItemClassName}>
         {investorViewStartupBusiness.workedWell.length > 0 ? (
@@ -100,7 +100,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="What has worked well?" />
+        <GreySubTextLabel label="What has worked well?" />
       </div>
       <div id="challenges" className={DoubleSpanItemClassName}>
         {investorViewStartupBusiness.challenges.length > 0 ? (
@@ -110,7 +110,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Challenges" />
+        <GreySubTextLabel label="Challenges" />
       </div>
       <div id="couldImprove" className={DoubleSpanItemClassName}>
         {investorViewStartupBusiness.couldImprove.length > 0 ? (
@@ -120,7 +120,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="What could improve?" />
+        <GreySubTextLabel label="What could improve?" />
       </div>
       <div id="currentActivities" className={DoubleSpanItemClassName}>
         {investorViewStartupBusiness.currentActivities.length > 0 ? (
@@ -130,7 +130,7 @@ export const Success = ({
         ) : (
           <MediumLabel label="-" />
         )}
-        <SubTextLabel label="Current Activities" />
+        <GreySubTextLabel label="Current Activities" />
       </div>
     </div>
   )

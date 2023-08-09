@@ -1,8 +1,7 @@
-import AboutIcon from 'public/icons/about.svg'
-import ExperienceIcon from 'public/icons/experience.svg'
-import ObjectiveIcon from 'public/icons/objective.svg'
-import PreferencesIcon from 'public/icons/preferences.svg'
-
+import SvgAbout from 'src/components/Icon/About'
+import SvgExperience from 'src/components/Icon/Experience'
+import SvgObjective from 'src/components/Icon/Objective'
+import SvgPreferences from 'src/components/Icon/Preferences'
 import InvestorAbout from 'src/components/Onboarding/Investor/InvestorAbout/InvestorAbout'
 import InvestorExperience from 'src/components/Onboarding/Investor/InvestorExperience/InvestorExperience'
 import InvestorObjective from 'src/components/Onboarding/Investor/InvestorObjective/InvestorObjective'
@@ -17,25 +16,25 @@ export const InvestorOnboardingSections: OnboardingSectionInfoType[] = [
     index: 1,
     title: 'About You',
     subTitle: 'Capturing basic details to create your investor profile',
-    icon: AboutIcon,
+    icon: SvgAbout,
   },
   {
     index: 2,
     title: 'Experience',
     subTitle: 'Getting to know your entrepreneurial history',
-    icon: ExperienceIcon,
+    icon: SvgExperience,
   },
   {
     index: 3,
     title: 'Objective',
     subTitle: 'Understanding your goals to get better matches',
-    icon: ObjectiveIcon,
+    icon: SvgObjective,
   },
   {
     index: 4,
     title: 'Preferences',
     subTitle: 'Personalizing the platform as per your needs',
-    icon: PreferencesIcon,
+    icon: SvgPreferences,
   },
 ]
 
