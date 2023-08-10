@@ -594,7 +594,7 @@ const FinancialsCapTable = (props: FinancialsCapTableProps) => {
           {'ADD SHAREHOLDER'}
         </button>
       </div>
-      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-y-auto pt-2">
         {props.latestCapTable.map((e) => (
           <div
             key={`${e.shareholderName}, ${e.equityShare}`}
@@ -730,7 +730,7 @@ const FinancialsRounds = (props: FinancialsRoundsProps) => {
           {'ADD ROUND'}
         </button>
       </div>
-      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-y-auto pt-2">
         {props.fundraisingRounds.sort().map((e) => (
           <div
             key={`${e.fundingStage}`}

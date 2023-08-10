@@ -60,12 +60,15 @@ type skipProps = {
   currentStepInfo: OnboardingStepsInfoType[]
 }
 export const skip = (props: skipProps) => {
+  //Skipped this step
   props.setSkipData([...props.skipData, true])
   props.clearError()
   if (props.step == props.currentStepInfo.length) {
+    //If last step, skip it and move to next section
     props.setCurrentSection(props.currentSection + 1)
     props.saveData(true)
   } else {
+    //Else, move to next step
     props.setStep(props.step + 1)
   }
 }
@@ -81,11 +84,14 @@ type nextProps = {
   currentStepInfo: OnboardingStepsInfoType[]
 }
 export const next = (props: nextProps) => {
+  //Did not skip this step
   props.setSkipData([...props.skipData, false])
   if (props.step == props.currentStepInfo.length) {
+    //If last step, save it and move to next section
     props.setCurrentSection(props.currentSection + 1)
     props.saveData(false)
   } else {
+    //Else, move to next step
     props.setStep(props.step + 1)
   }
 }
@@ -97,7 +103,9 @@ type backProps = {
   setStep: (value: React.SetStateAction<number>) => void
 }
 export const back = (props: backProps) => {
-  props.setSkipData(props.skipData.slice(-1))
+  //Remove last item from skipData array
+  props.setSkipData(props.skipData.slice(0, -1))
+  //Move one step back
   props.setStep(props.step - 1)
 }
 

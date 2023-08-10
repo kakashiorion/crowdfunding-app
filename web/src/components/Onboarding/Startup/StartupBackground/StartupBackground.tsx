@@ -530,7 +530,7 @@ const BackgroundKeyPeople = (props: BackgroundKeyPeopleProps) => {
           {'ADD PERSON'}
         </button>
       </div>
-      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-y-auto pt-2">
         {props.keyPeople.map((e) => (
           <div
             key={`${e.name}, ${e.role}`}

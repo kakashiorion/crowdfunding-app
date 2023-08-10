@@ -541,7 +541,7 @@ const ObjectiveLocations = (props: ObjectiveLocationsProps) => {
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-grow flex-col gap-2 overflow-scroll pt-2">
+      <div className="flex w-full flex-grow flex-col gap-2 overflow-y-auto pt-2">
         {props.input.map((e) => (
           <div
             key={e}

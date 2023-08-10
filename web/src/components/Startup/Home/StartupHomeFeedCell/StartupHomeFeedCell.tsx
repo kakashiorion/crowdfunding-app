@@ -56,7 +56,7 @@ export const Success = ({
         />
       </div>
       {/* //TODO: Different tabs for various activities */}
-      <div className="flex flex-col gap-2 overflow-y-scroll lg:gap-3">
+      <div className="flex flex-col gap-2 overflow-y-auto lg:gap-3">
         {recentInvestorsPosts.map((p: { id: number }) => (
           <StartupHomePostCell id={p.id} key={'post' + p.id.toString()} />
         ))}

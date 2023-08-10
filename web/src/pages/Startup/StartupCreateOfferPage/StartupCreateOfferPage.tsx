@@ -1,27 +1,36 @@
-import { Link, routes } from '@redwoodjs/router'
+import { useContext, useEffect } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
 
+import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
+
 const StartupCreateOfferPage = () => {
+  const { setPageSelected } = useContext(StartupPageContext)
+
+  useEffect(() => {
+    setPageSelected('Offer')
+  }, [setPageSelected])
+
   return (
     <>
       <MetaTags
         title="StartupCreateOffer"
-        description="StartupCreateOffer page"
+        description="Startup Create Offer page for Dealbari platform"
       />
-
-      <h1>StartupCreateOfferPage</h1>
-      <p>
-        Find me in{' '}
-        <code>
-          ./web/src/pages/StartupCreateOfferPage/StartupCreateOfferPage.tsx
-        </code>
-      </p>
-      <p>
-        My default route is named <code>startupCreateOffer</code>, link to me
-        with `<Link to={routes.startupCreateOffer()}>StartupCreateOffer</Link>`
-      </p>
     </>
   )
 }
 
 export default StartupCreateOfferPage
+
+/*
+Info to create offer:
+  - capitalTargetLacs
+  - equityBeingIssued
+  - minTicketSizeLacs @default(1.0)
+  - maxTicketSizeLacs
+  - fundingStage
+  - maxInvestors
+  - willUseFundsFor
+  - needHelpWith
+*/

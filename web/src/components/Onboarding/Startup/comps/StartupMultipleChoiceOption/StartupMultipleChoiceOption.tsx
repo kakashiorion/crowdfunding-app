@@ -13,7 +13,7 @@ const StartupMultipleChoiceOption = (
 ) => {
   return (
     <>
-      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll lg:grid lg:grid-cols-2">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-y-auto lg:grid lg:grid-cols-2">
         {props.options.map((e) => (
           <button
             key={e}

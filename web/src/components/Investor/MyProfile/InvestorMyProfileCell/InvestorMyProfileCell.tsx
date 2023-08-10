@@ -235,11 +235,11 @@ const InvestorMyDetails = ({
       className="grid w-full grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4"
     >
       <div id="LinkedIn" className={DoubleSpanItemClassName}>
-        <MediumLabel label={investorMyProfile.linkedInURL ?? 'N/A'} />
+        <MediumLabel label={investorMyProfile.linkedInURL ?? '-'} />
         <GreySubTextLabel label="LinkedIn" />
       </div>
       <div id="Website" className={DoubleSpanItemClassName}>
-        <MediumLabel label={investorMyProfile.websiteURL ?? 'N/A'} />
+        <MediumLabel label={investorMyProfile.websiteURL ?? '-'} />
         <GreySubTextLabel label="Website" />
       </div>
       <div id="Education" className={SingleSpanItemClassName}>

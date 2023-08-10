@@ -38,7 +38,7 @@ const StartupHelpPage = () => {
       <MetaTags title="Help" description="Help page for Dealbari platform" />
       <div
         id="HelpPage"
-        className="flex h-full w-full flex-col gap-6 overflow-y-scroll rounded lg:gap-7"
+        className="flex h-full w-full flex-col gap-6 overflow-y-auto rounded lg:gap-7"
       >
         <TertiaryTitleLabel label="Help Center" />
         <div

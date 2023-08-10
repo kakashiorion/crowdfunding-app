@@ -168,7 +168,7 @@ export const ConnectionInfoIconClassName =
 
 //Profile
 export const ProfilePageClassName =
-  'flex h-full flex-col gap-6 lg:gap-7 overflow-y-scroll items-start'
+  'flex h-full flex-col gap-6 lg:gap-7 overflow-y-auto items-start'
 
 export const ProfileHeaderClassName = 'flex items-center gap-4 lg:gap-6'
 

@@ -10,7 +10,7 @@ type InvestorSingleChoiceOptionProps = {
 const InvestorSingleChoiceOption = (props: InvestorSingleChoiceOptionProps) => {
   return (
     <>
-      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-scroll">
+      <div className="mb-2 flex w-full flex-grow flex-col gap-2 overflow-y-auto">
         {props.options.map((e) => (
           <button
             key={e}
