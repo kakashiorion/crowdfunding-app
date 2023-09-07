@@ -4,7 +4,7 @@ import { MetaTags } from '@redwoodjs/web'
 
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
-const StartupOfferRoomPage = () => {
+const StartupOfferRoomPage = ({ id }: { id: number }) => {
   const { setPageSelected } = useContext(StartupPageContext)
 
   useEffect(() => {

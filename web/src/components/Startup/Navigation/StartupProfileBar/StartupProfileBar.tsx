@@ -40,7 +40,7 @@ const StartupProfileBar = (props: StartupProfileBarProps) => {
           onClick={() => props.setMenuOpen('Profile')}
         >
           {/* //TODO: apply profile pic as BG - phase 2 */}
-          {currentUser?.email[0].toUpperCase()}
+          {currentUser?.startup.name[0].toUpperCase() ?? 'S'}
         </button>
       )}
     </>

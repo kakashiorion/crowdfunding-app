@@ -2,7 +2,7 @@ type LabelProps = {
   label: string | undefined
 }
 
-//Headings - h1/h2
+//Headings - h1/h3
 export const HeadingLabel = (props: LabelProps) => {
   return (
     <p className="text-h3 font-black text-black dark:text-white lg:text-h1">
@@ -19,7 +19,7 @@ export const GradientHeadingLabel = (props: LabelProps) => {
   )
 }
 
-//Subheadings - h2/h3
+//Subheadings - h2/h4
 export const SubHeadingLabel = (props: LabelProps) => {
   return (
     <p className="text-h4 text-black dark:text-white lg:text-h2">
@@ -36,7 +36,7 @@ export const PrimarySubHeadingLabel = (props: LabelProps) => {
   )
 }
 
-//Display - h3/h4
+//Display - h3/h5
 export const DisplayLabel = (props: LabelProps) => {
   return (
     <p className="text-h5 text-black dark:text-white lg:text-h3">
@@ -53,7 +53,7 @@ export const PrimaryDisplayLabel = (props: LabelProps) => {
   )
 }
 
-//SubDisplay - h4/h5
+//SubDisplay - h4/h6
 export const SubDisplayLabel = (props: LabelProps) => {
   return (
     <p className="text-h6 text-black dark:text-white lg:text-h4">
@@ -70,7 +70,7 @@ export const PrimarySubDisplayLabel = (props: LabelProps) => {
   )
 }
 
-//Title - h5/h6
+//Title - h5/h7
 export const TitleLabel = (props: LabelProps) => {
   return (
     <p className="text-h7 text-black dark:text-white lg:text-h5">
@@ -290,6 +290,14 @@ export const SuccessTextLabel = (props: LabelProps) => {
   )
 }
 
+export const WarnTextLabel = (props: LabelProps) => {
+  return (
+    <p className="text-b2 text-warn-d2 dark:text-warn-l2 lg:text-b1">
+      {props.label}
+    </p>
+  )
+}
+
 export const DisabledTextLabel = (props: LabelProps) => {
   return (
     <p className="text-b2 text-black-l4 dark:text-white-d4 lg:text-b1">
@@ -349,7 +357,7 @@ export const DisabledSubTextLabel = (props: LabelProps) => {
 
 export const ErrorSubTextLabel = (props: LabelProps) => {
   return (
-    <p className="text-b3 text-error-d1 dark:text-error-l1 lg:text-b2">
+    <p className="text-b3 text-error-d2 dark:text-error-l2 lg:text-b2">
       {props.label}
     </p>
   )
@@ -365,7 +373,7 @@ export const WarnSubTextLabel = (props: LabelProps) => {
 
 export const SuccessSubTextLabel = (props: LabelProps) => {
   return (
-    <p className="text-b3 text-success-d1 dark:text-success-l1 lg:text-b2">
+    <p className="text-b3 text-success-d2 dark:text-success-l2 lg:text-b2">
       {props.label}
     </p>
   )

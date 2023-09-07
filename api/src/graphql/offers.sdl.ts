@@ -39,10 +39,13 @@ export const schema = gql`
   type Query {
     offers: [Offer!]! @requireAuth
     offer(id: Int!): Offer @requireAuth
+    getStartupActiveOffer: Offer @requireAuth
+    getStartupPreviousOffers: [Offer!]! @requireAuth
+    getInvestorCurrentOffers: [Offer!]! @requireAuth
+    getInvestorPreviousOffers: [Offer!]! @requireAuth
   }
 
   input CreateOfferInput {
-    startupID: Int!
     capitalTargetLacs: Float!
     equityBeingIssued: Float!
     minTicketSizeLacs: Float!
@@ -51,7 +54,6 @@ export const schema = gql`
     maxInvestors: Int!
     willUseFundsFor: [String]!
     needHelpWith: [String]!
-    status: OfferStatus!
   }
 
   input UpdateOfferInput {

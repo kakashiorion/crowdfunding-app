@@ -40,7 +40,7 @@ const InvestorProfileBar = (props: InvestorProfileBarProps) => {
           onClick={() => props.setMenuOpen('Profile')}
         >
           {/* //TODO: apply profile pic as BG */}
-          {currentUser?.email[0].toUpperCase()}
+          {currentUser?.investor.name[0].toUpperCase() ?? 'I'}
         </button>
       )}
     </>

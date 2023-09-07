@@ -62,6 +62,7 @@ const Routes = () => {
         <Route path="/investor/startupProfile/{id:Int}" page={InvestorInvestorStartupProfilePage} name="investorStartupProfile" />
         <Route path="/investor/viewPost/{id:Int}" page={InvestorInvestorViewPostPage} name="investorViewPost" />
         <Route path="/investor/createPost" page={InvestorInvestorCreatePostPage} name="investorCreatePost" />
+        <Route path="/investor/joinRoom" page={InvestorInvestorJoinRoomPage} name="investorJoinRoom" />
         <Route path="/investor/offerRoom/{id:Int}" page={InvestorInvestorOfferRoomPage} name="investorOfferRoom" />
       </Set>
       <Set wrap={[InvestorOnboardingLayout]} private unauthenticated="login">

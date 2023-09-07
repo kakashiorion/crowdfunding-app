@@ -2,6 +2,8 @@ import { useContext, useEffect } from 'react'
 
 import { MetaTags } from '@redwoodjs/web'
 
+import StartupMyOfferCell from 'src/components/Startup/Offer/StartupMyOfferCell'
+import StartupPreviousOffersCell from 'src/components/Startup/Offer/StartupPreviousOffersCell'
 import { StartupPageContext } from 'src/layouts/StartupHomeLayout/StartupHomeLayout'
 
 const StartupMyOfferPage = () => {
@@ -17,11 +19,28 @@ const StartupMyOfferPage = () => {
         title="StartupMyOffer"
         description="Startup My Offer page for Dealbari platform"
       />
+      <StartupMyOfferMain />
+      <StartupMyOfferSide />
     </>
   )
 }
 
 export default StartupMyOfferPage
+
+const StartupMyOfferMain = () => {
+  return (
+    <div className="flex h-full w-full flex-col gap-8 overflow-y-auto lg:w-2/3 lg:gap-10">
+      <StartupMyOfferCell />
+      <StartupPreviousOffersCell />
+    </div>
+  )
+}
+
+const StartupMyOfferSide = () => {
+  return (
+    <div className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-tertiary-d1/50 lg:dark:bg-tertiary-l1/50"></div>
+  )
+}
 
 /*
 Offer page shall have:

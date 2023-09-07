@@ -1,7 +1,11 @@
 import { useContext, useEffect } from 'react'
 
+import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
+import { BlackOutlineButton } from 'src/components/Button/Button'
+import InvestorCurrentOffersCell from 'src/components/Investor/Offers/InvestorCurrentOffersCell'
+import InvestorPreviousOffersCell from 'src/components/Investor/Offers/InvestorPreviousOffersCell'
 import { InvestorPageContext } from 'src/layouts/InvestorHomeLayout/InvestorHomeLayout'
 
 const InvestorOffersPage = () => {
@@ -14,7 +18,7 @@ const InvestorOffersPage = () => {
     <>
       <MetaTags
         title="Investor Offers"
-        description="Investor Offers page for Dealbari platform."
+        description="Investor Offers page for Dealbari platform"
       />
 
       <InvestorOffersMain />
@@ -27,15 +31,20 @@ export default InvestorOffersPage
 
 const InvestorOffersMain = () => {
   return (
-    <div className="flex h-full w-full flex-grow overflow-y-auto rounded lg:w-2/3  ">
-      <div className=""></div>
+    <div className="relative flex h-full w-full flex-col gap-8 overflow-y-auto lg:w-2/3 lg:gap-10">
+      <BlackOutlineButton
+        label="JOIN A ROOM"
+        action={() => navigate(routes.investorJoinRoom())}
+      />
+      <InvestorCurrentOffersCell />
+      <InvestorPreviousOffersCell />
     </div>
   )
 }
 
 const InvestorOffersSidebar = () => {
   return (
-    <div className="hidden rounded border-l-2 border-l-white-d4 dark:border-l-black-l4 lg:flex lg:h-full lg:w-1/3"></div>
+    <div className="hidden lg:relative lg:flex lg:h-full lg:w-1/3 lg:overflow-hidden lg:rounded lg:bg-primary-d1/50 lg:dark:bg-primary-l1/50"></div>
   )
 }
 

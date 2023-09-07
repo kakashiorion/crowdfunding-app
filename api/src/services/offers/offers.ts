@@ -16,9 +16,69 @@ export const offer: QueryResolvers['offer'] = ({ id }) => {
   })
 }
 
+export const getStartupActiveOffer = () => {
+  return db.offer.findFirst({
+    where: {
+      OR: [{ status: 'CREATED' }, { status: 'EXCEEDED' }],
+      startupID: context.currentUser?.id,
+    },
+  })
+}
+
+export const getInvestorCurrentOffers = () => {
+  return db.offer.findMany({
+    where: {
+      OR: [{ status: 'CREATED' }, { status: 'EXCEEDED' }],
+      offerRoom: {
+        OR: [
+          {
+            participants: {
+              some: { id: context.currentUser?.id },
+            },
+          },
+          {
+            waitingList: {
+              some: { id: context.currentUser?.id },
+            },
+          },
+        ],
+      },
+    },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+  })
+}
+
+export const getStartupPreviousOffers = () => {
+  return db.offer.findMany({
+    where: {
+      OR: [{ status: 'CLOSED' }, { status: 'DISCARDED' }],
+      startupID: context.currentUser?.id,
+    },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+  })
+}
+
+export const getInvestorPreviousOffers = () => {
+  return db.offer.findMany({
+    where: {
+      OR: [{ status: 'CLOSED' }],
+      successfulDealers: {
+        some: { investorID: context.currentUser?.id },
+      },
+    },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+  })
+}
+
 export const createOffer: MutationResolvers['createOffer'] = ({ input }) => {
   return db.offer.create({
-    data: input,
+    data: { ...input, startupID: context.currentUser?.id, status: 'CREATED' },
   })
 }
 

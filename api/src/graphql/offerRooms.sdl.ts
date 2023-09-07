@@ -20,6 +20,7 @@ export const schema = gql`
   type Query {
     offerRooms: [OfferRoom!]! @requireAuth
     offerRoom(id: Int!): OfferRoom @requireAuth
+    getActiveOfferRooms: [OfferRoom!]! @requireAuth
   }
 
   input CreateOfferRoomInput {
@@ -42,6 +43,9 @@ export const schema = gql`
     createOfferRoom(input: CreateOfferRoomInput!): OfferRoom! @requireAuth
     updateOfferRoom(id: Int!, input: UpdateOfferRoomInput!): OfferRoom!
       @requireAuth
+    joinOfferRoom(id: Int!): OfferRoom! @requireAuth
+    leaveOfferRoom(id: Int!): OfferRoom @requireAuth
+    kickInvestorFromOfferRoom(investorId: Int!): OfferRoom @requireAuth
     deleteOfferRoom(id: Int!): OfferRoom! @requireAuth
   }
 `

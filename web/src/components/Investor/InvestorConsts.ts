@@ -21,7 +21,7 @@ export const CountClassName =
   'flex rounded bg-black-l2 px-2 py-0.5 text-b4 text-white dark:bg-white-d2 dark:text-black lg:text-b3'
 
 export const PageDivClassName =
-  'flex h-full w-full flex-col items-start justify-start gap-2 overflow-y-scroll rounded'
+  'flex h-full w-full flex-col items-start justify-start gap-2 overflow-y-auto rounded'
 
 export const DividerClassName =
   'h-0.5 w-full shrink-0 bg-white-d2 dark:bg-black-l2'
@@ -85,7 +85,7 @@ export const PostDivClassName =
   'flex w-full flex-col items-start gap-2 rounded bg-primary-d1/5 p-3 dark:bg-primary-l1/5 lg:p-4'
 
 export const ViewPostDivClassName =
-  'flex w-full flex-col overflow-y-scroll items-start gap-2 rounded bg-primary-d1/5 p-3 dark:bg-primary-l1/5 lg:p-4'
+  'flex w-full flex-col overflow-y-auto items-start gap-2 rounded bg-primary-d1/5 p-3 dark:bg-primary-l1/5 lg:p-4'
 
 export const HomeConnDivClassName =
   'flex w-full flex-wrap items-center justify-start gap-2 rounded bg-primary-d1/5 p-3 dark:bg-primary-l1/5 lg:p-4'
@@ -98,7 +98,7 @@ export const CommentDivClassName =
 
 //Conversation
 export const ChatContentClassName =
-  'flex flex-col h-full gap-3 overflow-y-scroll items-center lg:gap-4'
+  'flex flex-col h-full gap-3 overflow-y-auto items-center lg:gap-4'
 
 export const ConvoInfoClassName =
   'flex flex-col h-full gap-1 lg:gap-2 items-end justify-between'

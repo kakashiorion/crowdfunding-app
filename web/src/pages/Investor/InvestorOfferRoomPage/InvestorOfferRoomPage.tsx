@@ -13,7 +13,7 @@ const InvestorOfferRoomPage = () => {
   return (
     <>
       <MetaTags
-        title="InvestorOfferRoom"
+        title="Investor Offer Room"
         description="Investor Offer Room page for Dealbari platform"
       />
     </>
